@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1440, user-scalable=yes">
     <title>Corona Engine</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -135,7 +135,7 @@
             box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: flex-start; /* 主轴靠左 */
-            align-items: center;         /* 垂直居中 */
+            align-items: center;        /* 垂直居中 */
             padding: clamp(30px, 5vw, 80px); /* 自适应内边距 */
         }
 
@@ -490,50 +490,8 @@
         .resource-info h4 { color: #cbd5e1; font-size: 0.95rem; margin-bottom: 2px; }
         .resource-info p { color: #64748b; font-size: 0.75rem; line-height: 1.4; margin: 0; }
 
-        /* --- 响应式 --- */
-        @media (max-width: 900px) {
-            body { overflow-y: auto; height: auto; }
-            .main-viewport { height: auto; overflow: visible; width: 100%; }
-            .slider-track { flex-direction: column; width: 100%; transform: none !important; }
-            .slide { width: 100%; height: auto; padding: 40px 20px; }
-            .content-box, .page-container { height: auto; max-height: none; display: flex; flex-direction: column; gap: var(--gap-lg); }
-            .page-container.grid-layout { grid-template-columns: 1fr; }
-            
-            /* 手机端首页覆盖布局 */
-            .hero-overlay-layout { 
-                min-height: 450px; 
-                padding: 40px 20px; 
-                justify-content: center; 
-                align-items: flex-end; 
-            }
-            .showcase-overlay-gradient {
-                /* 手机端采用从上到下的细腻渐变，给图片留出足够的上方展示空间 */
-                background: linear-gradient(to bottom, 
-                    rgba(2, 6, 23, 0) 0%, 
-                    rgba(2, 6, 23, 0.3) 40%, 
-                    rgba(2, 6, 23, 0.85) 70%, 
-                    rgba(2, 6, 23, 1) 100%
-                );
-                /* 内阴影仅保留在底部 */
-                box-shadow: inset 0 -60px 60px -20px rgba(2, 6, 23, 0.9);
-            }
-            .hero-text-content.left-aligned { 
-                align-items: center; 
-                text-align: center; 
-                max-width: 100%;
-            }
-            .hero-text-content h1 .highlight { display: inline; }
+        /* 修改点 2：彻底移除了原来的 @media (max-width: 900px) 响应式代码块 */
 
-            .nav-btn { display: none; }
-            .nav-links { display: none; }
-            .dual-timeline { grid-template-columns: 1fr; gap: var(--gap-lg); }
-            .dual-timeline::before { display: none; }
-            .merge-grid { grid-template-columns: 1fr !important; }
-            .founders-row, .core-members-grid { grid-template-columns: 1fr; }
-            .patents-grid-new { grid-template-columns: 1fr; }
-            .comp-bento-grid { grid-template-columns: 1fr; }
-            .comp-resources { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
@@ -906,7 +864,7 @@
     }
 
     window.addEventListener('wheel', (e) => {
-        if(window.innerWidth <= 900) return; 
+        // 修改点 3：移除了 if(window.innerWidth <= 900) return; 以保证移动端触控板或外设也能触发
         if(isAnimating) return;
         
         if(e.deltaY > 30) {
@@ -931,7 +889,7 @@
     }, {passive: true});
 
     function handleSwipe() {
-        if(window.innerWidth <= 900) return; 
+        // 修改点 4：移除了 if(window.innerWidth <= 900) return; 恢复手机端的横向滑动切换功能
         const swipeThreshold = 50;
         if(touchStartX - touchEndX > swipeThreshold) nextSlide();
         if(touchEndX - touchStartX > swipeThreshold) prevSlide();
