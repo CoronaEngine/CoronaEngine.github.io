@@ -119,20 +119,6 @@ nav {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr));
 }
 
-/* --- 两侧翻页箭头 --- */
-.nav-btn {
-    position: absolute; top: 50%; transform: translateY(-50%); z-index: 100;
-    background: rgba(15, 23, 42, 0.6); border: 1px solid var(--card-border);
-    color: var(--text-gray); width: 50px; height: 50px; border-radius: 50%;
-    cursor: pointer; transition: var(--transition); display: flex;
-    justify-content: center; align-items: center; font-size: 1.2rem; backdrop-filter: blur(5px);
-}
-.prev-btn { left: clamp(15px, 3vw, 40px); }
-.next-btn { right: clamp(15px, 3vw, 40px); }
-.nav-btn:hover { background: var(--primary-gold); color: #000; box-shadow: 0 0 15px rgba(255,204,51,0.4); border-color: var(--primary-gold); }
-.nav-btn:disabled { opacity: 0; pointer-events: none; }
-
-
 /* ================= 模块内部样式 ================= */
 
 /* --- 1. 首页 (覆盖布局: 图片背景, 文字靠左) --- */
