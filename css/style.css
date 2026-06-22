@@ -119,20 +119,6 @@ nav {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr));
 }
 
-/* --- 两侧翻页箭头 --- */
-.nav-btn {
-    position: absolute; top: 50%; transform: translateY(-50%); z-index: 100;
-    background: rgba(15, 23, 42, 0.6); border: 1px solid var(--card-border);
-    color: var(--text-gray); width: 50px; height: 50px; border-radius: 50%;
-    cursor: pointer; transition: var(--transition); display: flex;
-    justify-content: center; align-items: center; font-size: 1.2rem; backdrop-filter: blur(5px);
-}
-.prev-btn { left: clamp(15px, 3vw, 40px); }
-.next-btn { right: clamp(15px, 3vw, 40px); }
-.nav-btn:hover { background: var(--primary-gold); color: #000; box-shadow: 0 0 15px rgba(255,204,51,0.4); border-color: var(--primary-gold); }
-.nav-btn:disabled { opacity: 0; pointer-events: none; }
-
-
 /* ================= 模块内部样式 ================= */
 
 /* --- 1. 首页 (覆盖布局: 图片背景, 文字靠左) --- */
@@ -160,27 +146,13 @@ nav {
     background: var(--bg-dark);
 }
 
-.bg-carousel {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-}
-
-.bg-carousel img {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    object-fit: cover; opacity: 0;
-    animation: heroFade 15s infinite; 
-    will-change: opacity, transform;
-}
-
-.bg-carousel img:nth-child(1) { animation-delay: 0s; }
-.bg-carousel img:nth-child(2) { animation-delay: 5s; }
-.bg-carousel img:nth-child(3) { animation-delay: 10s; }
-
-@keyframes heroFade {
-    0%   { opacity: 0; transform: scale(1.05); }
-    10%  { opacity: 1; }
-    33%  { opacity: 1; transform: scale(1); }
-    43%  { opacity: 0; }
-    100% { opacity: 0; transform: scale(1.05); }
+.hero-fx {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 0;
 }
 
 /* 左侧深色渐变底，多级平滑过渡，去除右侧突兀的黑边 */
@@ -189,10 +161,10 @@ nav {
     inset: 0; 
     pointer-events: none;
     /* 采用更细腻的阶梯透明度，模拟自然的光影消散 */
-    background: linear-gradient(to right, 
-        rgba(2, 6, 23, 1) 0%, 
-        rgba(2, 6, 23, 0.9) 30%, 
-        rgba(2, 6, 23, 0.5) 60%, 
+    background: linear-gradient(to right,
+        rgba(2, 6, 23, 0.92) 0%,
+        rgba(2, 6, 23, 0.75) 30%,
+        rgba(2, 6, 23, 0.4) 60%,
         rgba(2, 6, 23, 0) 100%
     );
     /* 将内阴影改为仅作用于左侧，避免右侧图片边缘发脏 */
@@ -480,33 +452,46 @@ nav {
 }
 .section-heading {
     display: flex;
-    align-items: baseline;
-    gap: 14px;
+    align-items: center;
+    gap: 16px;
     position: relative;
-    padding-bottom: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 4px;
     border-bottom: 1px solid var(--card-border);
 }
+/* 左侧金色竖条装饰 */
+.section-heading::before {
+    content: '';
+    width: 6px;
+    align-self: stretch;
+    min-height: 1.3em;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--primary-gold), rgba(255, 204, 51, 0.15));
+    box-shadow: 0 0 14px rgba(255, 204, 51, 0.45);
+}
+/* 底部金色短下划线强调 */
 .section-heading::after {
     content: '';
     position: absolute;
     left: 0;
     bottom: -1px;
-    width: 64px;
-    height: 2px;
+    width: 90px;
+    height: 3px;
+    border-radius: 2px;
     background: var(--primary-gold);
+    box-shadow: 0 0 10px rgba(255, 204, 51, 0.5);
 }
 .section-heading h2 {
-    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    font-size: clamp(1.9rem, 3.4vw, 3rem);
     font-weight: 800;
-    color: #fff;
     margin: 0;
-    letter-spacing: -0.5px;
-}
-.section-index {
-    font-size: clamp(0.9rem, 1.2vw, 1.1rem);
-    font-weight: 800;
-    color: var(--primary-gold);
-    letter-spacing: 1px;
+    line-height: 1.15;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #ffffff 25%, var(--primary-gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 16px rgba(255, 204, 51, 0.22));
 }
 .research-grid {
     display: grid;
@@ -535,6 +520,8 @@ nav {
 .tag-national { background: rgba(239, 68, 68, 0.1); color: var(--vision-red); border: 1px solid rgba(239, 68, 68, 0.2); }
 .tag-provincial { background: rgba(59, 130, 246, 0.1); color: var(--cabbage-blue); border: 1px solid rgba(59, 130, 246, 0.2); }
 .tag-school { background: rgba(168, 85, 247, 0.1); color: var(--tag-purple); border: 1px solid rgba(168, 85, 247, 0.2); }
+.tag-host { background: rgba(16, 185, 129, 0.12); color: var(--success-green); border: 1px solid rgba(16, 185, 129, 0.35); }
+.tag-join { background: rgba(255, 204, 51, 0.12); color: var(--primary-gold); border: 1px solid rgba(255, 204, 51, 0.35); }
 .tag-pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); animation: pulse-orange 2s infinite; display: inline-flex; align-items: center; gap: 4px; }
 @keyframes pulse-orange { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
 

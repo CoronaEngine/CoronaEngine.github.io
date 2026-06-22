@@ -167,11 +167,6 @@ function initSlider() {
         }
     }, { passive: true });
 
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') nextSlide();
-        if (e.key === 'ArrowLeft') prevSlide();
-    });
-
     window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
     window.addEventListener('touchend', e => { 
         touchEndX = e.changedTouches[0].screenX; 
@@ -181,16 +176,12 @@ function initSlider() {
 
 function updateNav() {
     const navItems = document.querySelectorAll('.nav-item');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    
+
     if (navItems.length) {
         navItems.forEach((item, index) => {
             item.classList.toggle('active', index === currentIndex);
         });
     }
-    if (prevBtn) prevBtn.disabled = currentIndex === 0;
-    if (nextBtn) nextBtn.disabled = currentIndex === totalSlides - 1;
 }
 
 function goToSlide(index) {
