@@ -146,27 +146,13 @@ nav {
     background: var(--bg-dark);
 }
 
-.bg-carousel {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-}
-
-.bg-carousel img {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    object-fit: cover; opacity: 0;
-    animation: heroFade 15s infinite; 
-    will-change: opacity, transform;
-}
-
-.bg-carousel img:nth-child(1) { animation-delay: 0s; }
-.bg-carousel img:nth-child(2) { animation-delay: 5s; }
-.bg-carousel img:nth-child(3) { animation-delay: 10s; }
-
-@keyframes heroFade {
-    0%   { opacity: 0; transform: scale(1.05); }
-    10%  { opacity: 1; }
-    33%  { opacity: 1; transform: scale(1); }
-    43%  { opacity: 0; }
-    100% { opacity: 0; transform: scale(1.05); }
+.hero-fx {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 0;
 }
 
 /* 左侧深色渐变底，多级平滑过渡，去除右侧突兀的黑边 */
@@ -175,10 +161,10 @@ nav {
     inset: 0; 
     pointer-events: none;
     /* 采用更细腻的阶梯透明度，模拟自然的光影消散 */
-    background: linear-gradient(to right, 
-        rgba(2, 6, 23, 1) 0%, 
-        rgba(2, 6, 23, 0.9) 30%, 
-        rgba(2, 6, 23, 0.5) 60%, 
+    background: linear-gradient(to right,
+        rgba(2, 6, 23, 0.92) 0%,
+        rgba(2, 6, 23, 0.75) 30%,
+        rgba(2, 6, 23, 0.4) 60%,
         rgba(2, 6, 23, 0) 100%
     );
     /* 将内阴影改为仅作用于左侧，避免右侧图片边缘发脏 */
