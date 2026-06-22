@@ -521,6 +521,8 @@ nav {
 .tag-national { background: rgba(239, 68, 68, 0.1); color: var(--vision-red); border: 1px solid rgba(239, 68, 68, 0.2); }
 .tag-provincial { background: rgba(59, 130, 246, 0.1); color: var(--cabbage-blue); border: 1px solid rgba(59, 130, 246, 0.2); }
 .tag-school { background: rgba(168, 85, 247, 0.1); color: var(--tag-purple); border: 1px solid rgba(168, 85, 247, 0.2); }
+.tag-host { background: rgba(16, 185, 129, 0.12); color: var(--success-green); border: 1px solid rgba(16, 185, 129, 0.35); }
+.tag-join { background: rgba(255, 204, 51, 0.12); color: var(--primary-gold); border: 1px solid rgba(255, 204, 51, 0.35); }
 .tag-pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); animation: pulse-orange 2s infinite; display: inline-flex; align-items: center; gap: 4px; }
 @keyframes pulse-orange { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
 
