@@ -60,7 +60,7 @@ nav {
 
 .slider-track {
     display: flex;
-    width: 500vw;
+    width: max-content;
     height: 100%;
     transition: transform var(--slider-speed) cubic-bezier(0.25, 1, 0.3, 1);
     will-change: transform;
@@ -468,6 +468,52 @@ nav {
 .patent-year { font-size: 0.7rem; color: var(--cabbage-blue); font-weight: 800; background: rgba(59, 130, 246, 0.1); padding: 3px 8px; border-radius: 4px; line-height: 1; display: inline-block; width: fit-content;}
 .patent-title { font-size: 0.8rem; color: #cbd5e1; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
+/* --- 关于我们 (合并页：发展历程 + 核心团队 + 科研成果) --- */
+.about-container {
+    gap: clamp(40px, 6vh, 80px);
+}
+.about-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+    flex: 0 0 auto;
+}
+.section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    position: relative;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--card-border);
+}
+.section-heading::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 64px;
+    height: 2px;
+    background: var(--primary-gold);
+}
+.section-heading h2 {
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+.section-index {
+    font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+    font-weight: 800;
+    color: var(--primary-gold);
+    letter-spacing: 1px;
+}
+.research-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr));
+    gap: var(--gap-lg);
+}
+
 /* --- 5. 竞赛 --- */
 .comp-bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: var(--gap-lg); flex: 1; } 
 .comp-side-stack { display: flex; flex-direction: column; gap: var(--gap-lg); min-height: 100%; justify-content: stretch; }
@@ -574,6 +620,7 @@ nav {
     .comp-resources,
     .comp-bento-grid,
     .page-container.grid-layout,
+    .research-grid,
     .dual-timeline,
     .founders-row,
     .core-members-grid {

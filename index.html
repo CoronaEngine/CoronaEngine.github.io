@@ -16,10 +16,8 @@
     </a>
     <div class="nav-links">
         <a class="nav-item active" onclick="goToSlide(0)">首页</a>
-        <a class="nav-item" onclick="goToSlide(1)">发展历程</a>
-        <a class="nav-item" onclick="goToSlide(2)">核心团队</a>
-        <a class="nav-item" onclick="goToSlide(3)">科研成果</a>
-        <a class="nav-item" onclick="goToSlide(4)">相关竞赛</a>
+        <a class="nav-item" onclick="goToSlide(1)">关于我们</a>
+        <a class="nav-item" onclick="goToSlide(2)">相关竞赛</a>
     </div>
 </nav>
 
@@ -59,10 +57,17 @@
             </div>
         </section>
 
-        <!-- 2. 发展历程 -->
+        <!-- 2. 关于我们 (发展历程 + 核心团队 + 科研成果) -->
         <section class="slide">
             <div class="content-box">
-                <div class="page-container">
+                <div class="page-container about-container">
+
+                <!-- 区块一：发展历程 -->
+                <div class="about-section">
+                    <div class="section-heading">
+                        <span class="section-index">01</span>
+                        <h2>发展历程</h2>
+                    </div>
                     <div class="dual-timeline">
                         <div class="timeline-track cabbage-track">
                             <div class="track-header"><i class="fas fa-leaf"></i> 2017-2025 | Cabbage支线</div>
@@ -139,26 +144,27 @@
                     </div>
                     
                 </div>
-            </div>
-        </section>
 
-        <!-- 3. 核心团队 -->
-        <section class="slide">
-            <div class="content-box">
-                <div class="page-container">
+                <!-- 区块二：核心团队 -->
+                <div class="about-section">
+                    <div class="section-heading">
+                        <span class="section-index">02</span>
+                        <h2>核心团队</h2>
+                    </div>
                     <div class="founders-row" id="foundersContainer"></div>
                     <div class="core-members-grid" id="coreMembersContainer"></div>
                     <div class="marquee-container">
                         <div class="marquee-track" id="marqueeTrack"></div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- 4. 科研成果 -->
-        <section class="slide">
-            <div class="content-box">
-                <div class="page-container grid-layout">
+                <!-- 区块三：科研成果 -->
+                <div class="about-section">
+                    <div class="section-heading">
+                        <span class="section-index">03</span>
+                        <h2>科研成果</h2>
+                    </div>
+                    <div class="grid-layout research-grid">
                     <div class="research-panel papers-panel">
                         <div class="research-panel-title">
                             <i class="fas fa-microscope"></i> 核心学术论文
@@ -203,11 +209,13 @@
                         </div>
                         <div class="patents-grid-new" id="patentsContainer"></div>
                     </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </section>
 
-        <!-- 5. 相关竞赛 -->
+        <!-- 3. 相关竞赛 -->
         <section class="slide">
             <div class="content-box">
                 <div class="page-container">
