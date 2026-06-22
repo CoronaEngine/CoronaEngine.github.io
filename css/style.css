@@ -466,33 +466,46 @@ nav {
 }
 .section-heading {
     display: flex;
-    align-items: baseline;
-    gap: 14px;
+    align-items: center;
+    gap: 16px;
     position: relative;
-    padding-bottom: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 4px;
     border-bottom: 1px solid var(--card-border);
 }
+/* 左侧金色竖条装饰 */
+.section-heading::before {
+    content: '';
+    width: 6px;
+    align-self: stretch;
+    min-height: 1.3em;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--primary-gold), rgba(255, 204, 51, 0.15));
+    box-shadow: 0 0 14px rgba(255, 204, 51, 0.45);
+}
+/* 底部金色短下划线强调 */
 .section-heading::after {
     content: '';
     position: absolute;
     left: 0;
     bottom: -1px;
-    width: 64px;
-    height: 2px;
+    width: 90px;
+    height: 3px;
+    border-radius: 2px;
     background: var(--primary-gold);
+    box-shadow: 0 0 10px rgba(255, 204, 51, 0.5);
 }
 .section-heading h2 {
-    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    font-size: clamp(1.9rem, 3.4vw, 3rem);
     font-weight: 800;
-    color: #fff;
     margin: 0;
-    letter-spacing: -0.5px;
-}
-.section-index {
-    font-size: clamp(0.9rem, 1.2vw, 1.1rem);
-    font-weight: 800;
-    color: var(--primary-gold);
-    letter-spacing: 1px;
+    line-height: 1.15;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #ffffff 25%, var(--primary-gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 16px rgba(255, 204, 51, 0.22));
 }
 .research-grid {
     display: grid;
