@@ -400,12 +400,15 @@ nav {
     font-weight: 800;
     line-height: 1.25;
     margin: 0;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
-.research .dir-title { background: linear-gradient(120deg, #ffffff 40%, #7dd3fc 100%); }
-.sandbox .dir-title { background: linear-gradient(120deg, #ffffff 35%, #d8b4fe 100%); }
+.research .dir-title {
+    color: #56c5ff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.3);
+}
+.sandbox .dir-title {
+    color: #c98bff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.35);
+}
 
 .dir-desc {
     color: var(--text-gray);
