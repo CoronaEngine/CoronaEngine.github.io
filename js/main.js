@@ -49,7 +49,23 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPatents();
     initSlider();
     initClipboard();
+    initSceneAccordion();
 });
+
+// ================= 渲染效果展示：纵向手风琴（鼠标选择展开） =================
+function initSceneAccordion() {
+    const acc = document.getElementById('sceneAccordion');
+    if (!acc) return;
+    const panels = acc.querySelectorAll('.scene-panel');
+    const activate = (panel) => {
+        panels.forEach(p => p.classList.toggle('active', p === panel));
+    };
+    panels.forEach(panel => {
+        panel.addEventListener('mouseenter', () => activate(panel));
+        panel.addEventListener('click', () => activate(panel));
+        panel.addEventListener('focus', () => activate(panel));
+    });
+}
 
 function renderTeam() {
     // 1. 渲染联合创始人

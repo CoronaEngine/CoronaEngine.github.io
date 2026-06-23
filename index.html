@@ -100,10 +100,53 @@
 
                     <div class="hero-showcase">
                         <div class="section-heading"><h2>渲染效果展示</h2></div>
-                        <div class="render-carousel">
-                            <img src="render/1.png" loading="lazy" alt="渲染效果 1">
-                            <img src="render/2.png" loading="lazy" alt="渲染效果 2">
-                            <img src="render/3.png" loading="lazy" alt="渲染效果 3">
+                        <div class="scene-accordion" id="sceneAccordion">
+
+                            <div class="scene-panel active" tabindex="0" data-index="0">
+                                <img class="scene-img" src="render/1.png" loading="lazy" alt="全局光照场景">
+                                <div class="scene-overlay"></div>
+                                <div class="scene-brief">
+                                    <span class="scene-num">01</span>
+                                    <h3>全局光照 · 室内场景</h3>
+                                    <span class="scene-brief-tag">Path Tracing</span>
+                                </div>
+                                <div class="scene-detail">
+                                    <span class="scene-tag">实时全局光照</span>
+                                    <h3>全局光照 · 室内场景</h3>
+                                    <p>基于物理的路径追踪渲染，真实还原间接光照与软阴影；金属、玻璃、织物等材质在统一 BRDF 框架下呈现细腻的能量传递与色彩溢出。</p>
+                                </div>
+                            </div>
+
+                            <div class="scene-panel" tabindex="0" data-index="1">
+                                <img class="scene-img" src="render/2.png" loading="lazy" alt="光线追踪场景">
+                                <div class="scene-overlay"></div>
+                                <div class="scene-brief">
+                                    <span class="scene-num">02</span>
+                                    <h3>硬件光追 · 反射折射</h3>
+                                    <span class="scene-brief-tag">Ray Tracing</span>
+                                </div>
+                                <div class="scene-detail">
+                                    <span class="scene-tag">硬件光线追踪</span>
+                                    <h3>硬件光追 · 反射折射</h3>
+                                    <p>借助硬件光线追踪实现精确的镜面反射、多层折射与焦散；动态场景下保持稳定的实时帧率，呈现电影级的光学质感。</p>
+                                </div>
+                            </div>
+
+                            <div class="scene-panel" tabindex="0" data-index="2">
+                                <img class="scene-img" src="render/3.png" loading="lazy" alt="大规模场景">
+                                <div class="scene-overlay"></div>
+                                <div class="scene-brief">
+                                    <span class="scene-num">03</span>
+                                    <h3>大规模场景 · 流式加载</h3>
+                                    <span class="scene-brief-tag">Streaming</span>
+                                </div>
+                                <div class="scene-detail">
+                                    <span class="scene-tag">大世界渲染</span>
+                                    <h3>大规模场景 · 流式加载</h3>
+                                    <p>面向大世界的几何与资源流式调度，配合空间剖分与 LOD，在保证画面密度的同时实现高效的实时渲染与无缝加载。</p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
