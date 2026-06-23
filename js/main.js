@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTeam();
     renderPatents();
     initSlider();
+    initClipboard();
 });
 
 function renderTeam() {
@@ -108,6 +109,51 @@ function renderTeam() {
         `).join('');
         marqueeTrack.innerHTML = baseCards + baseCards;
     }
+}
+
+// ================= 页脚联系方式：单击复制到剪贴板 =================
+function initClipboard() {
+    document.querySelectorAll('.contact-item[data-copy]').forEach(el => {
+        const original = el.getAttribute('data-tip');
+        let timer = null;
+
+        const showCopied = () => {
+            el.setAttribute('data-tip', '已复制 ✓');
+            el.classList.add('copied');
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(() => {
+                el.setAttribute('data-tip', original);
+                el.classList.remove('copied');
+            }, 1400);
+        };
+
+        const doCopy = () => {
+            const text = el.getAttribute('data-copy');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(showCopied).catch(() => fallbackCopy(text, showCopied));
+            } else {
+                fallbackCopy(text, showCopied);
+            }
+        };
+
+        el.addEventListener('click', doCopy);
+        el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); doCopy(); }
+        });
+    });
+}
+
+function fallbackCopy(text, cb) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); if (cb) cb(); } catch (e) {}
+    document.body.removeChild(ta);
 }
 
 function renderPatents() {
