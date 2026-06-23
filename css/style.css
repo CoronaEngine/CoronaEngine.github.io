@@ -834,6 +834,16 @@ nav {
     opacity: 1;
     transform: translateY(0);
 }
+.contact-item.copied {
+    color: #000;
+    background: var(--success-green);
+    border-color: var(--success-green);
+}
+.contact-item.copied::after {
+    opacity: 1;
+    transform: translateY(0);
+    border-color: var(--success-green);
+}
 
 @media (max-width: 1100px) {
     nav {
