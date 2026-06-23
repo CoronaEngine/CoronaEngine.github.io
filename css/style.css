@@ -345,6 +345,47 @@ nav {
     margin: 0;
     max-width: 680px;
 }
+
+/* 无图模块（基础设施）：科技底纹 + 特性列表 */
+.scene-panel.infra {
+    background: linear-gradient(150deg, rgba(15, 23, 42, 0.96), rgba(2, 8, 22, 0.98));
+}
+.scene-panel.infra::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(59, 130, 246, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(ellipse at 70% 18%, #000, transparent 78%);
+    mask-image: radial-gradient(ellipse at 70% 18%, #000, transparent 78%);
+    pointer-events: none;
+}
+.scene-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 720px;
+}
+.scene-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: clamp(0.82rem, 0.95vw, 1rem);
+    color: #cbd5e1;
+    line-height: 1.5;
+}
+.scene-list li i {
+    color: var(--primary-gold);
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
 /* 移动端：横向竖条过窄，回退为纵向堆叠 */
 @media (max-width: 760px) {
     .scene-accordion { flex-direction: column; height: auto; }

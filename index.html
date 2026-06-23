@@ -103,47 +103,77 @@
                         <div class="scene-accordion" id="sceneAccordion">
 
                             <div class="scene-panel active" tabindex="0" data-index="0">
-                                <img class="scene-img" src="render/1.png" loading="lazy" alt="全局光照场景">
+                                <img class="scene-img" src="render/1.png" loading="lazy" alt="全局光照">
                                 <div class="scene-overlay"></div>
                                 <div class="scene-brief">
                                     <span class="scene-num">01</span>
-                                    <h3>全局光照 · 室内场景</h3>
-                                    <span class="scene-brief-tag">Path Tracing</span>
+                                    <h3>全局光照</h3>
                                 </div>
                                 <div class="scene-detail">
-                                    <span class="scene-tag">实时全局光照</span>
-                                    <h3>全局光照 · 室内场景</h3>
-                                    <p>基于物理的路径追踪渲染，真实还原间接光照与软阴影；金属、玻璃、织物等材质在统一 BRDF 框架下呈现细腻的能量传递与色彩溢出。</p>
+                                    <span class="scene-tag">Global Illumination</span>
+                                    <h3>全局光照</h3>
+                                    <p>硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。</p>
                                 </div>
                             </div>
 
                             <div class="scene-panel" tabindex="0" data-index="1">
-                                <img class="scene-img" src="render/2.png" loading="lazy" alt="光线追踪场景">
+                                <img class="scene-img" src="render/2.png" loading="lazy" alt="光场显示">
                                 <div class="scene-overlay"></div>
                                 <div class="scene-brief">
                                     <span class="scene-num">02</span>
-                                    <h3>硬件光追 · 反射折射</h3>
-                                    <span class="scene-brief-tag">Ray Tracing</span>
+                                    <h3>光场显示</h3>
                                 </div>
                                 <div class="scene-detail">
-                                    <span class="scene-tag">硬件光线追踪</span>
-                                    <h3>硬件光追 · 反射折射</h3>
-                                    <p>借助硬件光线追踪实现精确的镜面反射、多层折射与焦散；动态场景下保持稳定的实时帧率，呈现电影级的光学质感。</p>
+                                    <span class="scene-tag">Light Field · 裸眼3D</span>
+                                    <h3>光场显示</h3>
+                                    <p>面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。</p>
                                 </div>
                             </div>
 
                             <div class="scene-panel" tabindex="0" data-index="2">
-                                <img class="scene-img" src="render/3.png" loading="lazy" alt="大规模场景">
+                                <img class="scene-img" src="render/3.png" loading="lazy" alt="协同编辑">
                                 <div class="scene-overlay"></div>
                                 <div class="scene-brief">
                                     <span class="scene-num">03</span>
-                                    <h3>大规模场景 · 流式加载</h3>
-                                    <span class="scene-brief-tag">Streaming</span>
+                                    <h3>协同编辑</h3>
                                 </div>
                                 <div class="scene-detail">
-                                    <span class="scene-tag">大世界渲染</span>
-                                    <h3>大规模场景 · 流式加载</h3>
-                                    <p>面向大世界的几何与资源流式调度，配合空间剖分与 LOD，在保证画面密度的同时实现高效的实时渲染与无缝加载。</p>
+                                    <span class="scene-tag">Real-Time Collaboration</span>
+                                    <h3>实时协同编辑</h3>
+                                    <p>多人实时协作的场景编辑能力，操作即时同步，团队可在同一场景中并行创作，像在线文档一样顺畅高效。</p>
+                                </div>
+                            </div>
+
+                            <div class="scene-panel" tabindex="0" data-index="3">
+                                <img class="scene-img" src="render/1.png" loading="lazy" alt="AI 智能体">
+                                <div class="scene-overlay"></div>
+                                <div class="scene-brief">
+                                    <span class="scene-num">04</span>
+                                    <h3>AI 智能体</h3>
+                                </div>
+                                <div class="scene-detail">
+                                    <span class="scene-tag">AI Agent</span>
+                                    <h3>AI 智能体</h3>
+                                    <p>内置 AI 智能体：以自然语言驱动三维场景生成，并通过 MCP 协议直接操控与编排场景，让创作从「手动搭建」走向「对话生成」。</p>
+                                </div>
+                            </div>
+
+                            <div class="scene-panel infra" tabindex="0" data-index="4">
+                                <div class="scene-overlay"></div>
+                                <div class="scene-brief">
+                                    <span class="scene-num">05</span>
+                                    <h3>基础设施</h3>
+                                </div>
+                                <div class="scene-detail">
+                                    <span class="scene-tag">Engine Infrastructure</span>
+                                    <h3>引擎基础设施</h3>
+                                    <ul class="scene-list">
+                                        <li><i class="fas fa-layer-group"></i> 大场景流式加载</li>
+                                        <li><i class="fas fa-microchip"></i> 原生多线程架构</li>
+                                        <li><i class="fas fa-laptop-code"></i> PC 全平台覆盖（预计）：Windows / macOS / Linux / HarmonyOS</li>
+                                        <li><i class="fas fa-wave-square"></i> 算法支持：光照 · 物理 · 动画 · 空间音频</li>
+                                        <li><i class="fas fa-ellipsis"></i> 更多底层能力持续扩展中……</li>
+                                    </ul>
                                 </div>
                             </div>
 
