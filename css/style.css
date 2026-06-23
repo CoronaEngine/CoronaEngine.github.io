@@ -790,6 +790,11 @@ nav {
 .footer-left span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .footer-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.footer-logo {
+    height: 32px;
+    width: auto;
+    display: block;
+}
 .contact-item {
     position: relative;
     width: 34px;
@@ -894,6 +899,7 @@ nav {
     }
     .footer-left i { font-size: 0.82rem; }
     .contact-item { width: 32px; height: 32px; font-size: 0.92rem; }
+    .footer-logo { height: 26px; }
 
     .nav-links {
         width: 100%;
