@@ -13,14 +13,9 @@
             border: none !important;
             box-shadow: none !important;
         }
-        /* ===== Hero 底部模糊渐变：星空 → 深蓝底色 ===== */
+        /* Hero 背景透明，让 Slide 级渐变接管 */
         .hero-visual-background {
-            background: linear-gradient(to bottom,
-                transparent 55%,
-                rgba(2,6,23,0.40) 70%,
-                rgba(2,6,23,0.75) 84%,
-                #020617 96%,
-                #020617 100%) !important;
+            background: transparent !important;
         }
         /* ===== Canvas 铺满整屏（slide 层级） + 底部 mask 淡出 ===== */
         .slide-canvas-wrap {
@@ -29,9 +24,26 @@
         .slide-canvas-wrap .hero-fx {
             width: 100%; height: 100%;
             -webkit-mask-image: linear-gradient(to bottom,
-                black 0%, black 70%, transparent 95%);
+                black 0%, black 65%, transparent 92%);
             mask-image: linear-gradient(to bottom,
-                black 0%, black 70%, transparent 95%);
+                black 0%, black 65%, transparent 92%);
+        }
+        /* ===== Slide 级渐变：覆盖全屏，星空 → 深蓝底色 ===== */
+        .slide-canvas-wrap::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom,
+                transparent 55%,
+                rgba(2,6,23,0.30) 68%,
+                rgba(2,6,23,0.65) 82%,
+                rgba(2,6,23,0.90) 93%,
+                #020617 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* 限定 Canvas 的参考容器为第一屏，避免被 slider-track 的 transform 影响 */
+        .slide:first-child {
+            position: relative;
         }
         /* 确保内容层在 Canvas 之上 */
         .slide:first-child .content-box {
@@ -148,6 +160,8 @@
     <div class="nav-links">
         <a class="nav-item active" onclick="goToSlide(0)">首页</a>
         <a class="nav-item" onclick="goToSlide(1)">关于我们</a>
+        <a class="nav-item" href="javascript:void(0)">学术研究</a>
+        <a class="nav-item" href="javascript:void(0)">游戏开发</a>
         <a class="nav-item" onclick="goToSlide(2)">相关竞赛</a>
     </div>
 </nav>
