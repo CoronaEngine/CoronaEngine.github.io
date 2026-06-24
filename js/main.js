@@ -187,61 +187,19 @@ function renderPatents() {
 // ================= 滑动控制逻辑 =================
 let currentIndex = 0;
 const totalSlides = document.querySelectorAll('.slide').length;
-let isAnimating = false;
-let touchStartX = 0;
-let touchEndX = 0;
-let boundaryScroll = null;
 
 function initSlider() {
     updateNav();
-
-    window.addEventListener('wheel', (e) => {
-        const now = Date.now();
-        const currentSlide = document.querySelectorAll('.slide')[currentIndex];
-        if (!currentSlide) return;
-
-        const direction = e.deltaY > 0 ? 1 : -1;
-        const isAtTop = currentSlide.scrollTop <= 5; 
-        const isAtBottom = currentSlide.scrollHeight - currentSlide.scrollTop <= currentSlide.clientHeight + 5;
-        const wantsNext = direction > 0 && isAtBottom;
-        const wantsPrev = direction < 0 && isAtTop;
-
-        if (Math.abs(e.deltaY) < 50 || (!wantsNext && !wantsPrev)) {
-            boundaryScroll = null;
-            return;
-        }
-
-        const isSameBoundaryScroll = boundaryScroll &&
-            boundaryScroll.slide === currentIndex &&
-            boundaryScroll.direction === direction;
-
-        if (!isSameBoundaryScroll) {
-            boundaryScroll = { slide: currentIndex, direction, startedAt: now };
-            return;
-        }
-
-        if (now - boundaryScroll.startedAt >= 200) {
-            if (isAnimating) return;
-            if (wantsNext) nextSlide();
-            if (wantsPrev) prevSlide();
-            boundaryScroll = null;
-            throttleAnimation();
-        }
-    }, { passive: true });
-
-    window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
-    window.addEventListener('touchend', e => { 
-        touchEndX = e.changedTouches[0].screenX; 
-        handleSwipe(); 
-    }, {passive: true});
 }
+
+// slide index → nav item index 映射（导航栏有5个条目，但只有3页slide）
+const slideNavMap = [0, 1, 4];
 
 function updateNav() {
     const navItems = document.querySelectorAll('.nav-item');
-
     if (navItems.length) {
-        navItems.forEach((item, index) => {
-            item.classList.toggle('active', index === currentIndex);
+        navItems.forEach(function(item, i) {
+            item.classList.toggle('active', i === slideNavMap[currentIndex]);
         });
     }
 }
@@ -250,26 +208,8 @@ function goToSlide(index) {
     if (index < 0 || index >= totalSlides) return;
     const track = document.getElementById('sliderTrack');
     currentIndex = index;
-    boundaryScroll = null;
     if (track) track.style.transform = `translateX(-${currentIndex * 100}vw)`;
     updateNav();
 }
 
 window.goToSlide = goToSlide; // 暴露给 HTML 中的 onclick
-
-function prevSlide() { if(currentIndex > 0) goToSlide(currentIndex - 1); }
-window.prevSlide = prevSlide;
-
-function nextSlide() { if(currentIndex < totalSlides - 1) goToSlide(currentIndex + 1); }
-window.nextSlide = nextSlide;
-
-function throttleAnimation() {
-    isAnimating = true;
-    setTimeout(() => { isAnimating = false; }, 800); 
-}
-
-function handleSwipe() {
-    const swipeThreshold = 50;
-    if(touchStartX - touchEndX > swipeThreshold) nextSlide();
-    if(touchEndX - touchStartX > swipeThreshold) prevSlide();
-}

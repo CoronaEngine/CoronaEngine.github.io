@@ -6,6 +6,43 @@
     <title>Corona Engine</title>
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ===== 星空背景铺满首屏（Canvas 边到边），标题恢复原始内边距 ===== */
+        .slide:first-child {
+            padding: 0 !important;
+        }
+        .hero-overlay-layout {
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            min-height: 100% !important;
+        }
+        /* 标题区域恢复原始间距 */
+        .hero-text-content.centered {
+            padding: clamp(48px, 8vh, 120px) clamp(48px, 8vw, 160px) !important;
+        }
+        /* ===== Hero 底部模糊渐变：星空 → 深蓝底色 ===== */
+        .hero-visual-background {
+            background: linear-gradient(to bottom,
+                transparent 55%,
+                rgba(2,6,23,0.40) 70%,
+                rgba(2,6,23,0.75) 84%,
+                #020617 96%,
+                #020617 100%) !important;
+        }
+        /* ===== Canvas 自身底部 mask 淡出，避免硬截断 ===== */
+        .hero-fx {
+            -webkit-mask-image: linear-gradient(to bottom,
+                black 0%,
+                black 70%,
+                transparent 95%);
+            mask-image: linear-gradient(to bottom,
+                black 0%,
+                black 70%,
+                transparent 95%);
+        }
+    </style>
 </head>
 <body>
 
