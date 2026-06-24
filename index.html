@@ -6,6 +6,149 @@
     <title>Corona Engine</title>
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ===== 去掉 Hero 卡片圆角/边框/阴影 ===== */
+        .hero-overlay-layout {
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        /* Hero 背景透明，让 Slide 级渐变接管 */
+        .hero-visual-background {
+            background: transparent !important;
+        }
+        /* ===== Canvas 铺满整屏（slide 层级） + 底部 mask 淡出 ===== */
+        .slide-canvas-wrap {
+            position: absolute; inset: 0; z-index: 0; overflow: hidden;
+        }
+        .slide-canvas-wrap .hero-fx {
+            width: 100%; height: 100%;
+            -webkit-mask-image: linear-gradient(to bottom,
+                black 0%, black 65%, transparent 92%);
+            mask-image: linear-gradient(to bottom,
+                black 0%, black 65%, transparent 92%);
+        }
+        /* ===== Slide 级渐变：覆盖全屏，星空 → 深蓝底色 ===== */
+        .slide-canvas-wrap::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom,
+                transparent 55%,
+                rgba(2,6,23,0.30) 68%,
+                rgba(2,6,23,0.65) 82%,
+                rgba(2,6,23,0.90) 93%,
+                #020617 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* 限定 Canvas 的参考容器为第一屏，避免被 slider-track 的 transform 影响 */
+        .slide:first-child {
+            position: relative;
+        }
+        /* 确保内容层在 Canvas 之上 */
+        .slide:first-child .content-box {
+            position: relative; z-index: 1;
+        }
+
+        /* ========== 下载弹窗 ========== */
+        .dl-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(4,9,20,0.60);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.30s ease;
+        }
+        .dl-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
+        .dl-modal {
+            width: 90%; max-width: 600px;
+            background: rgba(10,18,40,0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+            position: relative;
+            transform: scale(0.92) translateY(18px);
+            transition: transform 0.30s cubic-bezier(.34,1.56,.64,1);
+        }
+        .dl-overlay.active .dl-modal {
+            transform: scale(1) translateY(0);
+        }
+        .dl-modal h2 {
+            font-size: 1.5rem; font-weight: 600;
+            color: #fff;
+            margin: 0 0 6px 0;
+            text-align: left;
+        }
+        .dl-modal .dl-subtitle {
+            font-size: 0.875rem;
+            color: rgba(180,200,230,0.65);
+            margin: 0 0 28px 0;
+        }
+        .dl-close {
+            position: absolute; top: 18px; right: 20px;
+            background: none; border: none;
+            color: rgba(160,190,220,0.70);
+            font-size: 1.6rem; cursor: pointer;
+            line-height: 1;
+            transition: color 0.25s ease;
+            padding: 0; width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .dl-close:hover { color: #ffcc33; }
+        .dl-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        @media (max-width: 600px) {
+            .dl-cards { grid-template-columns: 1fr; }
+        }
+        .dl-card {
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center;
+            padding: 24px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.30s cubic-bezier(.34,1.56,.64,1),
+                        background 0.25s ease,
+                        border-color 0.25s ease,
+                        box-shadow 0.25s ease;
+        }
+        .dl-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,204,51,0.50);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.30);
+        }
+        .dl-card .dl-icon {
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 12px;
+            color: #fff;
+            transition: color 0.25s ease;
+        }
+        .dl-card .dl-icon svg { width: 36px; height: 36px; }
+        .dl-card:hover .dl-icon { color: #ffcc33; }
+        .dl-card .dl-name {
+            font-size: 1rem; font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .dl-card .dl-desc {
+            font-size: 0.75rem;
+            color: rgba(160,185,215,0.55);
+        }
+    </style>
 </head>
 <body>
 
@@ -17,6 +160,8 @@
     <div class="nav-links">
         <a class="nav-item active" onclick="goToSlide(0)">首页</a>
         <a class="nav-item" onclick="goToSlide(1)">关于我们</a>
+        <a class="nav-item" href="javascript:void(0)">学术研究</a>
+        <a class="nav-item" href="javascript:void(0)">游戏开发</a>
         <a class="nav-item" onclick="goToSlide(2)">相关竞赛</a>
     </div>
 </nav>
@@ -26,11 +171,14 @@
         
         <!-- 1. 首页 -->
         <section class="slide">
+            <!-- Canvas 星空铺满整屏 -->
+            <div class="slide-canvas-wrap">
+                <canvas id="heroCanvas" class="hero-fx"></canvas>
+            </div>
             <div class="content-box">
                 <div class="page-container">
                     <div class="hero-overlay-layout">
                         <div class="hero-visual-background">
-                            <canvas id="heroCanvas" class="hero-fx"></canvas>
                             <div class="showcase-overlay-gradient"></div>
                         </div>
                         
@@ -39,10 +187,14 @@
                             <p>
                                 做前沿技术的无畏探索者，也做每一颗创作灵感的引路星
                             </p>
-                            <a href="https://github.com/CoronaEngine" target="_blank" class="github-cta">
-                                <i class="fab fa-github" style="font-size: 1.4rem;"></i>
-                                开源代码（MIT协议）
-                            </a>
+                            <div class="hero-buttons" style="display:flex; gap:18px; align-items:center; justify-content:center; flex-wrap:wrap;">
+                                <a id="btnDownload" href="javascript:void(0)" style="display:inline-flex; align-items:center; justify-content:center; padding:14px 44px; background:linear-gradient(135deg, #ffcc33 0%, #f0a800 100%); color:#1a1a2e; font-weight:700; font-size:1.05rem; border-radius:50px; text-decoration:none; letter-spacing:0.02em; transition:transform 0.25s ease, box-shadow 0.25s ease; cursor:pointer;">
+                                    <i class="fas fa-download" style="margin-right:9px;"></i> 立即下载
+                                </a>
+                                <a href="https://github.com/CoronaEngine" target="_blank" style="display:inline-flex; align-items:center; justify-content:center; padding:13px 42px; background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.85); border:1.5px solid rgba(255,255,255,0.22); border-radius:50px; font-weight:500; font-size:1rem; text-decoration:none; letter-spacing:0.02em; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); transition:transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, color 0.25s ease;">
+                                    <i class="fab fa-github" style="margin-right:8px;"></i> 获取开源代码 (MIT协议)
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -403,8 +555,60 @@
     </div>
 </footer>
 
+<!-- ========== 下载弹窗 ========== -->
+<div class="dl-overlay" id="dlOverlay">
+    <div class="dl-modal">
+        <button class="dl-close" id="dlClose">&times;</button>
+        <h2>选择下载版本</h2>
+        <p class="dl-subtitle">Corona Engine V1.0 (内测版) - 支持全平台渲染</p>
+        <div class="dl-cards">
+            <a class="dl-card" href="https://github.com/CoronaEngine" target="_blank">
+                <div class="dl-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 12V6.5l8-1.1v6.6H3zm0 .9h8v6.7l-8-1.1V12.9zm9 0h9v-5l-9-1v6zm0 .9v6.8l9-1.2V13.8h-9z"/></svg>
+                </div>
+                <div class="dl-name">Windows</div>
+                <div class="dl-desc">Windows 10/11 x64</div>
+            </a>
+            <a class="dl-card" href="https://github.com/CoronaEngine" target="_blank">
+                <div class="dl-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                </div>
+                <div class="dl-name">macOS</div>
+                <div class="dl-desc">Apple Silicon / Intel</div>
+            </a>
+            <a class="dl-card" href="https://github.com/CoronaEngine" target="_blank">
+                <div class="dl-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5.75C6.46.75 1.5 5.43 1.5 11.1c0 4.07 2.5 7.55 6.07 9.12.45.1.62-.18.62-.42 0-.21-.02-.9-.02-1.64-2.23.42-2.8-.53-2.98-1.02-.1-.26-.53-1.02-.9-1.23-.31-.16-.75-.56-.01-.57.7-.01 1.19.63 1.36.9.8 1.3 2.07.94 2.58.71.08-.56.3-.94.56-1.15-1.96-.22-4.01-.96-4.01-4.24 0-.94.34-1.7.9-2.3-.1-.22-.4-1.1.08-2.28 0 0 .72-.22 2.38.88a8.5 8.5 0 0 1 4.32 0c1.66-1.1 2.38-.88 2.38-.88.48 1.18.18 2.06.09 2.28.56.6.9 1.36.9 2.3 0 3.3-2.06 4.02-4.02 4.24.3.26.58.76.58 1.54 0 1.12-.01 2.02-.01 2.3 0 .24.16.52.63.42 3.57-1.57 6.07-5.05 6.07-9.12C23.5 5.43 18.54.75 12.5.75z"/></svg>
+                </div>
+                <div class="dl-name">Linux</div>
+                <div class="dl-desc">AppImage / .deb / .rpm</div>
+            </a>
+        </div>
+    </div>
+</div>
+
 <script src="js/main.js"></script>
 <script src="js/hero-bg.js"></script>
+<script>
+    // ========== 下载弹窗交互 ==========
+    (function() {
+        var overlay = document.getElementById('dlOverlay');
+        var btnOpen = document.getElementById('btnDownload');
+        var btnClose = document.getElementById('dlClose');
+
+        function openModal()  { overlay.classList.add('active'); }
+        function closeModal() { overlay.classList.remove('active'); }
+
+        if (btnOpen)  btnOpen.addEventListener('click', openModal);
+        if (btnClose) btnClose.addEventListener('click', closeModal);
+        if (overlay)  overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) closeModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+        });
+    })();
+</script>
 
 </body>
 </html>

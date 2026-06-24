@@ -1,358 +1,273 @@
-// ================= 首页背景：深空星海（多层视差星点 + 星云 + 流星 + 星座连线） =================
-// 纯 Canvas，无第三方依赖。只在首页可见且标签页激活时运行。
+// ================= 深空星海 · 鼠标探照灯交互 =================
+// 休眠星光 + 鼠标力场点亮 + 动态连线 + 雾气驱散 + 拖尾延迟
+// 纯 Canvas 2D，无第三方依赖
 (function () {
-    const canvas = document.getElementById('heroCanvas');
+    var canvas = document.getElementById('heroCanvas');
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true });
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ctx = canvas.getContext('2d', { alpha: true });
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    let W = 0, H = 0, dpr = 1;
-    let stars = [];
-    let nebulae = [];
-    let shapes = [];
-    let meteors = [];
-    let linkDist = 120, linkDist2 = 120 * 120;
-    let rafId = null, running = false, time = 0;
+    // ---------- 可调参数 ----------
+    var FORCE_RADIUS = 260;           // 鼠标力场半径 (px)
+    var TRAIL_MAX = 10;               // 拖尾采样点数
+    var TRAIL_EVERY = 2;              // 每隔 N 帧采样一次
+    var STAR_COUNT = 280;             // 粒子总数
+    var LERP_RATE = 0.06;             // 平滑过渡速率（~0.5s 到位）
+    var MAX_LINK_DIST = 125;          // 连线最大距离
+    var LINK_THRESHOLD = 0.30;        // 最低连线亮度
+    var DORMANT_MIN = 0.08;           // 休眠最低透明度
+    var DORMANT_MAX = 0.20;           // 休眠最高透明度
+    var GOLD_RATIO = 0.06;            // 金色点缀比例
 
-    const mouse = { x: 0.5, y: 0.45, tx: 0.5, ty: 0.45, idle: 999 };
+    // ---------- 状态 ----------
+    var W = 0, H = 0, dpr = 1;
+    var stars = [];
+    var trail = [];                   // [{x, y}] 最新在前
+    var mouse = { x: -500, y: -500, active: false };
+    var rafId = null, running = false;
+    var frameCount = 0;
 
+    // ---------- 画布尺寸 ----------
     function resize() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const rect = canvas.getBoundingClientRect();
+        var rect = canvas.getBoundingClientRect();
         W = Math.max(1, rect.width);
         H = Math.max(1, rect.height);
         canvas.width = Math.round(W * dpr);
         canvas.height = Math.round(H * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        linkDist = Math.min(W, H) * 0.16;
-        linkDist2 = linkDist * linkDist;
-        initStars();
-        initNebulae();
-        initShapes();
     }
 
-    // 多层星点：depth 越大越近 → 更大、更亮、视差更强
+    // ---------- 初始化星场 ----------
     function initStars() {
-        const count = Math.min(320, Math.round((W * H) / 5200));
         stars = [];
-        for (let i = 0; i < count; i++) {
-            const roll = Math.random();
-            const depth = Math.random();
+        for (var i = 0; i < STAR_COUNT; i++) {
+            var isGold = Math.random() < GOLD_RATIO;
             stars.push({
                 x: Math.random() * W,
                 y: Math.random() * H,
-                depth: depth,
-                r: 0.4 + depth * 1.7,
-                drift: 0.02 + depth * 0.18,            // 缓慢平移
-                vx: (Math.random() - 0.5) * 0.05,
-                twPhase: Math.random() * Math.PI * 2,
-                twSpeed: Math.random() * 1.8 + 0.5,
-                gold: roll < 0.12,
-                mag: roll >= 0.12 && roll < 0.22,
-                link: false
-            });
-        }
-        // 仅选取数量受控的"连线星"（景深最靠前的若干颗），避免连线过多
-        const linkTarget = Math.min(85, Math.round(stars.length * 0.28));
-        const byDepth = stars.slice().sort((a, b) => b.depth - a.depth);
-        for (let i = 0; i < byDepth.length; i++) byDepth[i].link = i < linkTarget;
-    }
-
-    // 星云：大而柔的彩色光团，缓慢漂移
-    function initNebulae() {
-        const palette = [
-            '70,130,255',   // 蓝
-            '150,90,255',   // 紫
-            '40,200,255',   // 青
-            '255,120,180'   // 品红（点缀）
-        ];
-        nebulae = [];
-        const n = Math.max(3, Math.round(W / 480));
-        for (let i = 0; i < n; i++) {
-            nebulae.push({
-                x: Math.random() * W,
-                y: Math.random() * H,
-                r: Math.min(W, H) * (0.3 + Math.random() * 0.35),
-                col: palette[i % palette.length],
-                alpha: 0.05 + Math.random() * 0.05,
-                vx: (Math.random() - 0.5) * 0.06,
-                vy: (Math.random() - 0.5) * 0.04,
-                depth: 0.15 + Math.random() * 0.3
+                baseR: 0.25 + Math.random() * 1.1,     // 休眠时微小
+                r: 0,
+                opacity: DORMANT_MIN + Math.random() * (DORMANT_MAX - DORMANT_MIN),
+                targetOpacity: 0,
+                targetR: 0,
+                vx: (Math.random() - 0.5) * 0.08,      // 极慢漂浮
+                vy: (Math.random() - 0.5) * 0.08,
+                phase: Math.random() * Math.PI * 2,
+                twinkle: 0.3 + Math.random() * 0.8,
+                color: isGold ? [255, 210, 138] : [140, 198, 255]
             });
         }
     }
 
-    // 少量旋转线框母题（科技点缀）
-    function initShapes() {
-        shapes = [];
-        const sc = Math.max(3, Math.round(W / 480));
-        for (let i = 0; i < sc; i++) {
-            shapes.push({
-                x: Math.random() * W,
-                y: Math.random() * H,
-                size: Math.random() * 20 + 10,
-                sides: Math.random() < 0.5 ? 6 : 3,
-                rot: Math.random() * 6.283,
-                rotSpeed: (Math.random() - 0.5) * 0.01,
-                vy: -(Math.random() * 0.15 + 0.03),
-                depth: Math.random() * 0.6 + 0.3,
-                alpha: Math.random() * 0.1 + 0.05
-            });
+    // ---------- 光照强度计算 (考虑拖尾) ----------
+    function getIllumination(sx, sy) {
+        var best = 0;
+        for (var i = 0; i < trail.length; i++) {
+            var weight = 1 - i / trail.length;                  // 新采样权重高
+            var r = FORCE_RADIUS * (0.4 + 0.6 * weight);       // 旧采样半径衰减
+            var dx = sx - trail[i].x;
+            var dy = sy - trail[i].y;
+            var d = Math.sqrt(dx * dx + dy * dy);
+            if (d < r) {
+                var raw = 1 - d / r;
+                var eased = raw * raw * (3 - 2 * raw);          // smoothstep
+                best = Math.max(best, eased * weight);
+            }
         }
+        return best; // 0 = 休眠, 1 = 最强光照
     }
 
-    function spawnMeteor() {
-        const fromLeft = Math.random() < 0.5;
-        const a = 0.4 + Math.random() * 0.35;          // 俯冲角
-        const sp = 8 + Math.random() * 7;
-        meteors.push({
-            x: fromLeft ? Math.random() * W * 0.45 : W * 0.55 + Math.random() * W * 0.45,
-            y: Math.random() * H * 0.45,
-            vx: Math.cos(a) * sp * (fromLeft ? 1 : -1),
-            vy: Math.sin(a) * sp,
-            sp: sp,
-            len: 90 + Math.random() * 110,
-            life: 0,
-            max: 60 + Math.random() * 40,
-            gold: Math.random() < 0.3
-        });
-    }
+    // ---------- 绘制 ----------
+    function draw() {
+        frameCount++;
 
-    function drawNebulae(panX, panY) {
-        ctx.globalCompositeOperation = 'lighter';
-        for (const nb of nebulae) {
+        // -- 更新拖尾 --
+        if (!reduceMotion) {
+            if (mouse.active && frameCount % TRAIL_EVERY === 0) {
+                trail.unshift({ x: mouse.x, y: mouse.y });
+                if (trail.length > TRAIL_MAX) trail.length = TRAIL_MAX;
+            }
+            if (!mouse.active && trail.length > 0 && frameCount % 4 === 0) {
+                trail.pop(); // 鼠标离开后自然衰减
+            }
+        }
+
+        // -- 更新每颗星 --
+        for (var si = 0; si < stars.length; si++) {
+            var s = stars[si];
             if (!reduceMotion) {
-                nb.x += nb.vx; nb.y += nb.vy;
-                if (nb.x < -nb.r) nb.x = W + nb.r; else if (nb.x > W + nb.r) nb.x = -nb.r;
-                if (nb.y < -nb.r) nb.y = H + nb.r; else if (nb.y > H + nb.r) nb.y = -nb.r;
+                // 漂浮
+                s.x += s.vx;
+                s.y += s.vy;
+                if (s.x < -15) s.x = W + 15; else if (s.x > W + 15) s.x = -15;
+                if (s.y < -15) s.y = H + 15; else if (s.y > H + 15) s.y = -15;
+                s.phase += s.twinkle * 0.02;
             }
-            const x = nb.x + panX * nb.depth * 40;
-            const y = nb.y + panY * nb.depth * 28;
-            const g = ctx.createRadialGradient(x, y, 0, x, y, nb.r);
-            g.addColorStop(0, 'rgba(' + nb.col + ',' + nb.alpha + ')');
-            g.addColorStop(0.5, 'rgba(' + nb.col + ',' + (nb.alpha * 0.4) + ')');
-            g.addColorStop(1, 'rgba(' + nb.col + ',0)');
-            ctx.fillStyle = g;
-            ctx.fillRect(x - nb.r, y - nb.r, nb.r * 2, nb.r * 2);
-        }
-        ctx.globalCompositeOperation = 'source-over';
-    }
 
-    function drawShapes(panX, panY) {
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.lineWidth = 1;
-        for (const s of shapes) {
-            if (!reduceMotion) { s.rot += s.rotSpeed; s.y += s.vy; }
-            if (s.y < -s.size) { s.y = H + s.size; s.x = Math.random() * W; }
-            const x = s.x + panX * s.depth * 60;
-            const y = s.y + panY * s.depth * 36;
-            ctx.strokeStyle = 'rgba(110,190,255,' + s.alpha + ')';
-            ctx.beginPath();
-            for (let i = 0; i <= s.sides; i++) {
-                const a = s.rot + i / s.sides * 6.283;
-                const px = x + Math.cos(a) * s.size;
-                const py = y + Math.sin(a) * s.size;
-                if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
-            }
-            ctx.stroke();
-        }
-        ctx.globalCompositeOperation = 'source-over';
-    }
+            // 光照
+            var illum = reduceMotion ? 0 : getIllumination(s.x, s.y);
 
-    function drawStars(gx, gy, panX, panY) {
-        const reach = Math.min(W, H) * 0.4;
-        ctx.globalCompositeOperation = 'lighter';
+            // 目标值 = 休眠微光 + 力场点亮
+            var dormant = DORMANT_MIN +
+                (Math.sin(s.phase) * 0.5 + 0.5) * (DORMANT_MAX - DORMANT_MIN);
+            s.targetOpacity = dormant + illum * (1 - dormant);
+            s.targetR = s.baseR * (1 + illum * 3.0);
 
-        // 星座连线（仅近处亮星之间）
-        const linkers = [];
-        for (const p of stars) {
-            if (!reduceMotion) { p.y -= p.drift; p.x += p.vx; p.twPhase += p.twSpeed * 0.05; }
-            if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; }
-            if (p.x < -4) p.x = W + 4; else if (p.x > W + 4) p.x = -4;
-            p._x = p.x + panX * p.depth * 60;
-            p._y = p.y + panY * p.depth * 38;
-            if (p.link) linkers.push(p);
-        }
-        for (let i = 0; i < linkers.length; i++) {
-            const a = linkers[i];
-            for (let j = i + 1; j < linkers.length; j++) {
-                const b = linkers[j];
-                const dx = a._x - b._x, dy = a._y - b._y;
-                const d2 = dx * dx + dy * dy;
-                if (d2 < linkDist2) {
-                    const prox = 1 - Math.sqrt(d2) / linkDist;
-                    // 连线中点靠近鼠标 → 增亮，形成"光标牵引星网"的效果
-                    const mx = (a._x + b._x) * 0.5, my = (a._y + b._y) * 0.5;
-                    const near = Math.max(0, 1 - Math.hypot(mx - gx, my - gy) / reach);
-                    const al = prox * (0.22 + near * 0.4);
-                    ctx.strokeStyle = 'rgba(150,205,255,' + al + ')';
-                    ctx.lineWidth = 0.5 + near * 0.8;
-                    ctx.beginPath();
-                    ctx.moveTo(a._x, a._y);
-                    ctx.lineTo(b._x, b._y);
-                    ctx.stroke();
-                }
+            // 平滑插值
+            if (!reduceMotion) {
+                s.opacity += (s.targetOpacity - s.opacity) * LERP_RATE;
+                s.r += (s.targetR - s.r) * LERP_RATE;
+            } else {
+                s.opacity = DORMANT_MIN;
+                s.r = s.baseR;
             }
         }
 
-        // 星点
-        for (const p of stars) {
-            let alpha = 0.4 + Math.sin(p.twPhase) * 0.35;
-            const near = Math.max(0, 1 - Math.hypot(p._x - gx, p._y - gy) / reach);
-            alpha = Math.min(1, alpha + near * 0.4);
-            const rr = p.r * (1 + near * 1.2);
-            const col = p.gold ? '255,215,140' : (p.mag ? '230,160,255' : '190,220,255');
-            ctx.fillStyle = 'rgba(' + col + ',' + alpha + ')';
-            ctx.beginPath();
-            ctx.arc(p._x, p._y, rr, 0, 6.283);
-            ctx.fill();
-            if (rr > 1.3) {                              // 亮星带十字星芒
-                ctx.fillStyle = 'rgba(' + col + ',' + (alpha * 0.12) + ')';
-                ctx.beginPath();
-                ctx.arc(p._x, p._y, rr * 4, 0, 6.283);
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(' + col + ',' + (alpha * 0.5) + ')';
-                ctx.lineWidth = 0.6;
-                const sp = rr * 3.5;
-                ctx.beginPath();
-                ctx.moveTo(p._x - sp, p._y); ctx.lineTo(p._x + sp, p._y);
-                ctx.moveTo(p._x, p._y - sp); ctx.lineTo(p._x, p._y + sp);
-                ctx.stroke();
-            }
-        }
-        ctx.globalCompositeOperation = 'source-over';
-    }
-
-    function drawMeteors() {
-        if (!reduceMotion && meteors.length < 3 && Math.random() < 0.018) spawnMeteor();
-        ctx.globalCompositeOperation = 'lighter';
-        for (let i = meteors.length - 1; i >= 0; i--) {
-            const m = meteors[i];
-            if (!reduceMotion) { m.x += m.vx; m.y += m.vy; m.life++; }
-            const tx = m.x - (m.vx / m.sp) * m.len;
-            const ty = m.y - (m.vy / m.sp) * m.len;
-            const fade = Math.min(1, m.life / 8) * Math.max(0, 1 - m.life / m.max);
-            const col = m.gold ? '255,220,150' : '170,225,255';
-            const g = ctx.createLinearGradient(m.x, m.y, tx, ty);
-            g.addColorStop(0, 'rgba(' + col + ',' + (0.9 * fade) + ')');
-            g.addColorStop(1, 'rgba(' + col + ',0)');
-            ctx.strokeStyle = g;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(m.x, m.y);
-            ctx.lineTo(tx, ty);
-            ctx.stroke();
-            ctx.fillStyle = 'rgba(255,255,255,' + (0.9 * fade) + ')';
-            ctx.beginPath();
-            ctx.arc(m.x, m.y, 1.6, 0, 6.283);
-            ctx.fill();
-            if (m.life > m.max || m.x < -m.len || m.x > W + m.len || m.y > H + m.len) meteors.splice(i, 1);
-        }
-        ctx.globalCompositeOperation = 'source-over';
-    }
-
-    // 鼠标 HUD 准星（轻量）
-    function drawReticle(t, gx, gy) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.translate(gx, gy);
-        ctx.rotate(t * 0.35);
-        ctx.strokeStyle = 'rgba(120,210,255,0.18)';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([9, 10]);
-        ctx.beginPath(); ctx.arc(0, 0, 42, 0, 6.283); ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.restore();
-        ctx.globalCompositeOperation = 'source-over';
-    }
-
-    function frame() {
-        time += reduceMotion ? 0 : 0.016;
-        const t = time;
-
-        mouse.idle += 1;
-        if (mouse.idle > 90) {
-            mouse.tx = 0.5 + Math.cos(t * 0.16) * 0.32;
-            mouse.ty = 0.45 + Math.sin(t * 0.2) * 0.18;
-        }
-        mouse.x += (mouse.tx - mouse.x) * 0.05;
-        mouse.y += (mouse.ty - mouse.y) * 0.05;
-
-        const gx = mouse.x * W, gy = mouse.y * H;
-        const panX = mouse.x - 0.5, panY = mouse.y - 0.5;
-
+        // -- 清屏 + 深色科技蓝渐变背景 --
         ctx.clearRect(0, 0, W, H);
-
-        // 深空底色
-        const bg = ctx.createLinearGradient(0, 0, W, H);
-        bg.addColorStop(0, 'rgba(6,12,36,0.35)');
-        bg.addColorStop(0.5, 'rgba(8,10,32,0.20)');
-        bg.addColorStop(1, 'rgba(12,8,34,0.40)');
+        var bg = ctx.createRadialGradient(W * 0.50, H * 0.35, 0, W * 0.52, H * 0.40, Math.max(W, H) * 0.85);
+        bg.addColorStop(0, '#0b1536');
+        bg.addColorStop(0.42, '#060e26');
+        bg.addColorStop(1, '#020614');
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, W, H);
 
-        // 星云
-        drawNebulae(panX, panY);
+        // -- 连线（仅亮星之间）--
+        var linkers = [];
+        for (si = 0; si < stars.length; si++) {
+            if (stars[si].opacity > LINK_THRESHOLD) linkers.push(stars[si]);
+        }
+        if (linkers.length > 1) {
+            ctx.globalCompositeOperation = 'lighter';
+            for (var i = 0; i < linkers.length; i++) {
+                var a = linkers[i];
+                for (var j = i + 1; j < linkers.length; j++) {
+                    var b = linkers[j];
+                    var dx = a.x - b.x;
+                    var dy = a.y - b.y;
+                    var d2 = dx * dx + dy * dy;
+                    if (d2 < MAX_LINK_DIST * MAX_LINK_DIST) {
+                        var d = Math.sqrt(d2);
+                        var lineAlpha = Math.min(a.opacity, b.opacity) * (1 - d / MAX_LINK_DIST) * 0.45;
+                        if (lineAlpha > 0.006) {
+                            ctx.strokeStyle = 'rgba(155,215,255,' + lineAlpha.toFixed(3) + ')';
+                            ctx.lineWidth = 0.5 + lineAlpha * 1.0;
+                            ctx.beginPath();
+                            ctx.moveTo(a.x, a.y);
+                            ctx.lineTo(b.x, b.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            ctx.globalCompositeOperation = 'source-over';
+        }
 
-        // 跟随鼠标的星云流光
+        // -- 绘制星点 --
         ctx.globalCompositeOperation = 'lighter';
-        const R = Math.min(W, H) * 0.55;
-        const glow = ctx.createRadialGradient(gx, gy, 0, gx, gy, R);
-        glow.addColorStop(0, 'rgba(90,180,255,0.16)');
-        glow.addColorStop(0.45, 'rgba(80,120,255,0.06)');
-        glow.addColorStop(1, 'rgba(80,120,255,0)');
-        ctx.fillStyle = glow;
-        ctx.fillRect(0, 0, W, H);
+        for (si = 0; si < stars.length; si++) {
+            var s2 = stars[si];
+            var alpha = s2.opacity;
+            if (alpha < 0.012) continue;
+            var r = s2.r;
+            var col = s2.color;
+
+            // 光晕（亮星外圈）
+            if (alpha > 0.25) {
+                var glowA = alpha * 0.09;
+                ctx.fillStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + glowA.toFixed(3) + ')';
+                ctx.beginPath();
+                ctx.arc(s2.x, s2.y, r * 5.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            if (alpha > 0.16) {
+                var midA = alpha * 0.20;
+                ctx.fillStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + midA.toFixed(3) + ')';
+                ctx.beginPath();
+                ctx.arc(s2.x, s2.y, r * 2.2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            // 星核
+            ctx.fillStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + alpha.toFixed(3) + ')';
+            ctx.beginPath();
+            ctx.arc(s2.x, s2.y, r, 0, Math.PI * 2);
+            ctx.fill();
+        }
         ctx.globalCompositeOperation = 'source-over';
 
-        // 主体
-        drawShapes(panX, panY);
-        drawStars(gx, gy, panX, panY);
-        drawMeteors();
-        drawReticle(t, gx, gy);
-
-        // 轻暗角
-        const vg = ctx.createRadialGradient(W / 2, H * 0.48, Math.min(W, H) * 0.4, W / 2, H * 0.5, Math.max(W, H) * 0.85);
-        vg.addColorStop(0, 'rgba(2,4,12,0)');
-        vg.addColorStop(1, 'rgba(1,2,8,0.45)');
-        ctx.fillStyle = vg;
+        // -- 动态雾气遮罩（鼠标驱散朦胧）--
+        if (!reduceMotion && trail.length > 0) {
+            var cx = trail[0].x;
+            var cy = trail[0].y;
+            var fog = ctx.createRadialGradient(cx, cy, FORCE_RADIUS * 0.10, cx, cy, Math.max(W, H) * 0.88);
+            fog.addColorStop(0, 'rgba(2,6,20,0.03)');
+            fog.addColorStop(0.20, 'rgba(2,6,20,0.14)');
+            fog.addColorStop(0.50, 'rgba(2,6,20,0.40)');
+            fog.addColorStop(1, 'rgba(2,6,20,0.56)');
+            ctx.fillStyle = fog;
+        } else {
+            ctx.fillStyle = 'rgba(2,6,20,0.50)';
+        }
         ctx.fillRect(0, 0, W, H);
 
-        if (running) rafId = requestAnimationFrame(frame);
+        if (running) rafId = requestAnimationFrame(draw);
     }
 
+    // ---------- 启停 ----------
     function start() {
         if (running || reduceMotion) return;
         running = true;
-        rafId = requestAnimationFrame(frame);
+        rafId = requestAnimationFrame(draw);
     }
     function stop() {
         running = false;
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = null;
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
     }
 
-    window.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.tx = (e.clientX - rect.left) / rect.width;
-        mouse.ty = (e.clientY - rect.top) / rect.height;
-        mouse.idle = 0;
+    // ---------- 事件 ----------
+    window.addEventListener('mousemove', function (e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        mouse.active = true;
     }, { passive: true });
 
-    window.addEventListener('resize', resize);
+    window.addEventListener('mouseleave', function () {
+        mouse.active = false;
+    });
 
-    const io = new IntersectionObserver((entries) => {
-        entries.forEach(en => {
+    window.addEventListener('touchmove', function (e) {
+        if (e.touches.length) {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+            mouse.active = true;
+        }
+    }, { passive: true });
+
+    window.addEventListener('touchend', function () {
+        mouse.active = false;
+    });
+
+    window.addEventListener('resize', function () {
+        resize();
+        initStars();
+    });
+
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) stop(); else if (!reduceMotion) start();
+    });
+
+    // IntersectionObserver：Canvas 不可见时暂停
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
             if (en.isIntersecting && !document.hidden) start();
             else stop();
         });
     }, { threshold: 0.05 });
 
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) stop();
-    });
-
+    // ---------- 启动 ----------
     resize();
+    initStars();
     io.observe(canvas);
-    if (reduceMotion) frame();
+    if (reduceMotion) draw(); // 仅绘一帧静态星空
 })();
