@@ -227,7 +227,7 @@ nav {
 }
 .github-cta:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 30px rgba(255, 204, 51, 0.4); }
 
-/* --- 首页下方：渲染效果轮播（复用 render 图） --- */
+/* --- 首页下方：渲染效果展示（纵向手风琴） --- */
 .hero-showcase {
     flex: 0 0 auto;
     display: flex;
@@ -235,35 +235,170 @@ nav {
     gap: var(--gap-lg);
     padding-bottom: clamp(8px, 2vh, 24px);
 }
-.render-carousel {
+.scene-accordion {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    height: clamp(420px, 70vh, 680px);
+}
+.scene-panel {
     position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 24px;
+    flex: 1 1 0;
+    min-width: 60px;
+    border-radius: 18px;
     overflow: hidden;
     border: 1px solid var(--card-border);
-    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
-    background: var(--card-bg);
+    cursor: pointer;
+    outline: none;
+    transition: flex-grow 0.55s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s ease;
 }
-.render-carousel img {
+.scene-panel.active {
+    flex-grow: 7;
+    border-color: rgba(255, 204, 51, 0.4);
+}
+.scene-img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0;
-    animation: renderFade 15s infinite;
-    will-change: opacity;
+    transform: scale(1.02);
+    transition: transform 6s ease;
 }
-.render-carousel img:nth-child(1) { animation-delay: 0s; }
-.render-carousel img:nth-child(2) { animation-delay: 5s; }
-.render-carousel img:nth-child(3) { animation-delay: 10s; }
-@keyframes renderFade {
-    0%   { opacity: 0; transform: scale(1.05); }
-    10%  { opacity: 1; }
-    33%  { opacity: 1; transform: scale(1); }
-    43%  { opacity: 0; }
-    100% { opacity: 0; transform: scale(1.05); }
+.scene-panel.active .scene-img { transform: scale(1.08); }
+.scene-overlay {
+    position: absolute;
+    inset: 0;
+    transition: var(--transition);
+    background: linear-gradient(to top, rgba(2, 6, 23, 0.92) 0%, rgba(2, 6, 23, 0.3) 55%, rgba(2, 6, 23, 0.1) 100%);
+}
+
+/* 折叠态：窄竖条，缩略信息纵向排版 */
+.scene-brief {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    padding: 20px 0;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+.scene-panel.active .scene-brief { opacity: 0; pointer-events: none; }
+.scene-num {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--primary-gold);
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+.scene-brief h3 {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+.scene-brief-tag { display: none; }
+
+/* 展开态：场景细节介绍 */
+.scene-detail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: clamp(20px, 3vw, 40px);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
+    pointer-events: none;
+}
+.scene-panel.active .scene-detail { opacity: 1; transform: translateY(0); }
+.scene-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--primary-gold);
+    background: rgba(255, 204, 51, 0.12);
+    border: 1px solid rgba(255, 204, 51, 0.3);
+    padding: 4px 12px;
+    border-radius: 50px;
+    margin-bottom: 12px;
+}
+.scene-detail h3 {
+    font-size: clamp(1.3rem, 2vw, 1.9rem);
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 8px;
+}
+.scene-detail p {
+    font-size: clamp(0.82rem, 0.95vw, 1rem);
+    color: #cbd5e1;
+    line-height: 1.7;
+    margin: 0;
+    max-width: 680px;
+}
+
+/* 无图模块（基础设施）：科技底纹 + 特性列表 */
+.scene-panel.infra {
+    background: linear-gradient(150deg, rgba(15, 23, 42, 0.96), rgba(2, 8, 22, 0.98));
+}
+.scene-panel.infra::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(59, 130, 246, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    -webkit-mask-image: radial-gradient(ellipse at 70% 18%, #000, transparent 78%);
+    mask-image: radial-gradient(ellipse at 70% 18%, #000, transparent 78%);
+    pointer-events: none;
+}
+.scene-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 720px;
+}
+.scene-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: clamp(0.82rem, 0.95vw, 1rem);
+    color: #cbd5e1;
+    line-height: 1.5;
+}
+.scene-list li i {
+    color: var(--primary-gold);
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* 移动端：横向竖条过窄，回退为纵向堆叠 */
+@media (max-width: 760px) {
+    .scene-accordion { flex-direction: column; height: auto; }
+    .scene-panel { min-height: 64px; }
+    .scene-panel.active { min-height: 360px; }
+    .scene-brief {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 0 18px;
+    }
+    .scene-brief h3 { writing-mode: horizontal-tb; letter-spacing: 0; }
 }
 
 /* --- 首屏下方：双向定位 Split-Screen --- */
