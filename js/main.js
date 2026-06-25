@@ -193,7 +193,7 @@ function initSlider() {
 }
 
 // slide index → nav item index 映射（导航栏有5个条目，但只有3页slide）
-const slideNavMap = [0, 1, 4];
+const slideNavMap = [0, 1, 2, 4];
 
 function updateNav() {
     const navItems = document.querySelectorAll('.nav-item');

@@ -13,7 +13,6 @@
             border: none !important;
             box-shadow: none !important;
         }
-        /* Hero 背景透明，让 Slide 级渐变接管 */
         .hero-visual-background {
             background: url('assets/background.png') center/cover no-repeat !important;
         }
@@ -49,19 +48,173 @@
             -webkit-text-fill-color: transparent !important;
             filter: drop-shadow(0 0 10px rgba(140,190,235,0.12)) !important;
         }
-        /* ----- 玻璃卡片基底 ----- */
+        /* ===== 身份切换拨动开关 ===== */
+        .role-toggle {
+            display: flex; justify-content: center; gap: 0;
+            margin-bottom: 28px;
+            background: rgba(10,16,36,0.50);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50px; padding: 4px;
+            width: fit-content; margin-left: auto; margin-right: auto;
+        }
+        .role-btn {
+            padding: 12px 32px; border-radius: 50px; border: none;
+            background: transparent; color: rgba(180,190,210,0.45);
+            font-size: 0.88rem; font-weight: 600; cursor: pointer;
+            transition: all 0.30s ease;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+        /* 手柄图标（创作者 — 无框，尺寸对齐终端图标） */
+        .role-btn i.fa-gamepad {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; font-size: 1.15rem;
+            color: rgba(180,160,220,0.40); margin-right: 6px;
+            transition: all 0.30s ease;
+        }
+        .role-btn.active i.fa-gamepad {
+            color: #d8b8ff;
+            text-shadow: 0 0 12px rgba(180,140,240,0.55), 0 0 24px rgba(160,100,240,0.25);
+        }
+        /* 终端图标（开发者 — 玻璃框） */
+        .role-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; border-radius: 6px;
+            margin-right: 6px; font-size: 0.85rem; font-style: normal;
+            font-weight: 800; letter-spacing: 0;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(160,200,225,0.40);
+            transition: all 0.30s ease;
+        }
+        .role-btn.active .role-icon {
+            color: #a0e8ff; background: rgba(56,200,240,0.14);
+            border-color: rgba(56,200,240,0.35);
+            box-shadow: 0 0 10px rgba(56,189,248,0.25), 0 0 0 1px rgba(56,200,240,0.10) inset;
+            text-shadow: 0 0 10px rgba(80,200,240,0.50);
+        }
+        .role-btn.active {
+            background: rgba(255,255,255,0.10);
+            color: #fff;
+        }
+        .role-btn.active i { color: #fff; }
+        .role-btn:first-child.active {
+            background: rgba(180,140,240,0.20);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 22px rgba(180,140,240,0.35),
+                        0 0 0 1px rgba(200,160,255,0.30) inset;
+            color: #e8d8ff;
+        }
+        .role-btn:first-child.active i { color: #d8b8ff; }
+        .role-btn:last-child.active {
+            background: rgba(56,180,240,0.20);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.25), 0 0 22px rgba(56,189,248,0.35),
+                        0 0 0 1px rgba(56,189,248,0.30) inset;
+            color: #d0f0ff;
+        }
+        .role-btn:last-child.active i { color: #80d8ff; }
+        .role-btn:hover:not(.active) { color: rgba(255,255,255,0.70); }
+        .role-btn:hover:not(.active) i { color: rgba(255,255,255,0.55); }
+
+        /* Bento 卡片过滤动画 */
+        .bento-card {
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+        .bento-card.hiding {
+            opacity: 0; transform: scale(0.90);
+            pointer-events: none;
+        }
+        /* 2x2 卡片双面切换 */
+        .card-face {
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+        .card-face.switching-out {
+            opacity: 0; transform: translateY(-8px);
+        }
+        .card-face.switching-in {
+            animation: faceIn 0.40s cubic-bezier(.34,1.56,.64,1) forwards;
+        }
+        @keyframes faceIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Bento Box 布局：毛玻璃 + 大图标 + 精简文字 ===== */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-flow: dense;
+            gap: 18px;
+        }
+        @media (max-width: 900px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 500px) { .bento-grid { grid-template-columns: 1fr; } }
+        .bento-2x2 { grid-column: span 2; grid-row: span 2; min-height: 380px; }
+        .bento-2x1 { grid-column: span 2; min-height: 180px; }
+
+        .bento-card {
+            position: relative; overflow: hidden; border-radius: 20px;
+            padding: 28px 24px; min-height: 180px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; gap: 10px;
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+            transition: transform 0.40s cubic-bezier(.34,1.56,.64,1), border-color 0.35s ease, box-shadow 0.35s ease;
+            cursor: default;
+        }
+        .bento-card:hover { transform: translateY(-6px); box-shadow: 0 20px 56px rgba(0,0,0,0.48); }
+        .bento-card > * { position: relative; z-index: 1; }
+
+        .bento-glow { position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: 0; transition: opacity 0.35s ease; }
+        .bento-card:hover .bento-glow { opacity: 1; }
+
+        /* sandbox: 紫粉霓虹 */
+        .bento-card.sandbox { background: rgba(20,14,42,0.45); border-color: rgba(180,140,240,0.18); }
+        .bento-card.sandbox .bento-glow { background: radial-gradient(ellipse at 30% 20%, rgba(200,140,255,0.12), transparent 65%); }
+        .bento-card.sandbox:hover { border-color: rgba(210,170,250,0.45); box-shadow: 0 0 55px rgba(160,100,240,0.15), 0 18px 50px rgba(0,0,0,0.45); }
+
+        /* research: 青蓝冷光 */
+        .bento-card.research { background: rgba(8,16,36,0.42); border-color: rgba(56,180,240,0.14); }
+        .bento-card.research .bento-glow { background: radial-gradient(ellipse at 70% 30%, rgba(56,189,248,0.10), transparent 65%); }
+        .bento-card.research:hover { border-color: rgba(56,189,248,0.38); box-shadow: 0 0 50px rgba(56,189,248,0.10), 0 18px 50px rgba(0,0,0,0.45); }
+
+        .bento-icon-wrap { font-size: 2.6rem; transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), color 0.35s ease; }
+        .bento-2x2 .bento-icon-wrap { font-size: 3.8rem; }
+        .bento-2x1 .bento-icon-wrap { font-size: 3.0rem; }
+        .sandbox .bento-icon-wrap { color: #c8a8f0; }
+        .research .bento-icon-wrap { color: #60c8f0; }
+        .bento-card:hover .bento-icon-wrap { transform: scale(1.12); }
+        .sandbox:hover .bento-icon-wrap { color: #e0c8ff; text-shadow: 0 0 20px rgba(180,130,240,0.40); }
+        .research:hover .bento-icon-wrap { color: #80d8ff; text-shadow: 0 0 20px rgba(56,189,248,0.35); }
+
+        .bento-card h3 { font-size: 1.1rem; font-weight: 700; color: #fff; margin: 0; }
+        .bento-2x2 h3 { font-size: 1.5rem; }
+        .bento-2x1 h3 { font-size: 1.2rem; }
+        .bento-card p { font-size: 0.82rem; color: rgba(200,215,235,0.55); margin: 0; max-width: 240px; }
+        .bento-2x2 p { font-size: 0.95rem; max-width: 440px; line-height: 1.6; }
+
+        /* 旧卡片样式已废弃 */
         .direction-card {
-            background: rgba(8,18,38,0.38) !important;
-            backdrop-filter: blur(22px) !important;
-            -webkit-backdrop-filter: blur(22px) !important;
-            border: 1px solid rgba(255,255,255,0.07) !important;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.32) !important;
-            transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), border-color 0.35s ease, box-shadow 0.35s ease !important;
+            background: rgba(6,14,32,0.35) !important;
+            backdrop-filter: blur(26px) !important;
+            -webkit-backdrop-filter: blur(26px) !important;
+            border: 1px solid rgba(255,255,255,0.08) !important;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.03) inset,
+                0 8px 36px rgba(0,0,0,0.38),
+                0 2px 8px rgba(0,0,0,0.25) !important;
+            transition: transform 0.4s cubic-bezier(.34,1.56,.64,1),
+                        border-color 0.35s ease,
+                        box-shadow 0.35s ease !important;
         }
         .direction-card:hover {
             transform: translateY(-8px) !important;
-            border-color: rgba(255,255,255,0.15) !important;
-            box-shadow: 0 20px 56px rgba(0,0,0,0.44) !important;
+            border-color: rgba(255,255,255,0.16) !important;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.06) inset,
+                0 24px 64px rgba(0,0,0,0.50),
+                0 4px 12px rgba(0,0,0,0.30) !important;
         }
         /* ----- 左卡（创作）：玩具化 · 霓虹潮流 · 强毛玻璃 ----- */
         .direction-card.sandbox {
@@ -87,26 +240,33 @@
                         0 0 110px rgba(200,140,255,0.10),
                         0 18px 52px rgba(0,0,0,0.40) !important;
         }
-        /* ----- 右卡（科研）：青蓝氛围光 ----- */
+        /* ----- 右卡（科研）：强毛玻璃 + 青蓝氛围光 + 微光边框 ----- */
         .direction-card.research {
-            background: rgba(8,18,38,0.38) !important;
+            background: rgba(6,16,34,0.35) !important;
+            backdrop-filter: blur(26px) !important;
+            -webkit-backdrop-filter: blur(26px) !important;
+            border: 1px solid rgba(56,189,248,0.10) !important;
+            box-shadow:
+                0 0 0 1px rgba(56,189,248,0.03) inset,
+                0 8px 36px rgba(0,0,0,0.38),
+                0 2px 8px rgba(0,0,0,0.25) !important;
         }
         .direction-card.research::before {
             content: '' !important;
             position: absolute !important; inset: auto !important;
-            width: 340px; height: 340px !important;
-            background: radial-gradient(circle, rgba(56,189,248,0.07), transparent 70%) !important;
-            top: -110px; right: -80px !important; left: auto !important;
+            width: 360px; height: 360px !important;
+            background: radial-gradient(circle, rgba(56,189,248,0.09), rgba(40,160,220,0.04), transparent 68%) !important;
+            top: -120px; right: -90px !important; left: auto !important;
             pointer-events: none !important; z-index: 0 !important;
             -webkit-mask-image: none !important; mask-image: none !important;
         }
         .direction-card.research:hover {
-            border-color: rgba(56,189,248,0.22) !important;
-            box-shadow: 0 16px 48px rgba(56,189,248,0.05) !important;
+            border-color: rgba(56,189,248,0.28) !important;
+            box-shadow:
+                0 0 0 1px rgba(56,189,248,0.06) inset,
+                0 24px 60px rgba(0,0,0,0.50),
+                0 0 50px rgba(56,189,248,0.08) !important;
         }
-        /* 静默旧 ::after 图标 hover 动画 */
-        .direction-card.research:hover::after { color: rgba(56,189,248,0.04) !important; }
-        .direction-card.sandbox:hover::after { color: rgba(168,85,247,0.04) !important; transform: none !important; }
 
         /* ----- 卡片标题：纯白 + 微外发光 ----- */
         .dir-title {
@@ -118,6 +278,33 @@
         .research .dir-badge { background: rgba(56,189,248,0.08) !important; color: #70bce8 !important; border: 1px solid rgba(56,189,248,0.18) !important; }
         .sandbox .dir-ic { background: rgba(180,140,240,0.15) !important; color: #d4bcf8 !important; border: 1px solid rgba(200,160,255,0.28) !important; }
         .research .dir-ic { background: rgba(56,189,248,0.07) !important; color: #60b0e0 !important; border: 1px solid rgba(56,189,248,0.12) !important; }
+        /* ----- 卡片背景图标替换 ----- */
+        /* 左卡：积木式 UI → 网格方块图案 */
+        .direction-card.sandbox::after {
+            content: '\f84c' !important; /* fa-grid-2 方格网格 */
+            font-family: 'Font Awesome 6 Free' !important;
+            font-weight: 900 !important;
+            font-size: 14rem !important;
+            right: -25px !important; bottom: -35px !important;
+            color: rgba(180,150,240,0.12) !important;
+            transform: rotate(-6deg) !important;
+            /* 加 background-clip 边缘隐入 */
+            -webkit-mask-image: radial-gradient(ellipse at 80% 85%, black 35%, transparent 70%) !important;
+            mask-image: radial-gradient(ellipse at 80% 85%, black 35%, transparent 70%) !important;
+        }
+        /* 右卡：节点网络 → project-diagram */
+        .direction-card.research::after {
+            content: '\f542' !important; /* fa-diagram-project 节点层级图 */
+            font-family: 'Font Awesome 6 Free' !important;
+            font-weight: 900 !important;
+            font-size: 15rem !important;
+            right: -30px !important; bottom: -40px !important;
+            color: rgba(56,189,248,0.10) !important;
+            transform: rotate(4deg) !important;
+            -webkit-mask-image: radial-gradient(ellipse at 80% 85%, black 35%, transparent 70%) !important;
+            mask-image: radial-gradient(ellipse at 80% 85%, black 35%, transparent 70%) !important;
+        }
+
         /* 左卡标题多一层暖色辉光 */
         .sandbox .dir-title {
             text-shadow: 0 0 22px rgba(200,160,240,0.20),
@@ -235,9 +422,9 @@
     <div class="nav-links">
         <a class="nav-item active" onclick="goToSlide(0)">首页</a>
         <a class="nav-item" onclick="goToSlide(1)">关于我们</a>
-        <a class="nav-item" href="javascript:void(0)">学术研究</a>
+        <a class="nav-item" onclick="goToSlide(2)">学术研究</a>
         <a class="nav-item" href="javascript:void(0)">游戏开发</a>
-        <a class="nav-item" onclick="goToSlide(2)">相关竞赛</a>
+        <a class="nav-item" onclick="goToSlide(3)">相关竞赛</a>
     </div>
 </nav>
 
@@ -278,48 +465,76 @@
                             <!-- <span class="split-eyebrow">一个引擎 · 两种可能</span> -->
                             <h2>面向科研的深度，面向创作的自由</h2>
                         </div>
-                        <div class="split-grid">
+                        <!-- 身份切换拨动开关 -->
+                        <div class="role-toggle" id="roleToggle">
+                            <button class="role-btn" data-role="creator"><i class="fas fa-gamepad"></i> 我是创作者</button>
+                            <button class="role-btn" data-role="developer"><span class="role-icon term-icon">&gt;_</span> 我是开发者</button>
+                        </div>
+                        <div class="bento-grid" id="bentoGrid">
 
-                            <!-- 卡片一：面向学生与新手 -->
-                            <div class="direction-card sandbox">
-                                <span class="dir-badge"><i class="fas fa-wand-magic-sparkles"></i> 面向创作 · 新手</span>
-                                <h3 class="dir-title">零基础创作沙盒，让灵感即刻落地</h3>
-                                <p class="dir-desc">告别传统繁杂的引擎面板，无论你是懂技术不懂美术，还是懂美术不懂代码，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。</p>
-                                <ul class="dir-features">
-                                    <li>
-                                        <span class="dir-ic"><i class="fas fa-puzzle-piece"></i></span>
-                                        <div><h4>积木式编程</h4><p>用直观的逻辑模块代替生涩代码，所见即所得。</p></div>
-                                    </li>
-                                    <li>
-                                        <span class="dir-ic"><i class="fas fa-robot"></i></span>
-                                        <div><h4>AI 场景助手</h4><p>智能化辅助构建，大幅降低场景搭建的时间成本。</p></div>
-                                    </li>
-                                    <li>
-                                        <span class="dir-ic"><i class="fas fa-seedling"></i></span>
-                                        <div><h4>零门槛生态</h4><p>专为学生与初学者打造，让创意不再被技术壁垒阻挡。</p></div>
-                                    </li>
-                                </ul>
+                            <!-- 2x2: 双面切换卡 -->
+                            <div class="bento-card bento-2x2 sandbox" id="heroCard">
+                                <div class="bento-glow"></div>
+                                <!-- 创作者面 -->
+                                <div class="card-face card-face-creator">
+                                    <div class="bento-icon-wrap"><i class="fas fa-wand-magic-sparkles"></i></div>
+                                    <h3>零基础创作沙盒，让灵感即刻落地</h3>
+                                    <p>告别传统繁杂的引擎面板，无论你是懂技术不懂美术，还是懂美术不懂代码，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。</p>
+                                </div>
+                                <!-- 科研者面 -->
+                                <div class="card-face card-face-developer" style="display:none;">
+                                    <div class="bento-icon-wrap"><i class="fas fa-circle-nodes"></i></div>
+                                    <h3>突破边界，专为硬核而生</h3>
+                                    <p>为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。</p>
+                                </div>
                             </div>
 
-                            <!-- 卡片二：面向底层与科研 -->
-                            <div class="direction-card research">
-                                <span class="dir-badge"><i class="fas fa-flask"></i> 面向科研 · 底层</span>
-                                <h3 class="dir-title">突破边界，专为硬核挑战而生</h3>
-                                <p class="dir-desc">为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。</p>
-                                <ul class="dir-features">
-                                    <li>
-                                        <span class="dir-ic"><i class="fas fa-microchip"></i></span>
-                                        <div><h4>CPU-GPU 协同</h4><p>已在异构编程语言领域取得实质性突破，释放极致算力。</p></div>
-                                    </li>
-                                    <li>
-                                        <span class="dir-ic"><i class="fas fa-display"></i></span>
-                                        <div><h4>前沿显示支持</h4><p>深度集成并优化立体显示技术，赋能下一代视觉体验。</p></div>
-                                    </li>
-                                    <li>
-                                        <span class="dir-ic"><i class="fas fa-code-branch"></i></span>
-                                        <div><h4>高度可扩展</h4><p>为 SIGGRAPH 等学术研究提供透明、可修改的底层 API。</p></div>
-                                    </li>
-                                </ul>
+                            <!-- 1x1: 积木式编程 -->
+                            <div class="bento-card sandbox">
+                                <div class="bento-glow"></div>
+                                <div class="bento-icon-wrap"><i class="fas fa-puzzle-piece"></i></div>
+                                <h3>积木式编程</h3>
+                                <p>用直观的逻辑模块代替生涩代码，所见即所得。</p>
+                            </div>
+
+                            <!-- 1x1: AI 场景助手 -->
+                            <div class="bento-card sandbox">
+                                <div class="bento-glow"></div>
+                                <div class="bento-icon-wrap"><i class="fas fa-robot"></i></div>
+                                <h3>AI 场景助手</h3>
+                                <p>智能化辅助构建，大幅降低场景搭建的时间成本。</p>
+                            </div>
+
+                            <!-- 1x1: 零门槛生态 -->
+                            <div class="bento-card sandbox">
+                                <div class="bento-glow"></div>
+                                <div class="bento-icon-wrap"><i class="fas fa-seedling"></i></div>
+                                <h3>零门槛生态</h3>
+                                <p>专为学生与初学者打造，让创意不再被技术壁垒阻挡。</p>
+                            </div>
+
+                            <!-- 2x1: CPU-GPU 协同 -->
+                            <div class="bento-card bento-2x1 research">
+                                <div class="bento-glow"></div>
+                                <div class="bento-icon-wrap"><i class="fas fa-microchip"></i></div>
+                                <h3>CPU-GPU 协同</h3>
+                                <p>已在异构编程语言领域取得实质性突破，释放极致算力。</p>
+                            </div>
+
+                            <!-- 1x1: 前沿显示 -->
+                            <div class="bento-card research">
+                                <div class="bento-glow"></div>
+                                <div class="bento-icon-wrap"><i class="fas fa-display"></i></div>
+                                <h3>前沿显示支持</h3>
+                                <p>深度集成并优化立体显示技术，赋能下一代视觉体验。</p>
+                            </div>
+
+                            <!-- 1x1: 高度可扩展 -->
+                            <div class="bento-card research">
+                                <div class="bento-glow"></div>
+                                <div class="bento-icon-wrap"><i class="fas fa-code-branch"></i></div>
+                                <h3>高度可扩展</h3>
+                                <p>为 SIGGRAPH 等学术研究提供透明、可修改的底层 API。</p>
                             </div>
 
                         </div>
@@ -410,7 +625,7 @@
             </div>
         </section>
 
-        <!-- 2. 关于我们 (发展历程 + 核心团队 + 科研成果) -->
+        <!-- 2. 关于我们 (发展历程 + 核心团队) -->
         <section class="slide">
             <div class="content-box">
                 <div class="page-container about-container">
@@ -509,7 +724,14 @@
                     </div>
                 </div>
 
-                <!-- 区块三：科研成果 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 学术研究 -->
+        <section class="slide">
+            <div class="content-box">
+                <div class="page-container about-container">
                 <div class="about-section">
                     <div class="section-heading">
                         <h2>科研成果</h2>
@@ -565,7 +787,7 @@
             </div>
         </section>
 
-        <!-- 3. 相关竞赛 -->
+        <!-- 4. 相关竞赛 -->
         <section class="slide">
             <div class="content-box">
                 <div class="page-container">
@@ -664,6 +886,16 @@
 
 <script src="js/main.js"></script>
 <script>
+    // 学术研究 → 跳转到关于我们页的科研成果区
+    window.goToResearch = function() {
+        if (typeof goToSlide === 'function') goToSlide(1);
+        setTimeout(function() {
+            var el = document.getElementById('researchSection');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 500);
+    };
+</script>
+<script>
     // ========== 下载弹窗交互 ==========
     (function() {
         var overlay = document.getElementById('dlOverlay');
@@ -680,6 +912,70 @@
         });
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+        });
+    })();
+
+    // ========== 身份切换拨动开关 + 2x2卡片双面翻转 ==========
+    (function() {
+        var btns = document.querySelectorAll('.role-btn');
+        var allCards = document.querySelectorAll('.bento-card');
+        var heroCard = document.getElementById('heroCard');
+        var faceCreator = document.querySelector('.card-face-creator');
+        var faceDeveloper = document.querySelector('.card-face-developer');
+        if (!btns.length || !allCards.length) return;
+
+        var currentRole = 'creator';
+
+        function switchCardFace(role) {
+            if (role === currentRole) return;
+            currentRole = role;
+            var outFace, inFace, newClass, removeClass;
+            if (role === 'developer') {
+                outFace = faceCreator; inFace = faceDeveloper;
+                newClass = 'research'; removeClass = 'sandbox';
+            } else {
+                outFace = faceDeveloper; inFace = faceCreator;
+                newClass = 'sandbox'; removeClass = 'research';
+            }
+            outFace.classList.add('switching-out');
+            setTimeout(function() {
+                outFace.style.display = 'none';
+                outFace.classList.remove('switching-out');
+                inFace.style.display = '';
+                inFace.classList.add('switching-in');
+                heroCard.classList.remove(removeClass);
+                heroCard.classList.add(newClass);
+                setTimeout(function() { inFace.classList.remove('switching-in'); }, 400);
+            }, 300);
+        }
+
+        function filterCards(role) {
+            var cards = document.querySelectorAll('.bento-card');
+            cards.forEach(function(card) {
+                if (card === heroCard) return;
+                var isTarget = (role === 'creator') ? card.classList.contains('sandbox') : card.classList.contains('research');
+                card.style.display = isTarget ? '' : 'none';
+            });
+        }
+
+        btns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var role = this.getAttribute('data-role');
+                // 如果已激活 → 取消选择，显示全部
+                if (this.classList.contains('active')) {
+                    this.classList.remove('active');
+                    currentRole = null;
+                    // 显示全部卡片
+                    var allC = document.querySelectorAll('.bento-card');
+                    allC.forEach(function(c) { c.style.display = ''; });
+                    return;
+                }
+                // 否则激活当前
+                btns.forEach(function(b) { b.classList.remove('active'); });
+                this.classList.add('active');
+                switchCardFace(role);
+                filterCards(role);
+            });
         });
     })();
 </script>
