@@ -17,6 +17,102 @@
         .hero-visual-background {
             background: transparent !important;
         }
+
+        /* ===== 标题字母悬停弹跳 ===== */
+        .title-interactive {
+            display: inline-flex; flex-wrap: wrap; justify-content: center;
+            cursor: default; user-select: none;
+        }
+        .tl-char {
+            display: inline-block;
+            transition: transform 0.35s cubic-bezier(.34,1.56,.64,1),
+                        text-shadow 0.35s ease;
+        }
+        .tl-space { display: inline-block; width: 0.35em; }
+        /* 悬停弹跳 + 金色辉光 */
+        .tl-char:hover {
+            transform: translateY(-10px) scale(1.22);
+            -webkit-text-fill-color: #ffcc33;
+            text-shadow: 0 0 22px rgba(255,204,51,0.65),
+                         0 0 50px rgba(255,180,30,0.40),
+                         0 0 80px rgba(255,160,20,0.18);
+        }
+
+        /* ================================================================
+           核心优势卡片：深色毛玻璃 + 氛围光 + 去金黄标题
+           ================================================================ */
+        /* ----- 标题：去金黄，银白金属光泽 + 微外发光 ----- */
+        .split-intro h2 {
+            background: linear-gradient(135deg, #ffffff 15%, #b0cce8 50%, #ffffff 100%) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            filter: drop-shadow(0 0 10px rgba(140,190,235,0.12)) !important;
+        }
+        /* ----- 玻璃卡片基底 ----- */
+        .direction-card {
+            background: rgba(8,18,38,0.38) !important;
+            backdrop-filter: blur(22px) !important;
+            -webkit-backdrop-filter: blur(22px) !important;
+            border: 1px solid rgba(255,255,255,0.07) !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.32) !important;
+            transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), border-color 0.35s ease, box-shadow 0.35s ease !important;
+        }
+        .direction-card:hover {
+            transform: translateY(-8px) !important;
+            border-color: rgba(255,255,255,0.15) !important;
+            box-shadow: 0 20px 56px rgba(0,0,0,0.44) !important;
+        }
+        /* ----- 左卡（创作）：紫粉氛围光 ----- */
+        .direction-card.sandbox {
+            background: rgba(14,16,36,0.38) !important;
+            border-color: rgba(255,255,255,0.07) !important;
+        }
+        .direction-card.sandbox::before {
+            content: '' !important;
+            position: absolute !important; inset: auto !important;
+            width: 340px; height: 340px !important;
+            background: radial-gradient(circle, rgba(175,120,235,0.07), transparent 70%) !important;
+            top: -130px; left: -90px !important;
+            pointer-events: none !important; z-index: 0 !important;
+            -webkit-mask-image: none !important; mask-image: none !important;
+        }
+        .direction-card.sandbox:hover {
+            border-color: rgba(200,160,240,0.22) !important;
+            box-shadow: 0 16px 48px rgba(150,90,220,0.06) !important;
+        }
+        /* ----- 右卡（科研）：青蓝氛围光 ----- */
+        .direction-card.research {
+            background: rgba(8,18,38,0.38) !important;
+        }
+        .direction-card.research::before {
+            content: '' !important;
+            position: absolute !important; inset: auto !important;
+            width: 340px; height: 340px !important;
+            background: radial-gradient(circle, rgba(56,189,248,0.07), transparent 70%) !important;
+            top: -110px; right: -80px !important; left: auto !important;
+            pointer-events: none !important; z-index: 0 !important;
+            -webkit-mask-image: none !important; mask-image: none !important;
+        }
+        .direction-card.research:hover {
+            border-color: rgba(56,189,248,0.22) !important;
+            box-shadow: 0 16px 48px rgba(56,189,248,0.05) !important;
+        }
+        /* 静默旧 ::after 图标 hover 动画 */
+        .direction-card.research:hover::after { color: rgba(56,189,248,0.04) !important; }
+        .direction-card.sandbox:hover::after { color: rgba(168,85,247,0.04) !important; transform: none !important; }
+
+        /* ----- 卡片标题：纯白 + 微外发光 ----- */
+        .dir-title {
+            color: #ffffff !important;
+            text-shadow: 0 0 18px rgba(150,200,240,0.10), 0 0 40px rgba(120,180,230,0.04) !important;
+        }
+        /* ----- Badge / 图标：统一低饱和 ----- */
+        .sandbox .dir-badge { background: rgba(160,130,220,0.08) !important; color: #b8a2dc !important; border: 1px solid rgba(160,130,220,0.18) !important; }
+        .research .dir-badge { background: rgba(56,189,248,0.08) !important; color: #70bce8 !important; border: 1px solid rgba(56,189,248,0.18) !important; }
+        .sandbox .dir-ic { background: rgba(160,140,220,0.07) !important; color: #b0a0d0 !important; border: 1px solid rgba(160,140,220,0.12) !important; }
+        .research .dir-ic { background: rgba(56,189,248,0.07) !important; color: #60b0e0 !important; border: 1px solid rgba(56,189,248,0.12) !important; }
+
         /* ===== Canvas 铺满整屏（slide 层级） + 底部 mask 淡出 ===== */
         .slide-canvas-wrap {
             position: absolute; inset: 0; z-index: 0; overflow: hidden;
@@ -183,7 +279,11 @@
                         </div>
                         
                         <div class="hero-text-content centered">
-                            <h1>Corona Engine</h1>
+                            <h1 class="title-interactive" id="mainTitle">
+                                <span class="tl-char">C</span><span class="tl-char">o</span><span class="tl-char">r</span><span class="tl-char">o</span><span class="tl-char">n</span><span class="tl-char">a</span>
+                                <span class="tl-space"> </span>
+                                <span class="tl-char">E</span><span class="tl-char">n</span><span class="tl-char">g</span><span class="tl-char">i</span><span class="tl-char">n</span><span class="tl-char">e</span>
+                            </h1>
                             <p>
                                 做前沿技术的无畏探索者，也做每一颗创作灵感的引路星
                             </p>
