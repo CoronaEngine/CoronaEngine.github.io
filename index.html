@@ -15,7 +15,7 @@
         }
         /* Hero 背景透明，让 Slide 级渐变接管 */
         .hero-visual-background {
-            background: transparent !important;
+            background: url('assets/background.png') center/cover no-repeat !important;
         }
 
         /* ===== 标题字母悬停弹跳 ===== */
@@ -63,23 +63,29 @@
             border-color: rgba(255,255,255,0.15) !important;
             box-shadow: 0 20px 56px rgba(0,0,0,0.44) !important;
         }
-        /* ----- 左卡（创作）：紫粉氛围光 ----- */
+        /* ----- 左卡（创作）：玩具化 · 霓虹潮流 · 强毛玻璃 ----- */
         .direction-card.sandbox {
-            background: rgba(14,16,36,0.38) !important;
-            border-color: rgba(255,255,255,0.07) !important;
+            background: rgba(18,14,40,0.52) !important;
+            backdrop-filter: blur(28px) !important;
+            -webkit-backdrop-filter: blur(28px) !important;
+            border: 1.5px solid rgba(200,160,255,0.25) !important;
+            box-shadow: 0 0 45px rgba(160,100,240,0.12),
+                        0 8px 32px rgba(0,0,0,0.30) !important;
         }
         .direction-card.sandbox::before {
             content: '' !important;
             position: absolute !important; inset: auto !important;
-            width: 340px; height: 340px !important;
-            background: radial-gradient(circle, rgba(175,120,235,0.07), transparent 70%) !important;
-            top: -130px; left: -90px !important;
+            width: 380px; height: 380px !important;
+            background: radial-gradient(circle, rgba(200,130,255,0.14), rgba(255,140,200,0.06), transparent 68%) !important;
+            top: -140px; left: -100px !important;
             pointer-events: none !important; z-index: 0 !important;
             -webkit-mask-image: none !important; mask-image: none !important;
         }
         .direction-card.sandbox:hover {
-            border-color: rgba(200,160,240,0.22) !important;
-            box-shadow: 0 16px 48px rgba(150,90,220,0.06) !important;
+            border-color: rgba(230,190,255,0.55) !important;
+            box-shadow: 0 0 70px rgba(170,110,250,0.22),
+                        0 0 110px rgba(200,140,255,0.10),
+                        0 18px 52px rgba(0,0,0,0.40) !important;
         }
         /* ----- 右卡（科研）：青蓝氛围光 ----- */
         .direction-card.research {
@@ -107,43 +113,16 @@
             color: #ffffff !important;
             text-shadow: 0 0 18px rgba(150,200,240,0.10), 0 0 40px rgba(120,180,230,0.04) !important;
         }
-        /* ----- Badge / 图标：统一低饱和 ----- */
-        .sandbox .dir-badge { background: rgba(160,130,220,0.08) !important; color: #b8a2dc !important; border: 1px solid rgba(160,130,220,0.18) !important; }
+        /* ----- Badge / 图标：左卡潮流高亮，右卡保持低饱和 ----- */
+        .sandbox .dir-badge { background: rgba(180,130,240,0.16) !important; color: #d8bfff !important; border: 1px solid rgba(200,160,255,0.38) !important; }
         .research .dir-badge { background: rgba(56,189,248,0.08) !important; color: #70bce8 !important; border: 1px solid rgba(56,189,248,0.18) !important; }
-        .sandbox .dir-ic { background: rgba(160,140,220,0.07) !important; color: #b0a0d0 !important; border: 1px solid rgba(160,140,220,0.12) !important; }
+        .sandbox .dir-ic { background: rgba(180,140,240,0.15) !important; color: #d4bcf8 !important; border: 1px solid rgba(200,160,255,0.28) !important; }
         .research .dir-ic { background: rgba(56,189,248,0.07) !important; color: #60b0e0 !important; border: 1px solid rgba(56,189,248,0.12) !important; }
-
-        /* ===== Canvas 铺满整屏（slide 层级） + 底部 mask 淡出 ===== */
-        .slide-canvas-wrap {
-            position: absolute; inset: 0; z-index: 0; overflow: hidden;
-        }
-        .slide-canvas-wrap .hero-fx {
-            width: 100%; height: 100%;
-            -webkit-mask-image: linear-gradient(to bottom,
-                black 0%, black 65%, transparent 92%);
-            mask-image: linear-gradient(to bottom,
-                black 0%, black 65%, transparent 92%);
-        }
-        /* ===== Slide 级渐变：覆盖全屏，星空 → 深蓝底色 ===== */
-        .slide-canvas-wrap::after {
-            content: '';
-            position: absolute; inset: 0;
-            background: linear-gradient(to bottom,
-                transparent 55%,
-                rgba(2,6,23,0.30) 68%,
-                rgba(2,6,23,0.65) 82%,
-                rgba(2,6,23,0.90) 93%,
-                #020617 100%);
-            pointer-events: none;
-            z-index: 1;
-        }
-        /* 限定 Canvas 的参考容器为第一屏，避免被 slider-track 的 transform 影响 */
-        .slide:first-child {
-            position: relative;
-        }
-        /* 确保内容层在 Canvas 之上 */
-        .slide:first-child .content-box {
-            position: relative; z-index: 1;
+        /* 左卡标题多一层暖色辉光 */
+        .sandbox .dir-title {
+            text-shadow: 0 0 22px rgba(200,160,240,0.20),
+                         0 0 50px rgba(220,140,200,0.08),
+                         0 2px 12px rgba(0,0,0,0.50) !important;
         }
 
         /* ========== 下载弹窗 ========== */
@@ -267,10 +246,6 @@
         
         <!-- 1. 首页 -->
         <section class="slide">
-            <!-- Canvas 星空铺满整屏 -->
-            <div class="slide-canvas-wrap">
-                <canvas id="heroCanvas" class="hero-fx"></canvas>
-            </div>
             <div class="content-box">
                 <div class="page-container">
                     <div class="hero-overlay-layout">
@@ -688,7 +663,6 @@
 </div>
 
 <script src="js/main.js"></script>
-<script src="js/hero-bg.js"></script>
 <script>
     // ========== 下载弹窗交互 ==========
     (function() {
