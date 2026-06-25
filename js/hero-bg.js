@@ -196,22 +196,25 @@ float pointerLightMask(vec2 fragCoord) {
 
     vec2 pointer = iPointer.xy;
     float unit = iResolution.y;
-    float centerRadius = 0.24 * unit;
-    float tailLength = 0.34 * unit;
+    float innerRadius = 0.24 * unit;
+    float outerRadius = 0.36 * unit;
+    float tailLength = 0.30 * unit;
 
-    float center = smoothstep(centerRadius, 0.0, length(fragCoord - pointer));
+    float dist = length(fragCoord - pointer);
+    float innerGlow = smoothstep(innerRadius, 0.0, dist);
+    float outerGlow = smoothstep(outerRadius, 0.0, dist) * 0.50;
     float down = max(0.0, pointer.y - fragCoord.y);
     float tailFade = smoothstep(tailLength, 0.0, down);
-    float tailWidth = mix(0.18 * unit, 0.055 * unit, smoothstep(0.0, tailLength, down));
+    float tailWidth = mix(0.10 * unit, 0.035 * unit, smoothstep(0.0, tailLength, down));
     float tail = smoothstep(tailWidth, 0.0, abs(fragCoord.x - pointer.x)) * tailFade;
 
-    return max(center, tail * 0.82) * iPointer.z;
+    return max(max(innerGlow, outerGlow), tail * 0.28) * iPointer.z;
 }
 
 void main() {
     vec4 color = vec4(0.0);
     mainImage(color, gl_FragCoord.xy);
-    float light = 0.60 + 0.50 * pointerLightMask(gl_FragCoord.xy);
+    float light = 0.24 + 1.18 * pointerLightMask(gl_FragCoord.xy);
     outColor = vec4(color.rgb * light, 1.0);
 }
 `;
@@ -628,26 +631,23 @@ void main() {
             pointer.targetX = p[0];
             pointer.targetY = p[1];
             pointer.targetStrength = 1;
-
-            if (!pointer.hasInput) {
-                pointer.x = p[0];
-                pointer.y = p[1];
-                pointer.hasInput = true;
-            }
+            pointer.x = p[0];
+            pointer.y = p[1];
+            pointer.strength = 1;
+            pointer.hasInput = true;
+            lastDrawMs = 0;
         }
 
         function fadePointerTarget() {
             pointer.targetStrength = 0;
+            lastDrawMs = 0;
         }
 
         function updatePointer(delta) {
             var dt = Math.min(0.08, Math.max(0.001, delta || 0.016));
-            var positionEase = 1 - Math.exp(-dt * 18);
-            var strengthRate = pointer.targetStrength > pointer.strength ? 14 : 2.2;
+            var strengthRate = pointer.targetStrength > pointer.strength ? 24 : 2.2;
             var strengthEase = 1 - Math.exp(-dt * strengthRate);
 
-            pointer.x += (pointer.targetX - pointer.x) * positionEase;
-            pointer.y += (pointer.targetY - pointer.y) * positionEase;
             pointer.strength += (pointer.targetStrength - pointer.strength) * strengthEase;
 
             if (pointer.strength < 0.001 && pointer.targetStrength <= 0) {
