@@ -74,6 +74,57 @@
         .timeline-wrap { width: 100%; max-width: 90vw; margin: 40px auto 80px auto; }
         .timeline-wrap img { width: 100%; display: block; }
 
+        /* 顶会 Hero 三列 */
+        .pub-hero-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+        .pub-hero-card {
+            position: relative; overflow: hidden; border-radius: 20px;
+            padding: 36px 28px; min-height: 260px;
+            display: flex; flex-direction: column; justify-content: flex-end; gap: 12px;
+            background: linear-gradient(160deg, rgba(10,20,45,0.90), rgba(4,8,22,0.95));
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+        .pub-hero-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.14); box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
+        .pub-hero-bg {
+            position: absolute; inset: 0; opacity: 0.06;
+            background: radial-gradient(ellipse at 70% 20%, rgba(100,180,240,0.5), transparent 60%),
+                        linear-gradient(160deg, rgba(30,60,120,0.3), rgba(5,10,30,0.1));
+            pointer-events: none;
+        }
+        .pub-hero-tags { display: flex; gap: 8px; flex-wrap: wrap; position: relative; z-index: 1; }
+        .pub-hero-tags span {
+            padding: 4px 12px; border-radius: 6px; font-size: 0.72rem; font-weight: 600;
+            background: transparent; color: rgba(255,255,255,0.55);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .pub-hero-tags .hl-gold { background: rgba(220,180,60,0.08); color: #e8c860; border-color: rgba(220,180,60,0.35); }
+        .pub-hero-tags .hl-cyan { background: transparent; color: #60e0e8; border-color: rgba(40,200,210,0.35); }
+        .pub-hero-card h3 { font-size: 0.95rem; font-weight: 700; color: rgba(255,255,255,0.88); line-height: 1.5; margin: 0; position: relative; z-index: 1; }
+        .pub-hero-status { font-size: 0.72rem; color: rgba(180,200,225,0.50); position: relative; z-index: 1; }
+        @media (max-width: 900px) { .pub-hero-row { grid-template-columns: 1fr; } }
+
+        /* 幽灵按钮 */
+        .pub-ghost-btn {
+            display: inline-block; padding: 10px 28px;
+            border: 1px solid rgba(255,255,255,0.15); border-radius: 50px;
+            color: rgba(255,255,255,0.55); font-size: 0.85rem; text-decoration: none;
+            transition: all 0.25s ease; cursor: pointer;
+        }
+        .pub-ghost-btn:hover { border-color: rgba(180,140,240,0.40); color: #c8b0f0; background: rgba(180,140,240,0.06); }
+
+        /* 专利全宽 4 列 */
+        .patents-fullwidth { margin-top: 0; }
+        .patents-fullwidth .section-heading { margin-bottom: 32px; }
+        .patents-grid-4col { grid-template-columns: repeat(4, 1fr) !important; gap: 32px; }
+        .patents-grid-4col .patent-item {
+            display: flex; flex-direction: column; justify-content: center;
+            min-height: 140px; padding: 20px;
+        }
+        .patents-grid-4col .patent-year { margin-bottom: 10px !important; }
+        .patents-grid-4col .patent-title { line-height: 1.6 !important; display: block !important; -webkit-line-clamp: unset !important; }
+        @media (max-width: 1000px) { .patents-grid-4col { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 600px) { .patents-grid-4col { grid-template-columns: 1fr !important; } }
+
         /* 核心团队 — 横向滑动轮播 */
         .team-scroll-wrap { overflow: hidden; }
         .team-bento {
@@ -408,7 +459,7 @@
         .card-detail-link:hover i { transform: translateX(3px); }
 
         /* 详情弹窗 — 左右分栏 */
-        .member-modal-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(4,9,20,0.65); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.30s ease; }
+        .member-modal-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(4,9,20,0.65); backdrop-filter: blur(6px); display: flex; align-items: flex-start; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.30s ease; overflow-y: auto; padding: 60px 20px; }
         .member-modal-overlay.active { opacity: 1; pointer-events: auto; }
         .member-modal { width: 90%; max-width: 560px; background: rgba(10,16,36,0.82); backdrop-filter: blur(28px); border: 1px solid rgba(255,255,255,0.10); border-radius: 24px; padding: 24px; box-shadow: 0 24px 80px rgba(0,0,0,0.55); position: relative; transform: scale(0.92) translateY(18px); transition: transform 0.30s cubic-bezier(.34,1.56,.64,1); }
         .member-modal-overlay.active .member-modal { transform: scale(1) translateY(0); }
@@ -783,51 +834,40 @@
                     <div class="section-heading">
                         <h2>科研成果</h2>
                     </div>
-                    <div class="grid-layout research-grid">
-                    <div class="research-panel papers-panel">
-                        <div class="research-panel-title">
-                            <i class="fas fa-microscope"></i> 核心学术论文
+                    <!-- 顶会 Hero 三列 -->
+                    <div class="pub-hero-row">
+                        <div class="pub-hero-card">
+                            <div class="pub-hero-bg"></div>
+                            <div class="pub-hero-tags"><span class="hl-gold">2026</span><span class="hl-gold">CCF-A</span><span class="hl-gold">SIGGRAPH Conf</span></div>
+                            <h3>Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction</h3>
+                            <span class="pub-hero-status">已录用</span>
                         </div>
-                        <div class="papers-list">
-                            <div class="pub-card-new">
-                                <div>
-                                    <span class="pub-tag tag-top">2026年</span> <span class="pub-tag tag-top">CCF-A会议</span>  <span class="pub-tag tag-top">投稿筹备中</span> <span class="pub-tag tag-top">SIGGRAPH Asia (Comm)</span>
-                                </div>
-                                <div class="pub-title-new" style="margin-top:8px;">三维场景与游戏生成</div>
-                            </div>
-                            <div class="pub-card-new">
-                                <div>
-                                    <span class="pub-tag tag-top">2026年</span> <span class="pub-tag tag-top">CCF-A会议</span>  <span class="pub-tag tag-top">投稿筹备中</span> <span class="pub-tag tag-top">SIGGRAPH Asia (Poster)</span>
-                                </div>
-                                <div class="pub-title-new" style="margin-top:8px;">2D UI在裸眼3D光场显示方案</div>
-                            </div>
-                            <div class="pub-card-new">
-                                <div>
-                                    <span class="pub-tag tag-top">2026年</span> <span class="pub-tag tag-top">CCF-A会议</span> <span class="pub-tag tag-top">已录用</span> <span class="pub-tag tag-top">SIGGRAPH (Conf)</span>
-                                </div>
-                                <div class="pub-title-new" style="margin-top:8px;">Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction</div>
-                            </div>
-                            <div class="pub-card-new">
-                                <div>
-                                    <span class="pub-tag tag-top">2026年</span><span class="pub-tag tag-top">CCF-A会议</span> <span class="pub-tag tag-top">已录用</span> <span class="pub-tag tag-top">SIGGRAPH (Poster)</span>
-                                </div>
-                                <div class="pub-title-new" style="margin-top:8px;">Real-Time Light Field Tracing via Display-Architecture Alignment</div>
-                            </div>
-                            <div class="pub-card-new">
-                                <div>
-                                    <span class="pub-tag tag-top">2025年</span> <span class="pub-tag tag-top">CCF-A会议</span> <span class="pub-tag tag-top">已公开</span> <span class="pub-tag tag-top">SIGGRAPH Asia (Poster)</span>
-                                </div>
-                                <div class="pub-title-new" style="margin-top:8px;">Topology-Aware Polymorphism for Embedded Shading Languages</div>
-                            </div>
+                        <div class="pub-hero-card">
+                            <div class="pub-hero-bg"></div>
+                            <div class="pub-hero-tags"><span class="hl-gold">2026</span><span class="hl-gold">CCF-A</span><span class="hl-gold">SIGGRAPH Poster</span></div>
+                            <h3>Real-Time Light Field Tracing via Display-Architecture Alignment</h3>
+                            <span class="pub-hero-status">已录用</span>
+                        </div>
+                        <div class="pub-hero-card">
+                            <div class="pub-hero-bg"></div>
+                            <div class="pub-hero-tags"><span class="hl-gold">2025</span><span class="hl-gold">CCF-A</span><span class="hl-gold">SIGGRAPH Asia Poster</span></div>
+                            <h3>Topology-Aware Polymorphism for Embedded Shading Languages</h3>
+                            <span class="pub-hero-status">已公开</span>
                         </div>
                     </div>
-                    <div class="research-panel patents-panel">
-                        <div class="research-panel-title">
-                            <i class="fas fa-certificate"></i> 发明专利 (部分)
-                            <span style="margin-left:auto; background: rgba(59, 130, 246, 0.1); color: var(--cabbage-blue); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">累计 17 项</span>
-                        </div>
-                        <div class="patents-grid-new" id="patentsContainer"></div>
+                    <!-- 查看全部论文按钮 -->
+                    <div style="text-align:center;margin-bottom:48px;">
+                        <a href="javascript:void(0)" class="pub-ghost-btn" onclick="document.getElementById('papersModal').classList.add('active')">
+                            查看全部 10+ 篇学术论文 <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
+                    <!-- 发明专利 全宽 4 列 -->
+                    <div class="patents-fullwidth">
+                        <div class="section-heading"><h2>发明专利</h2></div>
+                        <div class="patents-grid-new patents-grid-4col" id="patentsContainer"></div>
+                        <div style="text-align:center;margin-top:32px;">
+                            <a href="javascript:void(0)" class="pub-ghost-btn" onclick="document.getElementById('patentsModal').classList.add('active')">查看全部 17 项发明专利 <i class="fas fa-arrow-right"></i></a>
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -850,14 +890,14 @@
                         <div class="comp-side-stack">
                             <div class="comp-card preparing">
                                 <div class="comp-header">
-                                    <div><span class="pub-tag tag-provincial">省级赛事</span> <span class="pub-tag tag-host">主办方</span> <span class="pub-tag tag-pending">筹备中</span></div>
+                                    <div><span class="pub-tag" style="background:rgba(180,150,240,0.08);color:#c8b8f8;border:1px solid rgba(180,150,240,0.30);border-radius:20px;padding:4px 10px;font-size:0.7rem;font-weight:800;letter-spacing:1px;">省级赛事</span> <span class="pub-tag tag-host">主办方</span> <span class="pub-tag tag-pending">筹备中</span></div>
                                 </div>
                                 <div class="comp-title">Corona Engine 江苏省高校联赛</div>
                                 <p class="bio" style="font-size:0.8rem;">由我们发起并主办的省级赛事，探索渲染与创意的边界，赛事计划采用高强度的限时开发（Jam）赛制，并预设“互动游戏”与“影视短片”双并行赛道，核心主题与评测规则目前仍处于封存状态。</p>
                             </div>
                             <div class="comp-card preparing">
                                 <div class="comp-header">
-                                    <div><span class="pub-tag tag-school">校级赛事</span> <span class="pub-tag tag-host">主办方</span> <span class="pub-tag tag-pending">筹备中</span></div>
+                                    <div><span class="pub-tag" style="background:rgba(59,130,246,0.08);color:#60a5fa;border:1px solid rgba(59,130,246,0.28);border-radius:20px;padding:4px 10px;font-size:0.7rem;font-weight:800;letter-spacing:1px;">校级赛事</span> <span class="pub-tag tag-host">主办方</span> <span class="pub-tag tag-pending">筹备中</span></div>
                                 </div>
                                 <div class="comp-title">Corona Engine 江苏理工学院校内挑战赛</div>
                                 <p class="bio" style="font-size:0.8rem;">由我们主办的校内赛事，一场伴随倒计时的未知挑战，无论是打造硬核的游戏原型，还是制作概念视听短片，都将成为破局的钥匙，赛制细节与入场悬念即将解禁。</p>
@@ -903,6 +943,28 @@
                 <div class="member-section"><h4>🎓 学术与专利</h4><p id="memberModalAch"></p></div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- 论文弹窗 -->
+<div class="member-modal-overlay" id="papersModal">
+    <div class="member-modal" style="max-width:680px;aspect-ratio:auto;max-height:85vh;overflow-y:auto;">
+        <button class="member-modal-close" onclick="document.getElementById('papersModal').classList.remove('active')">&times;</button>
+        <h2 style="color:#fff;margin:0 0 20px;">全部学术论文</h2>
+        <div class="papers-list">
+            <div class="pub-card-new"><div><span class="pub-tag tag-top" style="background:rgba(180,150,240,0.08);color:#c8b8f8;border-color:rgba(180,150,240,0.30);">2025</span> <span class="pub-tag tag-top" style="background:rgba(180,150,240,0.08);color:#c8b8f8;border-color:rgba(180,150,240,0.30);">中科院四区</span> <span class="pub-tag tag-top" style="background:rgba(180,150,240,0.08);color:#c8b8f8;border-color:rgba(180,150,240,0.30);">已公开</span></div><div class="pub-title-new" style="margin-top:8px;">Removing Initialization Phase of Visibility-Driven Metropolis Light Transport</div></div>
+            <div class="pub-card-new"><div><span class="pub-tag tag-top" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.28);">2025</span> <span class="pub-tag tag-top" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.28);">EI会议</span> <span class="pub-tag tag-top" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.28);">已公开</span></div><div class="pub-title-new" style="margin-top:8px;">Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis</div></div>
+            <div class="pub-card-new"><div><span class="pub-tag tag-top" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.28);">2024</span> <span class="pub-tag tag-top" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.28);">EI会议</span> <span class="pub-tag tag-top" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.28);">已公开</span></div><div class="pub-title-new" style="margin-top:8px;">Enhancing Shadow Maps via Screen-Space Visibility</div></div>
+            <div class="pub-card-new"><div><span class="pub-tag tag-top" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.28);">2022</span> <span class="pub-tag tag-top" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.28);">EI会议</span> <span class="pub-tag tag-top" style="background:rgba(59,130,246,0.08);color:#60a5fa;border-color:rgba(59,130,246,0.28);">已公开</span></div><div class="pub-title-new" style="margin-top:8px;">Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility</div></div>
+        </div>
+    </div>
+</div>
+<!-- 专利弹窗 -->
+<div class="member-modal-overlay" id="patentsModal">
+    <div class="member-modal" style="max-width:720px;aspect-ratio:auto;max-height:85vh;overflow-y:auto;">
+        <button class="member-modal-close" onclick="document.getElementById('patentsModal').classList.remove('active')">&times;</button>
+        <h2 style="color:#fff;margin:0 0 20px;">全部发明专利</h2>
+        <div class="patents-grid-new" id="patentsFullContainer" style="grid-template-columns:repeat(2,1fr);gap:16px;"></div>
     </div>
 </div>
 
@@ -1008,11 +1070,15 @@
         if (person) showMemberModal(person);
     };
     (function() {
-        var modal = document.getElementById('memberModal');
-        var btnClose = document.getElementById('memberModalClose');
-        if (btnClose) btnClose.addEventListener('click', function() { modal.classList.remove('active'); });
-        if (modal) modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
-        document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal && modal.classList.contains('active')) modal.classList.remove('active'); });
+        var modals = document.querySelectorAll('.member-modal-overlay');
+        modals.forEach(function(modal) {
+            modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                modals.forEach(function(m) { m.classList.remove('active'); });
+            }
+        });
     })();
 
     // ========== 团队卡片横滑 (translateX) ==========
