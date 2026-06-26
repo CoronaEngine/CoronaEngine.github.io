@@ -217,8 +217,30 @@ vec4 shadertoyTanh(vec4 x) {
 
 ` + sanitizeShaderBody(body) + `
 
-vec2 pointerMasks(vec2 fragCoord) {
-    if (iPointer.z <= 0.001) return vec2(0.0);
+float pointerHash21(vec2 p) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+}
+
+vec2 ignitionStars(vec2 fragCoord) {
+    vec2 grid = fragCoord / iResolution.y * 35.0;
+    vec2 id = floor(grid);
+    vec2 gv = fract(grid) - 0.5;
+    float n = pointerHash21(id);
+    vec2 starPos = vec2(n, pointerHash21(id + 19.17)) - 0.5;
+    vec2 local = gv - starPos * 0.76;
+    float gate = smoothstep(0.72, 0.98, n);
+    float pulse = 0.62 + 0.38 * sin(iTime * 4.8 + n * 6.28318);
+    float d = length(local);
+    float core = smoothstep(0.060, 0.0, d) * gate * pulse;
+    float rayX = smoothstep(0.015, 0.0, abs(local.y)) * smoothstep(0.36, 0.0, abs(local.x));
+    float rayY = smoothstep(0.015, 0.0, abs(local.x)) * smoothstep(0.36, 0.0, abs(local.y));
+    return vec2(core, (rayX + rayY) * gate * pulse);
+}
+
+vec4 pointerMasks(vec2 fragCoord) {
+    if (iPointer.z <= 0.001) return vec4(0.0);
 
     vec2 pointer = iPointer.xy;
     float unit = iResolution.y;
@@ -232,8 +254,12 @@ vec2 pointerMasks(vec2 fragCoord) {
     float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.13;
     float glow = min(1.0, coreGlow + haloGlow + ambientGlow) * iPointer.z;
     float clarity = smoothstep(0.28 * unit, 0.0, dist) * iPointer.z;
+    float starIgnite = (smoothstep(0.30 * unit, 0.0, dist) * 0.72
+        + smoothstep(0.18 * unit, 0.0, dist) * 0.52) * iPointer.z;
+    float cloudIgnite = (smoothstep(0.38 * unit, 0.0, dist) * 0.58
+        + smoothstep(0.22 * unit, 0.0, dist) * 0.34) * iPointer.z;
 
-    return vec2(glow, clarity);
+    return vec4(glow, clarity, min(1.0, starIgnite), min(1.0, cloudIgnite));
 }
 
 vec3 coolGrade(vec3 raw) {
@@ -269,9 +295,11 @@ vec3 starfieldGrade(vec3 raw) {
 void main() {
     vec4 color = vec4(0.0);
     mainImage(color, gl_FragCoord.xy);
-    vec2 masks = pointerMasks(gl_FragCoord.xy);
+    vec4 masks = pointerMasks(gl_FragCoord.xy);
     float glow = masks.x;
     float clarity = masks.y;
+    float starIgnite = masks.z;
+    float cloudIgnite = masks.w;
     vec3 raw = clamp(color.rgb, 0.0, 1.0);
     float luma = dot(raw, vec3(0.299, 0.587, 0.114));
     float cloud = smoothstep(0.024, 0.18, luma);
@@ -300,6 +328,23 @@ void main() {
     vec3 lit = mix(frosted, focused, clarity);
     float starLift = starMask * smoothstep(0.010, 0.20, luma);
     lit += starfieldGrade(raw) * starLift * 0.30 + vec3(0.004, 0.014, 0.052) * starMask * 0.25;
+    float existingStar = starMask * (1.0 - cloudMask * 0.72) * smoothstep(0.018, 0.22, luma);
+    float twinkle = 0.78 + 0.22 * sin(iTime * 5.2 + pointerHash21(floor(gl_FragCoord.xy / 28.0)) * 6.28318);
+    vec2 activeStars = ignitionStars(gl_FragCoord.xy);
+    float starSpark = activeStars.x * starIgnite * starMask * (1.0 - cloudMask * 0.74);
+    float starRays = activeStars.y * starIgnite * starMask * (1.0 - cloudMask * 0.82);
+    vec3 igniteTone = mix(vec3(0.34, 0.48, 1.00), vec3(0.78, 0.84, 1.00), twinkle);
+    lit += igniteTone * existingStar * starIgnite * (0.70 + twinkle * 0.34);
+    lit += vec3(0.34, 0.48, 1.00) * starSpark * 1.55;
+    lit += vec3(0.62, 0.68, 1.00) * starRays * 0.58;
+    lit += vec3(0.060, 0.110, 0.320) * starIgnite * starMask * 0.48;
+    float coolIgniteZone = starIgnite * starMask * (1.0 - cloudMask * 0.65);
+    vec3 cooledIgnition = vec3(lit.r * 0.74, lit.g * 0.86, max(lit.b, lit.g * 1.20));
+    lit = mix(lit, cooledIgnition, coolIgniteZone * 0.36);
+    float cloudEdge = smoothstep(0.045, 0.34, cloudMask) * (1.0 - smoothstep(0.62, 0.98, cloudMask));
+    float cloudSilver = cloudIgnite * cloudEdge * (0.72 + 0.28 * sin(uvN.x * 23.0 + uvN.y * 15.0 - iTime * 0.32));
+    lit = mix(lit, pearlCloud * (0.58 + luma * 1.48), cloudIgnite * cloudMask * 0.34);
+    lit += vec3(0.190, 0.230, 0.315) * cloudSilver;
     float lowMist = 1.0 - smoothstep(-0.04, 0.42, uvN.y + cloudEdgeNoise * 0.42);
     lowMist *= 0.50 + 0.24 * sin(uvN.x * 19.0 - iTime * 0.05);
     lit += vec3(0.165, 0.185, 0.235) * max(lowMist, 0.0);
@@ -763,7 +808,7 @@ void main() {
 
         function updatePointer(delta) {
             var dt = Math.min(0.08, Math.max(0.001, delta || 0.016));
-            var strengthRate = pointer.targetStrength > pointer.strength ? 24 : 2.2;
+            var strengthRate = pointer.targetStrength > pointer.strength ? 24 : 1.55;
             var strengthEase = 1 - Math.exp(-dt * strengthRate);
 
             pointer.strength += (pointer.targetStrength - pointer.strength) * strengthEase;
