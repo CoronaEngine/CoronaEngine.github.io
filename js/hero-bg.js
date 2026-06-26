@@ -213,15 +213,30 @@ vec2 pointerMasks(vec2 fragCoord) {
 vec3 coolGrade(vec3 raw) {
     float luma = dot(raw, vec3(0.299, 0.587, 0.114));
     float cloud = smoothstep(0.026, 0.19, luma);
-    vec3 shadow = vec3(0.004, 0.008, 0.032);
-    vec3 deepBlue = vec3(0.020, 0.044, 0.130);
-    vec3 blue = vec3(0.100, 0.220, 0.520);
+    vec3 shadow = vec3(0.006, 0.010, 0.048);
+    vec3 deepBlue = vec3(0.030, 0.070, 0.230);
+    vec3 blue = vec3(0.120, 0.280, 0.760);
     vec3 pearl = vec3(0.880, 0.940, 1.000);
 
     vec3 grade = mix(shadow, deepBlue, smoothstep(0.012, 0.16, luma));
     grade = mix(grade, blue, smoothstep(0.14, 0.52, luma) * 0.58);
     grade = mix(grade, pearl, cloud * 0.82);
     grade += vec3(0.018, 0.034, 0.082) * smoothstep(0.05, 0.42, raw.b);
+    return clamp(grade, 0.0, 1.0);
+}
+
+vec3 starfieldGrade(vec3 raw) {
+    float luma = dot(raw, vec3(0.299, 0.587, 0.114));
+    vec3 shadow = vec3(0.014, 0.018, 0.060);
+    vec3 violet = vec3(0.100, 0.070, 0.300);
+    vec3 blue = vec3(0.150, 0.300, 0.780);
+    vec3 pearl = vec3(0.700, 0.820, 1.000);
+
+    vec3 grade = mix(shadow, violet, smoothstep(0.02, 0.42, luma));
+    grade = mix(grade, blue, smoothstep(0.24, 0.82, luma));
+    grade += vec3(0.055, 0.020, 0.170) * smoothstep(0.08, 0.62, raw.r);
+    grade += vec3(0.015, 0.095, 0.220) * smoothstep(0.05, 0.46, raw.g);
+    grade += pearl * luma * luma * 0.34;
     return clamp(grade, 0.0, 1.0);
 }
 
@@ -232,20 +247,28 @@ void main() {
     float glow = masks.x;
     float clarity = masks.y;
     vec3 raw = clamp(color.rgb, 0.0, 1.0);
-    vec3 coolRaw = coolGrade(raw);
     float luma = dot(raw, vec3(0.299, 0.587, 0.114));
     float cloud = smoothstep(0.024, 0.18, luma);
+    float cloudBand = 1.0 - smoothstep(0.42 * iResolution.y, 0.68 * iResolution.y, gl_FragCoord.y);
+    float cloudMask = cloud * cloudBand;
+    float skyRegion = smoothstep(0.28 * iResolution.y, 0.58 * iResolution.y, gl_FragCoord.y);
+    vec3 cloudRaw = coolGrade(raw);
+    vec3 coolRaw = mix(cloudRaw, starfieldGrade(raw), skyRegion * (1.0 - cloudMask * 0.85));
     vec3 frostTone = vec3(0.006, 0.012, 0.052);
     vec3 pearlCloud = vec3(0.850, 0.920, 1.000);
     vec3 frosted = mix(frostTone, coolRaw * 0.34, 0.54);
-    frosted = mix(frosted, pearlCloud * (0.20 + luma * 1.18), cloud * 0.52);
-    frosted *= mix(0.58, 0.94, cloud);
+    frosted = mix(frosted, pearlCloud * (0.20 + luma * 1.18), cloudMask * 0.52);
+    frosted *= mix(0.58, 0.94, cloudMask);
+    float starMask = skyRegion * (1.0 - cloudMask * 0.82);
+    frosted = mix(frosted, starfieldGrade(raw) * 0.78 + vec3(0.004, 0.016, 0.070), starMask * 0.62);
 
     vec3 focused = coolRaw * (1.08 + glow * 0.32) + vec3(0.018, 0.030, 0.088);
-    focused = mix(focused, pearlCloud * (0.48 + luma * 1.42), cloud * 0.46);
+    focused = mix(focused, pearlCloud * (0.48 + luma * 1.42), cloudMask * 0.46);
     focused += vec3(0.095, 0.145, 0.320) * glow;
 
     vec3 lit = mix(frosted, focused, clarity);
+    float starLift = starMask * smoothstep(0.010, 0.20, luma);
+    lit += starfieldGrade(raw) * starLift * 0.30 + vec3(0.004, 0.014, 0.052) * starMask * 0.25;
     lit += vec3(0.055, 0.074, 0.180) * glow * (1.0 - clarity);
     outColor = vec4(lit, 1.0);
 }

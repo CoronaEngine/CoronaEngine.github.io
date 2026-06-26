@@ -163,9 +163,9 @@ nav {
     pointer-events: none;
     /* 居中标题：中心柔和压暗，向四周淡出，保证文字可读又不挡住星海 */
     background: radial-gradient(ellipse 65% 62% at center,
-        rgba(2, 6, 23, 0.46) 0%,
-        rgba(2, 6, 23, 0.30) 45%,
-        rgba(2, 6, 23, 0.03) 78%
+        rgba(8, 11, 34, 0.30) 0%,
+        rgba(10, 12, 44, 0.38) 50%,
+        rgba(5, 7, 26, 0.08) 80%
     );
 }
 
@@ -1052,7 +1052,7 @@ nav {
     }
 
     .showcase-overlay-gradient {
-        background: radial-gradient(ellipse 80% 60% at center, rgba(2, 6, 23, 0.68), rgba(2, 6, 23, 0.02) 80%);
+        background: radial-gradient(ellipse 80% 60% at center, rgba(8, 11, 34, 0.56), rgba(5, 7, 26, 0.08) 82%);
     }
 
     .profile-header,
