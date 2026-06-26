@@ -196,16 +196,16 @@ vec2 pointerMasks(vec2 fragCoord) {
 
     vec2 pointer = iPointer.xy;
     float unit = iResolution.y;
-    float coreRadius = 0.14 * unit;
-    float haloRadius = 0.27 * unit;
-    float ambientRadius = 0.38 * unit;
+    float coreRadius = 0.16 * unit;
+    float haloRadius = 0.34 * unit;
+    float ambientRadius = 0.48 * unit;
 
     float dist = length(fragCoord - pointer);
-    float coreGlow = smoothstep(coreRadius, 0.0, dist) * 0.96;
-    float haloGlow = smoothstep(haloRadius, 0.0, dist) * 0.54;
-    float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.08;
+    float coreGlow = smoothstep(coreRadius, 0.0, dist) * 0.82;
+    float haloGlow = smoothstep(haloRadius, 0.0, dist) * 0.64;
+    float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.13;
     float glow = min(1.0, coreGlow + haloGlow + ambientGlow) * iPointer.z;
-    float clarity = smoothstep(0.22 * unit, 0.0, dist) * iPointer.z;
+    float clarity = smoothstep(0.28 * unit, 0.0, dist) * iPointer.z;
 
     return vec2(glow, clarity);
 }
@@ -249,8 +249,13 @@ void main() {
     vec3 raw = clamp(color.rgb, 0.0, 1.0);
     float luma = dot(raw, vec3(0.299, 0.587, 0.114));
     float cloud = smoothstep(0.024, 0.18, luma);
-    float cloudBand = 1.0 - smoothstep(0.42 * iResolution.y, 0.68 * iResolution.y, gl_FragCoord.y);
-    float cloudMask = cloud * cloudBand;
+    vec2 uvN = gl_FragCoord.xy / iResolution.xy;
+    float cloudEdgeNoise = sin(uvN.x * 17.0 + iTime * 0.10) * 0.035
+        + sin((uvN.x + uvN.y) * 31.0 - iTime * 0.07) * 0.022;
+    float bottomDissolve = smoothstep(-0.03, 0.26, uvN.y + cloudEdgeNoise);
+    float cloudFloor = (1.0 - smoothstep(0.00, 0.34, uvN.y + cloudEdgeNoise * 0.55)) * 0.46;
+    float cloudBand = (1.0 - smoothstep(0.46 * iResolution.y, 0.73 * iResolution.y, gl_FragCoord.y)) * max(bottomDissolve, cloudFloor);
+    float cloudMask = max(cloud * cloudBand, cloudFloor * 0.22);
     float skyRegion = smoothstep(0.28 * iResolution.y, 0.58 * iResolution.y, gl_FragCoord.y);
     vec3 cloudRaw = coolGrade(raw);
     vec3 coolRaw = mix(cloudRaw, starfieldGrade(raw), skyRegion * (1.0 - cloudMask * 0.85));
@@ -269,6 +274,9 @@ void main() {
     vec3 lit = mix(frosted, focused, clarity);
     float starLift = starMask * smoothstep(0.010, 0.20, luma);
     lit += starfieldGrade(raw) * starLift * 0.30 + vec3(0.004, 0.014, 0.052) * starMask * 0.25;
+    float lowMist = 1.0 - smoothstep(-0.04, 0.42, uvN.y + cloudEdgeNoise * 0.42);
+    lowMist *= 0.50 + 0.24 * sin(uvN.x * 19.0 - iTime * 0.05);
+    lit += vec3(0.165, 0.185, 0.235) * max(lowMist, 0.0);
     lit += vec3(0.055, 0.074, 0.180) * glow * (1.0 - clarity);
     outColor = vec4(lit, 1.0);
 }
