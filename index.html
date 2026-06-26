@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1440, user-scalable=yes">
     <title>Corona Engine</title>
+    <link rel="icon" href="logo/corona.jfif">
     <link rel="stylesheet" href="fontawesome/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -14,7 +15,60 @@
             box-shadow: none !important;
         }
         .hero-visual-background {
-            background: url('assets/background.png') center/cover no-repeat !important;
+            background: transparent !important;
+        }
+        /* ===== Canvas 铺满首屏 + 底部云层自然消散 ===== */
+        .slide-canvas-wrap {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 18%, rgba(91, 33, 182, 0.18), transparent 42%),
+                linear-gradient(180deg, #05071b 0%, #030617 58%, #020617 100%);
+        }
+        .slide-canvas-wrap .hero-fx {
+            width: 100%;
+            height: 100%;
+            -webkit-mask-image: linear-gradient(to bottom,
+                black 0%, black 86%, rgba(0, 0, 0, 0.96) 94%, rgba(0, 0, 0, 0.82) 100%);
+            mask-image: linear-gradient(to bottom,
+                black 0%, black 86%, rgba(0, 0, 0, 0.96) 94%, rgba(0, 0, 0, 0.82) 100%);
+        }
+        .slide-canvas-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 70% 30% at 50% 100%, rgba(79, 70, 229, 0.045), transparent 78%),
+                linear-gradient(to bottom,
+                    rgba(5, 7, 27, 0) 74%,
+                    rgba(5, 7, 27, 0.035) 92%,
+                    rgba(5, 7, 27, 0.055) 100%);
+            -webkit-mask-image: linear-gradient(to bottom,
+                transparent 68%, rgba(0, 0, 0, 0.16) 88%, rgba(0, 0, 0, 0.28) 100%);
+            mask-image: linear-gradient(to bottom,
+                transparent 68%, rgba(0, 0, 0, 0.16) 88%, rgba(0, 0, 0, 0.28) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .showcase-overlay-gradient {
+            background: radial-gradient(ellipse 58% 54% at center,
+                rgba(8, 11, 34, 0.24) 0%,
+                rgba(9, 11, 42, 0.34) 54%,
+                rgba(5, 7, 26, 0.08) 82%
+            ) !important;
+        }
+        .slide:first-child {
+            position: relative;
+            overflow: visible;
+        }
+        .slide:first-child .slide-canvas-wrap {
+            bottom: -46px;
+        }
+        .slide:first-child .content-box {
+            position: relative;
+            z-index: 1;
         }
         /* 发展历程时间轴 */
         .timeline-wrap { width: 100%; max-width: 90vw; margin: 40px auto 80px auto; }
@@ -484,6 +538,9 @@
         
         <!-- 1. 首页 -->
         <section class="slide">
+            <div class="slide-canvas-wrap">
+                <canvas id="heroCanvas" class="hero-fx"></canvas>
+            </div>
             <div class="content-box">
                 <div class="page-container">
                     <div class="hero-overlay-layout">
@@ -882,6 +939,7 @@
 </div>
 
 <script src="js/main.js"></script>
+<script src="js/hero-bg.js?v=tXKfz1-merged-yqx-20260626"></script>
 <script>
     // 学术研究 → 跳转到关于我们页的科研成果区
     window.goToResearch = function() {
