@@ -20,6 +20,16 @@
         .timeline-wrap { width: 100%; max-width: 90vw; margin: 40px auto 80px auto; }
         .timeline-wrap img { width: 100%; display: block; }
 
+        /* 核心团队 — 电影谢幕风格 */
+        .credits-container { max-width: 1100px; margin: 0 auto; }
+        .credits-group { margin-bottom: 40px; }
+        .credits-group h4 { font-size: 1.25rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.70); margin: 40px 0 16px; text-align: center; }
+        .credits-row { display: flex; justify-content: center; gap: 60px; padding: 4px 0; }
+        .credits-row .credits-role { width: 250px; text-align: right; font-size: 1.125rem; color: rgba(255,255,255,0.48); white-space: nowrap; flex-shrink: 0; }
+        .credits-row .credits-name { width: 250px; text-align: left; font-size: 1.125rem; color: #fff; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+        .credits-row .credits-role { text-align: right; font-size: 1.125rem; color: rgba(255,255,255,0.48); white-space: nowrap; }
+        .credits-row .credits-name { text-align: left; font-size: 1.125rem; color: #fff; font-weight: 700; white-space: nowrap; }
+
         /* ===== 标题字母悬停弹跳 ===== */
         .title-interactive {
             display: inline-flex; flex-wrap: wrap; justify-content: center;
@@ -464,7 +474,7 @@
         <a class="nav-item active" onclick="goToSlide(0)">首页</a>
         <a class="nav-item" onclick="goToSlide(1)">关于我们</a>
         <a class="nav-item" onclick="goToSlide(2)">学术研究</a>
-        <a class="nav-item" href="javascript:void(0)">游戏开发</a>
+        <!-- <a class="nav-item" href="javascript:void(0)">游戏开发</a> -->
         <a class="nav-item" onclick="goToSlide(3)">相关竞赛</a>
     </div>
 </nav>
@@ -687,11 +697,7 @@
                     <div class="section-heading">
                         <h2>核心团队</h2>
                     </div>
-                    <div class="founders-row" id="foundersContainer"></div>
-                    <div class="core-members-grid" id="coreMembersContainer"></div>
-                    <div class="marquee-container">
-                        <div class="marquee-track" id="marqueeTrack"></div>
-                    </div>
+                    <div class="credits-container" id="creditsContainer"></div>
                 </div>
 
                 </div>
