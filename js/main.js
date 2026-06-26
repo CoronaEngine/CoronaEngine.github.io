@@ -1,10 +1,10 @@
-// ================= 团队数据配置中心 =================
+﻿// ================= 团队数据配置中心 =================
 // avatar: 头像图片地址。如果留空 ("")，则显示默认的图标占位符
 // link: 点击头像跳转的链接。如果留空，默认为 "#"
 
 const founders = [
-    {n: "Zero", r: "联合创始人", tags: ["某大厂资深工程师", "硕士研究生导师(即将)"], b: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", avatar: "images/Zero.png", link: "https://github.com/FaithZL"},
-    {n: "范洪辉", r: "联合创始人", tags: ["教授", "博士","硕士研究生导师"], b: "江苏理工学院教授、博士、硕士生导师，“十四五”计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图形处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", avatar: "images/Fan.jpg", link: "https://baike.baidu.com/item/%E8%8C%83%E6%B4%AA%E8%BE%89/63345374"},
+    {n: "范洪辉", r: "联合创始人", tags: ["教授", "博士","硕士研究生导师"], b: "江苏理工学院教授、博士、硕士生导师，十四五计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家级科研项目 10 余项，发表 SCI/EI 论文 100 余篇。", avatar: "images/Fan.jpg", link: "https://baike.baidu.com/item/%E8%8C%83%E6%B4%AA%E8%BE%89/63345374"},
+    {n: "Zero", r: "联合创始人", tags: ["前网易/D5资深工程师", "即将任硕导", "10项顶会/专利"], b: "资深图形引擎工程师。专注全局光照与嵌入式DSL优化，曾为《阴阳师》等国内S级顶流商业项目提供核心引擎技术支持，具备深厚的前沿技术工程化落地经验。", exp: "曾任职于 <b>D5渲染器、欢聚时代、网易、多益</b> 等头部企业。<br><br>网易期间为 <b>《阴阳师》《哈利波特：魔法觉醒》</b> 等项目提供引擎技术支持。<br><br>多益期间于 <b>《神武》</b> 项目组担任核心开发。", tech: "专注于 <b>全局光照 (GI)</b>、<b>嵌入式 DSL</b> 及 <b>工具链优化</b> 等底层方向。<br><br>对前沿技术的工业级、工程化落地具有丰富的实践积累。", ach: "累计发表/产出 <b>发明专利与顶级会议论文 10 项</b>。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
     {n: "邹刘磊", r: "联合创始人", tags: ["某初创公司CTO", "硕士研究生导师(校外)"], b: "某初创公司CTO，曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou"}
 ];
 
@@ -68,63 +68,26 @@ function initSceneAccordion() {
 }
 
 function renderTeam() {
-    // 1. 渲染联合创始人
-    const foundersContainer = document.getElementById('foundersContainer');
-    if (foundersContainer) {
-        foundersContainer.innerHTML = founders.map(f => `
-            <div class="member-card founder-card">
-                <div class="profile-header">
-                    <a href="${f.link || '#'}" target="${f.link && f.link !== '#' ? '_blank' : '_self'}" class="avatar-link">
-                        ${f.avatar ? `<img src="${f.avatar}" class="avatar" alt="${f.n}">` : `<div class="avatar-placeholder"><i class="fas fa-user-tie"></i></div>`}
-                    </a>
-                    <div class="name-info">
-                        <div class="name-title-row">
-                            <h3>${f.n}</h3><span class="role-text">${f.r}</span>
-                        </div>
-                        <div class="tag-container">
-                            ${f.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-                        </div>
-                    </div>
-                </div>
-                <p class="bio">${f.b}</p>
-            </div>
-        `).join('');
-    }
+    const creditsContainer = document.getElementById('creditsContainer');
+    if (!creditsContainer) return;
 
-    // 2. 渲染核心成员
-    const coreMembersContainer = document.getElementById('coreMembersContainer');
-    if (coreMembersContainer) {
-        coreMembersContainer.innerHTML = coreMembers.map(m => `
-            <div class="core-member-card">
-                <div class="profile-header">
-                    <a href="${m.link || '#'}" target="${m.link && m.link !== '#' ? '_blank' : '_self'}" class="avatar-link">
-                        ${m.avatar ? `<img src="${m.avatar}" class="avatar" alt="${m.n}">` : `<div class="avatar-placeholder"><i class="fas fa-user-astronaut"></i></div>`}
-                    </a>
-                    <div class="name-info">
-                        <div class="name-title-row"><h3>${m.n}</h3><span class="role-text">${m.r}</span></div>
-                    </div>
-                </div>
-                <p class="bio" style="margin:0;">${m.b}</p>
-            </div>
-        `).join('');
-    }
+    const groups = [
+        { label: '创始人', items: founders.map(f => ({ role: f.r, name: f.n })) },
+        { label: '架构组', items: coreMembers.map(m => ({ role: m.r, name: m.n })) },
+        { label: '开发组', items: scrollingMembers.map(m => ({ role: m.r, name: m.n })) }
+    ];
 
-    // 3. 渲染跑马灯成员
-    const marqueeTrack = document.getElementById('marqueeTrack');
-    if (marqueeTrack) {
-        const baseCards = scrollingMembers.map(m => `
-            <div class="scrolling-card">
-                <div class="profile-header">
-                    <a href="${m.link || '#'}" target="${m.link && m.link !== '#' ? '_blank' : '_self'}" class="avatar-link" style="text-decoration:none;">
-                        ${m.avatar ? `<img src="${m.avatar}" class="avatar" alt="${m.n}">` : `<div class="avatar-placeholder"><i class="fas fa-ghost"></i></div>`}
-                    </a>
-                    <div class="name-info"><div class="name-title-row"><h3>${m.n}</h3></div><span class="role-text">${m.r}</span></div>
+    creditsContainer.innerHTML = groups.map(g => `
+        <div class="credits-group">
+            <h4>${g.label}</h4>
+            ${g.items.map(p => `
+                <div class="credits-row">
+                    <span class="credits-role">${p.role}</span>
+                    <span class="credits-name">${p.name}</span>
                 </div>
-                <p class="bio" style="margin:0;">${m.b}</p>
-            </div>
-        `).join('');
-        marqueeTrack.innerHTML = baseCards + baseCards;
-    }
+            `).join('')}
+        </div>
+    `).join('');
 }
 
 // ================= 页脚联系方式：单击复制到剪贴板 =================
@@ -193,7 +156,7 @@ function initSlider() {
 }
 
 // slide index → nav item index 映射（导航栏有5个条目，但只有3页slide）
-const slideNavMap = [0, 1, 4];
+const slideNavMap = [0, 1, 2, 4];
 
 function updateNav() {
     const navItems = document.querySelectorAll('.nav-item');
