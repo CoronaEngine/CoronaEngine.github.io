@@ -16,8 +16,15 @@
         .hero-visual-background {
             background: url('assets/background.png') center/cover no-repeat !important;
         }
-        /* 发展历程时间轴图片 */
-        .timeline-img { width: 100%; max-width: 1200px; margin: 40px auto; display: block; }
+        /* 发展历程时间轴 — 图文分离 */
+        .timeline-wrap { position: relative; width: 100%; max-width: 1400px; margin: 40px auto; }
+        .timeline-wrap img { width: 100%; display: block; }
+        .tl-node { position: absolute; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+        .tl-node .tl-year { display: block; font-size: clamp(0.55rem, 0.75vw, 0.75rem); font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+        .tl-node .tl-desc { display: block; font-size: clamp(0.42rem, 0.55vw, 0.58rem); color: rgba(255,255,255,0.75); margin-top: 2px; white-space: nowrap; }
+        .tl-node.tl-blue .tl-year { color: #6aafff; }
+        .tl-node.tl-red .tl-year { color: #ff7070; }
+        .tl-node.tl-purple .tl-year { color: #c8a0f8; }
 
         /* ===== 标题字母悬停弹跳 ===== */
         .title-interactive {
@@ -675,7 +682,20 @@
                     <div class="section-heading">
                         <h2>发展历程</h2>
                     </div>
-                    <img src="render/Group 14294.png" alt="发展历程时间轴" class="timeline-img">
+                    <div class="timeline-wrap">
+                        <img src="render/Group 14296.png" alt="发展历程时间轴">
+                        <!-- 上支线 蓝 -->
+                        <div class="tl-node tl-blue" style="left:10%;top:32%;"><span class="tl-year">2017-2021</span><span class="tl-desc">GraphZ</span></div>
+                        <div class="tl-node tl-blue" style="left:33%;top:22%;"><span class="tl-year">2022</span><span class="tl-desc">Cabbage Engine 正式诞生</span></div>
+                        <!-- 下支线 红 -->
+                        <div class="tl-node tl-red" style="left:14%;top:70%;"><span class="tl-year">2018-2020</span><span class="tl-desc">Zero</span></div>
+                        <div class="tl-node tl-red" style="left:24%;top:78%;"><span class="tl-year">2020-2021</span><span class="tl-desc">Zero</span></div>
+                        <div class="tl-node tl-red" style="left:34%;top:72%;"><span class="tl-year">2022</span><span class="tl-desc">Vision 渲染器诞生</span></div>
+                        <!-- 主干紫 -->
+                        <div class="tl-node tl-purple" style="left:50%;top:48%;"><span class="tl-year">2025</span><span class="tl-desc">Corona Engine 诞生</span></div>
+                        <div class="tl-node tl-purple" style="left:70%;top:18%;"><span class="tl-year">2026</span><span class="tl-desc">Corona Engine v1.0 蓄势待发</span></div>
+                        <div class="tl-node tl-purple" style="left:85%;top:50%;"><span class="tl-year">2026</span><span class="tl-desc">支撑高校赛事 · 学术课题深化</span></div>
+                    </div>
                     
                 </div>
 
