@@ -3,7 +3,7 @@
 // link: 点击头像跳转的链接。如果留空，默认为 "#"
 
 const founders = [
-    {n: "Zero", r: "联合创始人", tags: ["某大厂资深工程师", "硕士研究生导师(即将)"], b: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", avatar: "images/Zero.png", link: "https://github.com/FaithZL"},
+    {n: "Zero", r: "联合创始人", tags: ["前网易/D5资深工程师", "即将任硕导", "10项顶会/专利"], b: "资深图形引擎工程师。专注全局光照与嵌入式DSL优化，曾为《阴阳师》等国内S级顶流商业项目提供核心引擎技术支持，具备深厚的前沿技术工程化落地经验。", exp: "曾任职于 <b>D5渲染器、欢聚时代、网易、多益</b> 等头部企业。<br><br>网易期间为 <b>《阴阳师》《哈利波特：魔法觉醒》</b> 等项目提供引擎技术支持。<br><br>多益期间于 <b>《神武》</b> 项目组担任核心开发。", tech: "专注于 <b>全局光照 (GI)</b>、<b>嵌入式 DSL</b> 及 <b>工具链优化</b> 等底层方向。<br><br>对前沿技术的工业级、工程化落地具有丰富的实践积累。", ach: "累计发表/产出 <b>发明专利与顶级会议论文 10 项</b>。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
     {n: "范洪辉", r: "联合创始人", tags: ["教授", "博士","硕士研究生导师"], b: "江苏理工学院教授、博士、硕士生导师，“十四五”计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图形处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", avatar: "images/Fan.jpg", link: "https://baike.baidu.com/item/%E8%8C%83%E6%B4%AA%E8%BE%89/63345374"},
     {n: "邹刘磊", r: "联合创始人", tags: ["某初创公司CTO", "硕士研究生导师(校外)"], b: "某初创公司CTO，曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou"}
 ];
@@ -71,7 +71,7 @@ function renderTeam() {
     // 1. 渲染联合创始人
     const foundersContainer = document.getElementById('foundersContainer');
     if (foundersContainer) {
-        foundersContainer.innerHTML = founders.map(f => `
+        foundersContainer.innerHTML = founders.map((f, idx) => `
             <div class="member-card founder-card">
                 <div class="profile-header">
                     <a href="${f.link || '#'}" target="${f.link && f.link !== '#' ? '_blank' : '_self'}" class="avatar-link">
@@ -87,6 +87,7 @@ function renderTeam() {
                     </div>
                 </div>
                 <p class="bio">${f.b}</p>
+                ${f.detail ? `<span class="card-detail-link" onclick="event.stopPropagation();openFounderDetail(${idx})">查看详情 <i class="fas fa-arrow-right"></i></span>` : ''}
             </div>
         `).join('');
     }
@@ -94,7 +95,7 @@ function renderTeam() {
     // 2. 渲染核心成员
     const coreMembersContainer = document.getElementById('coreMembersContainer');
     if (coreMembersContainer) {
-        coreMembersContainer.innerHTML = coreMembers.map(m => `
+        coreMembersContainer.innerHTML = coreMembers.map((m, idx) => `
             <div class="core-member-card">
                 <div class="profile-header">
                     <a href="${m.link || '#'}" target="${m.link && m.link !== '#' ? '_blank' : '_self'}" class="avatar-link">
@@ -104,7 +105,8 @@ function renderTeam() {
                         <div class="name-title-row"><h3>${m.n}</h3><span class="role-text">${m.r}</span></div>
                     </div>
                 </div>
-                <p class="bio" style="margin:0;">${m.b}</p>
+                <p class="bio">${m.b}</p>
+                <span class="card-detail-link" onclick="event.stopPropagation();openCoreDetail(${idx})">查看详情 <i class="fas fa-arrow-right"></i></span>
             </div>
         `).join('');
     }

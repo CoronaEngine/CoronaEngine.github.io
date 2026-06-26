@@ -312,6 +312,44 @@
                          0 2px 12px rgba(0,0,0,0.50) !important;
         }
 
+        /* 卡片样式 */
+        .member-card { position: relative; }
+        .member-card .bio { line-height: 1.65; color: rgba(200,210,225,0.70); margin-left: 0; padding-left: 0; }
+        .member-card .profile-header { padding-left: 0; margin-left: 0; }
+        .member-card .avatar-link { margin-left: 0; }
+        .founder-card { transition: border-color 0.35s ease, box-shadow 0.35s ease; }
+        .founder-card:hover { border-color: rgba(180,140,240,0.30); box-shadow: 0 0 28px rgba(160,110,240,0.10), 0 0 0 1px rgba(180,140,240,0.08) inset; }
+        .core-member-card { position: relative; transition: border-color 0.35s ease, box-shadow 0.35s ease; }
+        .core-member-card:hover { border-color: rgba(180,140,240,0.30) !important; box-shadow: 0 0 28px rgba(160,110,240,0.10), 0 0 0 1px rgba(180,140,240,0.08) inset !important; }
+        .core-member-card .bio { line-height: 1.65; color: rgba(200,210,225,0.70); }
+        .tag { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border-color: rgba(255,255,255,0.12) !important; }
+        .card-detail-link { position: absolute; bottom: 14px; right: 18px; font-size: 0.73rem; color: rgba(255,255,255,0.40); cursor: pointer; transition: color 0.25s ease; }
+        .card-detail-link i { transition: transform 0.25s ease; }
+        .card-detail-link:hover { color: #fff; }
+        .card-detail-link:hover i { transform: translateX(3px); }
+
+        /* 详情弹窗 — 左右分栏 */
+        .member-modal-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(4,9,20,0.65); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.30s ease; }
+        .member-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .member-modal { width: 90%; max-width: 560px; background: rgba(10,16,36,0.82); backdrop-filter: blur(28px); border: 1px solid rgba(255,255,255,0.10); border-radius: 24px; padding: 24px; box-shadow: 0 24px 80px rgba(0,0,0,0.55); position: relative; transform: scale(0.92) translateY(18px); transition: transform 0.30s cubic-bezier(.34,1.56,.64,1); }
+        .member-modal-overlay.active .member-modal { transform: scale(1) translateY(0); }
+        .member-modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: rgba(160,190,220,0.65); font-size: 1.3rem; cursor: pointer; transition: color 0.25s; z-index: 2; }
+        .member-modal-close:hover { color: #ffcc33; }
+        /* 双栏网格 */
+        .member-modal-grid { display: flex; gap: 24px; }
+        /* 左栏 30% — 纯净名片 */
+        .modal-left { width: 30%; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; padding-top: 12px; }
+        .member-modal-avatar { width: 88px; height: 88px; border-radius: 22px; object-fit: cover; border: 2px solid rgba(180,140,240,0.30); flex-shrink: 0; }
+        .modal-left h2 { font-size: 1.25rem; color: #fff; margin: 0; }
+        .modal-role { font-size: 0.73rem; color: rgba(180,200,225,0.50); }
+        /* 右栏 70% — 标签横排 + 内容 */
+        .modal-right { width: 70%; display: flex; flex-direction: column; gap: 8px; }
+        .modal-tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
+        .modal-tag { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 0.65rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: rgba(200,210,230,0.55); }
+        .member-section { background: rgba(255,255,255,0.02); border-radius: 8px; padding: 8px 12px; border-left: 2px solid rgba(180,140,240,0.20); }
+        .member-section h4 { font-size: 0.70rem; font-weight: 700; color: rgba(200,210,235,0.55); margin: 0 0 3px; }
+        .member-section p { font-size: 0.72rem; color: rgba(180,195,215,0.50); line-height: 1.50; margin: 0; }
+
         /* ========== 下载弹窗 ========== */
         .dl-overlay {
             position: fixed; inset: 0; z-index: 9999;
@@ -838,6 +876,27 @@
     </div>
 </div>
 
+<div class="member-modal-overlay" id="memberModal">
+    <div class="member-modal">
+        <button class="member-modal-close" id="memberModalClose">&times;</button>
+        <div class="member-modal-grid">
+            <!-- 左栏：纯净名片 -->
+            <div class="modal-left">
+                <img id="memberModalAvatar" src="" alt="" class="member-modal-avatar">
+                <h2 id="memberModalName"></h2>
+                <span class="modal-role" id="memberModalRoleText"></span>
+            </div>
+            <!-- 右栏：标签 + 实力展示 -->
+            <div class="modal-right">
+                <div id="memberModalTags" class="modal-tags-row"></div>
+                <div class="member-section"><h4>💼 行业履历</h4><p id="memberModalExp"></p></div>
+                <div class="member-section"><h4>⚙️ 核心技术栈</h4><p id="memberModalTech"></p></div>
+                <div class="member-section"><h4>🎓 学术与专利</h4><p id="memberModalAch"></p></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <footer class="site-footer">
     <div class="footer-left">
         <img src="logo/jsut_logo.svg" class="footer-logo" alt="江苏理工学院">
@@ -913,6 +972,31 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
         });
+    })();
+
+    // ========== 成员详情弹窗 ==========
+    function showMemberModal(person) {
+        document.getElementById('memberModalAvatar').src = person.avatar || '';
+        document.getElementById('memberModalName').textContent = person.n;
+        document.getElementById('memberModalRoleText').textContent = person.r;
+        var tagsHtml = person.tags ? person.tags.map(function(t) { return '<span class="modal-tag">' + t + '</span>'; }).join('') : '';
+        document.getElementById('memberModalTags').innerHTML = tagsHtml;
+        document.getElementById('memberModalExp').innerHTML = person.exp || person.b || '';
+        var tE = document.getElementById('memberModalTech'), aE = document.getElementById('memberModalAch');
+        if (person.tech) { if (tE) tE.innerHTML = person.tech; if (tE && tE.parentElement) tE.parentElement.style.display = ''; }
+        else { if (tE && tE.parentElement) tE.parentElement.style.display = 'none'; }
+        if (person.ach) { if (aE) aE.innerHTML = person.ach; if (aE && aE.parentElement) aE.parentElement.style.display = ''; }
+        else { if (aE && aE.parentElement) aE.parentElement.style.display = 'none'; }
+        document.getElementById('memberModal').classList.add('active');
+    }
+    window.openFounderDetail = function(idx) { var f; try { f = founders[idx]; } catch(e) {} if (f) showMemberModal(f); };
+    window.openCoreDetail = function(idx) { var m; try { m = coreMembers[idx]; } catch(e) {} if (m) showMemberModal(m); };
+    (function() {
+        var modal = document.getElementById('memberModal');
+        var btnClose = document.getElementById('memberModalClose');
+        if (btnClose) btnClose.addEventListener('click', function() { modal.classList.remove('active'); });
+        if (modal) modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal && modal.classList.contains('active')) modal.classList.remove('active'); });
     })();
 
     // ========== 身份切换拨动开关 + 2x2卡片双面翻转 ==========
