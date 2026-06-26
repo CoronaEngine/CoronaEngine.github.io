@@ -196,32 +196,32 @@ vec2 pointerMasks(vec2 fragCoord) {
 
     vec2 pointer = iPointer.xy;
     float unit = iResolution.y;
-    float coreRadius = 0.16 * unit;
-    float haloRadius = 0.30 * unit;
-    float ambientRadius = 0.44 * unit;
+    float coreRadius = 0.14 * unit;
+    float haloRadius = 0.27 * unit;
+    float ambientRadius = 0.38 * unit;
 
     float dist = length(fragCoord - pointer);
-    float coreGlow = smoothstep(coreRadius, 0.0, dist);
-    float haloGlow = smoothstep(haloRadius, 0.0, dist) * 0.46;
-    float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.12;
-    float glow = min(1.0, max(coreGlow, haloGlow) + ambientGlow) * iPointer.z;
-    float clarity = smoothstep(0.24 * unit, 0.0, dist) * iPointer.z;
+    float coreGlow = smoothstep(coreRadius, 0.0, dist) * 0.96;
+    float haloGlow = smoothstep(haloRadius, 0.0, dist) * 0.54;
+    float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.08;
+    float glow = min(1.0, coreGlow + haloGlow + ambientGlow) * iPointer.z;
+    float clarity = smoothstep(0.22 * unit, 0.0, dist) * iPointer.z;
 
     return vec2(glow, clarity);
 }
 
 vec3 coolGrade(vec3 raw) {
     float luma = dot(raw, vec3(0.299, 0.587, 0.114));
-    vec3 shadow = vec3(0.014, 0.018, 0.060);
-    vec3 violet = vec3(0.100, 0.070, 0.300);
-    vec3 blue = vec3(0.150, 0.300, 0.780);
-    vec3 pearl = vec3(0.700, 0.820, 1.000);
+    float cloud = smoothstep(0.026, 0.19, luma);
+    vec3 shadow = vec3(0.004, 0.008, 0.032);
+    vec3 deepBlue = vec3(0.020, 0.044, 0.130);
+    vec3 blue = vec3(0.100, 0.220, 0.520);
+    vec3 pearl = vec3(0.880, 0.940, 1.000);
 
-    vec3 grade = mix(shadow, violet, smoothstep(0.02, 0.42, luma));
-    grade = mix(grade, blue, smoothstep(0.24, 0.82, luma));
-    grade += vec3(0.055, 0.020, 0.170) * smoothstep(0.08, 0.62, raw.r);
-    grade += vec3(0.015, 0.095, 0.220) * smoothstep(0.05, 0.46, raw.g);
-    grade += pearl * luma * luma * 0.34;
+    vec3 grade = mix(shadow, deepBlue, smoothstep(0.012, 0.16, luma));
+    grade = mix(grade, blue, smoothstep(0.14, 0.52, luma) * 0.58);
+    grade = mix(grade, pearl, cloud * 0.82);
+    grade += vec3(0.018, 0.034, 0.082) * smoothstep(0.05, 0.42, raw.b);
     return clamp(grade, 0.0, 1.0);
 }
 
@@ -234,17 +234,19 @@ void main() {
     vec3 raw = clamp(color.rgb, 0.0, 1.0);
     vec3 coolRaw = coolGrade(raw);
     float luma = dot(raw, vec3(0.299, 0.587, 0.114));
-    vec3 frostTone = vec3(0.030, 0.038, 0.130);
-    vec3 frosted = mix(coolRaw * 0.42, frostTone + vec3(luma) * vec3(0.150, 0.190, 0.430), 0.78);
-    frosted = mix(frosted, vec3(0.018, 0.024, 0.082), 0.18);
+    float cloud = smoothstep(0.024, 0.18, luma);
+    vec3 frostTone = vec3(0.006, 0.012, 0.052);
+    vec3 pearlCloud = vec3(0.850, 0.920, 1.000);
+    vec3 frosted = mix(frostTone, coolRaw * 0.34, 0.54);
+    frosted = mix(frosted, pearlCloud * (0.20 + luma * 1.18), cloud * 0.52);
+    frosted *= mix(0.58, 0.94, cloud);
 
-    vec3 focusTint = vec3(0.330, 0.270, 0.900);
-    vec3 focusBlue = vec3(0.210, 0.560, 1.000);
-    vec3 focused = coolRaw * (0.94 + glow * 0.18) + vec3(0.032, 0.040, 0.110);
-    focused += focusTint * glow * 0.11 + focusBlue * glow * 0.06;
+    vec3 focused = coolRaw * (1.08 + glow * 0.32) + vec3(0.018, 0.030, 0.088);
+    focused = mix(focused, pearlCloud * (0.48 + luma * 1.42), cloud * 0.46);
+    focused += vec3(0.095, 0.145, 0.320) * glow;
 
     vec3 lit = mix(frosted, focused, clarity);
-    lit += vec3(0.045, 0.052, 0.160) * glow * (1.0 - clarity);
+    lit += vec3(0.055, 0.074, 0.180) * glow * (1.0 - clarity);
     outColor = vec4(lit, 1.0);
 }
 `;
