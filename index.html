@@ -61,7 +61,8 @@
         }
         .slide:first-child {
             position: relative;
-            overflow: visible;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
         .slide:first-child .slide-canvas-wrap {
             bottom: -46px;
@@ -939,7 +940,7 @@
 </div>
 
 <script src="js/main.js"></script>
-<script src="js/hero-bg.js?v=tXKfz1-merged-yqx-20260626"></script>
+<script src="js/hero-bg.js?v=tXKfz1-webgl1-scroll-20260626"></script>
 <script>
     // 学术研究 → 跳转到关于我们页的科研成果区
     window.goToResearch = function() {
