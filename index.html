@@ -75,13 +75,25 @@
         .timeline-wrap { width: 100%; max-width: 90vw; margin: 40px auto 80px auto; }
         .timeline-wrap img { width: 100%; display: block; }
 
-        /* 核心团队 — 电影谢幕风格 */
-        .credits-container { max-width: 1100px; margin: 0 auto; }
-        .credits-group { margin-bottom: 40px; }
-        .credits-group h4 { font-size: 1.25rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.70); margin: 40px 0 16px; text-align: center; }
-        .credits-row { display: flex; justify-content: center; gap: 60px; padding: 4px 0; }
-        .credits-row .credits-role { width: 250px; text-align: right; font-size: 1.125rem; color: rgba(255,255,255,0.48); white-space: nowrap; flex-shrink: 0; }
-        .credits-row .credits-name { width: 250px; text-align: left; font-size: 1.125rem; color: #fff; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+        /* 核心团队 — 横向滑动轮播 */
+        .team-scroll-wrap { overflow: hidden; }
+        .team-bento {
+            display: flex; flex-wrap: nowrap; gap: 32px;
+            padding: 20px 0; transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
+        .team-card {
+            width: 420px; flex-shrink: 0;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.10); border-radius: 24px; padding: 40px;
+            transition: border-color 0.35s ease;
+        }
+        .team-card:hover { border-color: rgba(255,255,255,0.30); }
+        .team-card h4 { font-size: 1.5rem; font-weight: 800; color: #fff; margin: 0 0 28px; }
+        .team-card .team-person { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .team-card .team-person .tp-name { font-size: 1rem; color: #fff; font-weight: 700; white-space: nowrap; }
+        .team-card .team-person .tp-role { font-size: 1rem; color: rgba(255,255,255,0.45); white-space: nowrap; }
         .credits-row .credits-role { text-align: right; font-size: 1.125rem; color: rgba(255,255,255,0.48); white-space: nowrap; }
         .credits-row .credits-name { text-align: left; font-size: 1.125rem; color: #fff; font-weight: 700; white-space: nowrap; }
 
@@ -751,11 +763,13 @@
                 </div>
 
                 <!-- 区块二：核心团队 -->
-                <div class="about-section">
+                <div class="about-section team-section">
                     <div class="section-heading">
                         <h2>核心团队</h2>
                     </div>
-                    <div class="credits-container" id="creditsContainer"></div>
+                    <div class="team-scroll-wrap" id="teamScrollWrap">
+                        <div class="team-bento" id="teamBento"></div>
+                    </div>
                 </div>
 
                 </div>
@@ -988,12 +1002,40 @@
     }
     window.openFounderDetail = function(idx) { var f; try { f = founders[idx]; } catch(e) {} if (f) showMemberModal(f); };
     window.openCoreDetail = function(idx) { var m; try { m = coreMembers[idx]; } catch(e) {} if (m) showMemberModal(m); };
+    window.showMemberModalByName = function(name) {
+        var all = [].concat(founders, coreMembers, scrollingMembers);
+        var person = null;
+        for (var i = 0; i < all.length; i++) { if (all[i].n === name) { person = all[i]; break; } }
+        if (person) showMemberModal(person);
+    };
     (function() {
         var modal = document.getElementById('memberModal');
         var btnClose = document.getElementById('memberModalClose');
         if (btnClose) btnClose.addEventListener('click', function() { modal.classList.remove('active'); });
         if (modal) modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
         document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal && modal.classList.contains('active')) modal.classList.remove('active'); });
+    })();
+
+    // ========== 团队卡片横滑 (translateX) ==========
+    (function() {
+        var wrap = document.getElementById('teamScrollWrap');
+        var track = document.getElementById('teamBento');
+        if (!wrap || !track) return;
+        var offset = 0;
+        var maxScroll = 0;
+        function updateMax() {
+            maxScroll = Math.max(0, track.scrollWidth - wrap.clientWidth);
+            offset = Math.max(-maxScroll, Math.min(0, offset));
+            track.style.transform = 'translateX(' + offset + 'px)';
+        }
+        updateMax();
+        window.addEventListener('resize', updateMax);
+        wrap.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            offset -= e.deltaY;
+            offset = Math.max(-maxScroll, Math.min(0, offset));
+            track.style.transform = 'translateX(' + offset + 'px)';
+        }, { passive: false });
     })();
 
     // ========== 身份切换拨动开关 + 2x2卡片双面翻转 ==========
