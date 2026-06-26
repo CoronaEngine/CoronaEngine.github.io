@@ -9,7 +9,7 @@
     var reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     var REDUCED_MOTION_TIME = 8.0;
     var REDUCED_MOTION_SPEED = 0.75;
-    var DESKTOP_TARGET_FPS = 45;
+    var DESKTOP_TARGET_FPS = 60;
     var MOBILE_TARGET_FPS = 30;
     var REDUCED_MOTION_TARGET_FPS = 30;
 
@@ -18,7 +18,7 @@
 // just unrolled the loop, i guess we only need 3 layers
 // to get some nice clouds :D
 #define N(a) abs(dot(sin(iTime+.1*p.z+.3*p / a), vec3(a+a)))
-#define NUM_LAYERS 12.
+#define NUM_LAYERS 7.
 #define TAU 6.28318
 #define PI 3.141592
 #define Velocity .025 //modified value to increse or decrease speed, negative value travel backwards
@@ -87,7 +87,7 @@ void mainImage(out vec4 o, vec2 u) {
     u = (u+u-r.xy)/r.y;
 
 
-    for(o*=i; i++<1e2; ) {
+    for(o*=i; i++<72.; ) {
         p += vec3(u * s, s);
         s = 6.+(p.y);
         s -= N(.08);
@@ -102,10 +102,10 @@ void mainImage(out vec4 o, vec2 u) {
 
     vec2 R = iResolution.xy;
     o2-=o2;
-    for(float d,t = -iTime*.005, i = 0. ; i > -1.; i -= .06 )
+    for(float d,t = -iTime*.005, i = 0. ; i > -1.; i -= .075 )
     {   d = fract( i -3.*t );
         vec4 c = vec4( ( F - R *.5 ) / R.y *d ,i,0 ) * 28.;
-        for (int j=0 ; j++ <27; )
+        for (int j=0 ; j++ <18; )
             c.xzyw = abs( c / max(dot(c,c), 1e-4)
                     -vec4( 7.-.2*sin(t) , 6.3 , .7 , 1.-cos(t/.8))/7.);
        o2 -= c * c.yzww  * d--*d  / vec4(3,5,1,1);
@@ -191,31 +191,61 @@ out vec4 outColor;
 
 ` + sanitizeShaderBody(body) + `
 
-float pointerLightMask(vec2 fragCoord) {
-    if (iPointer.z <= 0.001) return 0.0;
+vec2 pointerMasks(vec2 fragCoord) {
+    if (iPointer.z <= 0.001) return vec2(0.0);
 
     vec2 pointer = iPointer.xy;
     float unit = iResolution.y;
-    float innerRadius = 0.24 * unit;
-    float outerRadius = 0.36 * unit;
-    float tailLength = 0.30 * unit;
+    float coreRadius = 0.16 * unit;
+    float haloRadius = 0.30 * unit;
+    float ambientRadius = 0.44 * unit;
 
     float dist = length(fragCoord - pointer);
-    float innerGlow = smoothstep(innerRadius, 0.0, dist);
-    float outerGlow = smoothstep(outerRadius, 0.0, dist) * 0.50;
-    float down = max(0.0, pointer.y - fragCoord.y);
-    float tailFade = smoothstep(tailLength, 0.0, down);
-    float tailWidth = mix(0.10 * unit, 0.035 * unit, smoothstep(0.0, tailLength, down));
-    float tail = smoothstep(tailWidth, 0.0, abs(fragCoord.x - pointer.x)) * tailFade;
+    float coreGlow = smoothstep(coreRadius, 0.0, dist);
+    float haloGlow = smoothstep(haloRadius, 0.0, dist) * 0.46;
+    float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.12;
+    float glow = min(1.0, max(coreGlow, haloGlow) + ambientGlow) * iPointer.z;
+    float clarity = smoothstep(0.24 * unit, 0.0, dist) * iPointer.z;
 
-    return max(max(innerGlow, outerGlow), tail * 0.28) * iPointer.z;
+    return vec2(glow, clarity);
+}
+
+vec3 coolGrade(vec3 raw) {
+    float luma = dot(raw, vec3(0.299, 0.587, 0.114));
+    vec3 shadow = vec3(0.014, 0.018, 0.060);
+    vec3 violet = vec3(0.100, 0.070, 0.300);
+    vec3 blue = vec3(0.150, 0.300, 0.780);
+    vec3 pearl = vec3(0.700, 0.820, 1.000);
+
+    vec3 grade = mix(shadow, violet, smoothstep(0.02, 0.42, luma));
+    grade = mix(grade, blue, smoothstep(0.24, 0.82, luma));
+    grade += vec3(0.055, 0.020, 0.170) * smoothstep(0.08, 0.62, raw.r);
+    grade += vec3(0.015, 0.095, 0.220) * smoothstep(0.05, 0.46, raw.g);
+    grade += pearl * luma * luma * 0.34;
+    return clamp(grade, 0.0, 1.0);
 }
 
 void main() {
     vec4 color = vec4(0.0);
     mainImage(color, gl_FragCoord.xy);
-    float light = 0.24 + 1.18 * pointerLightMask(gl_FragCoord.xy);
-    outColor = vec4(color.rgb * light, 1.0);
+    vec2 masks = pointerMasks(gl_FragCoord.xy);
+    float glow = masks.x;
+    float clarity = masks.y;
+    vec3 raw = clamp(color.rgb, 0.0, 1.0);
+    vec3 coolRaw = coolGrade(raw);
+    float luma = dot(raw, vec3(0.299, 0.587, 0.114));
+    vec3 frostTone = vec3(0.030, 0.038, 0.130);
+    vec3 frosted = mix(coolRaw * 0.42, frostTone + vec3(luma) * vec3(0.150, 0.190, 0.430), 0.78);
+    frosted = mix(frosted, vec3(0.018, 0.024, 0.082), 0.18);
+
+    vec3 focusTint = vec3(0.330, 0.270, 0.900);
+    vec3 focusBlue = vec3(0.210, 0.560, 1.000);
+    vec3 focused = coolRaw * (0.94 + glow * 0.18) + vec3(0.032, 0.040, 0.110);
+    focused += focusTint * glow * 0.11 + focusBlue * glow * 0.06;
+
+    vec3 lit = mix(frosted, focused, clarity);
+    lit += vec3(0.045, 0.052, 0.160) * glow * (1.0 - clarity);
+    outColor = vec4(lit, 1.0);
 }
 `;
     }
@@ -238,9 +268,9 @@ void main() {
 
     function renderScaleFor(cssWidth, cssHeight) {
         var smallScreen = isSmallViewport(cssWidth, cssHeight);
-        var cap = smallScreen ? 0.75 : 2.0;
+        var cap = smallScreen ? 0.75 : 1.25;
         var scale = Math.min(window.devicePixelRatio || 1, cap);
-        var pixelBudget = smallScreen ? 1200000 : 2600000;
+        var pixelBudget = smallScreen ? 900000 : 1200000;
         var pixels = Math.max(1, cssWidth * scale) * Math.max(1, cssHeight * scale);
 
         if (pixels > pixelBudget) {
@@ -410,6 +440,7 @@ void main() {
         var running = false;
         var inView = false;
         var mouse = [0, 0, 0, 0];
+        var channelResValues = new Float32Array(12);
         var pointer = {
             x: 0,
             y: 0,
@@ -485,28 +516,38 @@ void main() {
 
         function setCommonUniforms(pass, now, delta) {
             var loc = pass.locations;
-            var date = new Date();
-            var seconds = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds() + date.getMilliseconds() / 1000;
             var channels = pass.def.channels || [];
-            var channelRes = [];
 
-            gl.uniform3f(loc.iResolution, W, H, 1);
-            gl.uniform1f(loc.iTime, now);
-            gl.uniform1f(loc.iTimeDelta, delta);
-            gl.uniform1i(loc.iFrame, frame);
-            gl.uniform4f(loc.iMouse, mouse[0], mouse[1], mouse[2], mouse[3]);
-            gl.uniform4f(loc.iPointer, pointer.x, pointer.y, pointer.strength, 0);
-            gl.uniform4f(loc.iDate, date.getFullYear(), date.getMonth() + 1, date.getDate(), seconds);
-
-            for (var i = 0; i < 4; i++) {
-                var ch = channels[i] || null;
-                gl.activeTexture(gl.TEXTURE0 + i);
-                gl.bindTexture(gl.TEXTURE_2D, channelTexture(ch));
-                if (loc.channels[i]) gl.uniform1i(loc.channels[i], i);
-                var res = channelResolution(ch);
-                channelRes.push(res[0], res[1], res[2]);
+            if (loc.iResolution) gl.uniform3f(loc.iResolution, W, H, 1);
+            if (loc.iTime) gl.uniform1f(loc.iTime, now);
+            if (loc.iTimeDelta) gl.uniform1f(loc.iTimeDelta, delta);
+            if (loc.iFrame) gl.uniform1i(loc.iFrame, frame);
+            if (loc.iMouse) gl.uniform4f(loc.iMouse, mouse[0], mouse[1], mouse[2], mouse[3]);
+            if (loc.iPointer) gl.uniform4f(loc.iPointer, pointer.x, pointer.y, pointer.strength, 0);
+            if (loc.iDate) {
+                var date = new Date();
+                var seconds = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds() + date.getMilliseconds() / 1000;
+                gl.uniform4f(loc.iDate, date.getFullYear(), date.getMonth() + 1, date.getDate(), seconds);
             }
-            gl.uniform3fv(loc.iChannelResolution, new Float32Array(channelRes));
+
+            if (loc.iChannelResolution || loc.channels[0] || loc.channels[1] || loc.channels[2] || loc.channels[3]) {
+                for (var i = 0; i < 4; i++) {
+                    var ch = channels[i] || null;
+                    if (loc.channels[i]) {
+                        gl.activeTexture(gl.TEXTURE0 + i);
+                        gl.bindTexture(gl.TEXTURE_2D, channelTexture(ch));
+                        gl.uniform1i(loc.channels[i], i);
+                    }
+                    if (loc.iChannelResolution) {
+                        var res = channelResolution(ch);
+                        var base = i * 3;
+                        channelResValues[base] = res[0];
+                        channelResValues[base + 1] = res[1];
+                        channelResValues[base + 2] = res[2];
+                    }
+                }
+                if (loc.iChannelResolution) gl.uniform3fv(loc.iChannelResolution, channelResValues);
+            }
         }
 
         function render(timestamp, singleFrame) {

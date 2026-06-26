@@ -163,9 +163,9 @@ nav {
     pointer-events: none;
     /* 居中标题：中心柔和压暗，向四周淡出，保证文字可读又不挡住星海 */
     background: radial-gradient(ellipse 65% 62% at center,
-        rgba(2, 6, 23, 0.62) 0%,
-        rgba(2, 6, 23, 0.32) 45%,
-        rgba(2, 6, 23, 0) 78%
+        rgba(8, 11, 34, 0.30) 0%,
+        rgba(10, 12, 44, 0.38) 50%,
+        rgba(5, 7, 26, 0.08) 80%
     );
 }
 
@@ -186,13 +186,13 @@ nav {
 .hero-text-content.centered h1 {
     font-size: clamp(3rem, 5.5vw, 5.5rem);
     font-weight: 900;
-    background: linear-gradient(135deg, #ffffff 6%, #ffe79a 42%, var(--primary-gold) 100%);
+    background: linear-gradient(135deg, #ffffff 6%, #dbeafe 38%, #a78bfa 72%, #38bdf8 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     filter:
         drop-shadow(0 2px 12px rgba(0, 0, 0, 0.55))
-        drop-shadow(0 0 30px rgba(255, 204, 51, 0.35));
+        drop-shadow(0 0 32px rgba(99, 102, 241, 0.36));
     letter-spacing: 0.5px;
 }
 
@@ -1052,7 +1052,7 @@ nav {
     }
 
     .showcase-overlay-gradient {
-        background: radial-gradient(ellipse 80% 60% at center, rgba(2, 6, 23, 0.7), rgba(2, 6, 23, 0) 80%);
+        background: radial-gradient(ellipse 80% 60% at center, rgba(8, 11, 34, 0.56), rgba(5, 7, 26, 0.08) 82%);
     }
 
     .profile-header,
