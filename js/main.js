@@ -68,26 +68,33 @@ function initSceneAccordion() {
 }
 
 function renderTeam() {
-    const creditsContainer = document.getElementById('creditsContainer');
-    if (!creditsContainer) return;
+    var container = document.getElementById('creditsContainer') || document.getElementById('teamBento');
+    if (!container) return;
 
-    const groups = [
-        { label: '创始人', items: founders.map(f => ({ role: f.r, name: f.n })) },
-        { label: '架构组', items: coreMembers.map(m => ({ role: m.r, name: m.n })) },
-        { label: '开发组', items: scrollingMembers.map(m => ({ role: m.r, name: m.n })) }
+    // 拆分开发组成员
+    var devLow = [], devRender = [], devOther = [];
+    scrollingMembers.forEach(function(m) {
+        if (m.r.indexOf('底层') >= 0) devLow.push(m);
+        else if (m.r.indexOf('渲染') >= 0 || m.r.indexOf('物理') >= 0) devRender.push(m);
+        else devOther.push(m);
+    });
+    // 将剩余成员分配到较短的组
+    devOther.forEach(function(m) { if (devLow.length <= devRender.length) devLow.push(m); else devRender.push(m); });
+
+    var groups = [
+        { label: '创始人', items: founders.map(function(f) { return { role: f.r, name: f.n }; }) },
+        { label: '架构组', items: coreMembers.map(function(m) { return { role: m.r, name: m.n }; }) },
+        { label: '底层开发', items: devLow.map(function(m) { return { role: m.r, name: m.n }; }) },
+        { label: '渲染与物理', items: devRender.map(function(m) { return { role: m.r, name: m.n }; }) }
     ];
 
-    creditsContainer.innerHTML = groups.map(g => `
-        <div class="credits-group">
-            <h4>${g.label}</h4>
-            ${g.items.map(p => `
-                <div class="credits-row">
-                    <span class="credits-role">${p.role}</span>
-                    <span class="credits-name">${p.name}</span>
-                </div>
-            `).join('')}
-        </div>
-    `).join('');
+    container.innerHTML = groups.map(function(g) {
+        return '<div class="team-card"><h4>' + g.label + '</h4>' +
+            g.items.map(function(p) {
+                return '<div class="team-person"><span class="tp-name" style="cursor:pointer;" onclick="event.stopPropagation();showMemberModalByName(\'' + p.name + '\')">' + p.name + '</span><span class="tp-role">' + p.role + '</span></div>';
+            }).join('') +
+            '</div>';
+    }).join('');
 }
 
 // ================= 页脚联系方式：单击复制到剪贴板 =================
