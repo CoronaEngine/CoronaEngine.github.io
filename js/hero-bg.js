@@ -12,6 +12,7 @@
     var DESKTOP_TARGET_FPS = 60;
     var MOBILE_TARGET_FPS = 30;
     var REDUCED_MOTION_TARGET_FPS = 30;
+    var POINTER_TRAIL_COUNT = 6;
 
     // Shadertoy Image pass source for https://www.shadertoy.com/view/tXKfz1.
     var IMAGE_PASS_SOURCE = `
@@ -184,6 +185,7 @@ uniform float iTimeDelta;
 uniform int iFrame;
 uniform vec4 iMouse;
 uniform vec4 iPointer;
+uniform vec4 iPointerTrail[6];
 uniform vec4 iDate;
 uniform sampler2D iChannel0;
 uniform sampler2D iChannel1;
@@ -217,49 +219,47 @@ vec4 shadertoyTanh(vec4 x) {
 
 ` + sanitizeShaderBody(body) + `
 
-float pointerHash21(vec2 p) {
-    p = fract(p * vec2(123.34, 456.21));
-    p += dot(p, p + 45.32);
-    return fract(p.x * p.y);
+float readableLightScale(vec2 fragCoord) {
+    vec2 uv = fragCoord / iResolution.xy;
+    float centerColumn = 1.0 - smoothstep(0.16, 0.39, abs(uv.x - 0.5));
+    float titleBand = smoothstep(0.28, 0.39, uv.y) * (1.0 - smoothstep(0.62, 0.74, uv.y));
+    return mix(1.0, 0.52, centerColumn * titleBand);
 }
 
-vec2 ignitionStars(vec2 fragCoord) {
-    vec2 grid = fragCoord / iResolution.y * 35.0;
-    vec2 id = floor(grid);
-    vec2 gv = fract(grid) - 0.5;
-    float n = pointerHash21(id);
-    vec2 starPos = vec2(n, pointerHash21(id + 19.17)) - 0.5;
-    vec2 local = gv - starPos * 0.76;
-    float gate = smoothstep(0.72, 0.98, n);
-    float pulse = 0.62 + 0.38 * sin(iTime * 4.8 + n * 6.28318);
-    float d = length(local);
-    float core = smoothstep(0.060, 0.0, d) * gate * pulse;
-    float rayX = smoothstep(0.015, 0.0, abs(local.y)) * smoothstep(0.36, 0.0, abs(local.x));
-    float rayY = smoothstep(0.015, 0.0, abs(local.x)) * smoothstep(0.36, 0.0, abs(local.y));
-    return vec2(core, (rayX + rayY) * gate * pulse);
+vec4 pointerMasksForPoint(vec2 fragCoord, vec2 pointer, float strength, float trailAmount) {
+    if (strength <= 0.001) return vec4(0.0);
+
+    float unit = iResolution.y;
+    float readable = readableLightScale(fragCoord);
+    float coreRadius = mix(0.115, 0.080, trailAmount) * unit;
+    float haloRadius = mix(0.270, 0.210, trailAmount) * unit;
+    float ambientRadius = mix(0.420, 0.300, trailAmount) * unit;
+
+    float dist = length(fragCoord - pointer);
+    float coreGlow = smoothstep(coreRadius, 0.0, dist) * 0.38;
+    float haloGlow = smoothstep(haloRadius, 0.0, dist) * 0.31;
+    float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.085;
+    float trailScale = mix(1.0, 0.38, trailAmount);
+    float glow = min(0.74, coreGlow + haloGlow + ambientGlow) * strength * readable * trailScale;
+    float clarity = smoothstep(mix(0.23, 0.16, trailAmount) * unit, 0.0, dist) * strength * readable * mix(0.64, 0.23, trailAmount);
+    float starIgnite = (smoothstep(0.230 * unit, 0.0, dist) * 0.48
+        + smoothstep(0.112 * unit, 0.0, dist) * 0.24) * strength * readable * mix(1.0, 0.30, trailAmount);
+    float cloudIgnite = (smoothstep(0.295 * unit, 0.0, dist) * 0.27
+        + smoothstep(0.165 * unit, 0.0, dist) * 0.12) * strength * readable * mix(0.72, 0.22, trailAmount);
+
+    return vec4(glow, clarity, starIgnite, cloudIgnite);
 }
 
 vec4 pointerMasks(vec2 fragCoord) {
-    if (iPointer.z <= 0.001) return vec4(0.0);
+    vec4 masks = pointerMasksForPoint(fragCoord, iPointer.xy, iPointer.z, 0.0);
 
-    vec2 pointer = iPointer.xy;
-    float unit = iResolution.y;
-    float coreRadius = 0.16 * unit;
-    float haloRadius = 0.34 * unit;
-    float ambientRadius = 0.48 * unit;
+    for (int i = 0; i < 6; i++) {
+        vec4 trail = iPointerTrail[i];
+        float ageFade = smoothstep(1.0, 0.0, clamp(trail.w, 0.0, 1.0));
+        masks += pointerMasksForPoint(fragCoord, trail.xy, trail.z * ageFade, 1.0);
+    }
 
-    float dist = length(fragCoord - pointer);
-    float coreGlow = smoothstep(coreRadius, 0.0, dist) * 0.82;
-    float haloGlow = smoothstep(haloRadius, 0.0, dist) * 0.64;
-    float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.13;
-    float glow = min(1.0, coreGlow + haloGlow + ambientGlow) * iPointer.z;
-    float clarity = smoothstep(0.28 * unit, 0.0, dist) * iPointer.z;
-    float starIgnite = (smoothstep(0.30 * unit, 0.0, dist) * 0.72
-        + smoothstep(0.18 * unit, 0.0, dist) * 0.52) * iPointer.z;
-    float cloudIgnite = (smoothstep(0.38 * unit, 0.0, dist) * 0.58
-        + smoothstep(0.22 * unit, 0.0, dist) * 0.34) * iPointer.z;
-
-    return vec4(glow, clarity, min(1.0, starIgnite), min(1.0, cloudIgnite));
+    return min(masks, vec4(0.78, 0.50, 0.64, 0.40));
 }
 
 vec3 coolGrade(vec3 raw) {
@@ -320,35 +320,35 @@ void main() {
     frosted *= mix(0.58, 0.94, cloudMask);
     float starMask = skyRegion * (1.0 - cloudMask * 0.82);
     frosted = mix(frosted, starfieldGrade(raw) * 0.78 + vec3(0.004, 0.016, 0.070), starMask * 0.62);
+    float skyLens = glow * starMask * (1.0 - cloudMask * 0.76);
+    float lensRim = skyLens * (1.0 - clarity) * smoothstep(0.08, 0.58, glow);
 
     vec3 focused = coolRaw * (1.08 + glow * 0.32) + vec3(0.018, 0.030, 0.088);
     focused = mix(focused, pearlCloud * (0.48 + luma * 1.42), cloudMask * 0.46);
-    focused += vec3(0.095, 0.145, 0.320) * glow;
+    focused += vec3(0.110, 0.170, 0.380) * glow;
 
     vec3 lit = mix(frosted, focused, clarity);
     float starLift = starMask * smoothstep(0.010, 0.20, luma);
     lit += starfieldGrade(raw) * starLift * 0.30 + vec3(0.004, 0.014, 0.052) * starMask * 0.25;
-    float existingStar = starMask * (1.0 - cloudMask * 0.72) * smoothstep(0.018, 0.22, luma);
-    float twinkle = 0.78 + 0.22 * sin(iTime * 5.2 + pointerHash21(floor(gl_FragCoord.xy / 28.0)) * 6.28318);
-    vec2 activeStars = ignitionStars(gl_FragCoord.xy);
-    float starSpark = activeStars.x * starIgnite * starMask * (1.0 - cloudMask * 0.74);
-    float starRays = activeStars.y * starIgnite * starMask * (1.0 - cloudMask * 0.82);
-    vec3 igniteTone = mix(vec3(0.34, 0.48, 1.00), vec3(0.78, 0.84, 1.00), twinkle);
-    lit += igniteTone * existingStar * starIgnite * (0.70 + twinkle * 0.34);
-    lit += vec3(0.34, 0.48, 1.00) * starSpark * 1.55;
-    lit += vec3(0.62, 0.68, 1.00) * starRays * 0.58;
-    lit += vec3(0.060, 0.110, 0.320) * starIgnite * starMask * 0.48;
+    float existingStar = starMask * (1.0 - cloudMask * 0.82) * smoothstep(0.016, 0.17, luma);
+    float twinkle = 0.84 + 0.16 * sin(iTime * 3.7 + sin(dot(gl_FragCoord.xy, vec2(0.013, 0.029))) * 6.28318);
+    vec3 igniteTone = mix(vec3(0.18, 0.30, 0.86), vec3(0.62, 0.74, 1.00), twinkle);
+    lit += igniteTone * existingStar * starIgnite * (0.34 + twinkle * 0.18);
+    lit += vec3(0.035, 0.070, 0.200) * starIgnite * starMask * 0.34;
+    lit += vec3(0.038, 0.060, 0.190) * skyLens * 0.74;
+    lit += vec3(0.050, 0.024, 0.135) * lensRim;
     float coolIgniteZone = starIgnite * starMask * (1.0 - cloudMask * 0.65);
-    vec3 cooledIgnition = vec3(lit.r * 0.74, lit.g * 0.86, max(lit.b, lit.g * 1.20));
-    lit = mix(lit, cooledIgnition, coolIgniteZone * 0.36);
+    vec3 cooledIgnition = vec3(lit.r * 0.82, lit.g * 0.92, max(lit.b, lit.g * 1.10));
+    lit = mix(lit, cooledIgnition, coolIgniteZone * 0.18);
     float cloudEdge = smoothstep(0.045, 0.34, cloudMask) * (1.0 - smoothstep(0.62, 0.98, cloudMask));
-    float cloudSilver = cloudIgnite * cloudEdge * (0.72 + 0.28 * sin(uvN.x * 23.0 + uvN.y * 15.0 - iTime * 0.32));
-    lit = mix(lit, pearlCloud * (0.58 + luma * 1.48), cloudIgnite * cloudMask * 0.34);
-    lit += vec3(0.190, 0.230, 0.315) * cloudSilver;
+    float cloudSilver = cloudIgnite * cloudEdge * (0.80 + 0.20 * sin(uvN.x * 23.0 + uvN.y * 15.0 - iTime * 0.32));
+    lit = mix(lit, pearlCloud * (0.43 + luma * 1.06), cloudIgnite * cloudMask * 0.19);
+    lit += vec3(0.085, 0.120, 0.165) * cloudSilver;
     float lowMist = 1.0 - smoothstep(-0.04, 0.42, uvN.y + cloudEdgeNoise * 0.42);
     lowMist *= 0.50 + 0.24 * sin(uvN.x * 19.0 - iTime * 0.05);
     lit += vec3(0.165, 0.185, 0.235) * max(lowMist, 0.0);
-    lit += vec3(0.055, 0.074, 0.180) * glow * (1.0 - clarity);
+    lit += vec3(0.030, 0.046, 0.132) * glow * (1.0 - clarity);
+    lit = lit / (vec3(1.0) + max(lit - vec3(0.82), vec3(0.0)) * 0.72);
     gl_FragColor = vec4(lit, 1.0);
 }
 `;
@@ -444,6 +444,7 @@ void main() {
             iFrame: gl.getUniformLocation(program, 'iFrame'),
             iMouse: gl.getUniformLocation(program, 'iMouse'),
             iPointer: gl.getUniformLocation(program, 'iPointer'),
+            iPointerTrail: gl.getUniformLocation(program, 'iPointerTrail[0]'),
             iDate: gl.getUniformLocation(program, 'iDate'),
             iChannelResolution: gl.getUniformLocation(program, 'iChannelResolution'),
             channels: [
@@ -558,6 +559,7 @@ void main() {
         var inView = false;
         var mouse = [0, 0, 0, 0];
         var channelResValues = new Float32Array(12);
+        var pointerTrailValues = new Float32Array(POINTER_TRAIL_COUNT * 4);
         var pointer = {
             x: 0,
             y: 0,
@@ -567,6 +569,14 @@ void main() {
             targetStrength: 0,
             hasInput: false
         };
+        var pointerTrail = [];
+        for (var trailInit = 0; trailInit < POINTER_TRAIL_COUNT; trailInit++) {
+            pointerTrail.push({ x: 0, y: 0, strength: 0, age: 1 });
+        }
+        var pointerTrailCursor = 0;
+        var lastTrailX = 0;
+        var lastTrailY = 0;
+        var lastTrailMs = 0;
         if (debugState) {
             debugState.status = 'runtime-ready';
             publishDebugState();
@@ -641,6 +651,17 @@ void main() {
             if (loc.iFrame) gl.uniform1i(loc.iFrame, frame);
             if (loc.iMouse) gl.uniform4f(loc.iMouse, mouse[0], mouse[1], mouse[2], mouse[3]);
             if (loc.iPointer) gl.uniform4f(loc.iPointer, pointer.x, pointer.y, pointer.strength, 0);
+            if (loc.iPointerTrail) {
+                for (var trailIndex = 0; trailIndex < POINTER_TRAIL_COUNT; trailIndex++) {
+                    var trail = pointerTrail[trailIndex];
+                    var baseIndex = trailIndex * 4;
+                    pointerTrailValues[baseIndex] = trail.x;
+                    pointerTrailValues[baseIndex + 1] = trail.y;
+                    pointerTrailValues[baseIndex + 2] = trail.strength;
+                    pointerTrailValues[baseIndex + 3] = trail.age;
+                }
+                gl.uniform4fv(loc.iPointerTrail, pointerTrailValues);
+            }
             if (loc.iDate) {
                 var date = new Date();
                 var seconds = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds() + date.getMilliseconds() / 1000;
@@ -791,6 +812,9 @@ void main() {
             }
 
             var p = canvasPoint(clientX, clientY);
+            if (pointer.hasInput) {
+                pushPointerTrail(pointer.x, pointer.y, false);
+            }
             pointer.targetX = p[0];
             pointer.targetY = p[1];
             pointer.targetStrength = 1;
@@ -801,7 +825,30 @@ void main() {
             lastDrawMs = 0;
         }
 
+        function pushPointerTrail(x, y, force) {
+            var now = performance.now();
+            var dx = x - lastTrailX;
+            var dy = y - lastTrailY;
+            var minDistance = Math.max(18, 26 * dpr);
+            if (!force && now - lastTrailMs < 38 && dx * dx + dy * dy < minDistance * minDistance) {
+                return;
+            }
+
+            var trail = pointerTrail[pointerTrailCursor];
+            trail.x = x;
+            trail.y = y;
+            trail.strength = 0.28;
+            trail.age = 0;
+            pointerTrailCursor = (pointerTrailCursor + 1) % POINTER_TRAIL_COUNT;
+            lastTrailX = x;
+            lastTrailY = y;
+            lastTrailMs = now;
+        }
+
         function fadePointerTarget() {
+            if (pointer.hasInput) {
+                pushPointerTrail(pointer.x, pointer.y, true);
+            }
             pointer.targetStrength = 0;
             lastDrawMs = 0;
         }
@@ -815,6 +862,17 @@ void main() {
 
             if (pointer.strength < 0.001 && pointer.targetStrength <= 0) {
                 pointer.strength = 0;
+            }
+
+            for (var i = 0; i < POINTER_TRAIL_COUNT; i++) {
+                var trail = pointerTrail[i];
+                if (trail.strength <= 0.001) {
+                    trail.strength = 0;
+                    trail.age = 1;
+                    continue;
+                }
+                trail.age = Math.min(1, trail.age + dt * 0.95);
+                trail.strength += (0 - trail.strength) * (1 - Math.exp(-dt * 2.35));
             }
         }
 
