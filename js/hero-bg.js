@@ -1,5 +1,5 @@
 // ================= Shadertoy 风格首屏背景 =================
-// WebGL2 Shadertoy runtime，无第三方依赖；失败时保持黑屏便于诊断。
+// WebGL 1.0 Shadertoy runtime，无第三方依赖；失败时保持黑屏便于诊断。
 (function () {
     'use strict';
 
@@ -12,6 +12,7 @@
     var DESKTOP_TARGET_FPS = 60;
     var MOBILE_TARGET_FPS = 30;
     var REDUCED_MOTION_TARGET_FPS = 30;
+    var POINTER_TRAIL_COUNT = 6;
 
     // Shadertoy Image pass source for https://www.shadertoy.com/view/tXKfz1.
     var IMAGE_PASS_SOURCE = `
@@ -87,7 +88,9 @@ void mainImage(out vec4 o, vec2 u) {
     u = (u+u-r.xy)/r.y;
 
 
-    for(o*=i; i++<72.; ) {
+    o *= i;
+    for(int rayStep=0; rayStep<72; rayStep++) {
+        i += 1.;
         p += vec3(u * s, s);
         s = 6.+(p.y);
         s -= N(.08);
@@ -102,12 +105,14 @@ void mainImage(out vec4 o, vec2 u) {
 
     vec2 R = iResolution.xy;
     o2-=o2;
-    for(float d,t = -iTime*.005, i = 0. ; i > -1.; i -= .075 )
-    {   d = fract( i -3.*t );
+    float t2 = -iTime*.005;
+    float d = 0.;
+    for(float i = 0. ; i > -1.; i -= .075 )
+    {   d = fract( i -3.*t2 );
         vec4 c = vec4( ( F - R *.5 ) / R.y *d ,i,0 ) * 28.;
-        for (int j=0 ; j++ <18; )
+        for (int j=0 ; j <18; j++ )
             c.xzyw = abs( c / max(dot(c,c), 1e-4)
-                    -vec4( 7.-.2*sin(t) , 6.3 , .7 , 1.-cos(t/.8))/7.);
+                    -vec4( 7.-.2*sin(t2) , 6.3 , .7 , 1.-cos(t2/.8))/7.);
        o2 -= c * c.yzww  * d--*d  / vec4(3,5,1,1);
     }
   o+=o2;
@@ -136,6 +141,7 @@ void mainImage(out vec4 o, vec2 u) {
         centerPixel: null,
         samplePixels: null,
         glError: 0,
+        webglVersion: 'webgl1',
         status: 'initializing'
     }) : null;
 
@@ -160,17 +166,16 @@ void mainImage(out vec4 o, vec2 u) {
         }
     ];
 
-    var VERTEX_SOURCE = `#version 300 es
+    var VERTEX_SOURCE = `
+attribute vec2 aPosition;
+
 void main() {
-    vec2 p = vec2(-1.0, -1.0);
-    if (gl_VertexID == 1) p = vec2(3.0, -1.0);
-    if (gl_VertexID == 2) p = vec2(-1.0, 3.0);
-    gl_Position = vec4(p, 0.0, 1.0);
+    gl_Position = vec4(aPosition, 0.0, 1.0);
 }
 `;
 
     function fragmentSource(body) {
-        return `#version 300 es
+        return `
 precision highp float;
 precision highp int;
 
@@ -180,6 +185,7 @@ uniform float iTimeDelta;
 uniform int iFrame;
 uniform vec4 iMouse;
 uniform vec4 iPointer;
+uniform vec4 iPointerTrail[6];
 uniform vec4 iDate;
 uniform sampler2D iChannel0;
 uniform sampler2D iChannel1;
@@ -187,27 +193,73 @@ uniform sampler2D iChannel2;
 uniform sampler2D iChannel3;
 uniform vec3 iChannelResolution[4];
 
-out vec4 outColor;
+float shadertoyTanh(float x) {
+    x = clamp(x, -10.0, 10.0);
+    float e = exp(2.0 * x);
+    return (e - 1.0) / (e + 1.0);
+}
+
+vec2 shadertoyTanh(vec2 x) {
+    x = clamp(x, vec2(-10.0), vec2(10.0));
+    vec2 e = exp(2.0 * x);
+    return (e - vec2(1.0)) / (e + vec2(1.0));
+}
+
+vec3 shadertoyTanh(vec3 x) {
+    x = clamp(x, vec3(-10.0), vec3(10.0));
+    vec3 e = exp(2.0 * x);
+    return (e - vec3(1.0)) / (e + vec3(1.0));
+}
+
+vec4 shadertoyTanh(vec4 x) {
+    x = clamp(x, vec4(-10.0), vec4(10.0));
+    vec4 e = exp(2.0 * x);
+    return (e - vec4(1.0)) / (e + vec4(1.0));
+}
 
 ` + sanitizeShaderBody(body) + `
 
-vec2 pointerMasks(vec2 fragCoord) {
-    if (iPointer.z <= 0.001) return vec2(0.0);
+float readableLightScale(vec2 fragCoord) {
+    vec2 uv = fragCoord / iResolution.xy;
+    float centerColumn = 1.0 - smoothstep(0.16, 0.39, abs(uv.x - 0.5));
+    float titleBand = smoothstep(0.28, 0.39, uv.y) * (1.0 - smoothstep(0.62, 0.74, uv.y));
+    return mix(1.0, 0.52, centerColumn * titleBand);
+}
 
-    vec2 pointer = iPointer.xy;
+vec4 pointerMasksForPoint(vec2 fragCoord, vec2 pointer, float strength, float trailAmount) {
+    if (strength <= 0.001) return vec4(0.0);
+
     float unit = iResolution.y;
-    float coreRadius = 0.16 * unit;
-    float haloRadius = 0.34 * unit;
-    float ambientRadius = 0.48 * unit;
+    float readable = readableLightScale(fragCoord);
+    float coreRadius = mix(0.115, 0.080, trailAmount) * unit;
+    float haloRadius = mix(0.270, 0.210, trailAmount) * unit;
+    float ambientRadius = mix(0.420, 0.300, trailAmount) * unit;
 
     float dist = length(fragCoord - pointer);
-    float coreGlow = smoothstep(coreRadius, 0.0, dist) * 0.82;
-    float haloGlow = smoothstep(haloRadius, 0.0, dist) * 0.64;
-    float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.13;
-    float glow = min(1.0, coreGlow + haloGlow + ambientGlow) * iPointer.z;
-    float clarity = smoothstep(0.28 * unit, 0.0, dist) * iPointer.z;
+    float coreGlow = smoothstep(coreRadius, 0.0, dist) * 0.38;
+    float haloGlow = smoothstep(haloRadius, 0.0, dist) * 0.31;
+    float ambientGlow = smoothstep(ambientRadius, 0.0, dist) * 0.085;
+    float trailScale = mix(1.0, 0.38, trailAmount);
+    float glow = min(0.74, coreGlow + haloGlow + ambientGlow) * strength * readable * trailScale;
+    float clarity = smoothstep(mix(0.23, 0.16, trailAmount) * unit, 0.0, dist) * strength * readable * mix(0.64, 0.23, trailAmount);
+    float starIgnite = (smoothstep(0.230 * unit, 0.0, dist) * 0.48
+        + smoothstep(0.112 * unit, 0.0, dist) * 0.24) * strength * readable * mix(1.0, 0.30, trailAmount);
+    float cloudIgnite = (smoothstep(0.295 * unit, 0.0, dist) * 0.27
+        + smoothstep(0.165 * unit, 0.0, dist) * 0.12) * strength * readable * mix(0.72, 0.22, trailAmount);
 
-    return vec2(glow, clarity);
+    return vec4(glow, clarity, starIgnite, cloudIgnite);
+}
+
+vec4 pointerMasks(vec2 fragCoord) {
+    vec4 masks = pointerMasksForPoint(fragCoord, iPointer.xy, iPointer.z, 0.0);
+
+    for (int i = 0; i < 6; i++) {
+        vec4 trail = iPointerTrail[i];
+        float ageFade = smoothstep(1.0, 0.0, clamp(trail.w, 0.0, 1.0));
+        masks += pointerMasksForPoint(fragCoord, trail.xy, trail.z * ageFade, 1.0);
+    }
+
+    return min(masks, vec4(0.78, 0.50, 0.64, 0.40));
 }
 
 vec3 coolGrade(vec3 raw) {
@@ -243,9 +295,11 @@ vec3 starfieldGrade(vec3 raw) {
 void main() {
     vec4 color = vec4(0.0);
     mainImage(color, gl_FragCoord.xy);
-    vec2 masks = pointerMasks(gl_FragCoord.xy);
+    vec4 masks = pointerMasks(gl_FragCoord.xy);
     float glow = masks.x;
     float clarity = masks.y;
+    float starIgnite = masks.z;
+    float cloudIgnite = masks.w;
     vec3 raw = clamp(color.rgb, 0.0, 1.0);
     float luma = dot(raw, vec3(0.299, 0.587, 0.114));
     float cloud = smoothstep(0.024, 0.18, luma);
@@ -266,19 +320,36 @@ void main() {
     frosted *= mix(0.58, 0.94, cloudMask);
     float starMask = skyRegion * (1.0 - cloudMask * 0.82);
     frosted = mix(frosted, starfieldGrade(raw) * 0.78 + vec3(0.004, 0.016, 0.070), starMask * 0.62);
+    float skyLens = glow * starMask * (1.0 - cloudMask * 0.76);
+    float lensRim = skyLens * (1.0 - clarity) * smoothstep(0.08, 0.58, glow);
 
     vec3 focused = coolRaw * (1.08 + glow * 0.32) + vec3(0.018, 0.030, 0.088);
     focused = mix(focused, pearlCloud * (0.48 + luma * 1.42), cloudMask * 0.46);
-    focused += vec3(0.095, 0.145, 0.320) * glow;
+    focused += vec3(0.110, 0.170, 0.380) * glow;
 
     vec3 lit = mix(frosted, focused, clarity);
     float starLift = starMask * smoothstep(0.010, 0.20, luma);
     lit += starfieldGrade(raw) * starLift * 0.30 + vec3(0.004, 0.014, 0.052) * starMask * 0.25;
+    float existingStar = starMask * (1.0 - cloudMask * 0.82) * smoothstep(0.016, 0.17, luma);
+    float twinkle = 0.84 + 0.16 * sin(iTime * 3.7 + sin(dot(gl_FragCoord.xy, vec2(0.013, 0.029))) * 6.28318);
+    vec3 igniteTone = mix(vec3(0.18, 0.30, 0.86), vec3(0.62, 0.74, 1.00), twinkle);
+    lit += igniteTone * existingStar * starIgnite * (0.34 + twinkle * 0.18);
+    lit += vec3(0.035, 0.070, 0.200) * starIgnite * starMask * 0.34;
+    lit += vec3(0.038, 0.060, 0.190) * skyLens * 0.74;
+    lit += vec3(0.050, 0.024, 0.135) * lensRim;
+    float coolIgniteZone = starIgnite * starMask * (1.0 - cloudMask * 0.65);
+    vec3 cooledIgnition = vec3(lit.r * 0.82, lit.g * 0.92, max(lit.b, lit.g * 1.10));
+    lit = mix(lit, cooledIgnition, coolIgniteZone * 0.18);
+    float cloudEdge = smoothstep(0.045, 0.34, cloudMask) * (1.0 - smoothstep(0.62, 0.98, cloudMask));
+    float cloudSilver = cloudIgnite * cloudEdge * (0.80 + 0.20 * sin(uvN.x * 23.0 + uvN.y * 15.0 - iTime * 0.32));
+    lit = mix(lit, pearlCloud * (0.43 + luma * 1.06), cloudIgnite * cloudMask * 0.19);
+    lit += vec3(0.085, 0.120, 0.165) * cloudSilver;
     float lowMist = 1.0 - smoothstep(-0.04, 0.42, uvN.y + cloudEdgeNoise * 0.42);
     lowMist *= 0.50 + 0.24 * sin(uvN.x * 19.0 - iTime * 0.05);
     lit += vec3(0.165, 0.185, 0.235) * max(lowMist, 0.0);
-    lit += vec3(0.055, 0.074, 0.180) * glow * (1.0 - clarity);
-    outColor = vec4(lit, 1.0);
+    lit += vec3(0.030, 0.046, 0.132) * glow * (1.0 - clarity);
+    lit = lit / (vec3(1.0) + max(lit - vec3(0.82), vec3(0.0)) * 0.72);
+    gl_FragColor = vec4(lit, 1.0);
 }
 `;
     }
@@ -287,7 +358,9 @@ void main() {
         return source
             .replace(/^\s*#version\s+.*$/gm, '')
             .replace(/^\s*precision\s+(lowp|mediump|highp)\s+(float|int)\s*;\s*$/gm, '')
-            .replace(/^\s*out\s+vec4\s+\w+\s*;\s*$/gm, '');
+            .replace(/^\s*out\s+vec4\s+\w+\s*;\s*$/gm, '')
+            .replace(/\btexture\s*\(/g, 'texture2D(')
+            .replace(/\btanh\s*\(/g, 'shadertoyTanh(');
     }
 
     function isSmallViewport(cssWidth, cssHeight) {
@@ -320,7 +393,7 @@ void main() {
     }
 
     function getWebGL(canvasEl) {
-        return canvasEl.getContext('webgl2', {
+        var attributes = {
             alpha: true,
             antialias: false,
             depth: false,
@@ -328,7 +401,9 @@ void main() {
             premultipliedAlpha: false,
             preserveDrawingBuffer: false,
             powerPreference: 'high-performance'
-        });
+        };
+        return canvasEl.getContext('webgl', attributes) ||
+            canvasEl.getContext('experimental-webgl', attributes);
     }
 
     function compileShader(gl, type, source, label) {
@@ -362,12 +437,14 @@ void main() {
 
     function collectLocations(gl, program) {
         return {
+            aPosition: gl.getAttribLocation(program, 'aPosition'),
             iResolution: gl.getUniformLocation(program, 'iResolution'),
             iTime: gl.getUniformLocation(program, 'iTime'),
             iTimeDelta: gl.getUniformLocation(program, 'iTimeDelta'),
             iFrame: gl.getUniformLocation(program, 'iFrame'),
             iMouse: gl.getUniformLocation(program, 'iMouse'),
             iPointer: gl.getUniformLocation(program, 'iPointer'),
+            iPointerTrail: gl.getUniformLocation(program, 'iPointerTrail[0]'),
             iDate: gl.getUniformLocation(program, 'iDate'),
             iChannelResolution: gl.getUniformLocation(program, 'iChannelResolution'),
             channels: [
@@ -384,7 +461,7 @@ void main() {
         probe.width = 4;
         probe.height = 4;
         var gl = getWebGL(probe);
-        if (!gl) return { ok: false, reason: 'WebGL2 is not available' };
+        if (!gl) return { ok: false, reason: 'WebGL 1.0 is not available' };
         try {
             for (var i = 0; i < SHADERTOY_PASSES.length; i++) {
                 var program = createProgram(gl, SHADERTOY_PASSES[i]);
@@ -407,7 +484,7 @@ void main() {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels || null);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels || null);
         return tex;
     }
 
@@ -460,6 +537,14 @@ void main() {
             };
         });
 
+        var fullscreenBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, fullscreenBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -1, -1,
+             3, -1,
+            -1,  3
+        ]), gl.STATIC_DRAW);
+
         var blankTexture = createTexture(gl, 1, 1, new Uint8Array([0, 0, 0, 255]));
         var noiseTexture = createNoiseTexture(gl);
         var W = 1;
@@ -474,6 +559,7 @@ void main() {
         var inView = false;
         var mouse = [0, 0, 0, 0];
         var channelResValues = new Float32Array(12);
+        var pointerTrailValues = new Float32Array(POINTER_TRAIL_COUNT * 4);
         var pointer = {
             x: 0,
             y: 0,
@@ -483,6 +569,14 @@ void main() {
             targetStrength: 0,
             hasInput: false
         };
+        var pointerTrail = [];
+        for (var trailInit = 0; trailInit < POINTER_TRAIL_COUNT; trailInit++) {
+            pointerTrail.push({ x: 0, y: 0, strength: 0, age: 1 });
+        }
+        var pointerTrailCursor = 0;
+        var lastTrailX = 0;
+        var lastTrailY = 0;
+        var lastTrailMs = 0;
         if (debugState) {
             debugState.status = 'runtime-ready';
             publishDebugState();
@@ -557,6 +651,17 @@ void main() {
             if (loc.iFrame) gl.uniform1i(loc.iFrame, frame);
             if (loc.iMouse) gl.uniform4f(loc.iMouse, mouse[0], mouse[1], mouse[2], mouse[3]);
             if (loc.iPointer) gl.uniform4f(loc.iPointer, pointer.x, pointer.y, pointer.strength, 0);
+            if (loc.iPointerTrail) {
+                for (var trailIndex = 0; trailIndex < POINTER_TRAIL_COUNT; trailIndex++) {
+                    var trail = pointerTrail[trailIndex];
+                    var baseIndex = trailIndex * 4;
+                    pointerTrailValues[baseIndex] = trail.x;
+                    pointerTrailValues[baseIndex + 1] = trail.y;
+                    pointerTrailValues[baseIndex + 2] = trail.strength;
+                    pointerTrailValues[baseIndex + 3] = trail.age;
+                }
+                gl.uniform4fv(loc.iPointerTrail, pointerTrailValues);
+            }
             if (loc.iDate) {
                 var date = new Date();
                 var seconds = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds() + date.getMilliseconds() / 1000;
@@ -608,6 +713,11 @@ void main() {
                     var pass = compiled[i];
                     var isBuffer = pass.def.kind === 'buffer';
                     gl.useProgram(pass.program);
+                    gl.bindBuffer(gl.ARRAY_BUFFER, fullscreenBuffer);
+                    if (pass.locations.aPosition >= 0) {
+                        gl.enableVertexAttribArray(pass.locations.aPosition);
+                        gl.vertexAttribPointer(pass.locations.aPosition, 2, gl.FLOAT, false, 0, 0);
+                    }
 
                     if (isBuffer) {
                         gl.bindFramebuffer(gl.FRAMEBUFFER, pass.target.write.fbo);
@@ -702,6 +812,9 @@ void main() {
             }
 
             var p = canvasPoint(clientX, clientY);
+            if (pointer.hasInput) {
+                pushPointerTrail(pointer.x, pointer.y, false);
+            }
             pointer.targetX = p[0];
             pointer.targetY = p[1];
             pointer.targetStrength = 1;
@@ -712,20 +825,54 @@ void main() {
             lastDrawMs = 0;
         }
 
+        function pushPointerTrail(x, y, force) {
+            var now = performance.now();
+            var dx = x - lastTrailX;
+            var dy = y - lastTrailY;
+            var minDistance = Math.max(18, 26 * dpr);
+            if (!force && now - lastTrailMs < 38 && dx * dx + dy * dy < minDistance * minDistance) {
+                return;
+            }
+
+            var trail = pointerTrail[pointerTrailCursor];
+            trail.x = x;
+            trail.y = y;
+            trail.strength = 0.28;
+            trail.age = 0;
+            pointerTrailCursor = (pointerTrailCursor + 1) % POINTER_TRAIL_COUNT;
+            lastTrailX = x;
+            lastTrailY = y;
+            lastTrailMs = now;
+        }
+
         function fadePointerTarget() {
+            if (pointer.hasInput) {
+                pushPointerTrail(pointer.x, pointer.y, true);
+            }
             pointer.targetStrength = 0;
             lastDrawMs = 0;
         }
 
         function updatePointer(delta) {
             var dt = Math.min(0.08, Math.max(0.001, delta || 0.016));
-            var strengthRate = pointer.targetStrength > pointer.strength ? 24 : 2.2;
+            var strengthRate = pointer.targetStrength > pointer.strength ? 24 : 1.55;
             var strengthEase = 1 - Math.exp(-dt * strengthRate);
 
             pointer.strength += (pointer.targetStrength - pointer.strength) * strengthEase;
 
             if (pointer.strength < 0.001 && pointer.targetStrength <= 0) {
                 pointer.strength = 0;
+            }
+
+            for (var i = 0; i < POINTER_TRAIL_COUNT; i++) {
+                var trail = pointerTrail[i];
+                if (trail.strength <= 0.001) {
+                    trail.strength = 0;
+                    trail.age = 1;
+                    continue;
+                }
+                trail.age = Math.min(1, trail.age + dt * 0.95);
+                trail.strength += (0 - trail.strength) * (1 - Math.exp(-dt * 2.35));
             }
         }
 

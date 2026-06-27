@@ -1,11 +1,11 @@
-﻿// ================= 团队数据配置中心 =================
+// ================= 团队数据配置中心 =================
 // avatar: 头像图片地址。如果留空 ("")，则显示默认的图标占位符
 // link: 点击头像跳转的链接。如果留空，默认为 "#"
 
 const founders = [
-    {n: "范洪辉", r: "联合创始人", tags: ["教授", "博士","硕士研究生导师"], b: "江苏理工学院教授、博士、硕士生导师，十四五计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家级科研项目 10 余项，发表 SCI/EI 论文 100 余篇。", avatar: "images/Fan.jpg", link: "https://baike.baidu.com/item/%E8%8C%83%E6%B4%AA%E8%BE%89/63345374"},
-    {n: "Zero", r: "联合创始人", tags: ["前网易/D5资深工程师", "即将任硕导", "10项顶会/专利"], b: "资深图形引擎工程师。专注全局光照与嵌入式DSL优化，曾为《阴阳师》等国内S级顶流商业项目提供核心引擎技术支持，具备深厚的前沿技术工程化落地经验。", exp: "曾任职于 <b>D5渲染器、欢聚时代、网易、多益</b> 等头部企业。<br><br>网易期间为 <b>《阴阳师》《哈利波特：魔法觉醒》</b> 等项目提供引擎技术支持。<br><br>多益期间于 <b>《神武》</b> 项目组担任核心开发。", tech: "专注于 <b>全局光照 (GI)</b>、<b>嵌入式 DSL</b> 及 <b>工具链优化</b> 等底层方向。<br><br>对前沿技术的工业级、工程化落地具有丰富的实践积累。", ach: "累计发表/产出 <b>发明专利与顶级会议论文 10 项</b>。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
-    {n: "邹刘磊", r: "联合创始人", tags: ["某初创公司CTO", "硕士研究生导师(校外)"], b: "某初创公司CTO，曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou"}
+    {n: "范洪辉", r: "联合创始人", tags: ["教授", "博士","硕士研究生导师"], b: "江苏理工学院教授、博士、硕士生导师。十四五计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人。专注于图形图像处理与机器学习，发表 SCI/EI 论文 100 余篇。", exp: "现任江苏理工学院 <b>教授、博士及硕士生导师</b>。<br><br>担任 <b>\"十四五\" 计算机科学与技术省重点学科带头人</b>。<br><br>主导 <b>软件工程</b> 国家一流专业建设。<br><br>负责 <b>《面向对象程序设计》</b> 国家一流课程建设。", tech: "专注于 <b>图形图像处理</b> 与 <b>机器学习</b> 等底层与前沿领域。<br><br>在学术理论与计算机图形学交叉领域具有深厚的研究积累。", ach: "累计主持 <b>国家级科研项目 10 余项</b>。<br><br>发表 <b>SCI / EI 论文 100 余篇</b>。", avatar: "images/Fan.jpg", link: "https://baike.baidu.com/item/%E8%8C%83%E6%B4%AA%E8%BE%89/63345374", detail: true},
+    {n: "Zero", r: "联合创始人", tags: ["前网易/D5资深工程师"], b: "资深图形引擎工程师。专注全局光照与嵌入式DSL优化，曾为《阴阳师》等国内S级顶流商业项目提供核心引擎技术支持，具备深厚的前沿技术工程化落地经验。", exp: "曾任职于 <b>D5渲染器、欢聚时代、网易、多益</b> 等头部企业。<br><br>网易期间为 <b>《阴阳师》《哈利波特：魔法觉醒》</b> 等项目提供引擎技术支持。<br><br>多益期间于 <b>《神武》</b> 项目组担任核心开发。", tech: "专注于 <b>全局光照 (GI)</b>、<b>嵌入式 DSL</b> 及 <b>工具链优化</b> 等底层方向。<br><br>对前沿技术的工业级、工程化落地具有丰富的实践积累。", ach: "累计发表/产出 <b>发明专利与顶级会议论文 10 项</b>。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
+    {n: "邹刘磊", r: "联合创始人", tags: ["某初创公司CTO", "校外硕士研究生导师"], b: "某初创公司CTO。曾于D5渲染器、网易游戏、阿里巴巴担任图形与游戏引擎工程师。深耕计算机图形学、计算成像与计算机视觉，公开专利/论文 20 余项，曾任A类竞赛国赛决赛评委。", exp: "现任 <b>某初创公司 CTO</b>。<br><br>曾先后就职于 <b>D5渲染器、网易游戏</b> 及 <b>阿里巴巴</b>，担任图形与游戏引擎工程师。", tech: "深耕于 <b>计算机图形学、计算成像</b> 与 <b>计算机视觉</b> 等前沿领域。<br><br>对 <b>全局光照、渲染后处理、光场显示</b> 等硬核课题具有丰富的实战与研究经验。", ach: "累计公开发表 <b>发明论文与学术专利 20 余项</b>。<br><br>曾任第十届/第十一届 <b>\"数媒竞赛\"（A类）国赛决赛评委</b>，指导学生斩获省级/国家级 <b>\"大创项目\" 3 项</b>。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou", detail: true}
 ];
 
 const coreMembers = [
@@ -68,26 +68,33 @@ function initSceneAccordion() {
 }
 
 function renderTeam() {
-    const creditsContainer = document.getElementById('creditsContainer');
-    if (!creditsContainer) return;
+    var container = document.getElementById('creditsContainer') || document.getElementById('teamBento');
+    if (!container) return;
 
-    const groups = [
-        { label: '创始人', items: founders.map(f => ({ role: f.r, name: f.n })) },
-        { label: '架构组', items: coreMembers.map(m => ({ role: m.r, name: m.n })) },
-        { label: '开发组', items: scrollingMembers.map(m => ({ role: m.r, name: m.n })) }
+    // 拆分开发组成员
+    var devLow = [], devRender = [], devOther = [];
+    scrollingMembers.forEach(function(m) {
+        if (m.r.indexOf('底层') >= 0) devLow.push(m);
+        else if (m.r.indexOf('渲染') >= 0 || m.r.indexOf('物理') >= 0) devRender.push(m);
+        else devOther.push(m);
+    });
+    // 将剩余成员分配到较短的组
+    devOther.forEach(function(m) { if (devLow.length <= devRender.length) devLow.push(m); else devRender.push(m); });
+
+    var groups = [
+        { label: '创始人', items: founders.map(function(f) { return { role: f.tags ? f.tags.join(' / ') : f.r, name: f.n }; }) },
+        { label: '架构组', items: coreMembers.map(function(m) { return { role: m.r, name: m.n }; }) },
+        { label: '底层开发', items: devLow.map(function(m) { return { role: m.r, name: m.n }; }) },
+        { label: '渲染与物理', items: devRender.map(function(m) { return { role: m.r, name: m.n }; }) }
     ];
 
-    creditsContainer.innerHTML = groups.map(g => `
-        <div class="credits-group">
-            <h4>${g.label}</h4>
-            ${g.items.map(p => `
-                <div class="credits-row">
-                    <span class="credits-role">${p.role}</span>
-                    <span class="credits-name">${p.name}</span>
-                </div>
-            `).join('')}
-        </div>
-    `).join('');
+    container.innerHTML = groups.map(function(g) {
+        return '<div class="team-card"><h4>' + g.label + '</h4>' +
+            g.items.map(function(p) {
+                return '<div class="team-person"><span class="tp-name" style="cursor:pointer;" onclick="event.stopPropagation();showMemberModalByName(\'' + p.name + '\')">' + p.name + '</span><span class="tp-role">' + p.role + '</span></div>';
+            }).join('') +
+            '</div>';
+    }).join('');
 }
 
 // ================= 页脚联系方式：单击复制到剪贴板 =================
@@ -136,15 +143,16 @@ function fallbackCopy(text, cb) {
 }
 
 function renderPatents() {
-    const patentsContainer = document.getElementById('patentsContainer');
-    if (patentsContainer) {
-        patentsContainer.innerHTML = patentsData.map(p => `
-            <div class="patent-item" title="${p.title}">
-                <span class="patent-year">${p.year}</span>
-                <span class="patent-title">${p.title}</span>
-            </div>
-        `).join('');
-    }
+    var allHtml = patentsData.map(function(p) {
+        return '<div class="patent-item" title="' + p.title + '"><span class="patent-year">' + p.year + '</span><span class="patent-title">' + p.title + '</span></div>';
+    }).join('');
+    var top8 = patentsData.slice(0, 8).map(function(p) {
+        return '<div class="patent-item" title="' + p.title + '"><span class="patent-year">' + p.year + '</span><span class="patent-title">' + p.title + '</span></div>';
+    }).join('');
+    var c1 = document.getElementById('patentsContainer');
+    if (c1) c1.innerHTML = top8;
+    var c2 = document.getElementById('patentsFullContainer');
+    if (c2) c2.innerHTML = allHtml;
 }
 
 // ================= 滑动控制逻辑 =================
