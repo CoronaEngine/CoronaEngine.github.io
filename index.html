@@ -107,7 +107,7 @@
         .dot.active { background-color: #ffb703; box-shadow: 0 0 10px #ffb703; transform: scale(1.5); }
 
         /* ==========================================
-           【新增】团队排版样式 (电影字幕风格)
+           【Page 3】团队排版样式 (电影字幕风格)
            ========================================== */
         .credits-container {
             margin-top: 40px;
@@ -124,7 +124,6 @@
             align-items: baseline;
         }
         
-        /* 视线流：左侧对齐 -> 偏右对齐 -> 散落居中 */
         .row-founders { justify-content: flex-start; gap: 40px; border-left: 2px solid #00f3ff; padding-left: 20px; }
         .row-core { justify-content: flex-end; gap: 35px; padding-right: 15%; }
         .row-rnd { justify-content: center; gap: 25px; padding-left: 10%; padding-right: 10%; }
@@ -141,27 +140,24 @@
             transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* 字体层级区分 */
         .row-founders .name { font-size: 2.2rem; font-weight: 700; color: rgba(255, 255, 255, 0.95); }
         .row-core .name { font-size: 1.4rem; font-weight: 500; color: rgba(255, 255, 255, 0.75); }
         .row-rnd .name { font-size: 1.05rem; font-weight: 300; color: rgba(255, 255, 255, 0.5); }
 
-        /* 鼠标悬停名字发光变大 */
         .member:hover .name {
             color: #00f3ff;
             text-shadow: 0 0 15px rgba(0, 243, 255, 0.8);
             transform: scale(1.05);
         }
 
-        /* 隐藏的头衔，悬停时浮出 */
         .member .role {
             position: absolute;
-            top: -28px; /* 浮在名字上方避免遮挡下方文字 */
+            top: -28px;
             left: 50%;
             transform: translateX(-50%) translateY(10px);
             opacity: 0;
             font-size: 0.8rem;
-            color: #ff0066; /* 霓虹洋红 */
+            color: #ff0066;
             white-space: nowrap;
             pointer-events: none;
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
@@ -173,6 +169,120 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
+
+        /* ==========================================
+           【Page 4】学术成果与专利墙排版
+           ========================================== */
+        .academic-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 40px;
+            width: 100%;
+            max-width: 1050px;
+            gap: 60px;
+        }
+
+        /* --- 左侧：核心论文 --- */
+        .paper-list {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .paper-item {
+            position: relative;
+            padding-left: 20px;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+        }
+
+        .paper-item:hover {
+            border-left-color: #ff0066;
+            transform: translateX(12px);
+            background: linear-gradient(90deg, rgba(255,0,102,0.05) 0%, transparent 100%);
+        }
+
+        .paper-title {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            transition: color 0.3s;
+        }
+
+        .paper-item:hover .paper-title {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .paper-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.75rem;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 2px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .badge.sci { background: rgba(0, 243, 255, 0.1); color: #00f3ff; border: 1px solid rgba(0, 243, 255, 0.3); }
+        .badge.conf { background: rgba(255, 0, 102, 0.1); color: #ff0066; border: 1px solid rgba(255, 0, 102, 0.3); }
+        .badge.ei { background: rgba(255, 183, 3, 0.1); color: #ffb703; border: 1px solid rgba(255, 183, 3, 0.3); }
+        .paper-author { color: #888; }
+
+        /* --- 右侧：专利星云 --- */
+        .patent-wall {
+            flex: 0.8;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-content: flex-start;
+            padding-top: 5px;
+        }
+
+        .patent-item {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: crosshair;
+            transition: color 0.3s, background 0.3s, border-color 0.3s, box-shadow 0.3s, font-weight 0.3s;
+            background: rgba(255, 255, 255, 0.01);
+            white-space: nowrap;
+            /* 悬浮呼吸动画 */
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* 给不同专利设定错落的动画延迟，形成呼吸此起彼伏的生命感 */
+        .patent-item:nth-child(even) { animation-delay: -1.5s; transform-origin: center; }
+        .patent-item:nth-child(3n) { animation-delay: -2.8s; }
+        .patent-item:nth-child(5n) { animation-delay: -0.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-6px) scale(1.02); }
+        }
+
+        .patent-item:hover {
+            color: #030305;
+            background: #00f3ff;
+            border-color: #00f3ff;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+            font-weight: 600;
+            z-index: 10;
+            /* 悬停时暂停呼吸，保持放大状态 */
+            animation-play-state: paused; 
+            transform: scale(1.1) translateY(0) !important; 
+        }
     </style>
 </head>
 <body>
@@ -183,15 +293,17 @@
             <h1 class="title">探索无界</h1>
             <p class="subtitle">致力于前沿学术研究与技术创新。<br>以星辰大海为征途，连接每一次智慧的闪烁。</p>
             <div class="btn-group">
-                <a href="#" class="btn btn-primary">↓ 深入了解</a>
+                <a href="#" class="btn btn-primary" onclick="goToPage(1); return false;">↓ 深入了解</a>
                 <a href="#" class="btn btn-secondary">联系我们</a>
             </div>
         </div>
+        
         <div class="page" id="page-1">
             <div class="overline">Features & Introduction</div>
             <h1 class="title">核心业务</h1>
             <p class="subtitle">聚焦人工智能与计算机图形学交叉领域。<br>打造高效、智能的解决方案，推动行业技术变革。</p>
         </div>
+        
         <div class="page" id="page-2">
             <div class="overline">Our History</div>
             <h1 class="title">发展历程</h1>
@@ -199,7 +311,8 @@
         </div>
         
         <div class="page" id="page-3">
-
+            <div class="overline">Our Team</div>
+            <h1 class="title" style="font-size: 3.5rem; margin-bottom: -10px;">团队力量</h1>
             <div class="credits-container">
                 <div class="credit-row row-founders">
                     <div class="member"><span class="role">教授 / 硕导</span><span class="name">范洪辉</span></div>
@@ -230,10 +343,68 @@
         </div>
 
         <div class="page" id="page-4">
-            <div class="overline">Academic Publications</div>
-            <h1 class="title">学术成果</h1>
-            <p class="subtitle">多篇核心论文发表于顶级国际会议及期刊。<br>保持对未知的敬畏与好奇，持续向全球输出技术影响力。</p>
+            <div class="overline">Academic Publications & Patents</div>
+            <h1 class="title" style="font-size: 3.5rem;">学术成果</h1>
+            
+            <div class="academic-layout">
+                <div class="paper-list">
+                    <div class="paper-item">
+                        <div class="paper-title">Neural Rendering Fields for High-Fidelity 3D Reconstruction in Dynamic Scenes</div>
+                        <div class="paper-meta">
+                            <span class="badge conf">CVPR / TOP会议</span>
+                            <span class="paper-author">H. Fan, Zero, et al.</span>
+                        </div>
+                    </div>
+                    <div class="paper-item">
+                        <div class="paper-title">Attention-based Graph Convolutional Networks for Unsupervised Anomaly Detection</div>
+                        <div class="paper-meta">
+                            <span class="badge sci">SCI 一区</span>
+                            <span class="paper-author">L. Zou, A. Xu, et al.</span>
+                        </div>
+                    </div>
+                    <div class="paper-item">
+                        <div class="paper-title">Generative Adversarial Networks for Cross-modal Image Translation</div>
+                        <div class="paper-meta">
+                            <span class="badge conf">NeurIPS / TOP会议</span>
+                            <span class="paper-author">H. Li, X. Wu, et al.</span>
+                        </div>
+                    </div>
+                    <div class="paper-item">
+                        <div class="paper-title">Real-time Semantic Segmentation Architecture for Low-power Edge Devices</div>
+                        <div class="paper-meta">
+                            <span class="badge ei">EI 核心</span>
+                            <span class="paper-author">Royalvice, Y. Chen, et al.</span>
+                        </div>
+                    </div>
+                    <div class="paper-item">
+                        <div class="paper-title">Robust Trajectory Planning Mechanism in Highly Unpredictable Environments</div>
+                        <div class="paper-meta">
+                            <span class="badge sci">SCI 二区</span>
+                            <span class="paper-author">Z. Lin, Y. Zhang, et al.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="patent-wall">
+                    <div class="patent-item">基于自适应动态图的图像分割系统</div>
+                    <div class="patent-item">三维模型特征检索方法</div>
+                    <div class="patent-item">边缘计算节点的高效调度算法</div>
+                    <div class="patent-item">增强现实的实时空间建图装置</div>
+                    <div class="patent-item">抗干扰无人机视觉定位方法</div>
+                    <div class="patent-item">虚拟数字人多模态驱动引擎</div>
+                    <div class="patent-item">跨模态数据对齐处理方法及设备</div>
+                    <div class="patent-item">融合语义信息的视觉SLAM框架</div>
+                    <div class="patent-item">分布式联邦学习隐私保护系统</div>
+                    <div class="patent-item">智能座舱多模态疲劳检测方法</div>
+                    <div class="patent-item">三维点云数据的无损压缩方法</div>
+                    <div class="patent-item">柔性机械臂逆运动学神经网络</div>
+                    <div class="patent-item">基于体素网格的光线追踪加速</div>
+                    <div class="patent-item">面向自动驾驶的障碍物轨迹预测</div>
+                    <div class="patent-item">基于区块链的数字资产确权控制</div>
+                </div>
+            </div>
         </div>
+
         <div class="page" id="page-5">
             <div class="overline">Competitions</div>
             <h1 class="title">相关竞赛</h1>
