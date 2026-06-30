@@ -32,7 +32,7 @@
             width: 100%;
             height: 100%;
             z-index: 10;
-            pointer-events: none; /* 事件穿透给 Canvas */
+            pointer-events: none;
         }
 
         /* 页面基础样式 */
@@ -46,26 +46,22 @@
             flex-direction: column;
             justify-content: center;
             color: #ffffff;
-            
-            /* 切换动画核心 */
             opacity: 0;
             transform: translateY(80px);
             transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* 激活的页面 */
         .page.active {
             opacity: 1;
             transform: translateY(0);
-            pointer-events: auto; /* 恢复当前页面的交互 */
+            pointer-events: auto;
         }
 
-        /* 离开的页面（向上滚动时的状态） */
         .page.up {
             transform: translateY(-80px);
         }
 
-        /* --- 文字与按钮样式 --- */
+        /* 文字与按钮样式 */
         .overline {
             font-size: 0.85rem;
             color: #888;
@@ -99,59 +95,21 @@
             line-height: 1.8;
             max-width: 600px;
         }
-        .btn-group {
-            margin-top: 40px;
-            display: flex;
-            gap: 20px;
-        }
-        .btn {
-            padding: 16px 32px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .btn-group { margin-top: 40px; display: flex; gap: 20px; }
+        .btn { padding: 16px 32px; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.1em; text-decoration: none; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
         .btn-primary { background-color: #ffb703; color: #000; border: 1px solid #ffb703; }
         .btn-primary:hover { background-color: #ffc233; box-shadow: 0 0 20px rgba(255, 183, 3, 0.4); }
         .btn-secondary { background-color: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
         .btn-secondary:hover { border-color: #fff; background-color: rgba(255, 255, 255, 0.05); }
 
-        /* 右侧滚动指示器 */
-        .pagination {
-            position: absolute;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            pointer-events: auto;
-        }
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: rgba(255,255,255,0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .dot.active {
-            background-color: #ffb703;
-            box-shadow: 0 0 10px #ffb703;
-            transform: scale(1.5);
-        }
-
+        .pagination { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; pointer-events: auto; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background-color: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease; }
+        .dot.active { background-color: #ffb703; box-shadow: 0 0 10px #ffb703; transform: scale(1.5); }
     </style>
 </head>
 <body>
 
     <div id="ui-layer">
-        
         <div class="page active" id="page-0">
             <div class="overline">Welcome</div>
             <h1 class="title">探索无界</h1>
@@ -161,31 +119,26 @@
                 <a href="#" class="btn btn-secondary">联系我们</a>
             </div>
         </div>
-
         <div class="page" id="page-1">
             <div class="overline">Features & Introduction</div>
             <h1 class="title">核心业务</h1>
             <p class="subtitle">聚焦人工智能与计算机图形学交叉领域。<br>打造高效、智能的解决方案，推动行业技术变革。</p>
         </div>
-
         <div class="page" id="page-2">
             <div class="overline">Our History</div>
             <h1 class="title">发展历程</h1>
             <p class="subtitle">从初创时的极客团队，到如今屡获殊荣的研究中心。<br>每一步跨越都踏实坚定，用代码丈量时代的进步。</p>
         </div>
-
         <div class="page" id="page-3">
             <div class="overline">Core Team</div>
             <h1 class="title">菁英集结</h1>
             <p class="subtitle">汇聚来自顶尖高校与知名科技企业的多元化精英。<br>跨界合作，碰撞思想火花，共同赋能未来生态。</p>
         </div>
-
         <div class="page" id="page-4">
             <div class="overline">Academic Publications</div>
             <h1 class="title">学术成果</h1>
             <p class="subtitle">多篇核心论文发表于顶级国际会议及期刊。<br>保持对未知的敬畏与好奇，持续向全球输出技术影响力。</p>
         </div>
-
         <div class="page" id="page-5">
             <div class="overline">Competitions</div>
             <h1 class="title">相关竞赛</h1>
@@ -203,17 +156,16 @@
             <div class="dot" onclick="goToPage(4)"></div>
             <div class="dot" onclick="goToPage(5)"></div>
         </div>
-
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
         // ==========================================
-        // 1. 页面滚动与控制逻辑
+        // 1. 页面滚动逻辑
         // ==========================================
         let currentPage = 0;
-        const totalPages = 6; // 更新为 6 个模块
+        const totalPages = 6;
         let isScrolling = false;
 
         window.addEventListener('wheel', (e) => {
@@ -232,79 +184,140 @@
             const oldPage = document.getElementById(`page-${currentPage}`);
             const newPage = document.getElementById(`page-${index}`);
             
-            // 更新样式实现过渡
             oldPage.classList.remove('active');
             if(index > currentPage) {
-                oldPage.classList.add('up'); // 往上滚，旧页面上移
+                oldPage.classList.add('up');
             } else {
-                oldPage.classList.remove('up'); // 往下滚，旧页面下移
+                oldPage.classList.remove('up');
                 newPage.classList.remove('up');
             }
             
             currentPage = index;
             newPage.classList.add('active');
 
-            // 更新指示器
             const dots = document.querySelectorAll('.dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentPage);
-            });
+            dots.forEach((dot, i) => { dot.classList.toggle('active', i === currentPage); });
 
-            // 触发 3D 场景配置变更
             applySceneConfig(currentPage);
-
-            // 冷却时间，防止滚动过快
             setTimeout(() => { isScrolling = false; }, 1200);
         }
 
         // ==========================================
-        // 2. Three.js 场景初始化
+        // 2. Three.js 初始化与【粒子形变】核心数据
         // ==========================================
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x030305, 0.012);
 
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         document.body.appendChild(renderer.domElement);
 
-        // 生成星系
-        const particleCount = 40000;
+        const particleCount = 25000; // 优化后的粒子数，保障性能
         const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
+        
+        // 我们将生成 6 种不同的形状，保存在 shapes 数组中
+        const shapes = [];
+        for (let i = 0; i < 6; i++) {
+            shapes.push(new Float32Array(particleCount * 3));
+        }
+
+        const initialPositions = new Float32Array(particleCount * 3);
         const colors = new Float32Array(particleCount * 3);
         const colorInside = new THREE.Color(0x00d2ff);
         const colorOutside = new THREE.Color(0x7000ff);
 
+        // 预计算 6 种几何形态
         for(let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
-            const radius = Math.random() * Math.random() * 60; 
+
+            // --- 形状 0: 银河旋臂 (首页) ---
+            const r0 = Math.random() * Math.random() * 60; 
             const branchAngle = (i % 3) * ((Math.PI * 2) / 3);
-            const spinAngle = radius * 0.2; 
-            
-            const randomX = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 8 * (radius * 0.1);
-            const randomY = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 8 * (radius * 0.1);
-            const randomZ = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 8 * (radius * 0.1);
+            const spinAngle = r0 * 0.2; 
+            const randX = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 8 * (r0 * 0.1);
+            const randY = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 8 * (r0 * 0.1);
+            const randZ = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 8 * (r0 * 0.1);
+            shapes[0][i3] = Math.cos(branchAngle + spinAngle) * r0 + randX;
+            shapes[0][i3+1] = randY;
+            shapes[0][i3+2] = Math.sin(branchAngle + spinAngle) * r0 + randZ;
 
-            positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-            positions[i3+1] = randomY; 
-            positions[i3+2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+            // --- 形状 1: 核心球体 (功能简介) ---
+            const u = Math.random();
+            const v = Math.random();
+            const theta = 2 * Math.PI * u;
+            const phi = Math.acos(2 * v - 1);
+            const r1 = 30 + (Math.random() - 0.5) * 15; // 带有一定厚度的球壳
+            shapes[1][i3] = r1 * Math.sin(phi) * Math.cos(theta);
+            shapes[1][i3+1] = r1 * Math.sin(phi) * Math.sin(theta);
+            shapes[1][i3+2] = r1 * Math.cos(phi);
 
+            // --- 形状 2: DNA 双螺旋 (发展历程) ---
+            const h = (Math.random() - 0.5) * 100; // 高度
+            const strand = i % 2; // 两条链
+            const angleHelix = h * 0.15 + (strand * Math.PI);
+            const rHelix = 12;
+            const nX = (Math.random() - 0.5) * 3;
+            const nY = (Math.random() - 0.5) * 3;
+            const nZ = (Math.random() - 0.5) * 3;
+            // 少量粒子作为碱基对连接桥梁
+            if (Math.random() < 0.1) {
+                const bridgeT = Math.random();
+                const a1 = h * 0.15;
+                const a2 = h * 0.15 + Math.PI;
+                shapes[2][i3] = (rHelix * Math.cos(a1)) + bridgeT * (rHelix * Math.cos(a2) - rHelix * Math.cos(a1)) + nX;
+                shapes[2][i3+1] = h + nY;
+                shapes[2][i3+2] = (rHelix * Math.sin(a1)) + bridgeT * (rHelix * Math.sin(a2) - rHelix * Math.sin(a1)) + nZ;
+            } else {
+                shapes[2][i3] = rHelix * Math.cos(angleHelix) + nX;
+                shapes[2][i3+1] = h + nY;
+                shapes[2][i3+2] = rHelix * Math.sin(angleHelix) + nZ;
+            }
+
+            // --- 形状 3: 星环圆环 (团队成员 - 象征环环相扣) ---
+            const R = 35; // 主半径
+            const rTube = Math.random() * 10; // 管子半径
+            const angleU = Math.random() * Math.PI * 2;
+            const angleV = Math.random() * Math.PI * 2;
+            shapes[3][i3] = (R + rTube * Math.cos(angleV)) * Math.cos(angleU);
+            shapes[3][i3+1] = rTube * Math.sin(angleV) * 0.5; // 压扁一点
+            shapes[3][i3+2] = (R + rTube * Math.cos(angleV)) * Math.sin(angleU);
+
+            // --- 形状 4: 数据波浪网格 (学术成果) ---
+            const wX = (Math.random() - 0.5) * 120;
+            const wZ = (Math.random() - 0.5) * 120;
+            const wY = Math.sin(wX * 0.1) * Math.cos(wZ * 0.1) * 12;
+            shapes[4][i3] = wX;
+            shapes[4][i3+1] = wY + (Math.random() - 0.5) * 2;
+            shapes[4][i3+2] = wZ;
+
+            // --- 形状 5: 能量旋涡/龙卷风 (相关竞赛 - 充满对抗感) ---
+            const t = Math.random(); 
+            const heightTornado = (t - 0.5) * 120; 
+            const rTornado = 5 + t * 40; // 顶部宽底部窄
+            const angleVortex = t * 40 + Math.random() * Math.PI * 2;
+            const rFinal = rTornado * Math.sqrt(Math.random()); // 粒子多集中在边缘
+            shapes[5][i3] = rFinal * Math.cos(angleVortex);
+            shapes[5][i3+1] = heightTornado;
+            shapes[5][i3+2] = rFinal * Math.sin(angleVortex);
+
+            // 初始赋予颜色（保留一点深浅渐变）
             const mixedColor = colorInside.clone();
-            mixedColor.lerp(colorOutside, radius / 60);
+            mixedColor.lerp(colorOutside, Math.random());
+            colors[i3] = mixedColor.r; colors[i3+1] = mixedColor.g; colors[i3+2] = mixedColor.b;
             
-            colors[i3] = mixedColor.r;
-            colors[i3+1] = mixedColor.g;
-            colors[i3+2] = mixedColor.b;
+            // 初始化数组坐标为第一种形状
+            initialPositions[i3] = shapes[0][i3];
+            initialPositions[i3+1] = shapes[0][i3+1];
+            initialPositions[i3+2] = shapes[0][i3+2];
         }
 
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('position', new THREE.BufferAttribute(initialPositions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
         const material = new THREE.PointsMaterial({
-            size: 0.15,
+            size: 0.18,
             vertexColors: true, 
             blending: THREE.AdditiveBlending,
             depthWrite: false,
@@ -313,29 +326,28 @@
             color: 0xffffff
         });
 
-        const galaxy = new THREE.Points(geometry, material);
-        scene.add(galaxy);
+        const particleSystem = new THREE.Points(geometry, material);
+        scene.add(particleSystem);
 
 
         // ==========================================
-        // 3. 动态配置与交互差异化 (调整为 6 组)
+        // 3. 动态配置 (摄像机角度需配合各个形状特点)
         // ==========================================
         const pageConfigs = [
-            // Page 0 (首页): 默认俯视宏大感
-            { cam: {x: 0, y: 30, z: 60}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
-            // Page 1 (功能简介): 沉入星系边缘，绿/黄色调
-            { cam: {x: -30, y: 5, z: 40}, tiltX: 0.2, tiltZ: -0.1, rotSpeed: 0.08, tint: 0xc8ff88, parallax: 1.5 },
-            // Page 2 (发展历程): 光影重构，偏暖色
-            { cam: {x: 0, y: -10, z: 25}, tiltX: 0.4, tiltZ: 0, rotSpeed: 0.15, tint: 0xffaa88, parallax: 0.5 },
-            // Page 3 (团队成员): 纯顶视图，偏赛博青色
-            { cam: {x: 0, y: 70, z: 0}, tiltX: 0, tiltZ: 0, rotSpeed: 0.03, tint: 0x88ffff, parallax: 2.0 },
-            // Page 4 (学术成果): 侧边倾斜，紫色调
-            { cam: {x: 50, y: 20, z: 20}, tiltX: 0.5, tiltZ: 0.3, rotSpeed: -0.05, tint: 0xcc88ff, parallax: 1.2 },
-            // Page 5 (相关竞赛): 正向平视，极速旋转，充满对抗与动感
-            { cam: {x: 0, y: 0, z: 65}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.2, tint: 0x88bbff, parallax: 1.5 }
+            // 0: 星系 - 俯视宏大
+            { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
+            // 1: 球体 - 正面平视，偏绿
+            { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xaaff88, parallax: 1.5 },
+            // 2: DNA - 侧前方仰视，橙色调历史感
+            { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffaa88, parallax: 0.5 },
+            // 3: 星环 - 侧上方俯视，青色科技感
+            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0x88ffff, parallax: 1.2 },
+            // 4: 波浪 - 高位俯视网格，紫色数据感
+            { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.02, tint: 0xcc88ff, parallax: 1.2 },
+            // 5: 旋涡 - 正下方仰视，蓝色极速旋转
+            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0x88bbff, parallax: 1.5 }
         ];
 
-        // 目标状态（插值用）
         let targetCam = new THREE.Vector3(pageConfigs[0].cam.x, pageConfigs[0].cam.y, pageConfigs[0].cam.z);
         let baseCam = new THREE.Vector3().copy(targetCam);
         let targetTiltX = pageConfigs[0].tiltX * Math.PI;
@@ -344,12 +356,10 @@
         let targetTint = new THREE.Color(pageConfigs[0].tint);
         let targetParallax = pageConfigs[0].parallax;
 
-        // 当前状态
         let currentRotSpeed = targetRotSpeed;
         let currentRotationY = 0;
         let currentTint = new THREE.Color(pageConfigs[0].tint);
 
-        // 应用新配置
         function applySceneConfig(index) {
             const cfg = pageConfigs[index];
             targetCam.set(cfg.cam.x, cfg.cam.y, cfg.cam.z);
@@ -361,12 +371,10 @@
         }
 
         // ==========================================
-        // 4. 鼠标与窗口调整
+        // 4. 鼠标响应
         // ==========================================
-        let mouseX = 0;
-        let mouseY = 0;
-        let mouseTargetX = 0;
-        let mouseTargetY = 0;
+        let mouseX = 0; let mouseY = 0;
+        let mouseTargetX = 0; let mouseTargetY = 0;
         const windowHalfX = window.innerWidth / 2;
         const windowHalfY = window.innerHeight / 2;
 
@@ -382,30 +390,38 @@
         });
 
         // ==========================================
-        // 5. 渲染与动画循环
+        // 5. 渲染循环与 CPU 粒子插值
         // ==========================================
         function animate() {
             requestAnimationFrame(animate);
 
-            // 1. 平滑插值基础参数
+            // --- A. 相机与颜色平滑过渡 ---
             baseCam.lerp(targetCam, 0.02);
             currentRotSpeed += (targetRotSpeed - currentRotSpeed) * 0.02;
             currentTint.lerp(targetTint, 0.03);
             material.color.copy(currentTint);
 
-            // 2. 结合鼠标视差计算最终交互
+            // --- B. 核心：粒子坐标的平滑形变 (Morphing) ---
+            const positions = geometry.attributes.position.array;
+            const targetPositions = shapes[currentPage];
+            
+            // 每一帧将当前粒子坐标趋近于目标形状的坐标
+            for(let i = 0; i < particleCount * 3; i++) {
+                positions[i] += (targetPositions[i] - positions[i]) * 0.04;
+            }
+            geometry.attributes.position.needsUpdate = true;
+
+            // --- C. 视差交互与全局自转 ---
             mouseTargetX = mouseX * 0.0005 * targetParallax;
             mouseTargetY = mouseY * 0.0005 * targetParallax;
 
-            // 累加自转
             currentRotationY += currentRotSpeed * 0.05;
-            galaxy.rotation.y = currentRotationY;
+            particleSystem.rotation.y = currentRotationY;
 
-            // 鼠标带动星系倾斜
-            galaxy.rotation.z += 0.05 * (mouseTargetX + targetTiltZ - galaxy.rotation.z);
-            galaxy.rotation.x += 0.05 * (mouseTargetY + targetTiltX - galaxy.rotation.x);
+            particleSystem.rotation.z += 0.05 * (mouseTargetX + targetTiltZ - particleSystem.rotation.z);
+            particleSystem.rotation.x += 0.05 * (mouseTargetY + targetTiltX - particleSystem.rotation.x);
 
-            // 3. 更新摄像机位置
+            // --- D. 摄像机跟随 ---
             camera.position.x += (mouseX * 0.005 * targetParallax + baseCam.x - camera.position.x) * 0.05;
             camera.position.y += (-mouseY * 0.005 * targetParallax + baseCam.y - camera.position.y) * 0.05;
             camera.position.z += (baseCam.z - camera.position.z) * 0.05;
