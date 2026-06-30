@@ -13,24 +13,89 @@
     var MOBILE_TARGET_FPS = 30;
     var REDUCED_MOTION_TARGET_FPS = 30;
     var POINTER_TRAIL_COUNT = 6;
+    var HERO_QUALITY_LEVELS = [
+        {
+            name: 'high',
+            numLayers: '7.',
+            starGlow: '0.0299955',
+            starEnergy: '1.00',
+            raySteps: 72,
+            rayEnergy: '1.00',
+            fractalLayerStep: '.075',
+            fractalSteps: 18,
+            fractalEnergy: '1.00',
+            desktopTargetFps: DESKTOP_TARGET_FPS,
+            mobileTargetFps: MOBILE_TARGET_FPS,
+            reducedTargetFps: REDUCED_MOTION_TARGET_FPS,
+            desktopScaleCap: 1.25,
+            smallScaleCap: 0.75,
+            desktopPixelBudget: 1200000,
+            smallPixelBudget: 900000,
+            minScale: 0.45
+        },
+        {
+            name: 'balanced',
+            numLayers: '5.',
+            starGlow: '0.0299955',
+            starEnergy: '1.13',
+            raySteps: 56,
+            rayEnergy: '1.18',
+            fractalLayerStep: '.0875',
+            fractalSteps: 14,
+            fractalEnergy: '1.18',
+            desktopTargetFps: 45,
+            mobileTargetFps: MOBILE_TARGET_FPS,
+            reducedTargetFps: REDUCED_MOTION_TARGET_FPS,
+            desktopScaleCap: 0.95,
+            smallScaleCap: 0.68,
+            desktopPixelBudget: 850000,
+            smallPixelBudget: 620000,
+            minScale: 0.40
+        },
+        {
+            name: 'lite',
+            numLayers: '4.',
+            starGlow: '0.0299955',
+            starEnergy: '1.25',
+            raySteps: 44,
+            rayEnergy: '1.43',
+            fractalLayerStep: '.105',
+            fractalSteps: 11,
+            fractalEnergy: '1.34',
+            desktopTargetFps: 30,
+            mobileTargetFps: 24,
+            reducedTargetFps: 24,
+            desktopScaleCap: 0.72,
+            smallScaleCap: 0.56,
+            desktopPixelBudget: 560000,
+            smallPixelBudget: 390000,
+            minScale: 0.36
+        }
+    ];
+    var activeQualityIndex = 0;
+    var activeQuality = HERO_QUALITY_LEVELS[activeQualityIndex];
+    var forcedQualityLocked = false;
 
     // Shadertoy Image pass source for https://www.shadertoy.com/view/tXKfz1.
     var IMAGE_PASS_SOURCE = `
 // just unrolled the loop, i guess we only need 3 layers
 // to get some nice clouds :D
 #define N(a) abs(dot(sin(iTime+.1*p.z+.3*p / a), vec3(a+a)))
-#define NUM_LAYERS 7.
+#define NUM_LAYERS __HERO_NUM_LAYERS__
+#define HERO_STAR_GLOW __HERO_STAR_GLOW__
+#define HERO_STAR_ENERGY __HERO_STAR_ENERGY__
+#define HERO_RAY_STEPS __HERO_RAY_STEPS__
+#define HERO_RAY_ENERGY __HERO_RAY_ENERGY__
+#define HERO_FRACTAL_LAYER_STEP __HERO_FRACTAL_LAYER_STEP__
+#define HERO_FRACTAL_STEPS __HERO_FRACTAL_STEPS__
+#define HERO_FRACTAL_ENERGY __HERO_FRACTAL_ENERGY__
 #define TAU 6.28318
-#define PI 3.141592
-#define Velocity .025 //modified value to increse or decrease speed, negative value travel backwards
-#define StarGlow 0.025
-#define StarSize 02.
 #define CanvasView 20.
 
 
 float Star(vec2 uv, float flare){
     float d = length(uv);
-    float m = sin(StarGlow*1.2)/d;
+    float m = HERO_STAR_GLOW/d;
     float rays = max(0., .5-abs(uv.x*uv.y*1000.));
     m += (rays*flare)*2.;
     m *= smoothstep(1., .1, d);
@@ -67,29 +132,29 @@ vec3 StarLayer(vec2 uv){
 void mainImage(out vec4 o, vec2 u) {
     o = vec4(0);
     float i = 0., s = 0.;
-    vec3 p = vec3(0), r = iResolution;
+    vec3 p = vec3(0);
+    vec2 r = iResolution.xy;
 
    vec4 o2=vec4(0);
     vec2 F =u;
 
     vec2 uv = (u-.5*iResolution.xy)/iResolution.y;
-	vec2 M = vec2(0);
 
-    float t = iTime*.0;
     vec3 col = vec3(0);
     for(float i=0.; i<1.; i+=1./NUM_LAYERS){
-        float depth = fract(i+t);
+        float depth = i;
         float scale = mix(CanvasView, .5, depth);
         float fade = depth*smoothstep(1.,.9,depth);
-        col += StarLayer(uv*scale+i*453.2-iTime*.05+M)*fade;}
+        col += StarLayer(uv*scale+i*453.2-iTime*.05)*fade;}
+    col *= HERO_STAR_ENERGY;
 
 
 
-    u = (u+u-r.xy)/r.y;
+    u = (u+u-r)/r.y;
 
 
     o *= i;
-    for(int rayStep=0; rayStep<72; rayStep++) {
+    for(int rayStep=0; rayStep<HERO_RAY_STEPS; rayStep++) {
         i += 1.;
         p += vec3(u * s, s);
         s = 6.+(p.y);
@@ -99,22 +164,24 @@ void mainImage(out vec4 o, vec2 u) {
         s = .1 + abs(s)*.2;
         o +=  vec4(4,2,1,0)/s;
     }
+    o *= HERO_RAY_ENERGY;
 
        // Если нужно обрезать края кадра (как было в оригинале .8)
     o *= smoothstep(0.8, 0.75, abs(u.y));
 
     vec2 R = iResolution.xy;
-    o2-=o2;
     float t2 = -iTime*.005;
+    vec4 fractalBias = vec4(7.-.2*sin(t2), 6.3, .7, 1.-cos(t2/.8))/7.;
     float d = 0.;
-    for(float i = 0. ; i > -1.; i -= .075 )
+    for(float i = 0. ; i > -1.; i -= HERO_FRACTAL_LAYER_STEP )
     {   d = fract( i -3.*t2 );
         vec4 c = vec4( ( F - R *.5 ) / R.y *d ,i,0 ) * 28.;
-        for (int j=0 ; j <18; j++ )
+        for (int j=0 ; j <HERO_FRACTAL_STEPS; j++ )
             c.xzyw = abs( c / max(dot(c,c), 1e-4)
-                    -vec4( 7.-.2*sin(t2) , 6.3 , .7 , 1.-cos(t2/.8))/7.);
-       o2 -= c * c.yzww  * d--*d  / vec4(3,5,1,1);
+                    -fractalBias);
+       o2 -= c * c.yzww  * (d * (d - 1.0))  / vec4(3,5,1,1);
     }
+  o2 *= HERO_FRACTAL_ENERGY;
   o+=o2;
 
     o = tanh(o / 2e3 / length(u));
@@ -142,6 +209,9 @@ void mainImage(out vec4 o, vec2 u) {
         samplePixels: null,
         glError: 0,
         webglVersion: 'webgl1',
+        quality: activeQuality.name,
+        gpuRenderer: '',
+        downgrades: 0,
         status: 'initializing'
     }) : null;
 
@@ -149,6 +219,43 @@ void mainImage(out vec4 o, vec2 u) {
         if (debugState) canvas.setAttribute('data-hero-bg-debug', JSON.stringify(debugState));
     }
     publishDebugState();
+
+    function qualityIndexByName(name) {
+        for (var i = 0; i < HERO_QUALITY_LEVELS.length; i++) {
+            if (HERO_QUALITY_LEVELS[i].name === name) return i;
+        }
+        return -1;
+    }
+
+    function forcedQualityIndex() {
+        var match = /(?:[?&])heroQuality=([^&]+)/.exec(window.location.search);
+        if (!match) return -1;
+        return qualityIndexByName(decodeURIComponent(match[1]).toLowerCase());
+    }
+
+    function setActiveQuality(index, reason) {
+        activeQualityIndex = Math.max(0, Math.min(HERO_QUALITY_LEVELS.length - 1, index));
+        activeQuality = HERO_QUALITY_LEVELS[activeQualityIndex];
+        canvas.setAttribute('data-hero-bg-quality', activeQuality.name);
+        if (debugState) {
+            debugState.quality = activeQuality.name;
+            debugState.qualityReason = reason || '';
+            publishDebugState();
+        }
+    }
+
+    function shaderSourceForQuality(source, quality) {
+        return source
+            .replace(/__HERO_NUM_LAYERS__/g, quality.numLayers)
+            .replace(/__HERO_STAR_GLOW__/g, quality.starGlow)
+            .replace(/__HERO_STAR_ENERGY__/g, quality.starEnergy)
+            .replace(/__HERO_RAY_STEPS__/g, String(quality.raySteps))
+            .replace(/__HERO_RAY_ENERGY__/g, quality.rayEnergy)
+            .replace(/__HERO_FRACTAL_LAYER_STEP__/g, quality.fractalLayerStep)
+            .replace(/__HERO_FRACTAL_STEPS__/g, String(quality.fractalSteps))
+            .replace(/__HERO_FRACTAL_ENERGY__/g, quality.fractalEnergy);
+    }
+    setActiveQuality(activeQualityIndex, 'default');
 
     var DEBUG_SOLID_SOURCE = `
 void mainImage(out vec4 o, vec2 u) {
@@ -174,7 +281,8 @@ void main() {
 }
 `;
 
-    function fragmentSource(body) {
+    function fragmentSource(body, quality) {
+        var selectedQuality = quality || activeQuality;
         return `
 precision highp float;
 precision highp int;
@@ -217,7 +325,7 @@ vec4 shadertoyTanh(vec4 x) {
     return (e - vec4(1.0)) / (e + vec4(1.0));
 }
 
-` + sanitizeShaderBody(body) + `
+` + sanitizeShaderBody(shaderSourceForQuality(body, selectedQuality)) + `
 
 float readableLightScale(vec2 fragCoord) {
     vec2 uv = fragCoord / iResolution.xy;
@@ -312,14 +420,15 @@ void main() {
     float cloudMask = max(cloud * cloudBand, cloudFloor * 0.22);
     float skyRegion = smoothstep(0.28 * iResolution.y, 0.58 * iResolution.y, gl_FragCoord.y);
     vec3 cloudRaw = coolGrade(raw);
-    vec3 coolRaw = mix(cloudRaw, starfieldGrade(raw), skyRegion * (1.0 - cloudMask * 0.85));
+    vec3 starGrade = starfieldGrade(raw);
+    vec3 coolRaw = mix(cloudRaw, starGrade, skyRegion * (1.0 - cloudMask * 0.85));
     vec3 frostTone = vec3(0.006, 0.012, 0.052);
     vec3 pearlCloud = vec3(0.850, 0.920, 1.000);
     vec3 frosted = mix(frostTone, coolRaw * 0.34, 0.54);
     frosted = mix(frosted, pearlCloud * (0.20 + luma * 1.18), cloudMask * 0.52);
     frosted *= mix(0.58, 0.94, cloudMask);
     float starMask = skyRegion * (1.0 - cloudMask * 0.82);
-    frosted = mix(frosted, starfieldGrade(raw) * 0.78 + vec3(0.004, 0.016, 0.070), starMask * 0.62);
+    frosted = mix(frosted, starGrade * 0.78 + vec3(0.004, 0.016, 0.070), starMask * 0.62);
     float skyLens = glow * starMask * (1.0 - cloudMask * 0.76);
     float lensRim = skyLens * (1.0 - clarity) * smoothstep(0.08, 0.58, glow);
 
@@ -329,7 +438,7 @@ void main() {
 
     vec3 lit = mix(frosted, focused, clarity);
     float starLift = starMask * smoothstep(0.010, 0.20, luma);
-    lit += starfieldGrade(raw) * starLift * 0.30 + vec3(0.004, 0.014, 0.052) * starMask * 0.25;
+    lit += starGrade * starLift * 0.30 + vec3(0.004, 0.014, 0.052) * starMask * 0.25;
     float existingStar = starMask * (1.0 - cloudMask * 0.82) * smoothstep(0.016, 0.17, luma);
     float twinkle = 0.84 + 0.16 * sin(iTime * 3.7 + sin(dot(gl_FragCoord.xy, vec2(0.013, 0.029))) * 6.28318);
     vec3 igniteTone = mix(vec3(0.18, 0.30, 0.86), vec3(0.62, 0.74, 1.00), twinkle);
@@ -374,21 +483,21 @@ void main() {
 
     function renderScaleFor(cssWidth, cssHeight) {
         var smallScreen = isSmallViewport(cssWidth, cssHeight);
-        var cap = smallScreen ? 0.75 : 1.25;
+        var cap = smallScreen ? activeQuality.smallScaleCap : activeQuality.desktopScaleCap;
         var scale = Math.min(window.devicePixelRatio || 1, cap);
-        var pixelBudget = smallScreen ? 900000 : 1200000;
+        var pixelBudget = smallScreen ? activeQuality.smallPixelBudget : activeQuality.desktopPixelBudget;
         var pixels = Math.max(1, cssWidth * scale) * Math.max(1, cssHeight * scale);
 
         if (pixels > pixelBudget) {
             scale *= Math.sqrt(pixelBudget / pixels);
         }
-        return Math.max(0.45, scale);
+        return Math.max(activeQuality.minScale, scale);
     }
 
     function targetFrameInterval(cssWidth, cssHeight) {
         var fps = reduceMotionQuery.matches
-            ? REDUCED_MOTION_TARGET_FPS
-            : (isSmallViewport(cssWidth, cssHeight) ? MOBILE_TARGET_FPS : DESKTOP_TARGET_FPS);
+            ? activeQuality.reducedTargetFps
+            : (isSmallViewport(cssWidth, cssHeight) ? activeQuality.mobileTargetFps : activeQuality.desktopTargetFps);
         return 1000 / fps;
     }
 
@@ -406,6 +515,55 @@ void main() {
             canvasEl.getContext('experimental-webgl', attributes);
     }
 
+    function rendererInfo(gl) {
+        var info = { vendor: '', renderer: '' };
+        try {
+            var debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+            if (debugInfo) {
+                info.vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || '';
+                info.renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '';
+            } else {
+                info.vendor = gl.getParameter(gl.VENDOR) || '';
+                info.renderer = gl.getParameter(gl.RENDERER) || '';
+            }
+        } catch (err) {
+            info.renderer = '';
+        }
+        return info;
+    }
+
+    function chooseInitialQualityIndex(gl) {
+        var forced = forcedQualityIndex();
+        if (forced >= 0) return forced;
+
+        var info = rendererInfo(gl);
+        var renderer = (info.vendor + ' ' + info.renderer).toLowerCase();
+        var score = 0;
+        if (/swiftshader|llvmpipe|software|microsoft basic|basic render/.test(renderer)) score += 3;
+        if (/intel|uhd|iris|vega|radeon\(tm\) graphics|amd radeon graphics/.test(renderer)) score += 1;
+
+        var cores = navigator.hardwareConcurrency || 8;
+        if (cores <= 2) score += 2;
+        else if (cores <= 4) score += 1;
+
+        var memory = navigator.deviceMemory || 8;
+        if (memory <= 2) score += 2;
+        else if (memory <= 4) score += 1;
+
+        if (reduceMotionQuery.matches) score += 1;
+        if (isSmallViewport(canvas.clientWidth || window.innerWidth || 1440, canvas.clientHeight || window.innerHeight || 900)) score += 1;
+
+        if (debugState) {
+            debugState.gpuRenderer = info.renderer || info.vendor || '';
+            debugState.qualityScore = score;
+            publishDebugState();
+        }
+
+        if (score >= 3) return 2;
+        if (score >= 1) return 1;
+        return 0;
+    }
+
     function compileShader(gl, type, source, label) {
         var shader = gl.createShader(type);
         gl.shaderSource(shader, source);
@@ -418,9 +576,9 @@ void main() {
         return shader;
     }
 
-    function createProgram(gl, pass) {
+    function createProgram(gl, pass, quality) {
         var vertex = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SOURCE, pass.name + ' vertex');
-        var fragment = compileShader(gl, gl.FRAGMENT_SHADER, fragmentSource(pass.source), pass.name + ' fragment');
+        var fragment = compileShader(gl, gl.FRAGMENT_SHADER, fragmentSource(pass.source, quality), pass.name + ' fragment');
         var program = gl.createProgram();
         gl.attachShader(program, vertex);
         gl.attachShader(program, fragment);
@@ -456,7 +614,7 @@ void main() {
         };
     }
 
-    function verifyShaders() {
+    function verifyShaders(quality) {
         var probe = document.createElement('canvas');
         probe.width = 4;
         probe.height = 4;
@@ -464,7 +622,7 @@ void main() {
         if (!gl) return { ok: false, reason: 'WebGL 1.0 is not available' };
         try {
             for (var i = 0; i < SHADERTOY_PASSES.length; i++) {
-                var program = createProgram(gl, SHADERTOY_PASSES[i]);
+                var program = createProgram(gl, SHADERTOY_PASSES[i], quality || activeQuality);
                 gl.deleteProgram(program);
             }
             var lose = gl.getExtension('WEBGL_lose_context');
@@ -528,7 +686,7 @@ void main() {
 
     function makeRuntime(gl) {
         var compiled = SHADERTOY_PASSES.map(function (pass) {
-            var program = createProgram(gl, pass);
+            var program = createProgram(gl, pass, activeQuality);
             return {
                 def: pass,
                 program: program,
@@ -577,6 +735,8 @@ void main() {
         var lastTrailX = 0;
         var lastTrailY = 0;
         var lastTrailMs = 0;
+        var lastAdaptiveDrawMs = 0;
+        var slowFrameCount = 0;
         if (debugState) {
             debugState.status = 'runtime-ready';
             publishDebugState();
@@ -688,6 +848,67 @@ void main() {
             }
         }
 
+        function rebuildProgramsForQuality(nextIndex, reason) {
+            if (nextIndex <= activeQualityIndex || nextIndex >= HERO_QUALITY_LEVELS.length) return false;
+
+            var nextQuality = HERO_QUALITY_LEVELS[nextIndex];
+            var rebuilt = [];
+            try {
+                for (var i = 0; i < compiled.length; i++) {
+                    var program = createProgram(gl, compiled[i].def, nextQuality);
+                    rebuilt.push({
+                        program: program,
+                        locations: collectLocations(gl, program)
+                    });
+                }
+            } catch (err) {
+                rebuilt.forEach(function (pass) {
+                    if (pass.program) gl.deleteProgram(pass.program);
+                });
+                console.warn('[hero-bg] quality downgrade failed:', err);
+                return false;
+            }
+
+            for (var j = 0; j < compiled.length; j++) {
+                gl.deleteProgram(compiled[j].program);
+                compiled[j].program = rebuilt[j].program;
+                compiled[j].locations = rebuilt[j].locations;
+            }
+
+            setActiveQuality(nextIndex, reason || 'frame-budget');
+            if (debugState) {
+                debugState.downgrades = (debugState.downgrades || 0) + 1;
+                publishDebugState();
+            }
+            slowFrameCount = 0;
+            lastAdaptiveDrawMs = 0;
+            lastDrawMs = 0;
+            resize();
+            return true;
+        }
+
+        function trackFrameBudget(timestamp, singleFrame) {
+            if (forcedQualityLocked) return;
+            if (singleFrame || activeQualityIndex >= HERO_QUALITY_LEVELS.length - 1) return;
+            if (!lastAdaptiveDrawMs) {
+                lastAdaptiveDrawMs = timestamp;
+                return;
+            }
+
+            var frameMs = timestamp - lastAdaptiveDrawMs;
+            lastAdaptiveDrawMs = timestamp;
+            var targetMs = targetFrameInterval(canvas.clientWidth || W, canvas.clientHeight || H);
+            if (frameMs > targetMs * 2.1 && frameMs < 220) {
+                slowFrameCount++;
+            } else {
+                slowFrameCount = Math.max(0, slowFrameCount - 2);
+            }
+
+            if (slowFrameCount >= 18) {
+                rebuildProgramsForQuality(activeQualityIndex + 1, 'frame-budget');
+            }
+        }
+
         function render(timestamp, singleFrame) {
             if (!singleFrame) {
                 var minFrameMs = targetFrameInterval(canvas.clientWidth || W, canvas.clientHeight || H) * 0.9;
@@ -763,6 +984,8 @@ void main() {
                 startCanvasFallback();
                 return;
             }
+
+            trackFrameBudget(timestamp, singleFrame);
 
             if (running && !singleFrame) {
                 rafId = requestAnimationFrame(render);
@@ -949,15 +1172,18 @@ void main() {
     }
 
     function startWebGL() {
-        var verified = verifyShaders();
-        if (!verified.ok) {
-            console.warn('[hero-bg] WebGL shader verification failed; leaving black canvas:', verified.reason);
+        var gl = getWebGL(canvas);
+        if (!gl) {
             startCanvasFallback();
             return;
         }
 
-        var gl = getWebGL(canvas);
-        if (!gl) {
+        forcedQualityLocked = forcedQualityIndex() >= 0;
+        setActiveQuality(chooseInitialQualityIndex(gl), forcedQualityLocked ? 'forced' : 'device');
+
+        var verified = verifyShaders(activeQuality);
+        if (!verified.ok) {
+            console.warn('[hero-bg] WebGL shader verification failed; leaving black canvas:', verified.reason);
             startCanvasFallback();
             return;
         }
