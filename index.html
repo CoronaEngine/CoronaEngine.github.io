@@ -237,52 +237,77 @@
         .badge.conf { background: rgba(255, 0, 102, 0.1); color: #ff0066; border: 1px solid rgba(255, 0, 102, 0.3); }
         .badge.ei { background: rgba(255, 183, 3, 0.1); color: #ffb703; border: 1px solid rgba(255, 183, 3, 0.3); }
         .paper-author { color: #888; }
+/* --- 右侧：专利星云 --- */
+.patent-wall {
+    flex: 0.8;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* 稍微收紧间距 */
+    align-content: flex-start;
+    padding-top: 5px;
+    
+    /* 【新增排版魔法】：限制高度、开启滚动、并羽化边缘 */
+    max-height: 360px; /* 限制视窗高度，避免挤压下方空间 */
+    overflow-y: auto;
+    padding-right: 15px; /* 为滚动条留出呼吸空间 */
+    padding-bottom: 40px; /* 给底部羽化过渡留出余量 */
+    
+    /* 核心视觉：使用线性渐变作为蒙版，让底部数据平滑隐去 */
+    -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 75%, transparent 100%);
+}
 
-        /* --- 右侧：专利星云 --- */
-        .patent-wall {
-            flex: 0.8;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-content: flex-start;
-            padding-top: 5px;
-        }
+/* 定制赛博质感的极简滚动条 */
+.patent-wall::-webkit-scrollbar {
+    width: 3px; /* 极细，不抢视觉 */
+}
+.patent-wall::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 3px;
+}
+.patent-wall::-webkit-scrollbar-thumb {
+    background: rgba(0, 243, 255, 0.2); /* 默认微光 */
+    border-radius: 3px;
+    transition: background 0.3s;
+}
+.patent-wall:hover::-webkit-scrollbar-thumb {
+    background: rgba(0, 243, 255, 0.7); /* 悬停时激活高亮 */
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+}
 
-        .patent-item {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 8px 14px;
-            border-radius: 20px;
-            cursor: crosshair;
-            transition: color 0.3s, background 0.3s, border-color 0.3s, box-shadow 0.3s, font-weight 0.3s;
-            background: rgba(255, 255, 255, 0.01);
-            white-space: nowrap;
-            /* 悬浮呼吸动画 */
-            animation: float 4s ease-in-out infinite;
-        }
+.patent-item {
+    font-size: 0.75rem; /* 适当减小字号，增加精致感 */
+    color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 6px 12px; /* 减小内边距，使胶囊更秀气 */
+    border-radius: 15px;
+    cursor: crosshair;
+    transition: color 0.3s, background 0.3s, border-color 0.3s, box-shadow 0.3s, font-weight 0.3s;
+    background: rgba(255, 255, 255, 0.01);
+    white-space: nowrap;
+    animation: float 4s ease-in-out infinite;
+}
 
-        /* 给不同专利设定错落的动画延迟，形成呼吸此起彼伏的生命感 */
-        .patent-item:nth-child(even) { animation-delay: -1.5s; transform-origin: center; }
-        .patent-item:nth-child(3n) { animation-delay: -2.8s; }
-        .patent-item:nth-child(5n) { animation-delay: -0.5s; }
+/* 错落的动画延迟 */
+.patent-item:nth-child(even) { animation-delay: -1.5s; transform-origin: center; }
+.patent-item:nth-child(3n) { animation-delay: -2.8s; }
+.patent-item:nth-child(5n) { animation-delay: -0.5s; }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-6px) scale(1.02); }
-        }
+@keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.02); }
+}
 
-        .patent-item:hover {
-            color: #030305;
-            background: #00f3ff;
-            border-color: #00f3ff;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
-            font-weight: 600;
-            z-index: 10;
-            /* 悬停时暂停呼吸，保持放大状态 */
-            animation-play-state: paused; 
-            transform: scale(1.1) translateY(0) !important; 
-        }
+.patent-item:hover {
+    color: #030305;
+    background: #00f3ff;
+    border-color: #00f3ff;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+    font-weight: 600;
+    z-index: 10;
+    animation-play-state: paused; 
+    transform: scale(1.08) translateY(0) !important; 
+}
     </style>
 </head>
 <body>
