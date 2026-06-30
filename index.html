@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Corona Engine - 3D 互动体验</title>
+    <title>3D 互动体验 - 团队主页</title>
     <style>
         /* 基础重置 */
         body, html {
@@ -12,7 +12,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #030305; /* 极暗的深空蓝背景 */
+            background-color: #030305;
             font-family: 'Helvetica Neue', Arial, 'Microsoft YaHei', sans-serif;
         }
 
@@ -24,19 +24,48 @@
             z-index: 1;
         }
 
-        /* 参考图 2：左对齐的科技感 UI 布局 */
-        .ui-container {
+        /* UI 顶层容器 */
+        #ui-layer {
             position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 10;
-            top: 50%;
-            left: 8%; /* 整体靠左 */
-            transform: translateY(-50%);
-            color: #ffffff;
-            pointer-events: none; /* 让鼠标事件穿透到画布上 */
-            max-width: 800px;
+            pointer-events: none; /* 事件穿透给 Canvas */
         }
 
-        /* 顶部小标题与装饰线 */
+        /* 页面基础样式 */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 8%;
+            width: 80%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #ffffff;
+            
+            /* 切换动画核心 */
+            opacity: 0;
+            transform: translateY(80px);
+            transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* 激活的页面 */
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto; /* 恢复当前页面的交互 */
+        }
+
+        /* 离开的页面（向上滚动时的状态） */
+        .page.up {
+            transform: translateY(-80px);
+        }
+
+        /* --- 文字与按钮样式 --- */
         .overline {
             font-size: 0.85rem;
             color: #888;
@@ -46,28 +75,22 @@
             align-items: center;
             text-transform: uppercase;
         }
-
         .overline::before {
             content: "";
             display: inline-block;
             width: 40px;
             height: 1px;
-            background-color: #ffb703; /* 呼应图3的品牌黄 */
+            background-color: #ffb703;
             margin-right: 15px;
         }
-
-        /* 主标题 */
         .title {
             font-size: 5.5rem;
             font-weight: 800;
             letter-spacing: 0.05em;
             margin: 0;
             line-height: 1.1;
-            /* 微微的发光效果 */
             text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         }
-
-        /* 副标题 (参考图3文案) */
         .subtitle {
             font-size: 1.1rem;
             color: #b0b0b0;
@@ -76,16 +99,11 @@
             line-height: 1.8;
             max-width: 600px;
         }
-
-        /* 按钮容器 */
         .btn-group {
             margin-top: 40px;
             display: flex;
             gap: 20px;
-            pointer-events: auto; /* 恢复按钮的点击交互 */
         }
-
-        /* 通用按钮样式 */
         .btn {
             padding: 16px 32px;
             font-size: 0.9rem;
@@ -98,99 +116,182 @@
             align-items: center;
             justify-content: center;
         }
+        .btn-primary { background-color: #ffb703; color: #000; border: 1px solid #ffb703; }
+        .btn-primary:hover { background-color: #ffc233; box-shadow: 0 0 20px rgba(255, 183, 3, 0.4); }
+        .btn-secondary { background-color: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .btn-secondary:hover { border-color: #fff; background-color: rgba(255, 255, 255, 0.05); }
 
-        /* 立即下载按钮 - 参考图3品牌色 + 图2硬朗锐利边缘 */
-        .btn-primary {
+        /* 右侧滚动指示器 */
+        .pagination {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            pointer-events: auto;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dot.active {
             background-color: #ffb703;
-            color: #000;
-            border: 1px solid #ffb703;
-        }
-
-        .btn-primary:hover {
-            background-color: #ffc233;
-            box-shadow: 0 0 20px rgba(255, 183, 3, 0.4);
-        }
-
-        /* 开源代码按钮 - 参考图2线框风格 */
-        .btn-secondary {
-            background-color: transparent;
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-secondary:hover {
-            border-color: #fff;
-            background-color: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 10px #ffb703;
+            transform: scale(1.5);
         }
 
     </style>
 </head>
 <body>
 
-    <div class="ui-container">
-        <div class="overline">The Next Frontier</div>
-        <h1 class="title">Corona Engine</h1>
-        <p class="subtitle">做前沿技术的无畏探索者，<br>也做每一颗创作者灵感的引路星。</p>
+    <div id="ui-layer">
         
-        <div class="btn-group">
-            <a href="https://github.com/CoronaEngine/CoronaEngine" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
-                ↓ 立即下载
-            </a>
-            <a href="https://github.com/CoronaEngine/CoronaEngine" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
-                获取开源代码 (MIT协议)
-            </a>
+        <div class="page active" id="page-0">
+            <div class="overline">Welcome</div>
+            <h1 class="title">探索无界</h1>
+            <p class="subtitle">致力于前沿学术研究与技术创新。<br>以星辰大海为征途，连接每一次智慧的闪烁。</p>
+            <div class="btn-group">
+                <a href="#" class="btn btn-primary">↓ 深入了解</a>
+                <a href="#" class="btn btn-secondary">联系我们</a>
+            </div>
         </div>
+
+        <div class="page" id="page-1">
+            <div class="overline">Features & Introduction</div>
+            <h1 class="title">核心业务</h1>
+            <p class="subtitle">聚焦人工智能与计算机图形学交叉领域。<br>打造高效、智能的解决方案，推动行业技术变革。</p>
+        </div>
+
+        <div class="page" id="page-2">
+            <div class="overline">Our History</div>
+            <h1 class="title">发展历程</h1>
+            <p class="subtitle">从初创时的极客团队，到如今屡获殊荣的研究中心。<br>每一步跨越都踏实坚定，用代码丈量时代的进步。</p>
+        </div>
+
+        <div class="page" id="page-3">
+            <div class="overline">Core Team</div>
+            <h1 class="title">菁英集结</h1>
+            <p class="subtitle">汇聚来自顶尖高校与知名科技企业的多元化精英。<br>跨界合作，碰撞思想火花，共同赋能未来生态。</p>
+        </div>
+
+        <div class="page" id="page-4">
+            <div class="overline">Academic Publications</div>
+            <h1 class="title">学术成果</h1>
+            <p class="subtitle">多篇核心论文发表于顶级国际会议及期刊。<br>保持对未知的敬畏与好奇，持续向全球输出技术影响力。</p>
+        </div>
+
+        <div class="page" id="page-5">
+            <div class="overline">Competitions</div>
+            <h1 class="title">相关竞赛</h1>
+            <p class="subtitle">在国内外多项顶级算法大赛与创客马拉松中斩获桂冠。<br>以赛促学，在真实对抗中不断突破技术极限。</p>
+            <div class="btn-group">
+                <a href="#" class="btn btn-primary">查看荣誉榜单</a>
+            </div>
+        </div>
+
+        <div class="pagination" id="pagination">
+            <div class="dot active" onclick="goToPage(0)"></div>
+            <div class="dot" onclick="goToPage(1)"></div>
+            <div class="dot" onclick="goToPage(2)"></div>
+            <div class="dot" onclick="goToPage(3)"></div>
+            <div class="dot" onclick="goToPage(4)"></div>
+            <div class="dot" onclick="goToPage(5)"></div>
+        </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
-        // --- 1. 场景与相机 ---
+        // ==========================================
+        // 1. 页面滚动与控制逻辑
+        // ==========================================
+        let currentPage = 0;
+        const totalPages = 6; // 更新为 6 个模块
+        let isScrolling = false;
+
+        window.addEventListener('wheel', (e) => {
+            if (isScrolling) return;
+            if (e.deltaY > 0 && currentPage < totalPages - 1) {
+                goToPage(currentPage + 1);
+            } else if (e.deltaY < 0 && currentPage > 0) {
+                goToPage(currentPage - 1);
+            }
+        });
+
+        function goToPage(index) {
+            if (isScrolling || index === currentPage) return;
+            isScrolling = true;
+
+            const oldPage = document.getElementById(`page-${currentPage}`);
+            const newPage = document.getElementById(`page-${index}`);
+            
+            // 更新样式实现过渡
+            oldPage.classList.remove('active');
+            if(index > currentPage) {
+                oldPage.classList.add('up'); // 往上滚，旧页面上移
+            } else {
+                oldPage.classList.remove('up'); // 往下滚，旧页面下移
+                newPage.classList.remove('up');
+            }
+            
+            currentPage = index;
+            newPage.classList.add('active');
+
+            // 更新指示器
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentPage);
+            });
+
+            // 触发 3D 场景配置变更
+            applySceneConfig(currentPage);
+
+            // 冷却时间，防止滚动过快
+            setTimeout(() => { isScrolling = false; }, 1200);
+        }
+
+        // ==========================================
+        // 2. Three.js 场景初始化
+        // ==========================================
         const scene = new THREE.Scene();
-        // 增加雾化效果，增强深邃感
-        scene.fog = new THREE.FogExp2(0x030305, 0.015);
+        scene.fog = new THREE.FogExp2(0x030305, 0.012);
 
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        // 相机抬高并往后拉，俯视星系，增强宏大感
-        camera.position.set(0, 30, 60);
-
+        
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         document.body.appendChild(renderer.domElement);
 
-        // --- 2. 打造绚丽的 3D 星系粒子场 (参考图1) ---
-        const particleCount = 40000; // 高密度粒子
+        // 生成星系
+        const particleCount = 40000;
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(particleCount * 3);
         const colors = new Float32Array(particleCount * 3);
+        const colorInside = new THREE.Color(0x00d2ff);
+        const colorOutside = new THREE.Color(0x7000ff);
 
-        // 颜色调色板 (深蓝、青色、紫红)
-        const colorInside = new THREE.Color(0x00d2ff);  // 核心发亮青蓝
-        const colorOutside = new THREE.Color(0x7000ff); // 边缘紫红
-
-        // 生成螺旋星系
         for(let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
-
-            // 半径：粒子距离中心的距离 (中心密集，边缘稀疏)
             const radius = Math.random() * Math.random() * 60; 
-            
-            // 角度与螺旋分支 (3条旋臂)
             const branchAngle = (i % 3) * ((Math.PI * 2) / 3);
-            const spinAngle = radius * 0.2; // 随着半径增加，旋转角度增大，形成螺旋
-
-            // 随机发散值，让星系有厚度和朦胧感
+            const spinAngle = radius * 0.2; 
+            
             const randomX = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 8 * (radius * 0.1);
             const randomY = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 8 * (radius * 0.1);
             const randomZ = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 8 * (radius * 0.1);
 
-            // 计算 x, y, z 位置
             positions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
-            positions[i3+1] = randomY; // 压扁 y 轴，形成圆盘状
+            positions[i3+1] = randomY; 
             positions[i3+2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
-            // 混合颜色：核心与边缘颜色平滑过渡
             const mixedColor = colorInside.clone();
             mixedColor.lerp(colorOutside, radius / 60);
             
@@ -202,26 +303,70 @@
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-        // 粒子材质
         const material = new THREE.PointsMaterial({
             size: 0.15,
-            vertexColors: true, // 开启顶点颜色
-            blending: THREE.AdditiveBlending, // 加法混合，越叠加越亮
-            depthWrite: false, // 解决粒子互相遮挡产生的黑边问题
+            vertexColors: true, 
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
             transparent: true,
-            opacity: 0.8
+            opacity: 0.8,
+            color: 0xffffff
         });
 
         const galaxy = new THREE.Points(geometry, material);
-        // 让星系稍微倾斜一点
-        galaxy.rotation.x = Math.PI * 0.1; 
         scene.add(galaxy);
 
-        // --- 3. 鼠标交互与视差 ---
+
+        // ==========================================
+        // 3. 动态配置与交互差异化 (调整为 6 组)
+        // ==========================================
+        const pageConfigs = [
+            // Page 0 (首页): 默认俯视宏大感
+            { cam: {x: 0, y: 30, z: 60}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
+            // Page 1 (功能简介): 沉入星系边缘，绿/黄色调
+            { cam: {x: -30, y: 5, z: 40}, tiltX: 0.2, tiltZ: -0.1, rotSpeed: 0.08, tint: 0xc8ff88, parallax: 1.5 },
+            // Page 2 (发展历程): 光影重构，偏暖色
+            { cam: {x: 0, y: -10, z: 25}, tiltX: 0.4, tiltZ: 0, rotSpeed: 0.15, tint: 0xffaa88, parallax: 0.5 },
+            // Page 3 (团队成员): 纯顶视图，偏赛博青色
+            { cam: {x: 0, y: 70, z: 0}, tiltX: 0, tiltZ: 0, rotSpeed: 0.03, tint: 0x88ffff, parallax: 2.0 },
+            // Page 4 (学术成果): 侧边倾斜，紫色调
+            { cam: {x: 50, y: 20, z: 20}, tiltX: 0.5, tiltZ: 0.3, rotSpeed: -0.05, tint: 0xcc88ff, parallax: 1.2 },
+            // Page 5 (相关竞赛): 正向平视，极速旋转，充满对抗与动感
+            { cam: {x: 0, y: 0, z: 65}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.2, tint: 0x88bbff, parallax: 1.5 }
+        ];
+
+        // 目标状态（插值用）
+        let targetCam = new THREE.Vector3(pageConfigs[0].cam.x, pageConfigs[0].cam.y, pageConfigs[0].cam.z);
+        let baseCam = new THREE.Vector3().copy(targetCam);
+        let targetTiltX = pageConfigs[0].tiltX * Math.PI;
+        let targetTiltZ = pageConfigs[0].tiltZ * Math.PI;
+        let targetRotSpeed = pageConfigs[0].rotSpeed;
+        let targetTint = new THREE.Color(pageConfigs[0].tint);
+        let targetParallax = pageConfigs[0].parallax;
+
+        // 当前状态
+        let currentRotSpeed = targetRotSpeed;
+        let currentRotationY = 0;
+        let currentTint = new THREE.Color(pageConfigs[0].tint);
+
+        // 应用新配置
+        function applySceneConfig(index) {
+            const cfg = pageConfigs[index];
+            targetCam.set(cfg.cam.x, cfg.cam.y, cfg.cam.z);
+            targetTiltX = cfg.tiltX * Math.PI;
+            targetTiltZ = cfg.tiltZ * Math.PI;
+            targetRotSpeed = cfg.rotSpeed;
+            targetTint.setHex(cfg.tint);
+            targetParallax = cfg.parallax;
+        }
+
+        // ==========================================
+        // 4. 鼠标与窗口调整
+        // ==========================================
         let mouseX = 0;
         let mouseY = 0;
-        let targetX = 0;
-        let targetY = 0;
+        let mouseTargetX = 0;
+        let mouseTargetY = 0;
         const windowHalfX = window.innerWidth / 2;
         const windowHalfY = window.innerHeight / 2;
 
@@ -230,34 +375,40 @@
             mouseY = (event.clientY - windowHalfY);
         });
 
-        // 窗口自适应
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- 4. 动画循环 ---
-        const clock = new THREE.Clock();
-
+        // ==========================================
+        // 5. 渲染与动画循环
+        // ==========================================
         function animate() {
             requestAnimationFrame(animate);
-            const elapsedTime = clock.getElapsedTime();
 
-            // 星系整体缓慢自转
-            galaxy.rotation.y = elapsedTime * 0.05;
+            // 1. 平滑插值基础参数
+            baseCam.lerp(targetCam, 0.02);
+            currentRotSpeed += (targetRotSpeed - currentRotSpeed) * 0.02;
+            currentTint.lerp(targetTint, 0.03);
+            material.color.copy(currentTint);
 
-            // 鼠标视差平滑过渡
-            targetX = mouseX * 0.0005;
-            targetY = mouseY * 0.0005;
+            // 2. 结合鼠标视差计算最终交互
+            mouseTargetX = mouseX * 0.0005 * targetParallax;
+            mouseTargetY = mouseY * 0.0005 * targetParallax;
 
-            // 整个星系随着鼠标微微倾斜
-            galaxy.rotation.z += 0.05 * (targetX - galaxy.rotation.z);
-            galaxy.rotation.x += 0.05 * (targetY + Math.PI * 0.1 - galaxy.rotation.x);
+            // 累加自转
+            currentRotationY += currentRotSpeed * 0.05;
+            galaxy.rotation.y = currentRotationY;
 
-            // 摄像机微调，增强空间感
-            camera.position.x += (mouseX * 0.01 - camera.position.x) * 0.05;
-            camera.position.y += (-mouseY * 0.01 + 30 - camera.position.y) * 0.05;
+            // 鼠标带动星系倾斜
+            galaxy.rotation.z += 0.05 * (mouseTargetX + targetTiltZ - galaxy.rotation.z);
+            galaxy.rotation.x += 0.05 * (mouseTargetY + targetTiltX - galaxy.rotation.x);
+
+            // 3. 更新摄像机位置
+            camera.position.x += (mouseX * 0.005 * targetParallax + baseCam.x - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY * 0.005 * targetParallax + baseCam.y - camera.position.y) * 0.05;
+            camera.position.z += (baseCam.z - camera.position.z) * 0.05;
             camera.lookAt(scene.position);
 
             renderer.render(scene, camera);
