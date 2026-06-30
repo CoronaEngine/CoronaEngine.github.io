@@ -214,10 +214,10 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         document.body.appendChild(renderer.domElement);
 
-        const particleCount = 25000; // 优化后的粒子数，保障性能
+        // 【升级】大幅增加粒子数量，让形状更饱满
+        const particleCount = 45000; 
         const geometry = new THREE.BufferGeometry();
         
-        // 我们将生成 6 种不同的形状，保存在 shapes 数组中
         const shapes = [];
         for (let i = 0; i < 6; i++) {
             shapes.push(new Float32Array(particleCount * 3));
@@ -225,14 +225,16 @@
 
         const initialPositions = new Float32Array(particleCount * 3);
         const colors = new Float32Array(particleCount * 3);
-        const colorInside = new THREE.Color(0x00d2ff);
-        const colorOutside = new THREE.Color(0x7000ff);
+        
+        // 【升级】改为具有极高视觉冲击力对比的赛博朋克色系（荧光青 vs 霓虹洋红）
+        const colorInside = new THREE.Color(0x00f3ff); 
+        const colorOutside = new THREE.Color(0xff0066);
 
         // 预计算 6 种几何形态
         for(let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
 
-            // --- 形状 0: 银河旋臂 (首页) ---
+            // --- 形状 0: 银河旋臂 ---
             const r0 = Math.random() * Math.random() * 60; 
             const branchAngle = (i % 3) * ((Math.PI * 2) / 3);
             const spinAngle = r0 * 0.2; 
@@ -243,25 +245,24 @@
             shapes[0][i3+1] = randY;
             shapes[0][i3+2] = Math.sin(branchAngle + spinAngle) * r0 + randZ;
 
-            // --- 形状 1: 核心球体 (功能简介) ---
+            // --- 形状 1: 核心球体 ---
             const u = Math.random();
             const v = Math.random();
             const theta = 2 * Math.PI * u;
             const phi = Math.acos(2 * v - 1);
-            const r1 = 30 + (Math.random() - 0.5) * 15; // 带有一定厚度的球壳
+            const r1 = 30 + (Math.random() - 0.5) * 15; 
             shapes[1][i3] = r1 * Math.sin(phi) * Math.cos(theta);
             shapes[1][i3+1] = r1 * Math.sin(phi) * Math.sin(theta);
             shapes[1][i3+2] = r1 * Math.cos(phi);
 
-            // --- 形状 2: DNA 双螺旋 (发展历程) ---
-            const h = (Math.random() - 0.5) * 100; // 高度
-            const strand = i % 2; // 两条链
+            // --- 形状 2: DNA 双螺旋 ---
+            const h = (Math.random() - 0.5) * 100;
+            const strand = i % 2; 
             const angleHelix = h * 0.15 + (strand * Math.PI);
             const rHelix = 12;
             const nX = (Math.random() - 0.5) * 3;
             const nY = (Math.random() - 0.5) * 3;
             const nZ = (Math.random() - 0.5) * 3;
-            // 少量粒子作为碱基对连接桥梁
             if (Math.random() < 0.1) {
                 const bridgeT = Math.random();
                 const a1 = h * 0.15;
@@ -275,16 +276,16 @@
                 shapes[2][i3+2] = rHelix * Math.sin(angleHelix) + nZ;
             }
 
-            // --- 形状 3: 星环圆环 (团队成员 - 象征环环相扣) ---
-            const R = 35; // 主半径
-            const rTube = Math.random() * 10; // 管子半径
+            // --- 形状 3: 星环圆环 ---
+            const R = 35;
+            const rTube = Math.random() * 10;
             const angleU = Math.random() * Math.PI * 2;
             const angleV = Math.random() * Math.PI * 2;
             shapes[3][i3] = (R + rTube * Math.cos(angleV)) * Math.cos(angleU);
-            shapes[3][i3+1] = rTube * Math.sin(angleV) * 0.5; // 压扁一点
+            shapes[3][i3+1] = rTube * Math.sin(angleV) * 0.5;
             shapes[3][i3+2] = (R + rTube * Math.cos(angleV)) * Math.sin(angleU);
 
-            // --- 形状 4: 数据波浪网格 (学术成果) ---
+            // --- 形状 4: 数据波浪网格 ---
             const wX = (Math.random() - 0.5) * 120;
             const wZ = (Math.random() - 0.5) * 120;
             const wY = Math.sin(wX * 0.1) * Math.cos(wZ * 0.1) * 12;
@@ -292,22 +293,24 @@
             shapes[4][i3+1] = wY + (Math.random() - 0.5) * 2;
             shapes[4][i3+2] = wZ;
 
-            // --- 形状 5: 能量旋涡/龙卷风 (相关竞赛 - 充满对抗感) ---
+            // --- 形状 5: 能量旋涡 ---
             const t = Math.random(); 
             const heightTornado = (t - 0.5) * 120; 
-            const rTornado = 5 + t * 40; // 顶部宽底部窄
+            const rTornado = 5 + t * 40;
             const angleVortex = t * 40 + Math.random() * Math.PI * 2;
-            const rFinal = rTornado * Math.sqrt(Math.random()); // 粒子多集中在边缘
+            const rFinal = rTornado * Math.sqrt(Math.random()); 
             shapes[5][i3] = rFinal * Math.cos(angleVortex);
             shapes[5][i3+1] = heightTornado;
             shapes[5][i3+2] = rFinal * Math.sin(angleVortex);
 
-            // 初始赋予颜色（保留一点深浅渐变）
+            // 分配颜色（使用指数分布，让颜色向两端（极度蓝或极度红）靠拢，避免中间发灰的过渡色）
+            let colorBlend = Math.random();
+            colorBlend = colorBlend < 0.5 ? Math.pow(colorBlend * 2, 2) / 2 : 1 - Math.pow((1 - colorBlend) * 2, 2) / 2;
+            
             const mixedColor = colorInside.clone();
-            mixedColor.lerp(colorOutside, Math.random());
+            mixedColor.lerp(colorOutside, colorBlend);
             colors[i3] = mixedColor.r; colors[i3+1] = mixedColor.g; colors[i3+2] = mixedColor.b;
             
-            // 初始化数组坐标为第一种形状
             initialPositions[i3] = shapes[0][i3];
             initialPositions[i3+1] = shapes[0][i3+1];
             initialPositions[i3+2] = shapes[0][i3+2];
@@ -317,35 +320,34 @@
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
         const material = new THREE.PointsMaterial({
-            size: 0.18,
+            size: 0.25, // 【升级】增加粒子尺寸，更显饱满
             vertexColors: true, 
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             transparent: true,
-            opacity: 0.8,
+            opacity: 0.95, // 【升级】提高透明度，提升整体亮度
             color: 0xffffff
         });
 
         const particleSystem = new THREE.Points(geometry, material);
         scene.add(particleSystem);
 
-
         // ==========================================
-        // 3. 动态配置 (摄像机角度需配合各个形状特点)
+        // 3. 动态配置 (使用高明度色彩滤镜，避免暗淡)
         // ==========================================
         const pageConfigs = [
-            // 0: 星系 - 俯视宏大
+            // 0: 星系 - 纯白/高光
             { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
-            // 1: 球体 - 正面平视，偏绿
-            { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xaaff88, parallax: 1.5 },
-            // 2: DNA - 侧前方仰视，橙色调历史感
-            { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffaa88, parallax: 0.5 },
-            // 3: 星环 - 侧上方俯视，青色科技感
-            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0x88ffff, parallax: 1.2 },
-            // 4: 波浪 - 高位俯视网格，紫色数据感
-            { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.02, tint: 0xcc88ff, parallax: 1.2 },
-            // 5: 旋涡 - 正下方仰视，蓝色极速旋转
-            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0x88bbff, parallax: 1.5 }
+            // 1: 球体 - 明亮翠绿
+            { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5 },
+            // 2: DNA - 明亮金橙
+            { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffccaa, parallax: 0.5 },
+            // 3: 星环 - 高亮青色
+            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2 },
+            // 4: 波浪 - 明亮紫粉
+            { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.02, tint: 0xeebbff, parallax: 1.2 },
+            // 5: 旋涡 - 冰蓝色强光
+            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0xaaccff, parallax: 1.5 }
         ];
 
         let targetCam = new THREE.Vector3(pageConfigs[0].cam.x, pageConfigs[0].cam.y, pageConfigs[0].cam.z);
@@ -395,23 +397,20 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            // --- A. 相机与颜色平滑过渡 ---
+            // 平滑颜色过渡
             baseCam.lerp(targetCam, 0.02);
             currentRotSpeed += (targetRotSpeed - currentRotSpeed) * 0.02;
             currentTint.lerp(targetTint, 0.03);
             material.color.copy(currentTint);
 
-            // --- B. 核心：粒子坐标的平滑形变 (Morphing) ---
             const positions = geometry.attributes.position.array;
             const targetPositions = shapes[currentPage];
             
-            // 每一帧将当前粒子坐标趋近于目标形状的坐标
             for(let i = 0; i < particleCount * 3; i++) {
                 positions[i] += (targetPositions[i] - positions[i]) * 0.04;
             }
             geometry.attributes.position.needsUpdate = true;
 
-            // --- C. 视差交互与全局自转 ---
             mouseTargetX = mouseX * 0.0005 * targetParallax;
             mouseTargetY = mouseY * 0.0005 * targetParallax;
 
@@ -421,7 +420,6 @@
             particleSystem.rotation.z += 0.05 * (mouseTargetX + targetTiltZ - particleSystem.rotation.z);
             particleSystem.rotation.x += 0.05 * (mouseTargetY + targetTiltX - particleSystem.rotation.x);
 
-            // --- D. 摄像机跟随 ---
             camera.position.x += (mouseX * 0.005 * targetParallax + baseCam.x - camera.position.x) * 0.05;
             camera.position.y += (-mouseY * 0.005 * targetParallax + baseCam.y - camera.position.y) * 0.05;
             camera.position.z += (baseCam.z - camera.position.z) * 0.05;
