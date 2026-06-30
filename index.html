@@ -105,6 +105,74 @@
         .pagination { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 15px; pointer-events: auto; }
         .dot { width: 8px; height: 8px; border-radius: 50%; background-color: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s ease; }
         .dot.active { background-color: #ffb703; box-shadow: 0 0 10px #ffb703; transform: scale(1.5); }
+
+        /* ==========================================
+           【新增】团队排版样式 (电影字幕风格)
+           ========================================== */
+        .credits-container {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 45px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .credit-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+        }
+        
+        /* 视线流：左侧对齐 -> 偏右对齐 -> 散落居中 */
+        .row-founders { justify-content: flex-start; gap: 40px; border-left: 2px solid #00f3ff; padding-left: 20px; }
+        .row-core { justify-content: flex-end; gap: 35px; padding-right: 15%; }
+        .row-rnd { justify-content: center; gap: 25px; padding-left: 10%; padding-right: 10%; }
+
+        .member {
+            position: relative;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .member .name {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            letter-spacing: 2px;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* 字体层级区分 */
+        .row-founders .name { font-size: 2.2rem; font-weight: 700; color: rgba(255, 255, 255, 0.95); }
+        .row-core .name { font-size: 1.4rem; font-weight: 500; color: rgba(255, 255, 255, 0.75); }
+        .row-rnd .name { font-size: 1.05rem; font-weight: 300; color: rgba(255, 255, 255, 0.5); }
+
+        /* 鼠标悬停名字发光变大 */
+        .member:hover .name {
+            color: #00f3ff;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        /* 隐藏的头衔，悬停时浮出 */
+        .member .role {
+            position: absolute;
+            top: -28px; /* 浮在名字上方避免遮挡下方文字 */
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            opacity: 0;
+            font-size: 0.8rem;
+            color: #ff0066; /* 霓虹洋红 */
+            white-space: nowrap;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .member:hover .role {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -129,11 +197,38 @@
             <h1 class="title">发展历程</h1>
             <p class="subtitle">从初创时的极客团队，到如今屡获殊荣的研究中心。<br>每一步跨越都踏实坚定，用代码丈量时代的进步。</p>
         </div>
+        
         <div class="page" id="page-3">
-            <div class="overline">Core Team</div>
-            <h1 class="title">菁英集结</h1>
-            <p class="subtitle">汇聚来自顶尖高校与知名科技企业的多元化精英。<br>跨界合作，碰撞思想火花，共同赋能未来生态。</p>
+
+            <div class="credits-container">
+                <div class="credit-row row-founders">
+                    <div class="member"><span class="role">教授 / 硕导</span><span class="name">范洪辉</span></div>
+                    <div class="member"><span class="role">资深工程师 / 硕导</span><span class="name">Zero</span></div>
+                    <div class="member"><span class="role">企业CTO / 硕导</span><span class="name">邹刘磊</span></div>
+                </div>
+
+                <div class="credit-row row-core">
+                    <div class="member"><span class="role">核心成员</span><span class="name">徐安琦</span></div>
+                    <div class="member"><span class="role">核心成员</span><span class="name">李昊</span></div>
+                    <div class="member"><span class="role">核心成员</span><span class="name">吴学杰</span></div>
+                    <div class="member"><span class="role">核心成员</span><span class="name">Royalvice</span></div>
+                </div>
+
+                <div class="credit-row row-rnd">
+                    <div class="member"><span class="role">研发工程师</span><span class="name">陈宇轩</span></div>
+                    <div class="member"><span class="role">研发工程师</span><span class="name">林子墨</span></div>
+                    <div class="member"><span class="role">研发工程师</span><span class="name">张云起</span></div>
+                    <div class="member"><span class="role">视觉设计师</span><span class="name">王奕辰</span></div>
+                    <div class="member"><span class="role">算法工程师</span><span class="name">刘星语</span></div>
+                    <div class="member"><span class="role">后端工程师</span><span class="name">赵子昂</span></div>
+                    <div class="member"><span class="role">测试工程师</span><span class="name">周瑾瑜</span></div>
+                    <div class="member"><span class="role">研发工程师</span><span class="name">孙浩宇</span></div>
+                    <div class="member"><span class="role">数据分析师</span><span class="name">何佳莹</span></div>
+                    <div class="member"><span class="role">研发工程师</span><span class="name">郑宇航</span></div>
+                </div>
+            </div>
         </div>
+
         <div class="page" id="page-4">
             <div class="overline">Academic Publications</div>
             <h1 class="title">学术成果</h1>
@@ -214,7 +309,6 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         document.body.appendChild(renderer.domElement);
 
-        // 【升级】大幅增加粒子数量，让形状更饱满
         const particleCount = 45000; 
         const geometry = new THREE.BufferGeometry();
         
@@ -226,11 +320,9 @@
         const initialPositions = new Float32Array(particleCount * 3);
         const colors = new Float32Array(particleCount * 3);
         
-        // 【升级】改为具有极高视觉冲击力对比的赛博朋克色系（荧光青 vs 霓虹洋红）
         const colorInside = new THREE.Color(0x00f3ff); 
         const colorOutside = new THREE.Color(0xff0066);
 
-        // 预计算 6 种几何形态
         for(let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
 
@@ -303,7 +395,6 @@
             shapes[5][i3+1] = heightTornado;
             shapes[5][i3+2] = rFinal * Math.sin(angleVortex);
 
-            // 分配颜色（使用指数分布，让颜色向两端（极度蓝或极度红）靠拢，避免中间发灰的过渡色）
             let colorBlend = Math.random();
             colorBlend = colorBlend < 0.5 ? Math.pow(colorBlend * 2, 2) / 2 : 1 - Math.pow((1 - colorBlend) * 2, 2) / 2;
             
@@ -320,12 +411,12 @@
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
         const material = new THREE.PointsMaterial({
-            size: 0.25, // 【升级】增加粒子尺寸，更显饱满
+            size: 0.25, 
             vertexColors: true, 
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             transparent: true,
-            opacity: 0.95, // 【升级】提高透明度，提升整体亮度
+            opacity: 0.95, 
             color: 0xffffff
         });
 
@@ -333,20 +424,14 @@
         scene.add(particleSystem);
 
         // ==========================================
-        // 3. 动态配置 (使用高明度色彩滤镜，避免暗淡)
+        // 3. 动态配置
         // ==========================================
         const pageConfigs = [
-            // 0: 星系 - 纯白/高光
             { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
-            // 1: 球体 - 明亮翠绿
             { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5 },
-            // 2: DNA - 明亮金橙
             { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffccaa, parallax: 0.5 },
-            // 3: 星环 - 高亮青色
             { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2 },
-            // 4: 波浪 - 明亮紫粉
             { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.02, tint: 0xeebbff, parallax: 1.2 },
-            // 5: 旋涡 - 冰蓝色强光
             { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0xaaccff, parallax: 1.5 }
         ];
 
@@ -397,7 +482,6 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            // 平滑颜色过渡
             baseCam.lerp(targetCam, 0.02);
             currentRotSpeed += (targetRotSpeed - currentRotSpeed) * 0.02;
             currentTint.lerp(targetTint, 0.03);
