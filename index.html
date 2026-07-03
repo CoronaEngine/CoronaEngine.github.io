@@ -68,148 +68,202 @@
             z-index: 1;
         }
         /* 发展历程时间轴 */
-        .timeline-wrap { width: 100%; max-width: 90vw; margin: 40px auto 80px auto; }
-        .timeline-map { width: 100%; height: auto; display: block; overflow: visible; }
+        .timeline-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 90vw;
+            margin: 40px auto 80px auto;
+            overflow: hidden;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background:
+                radial-gradient(circle at 22% 14%, rgba(62,130,255,0.16), transparent 34%),
+                radial-gradient(circle at 72% 44%, rgba(198,141,255,0.18), transparent 36%),
+                rgba(2, 6, 23, 0.54);
+            cursor: grab;
+            touch-action: pan-y;
+        }
+        .timeline-wrap:active { cursor: grabbing; }
+        .timeline-wrap::before,
+        .timeline-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            z-index: 3;
+            width: 88px;
+            pointer-events: none;
+        }
+        .timeline-wrap::before {
+            left: 0;
+            background: linear-gradient(90deg, rgba(2,6,23,0.94), transparent);
+        }
+        .timeline-wrap::after {
+            right: 0;
+            background: linear-gradient(270deg, rgba(2,6,23,0.94), transparent);
+        }
+        .history-timeline-track {
+            width: 2480px;
+            padding: 28px 28px 34px;
+            will-change: transform;
+            transition: transform 0.12s ease-out;
+        }
+        .timeline-map {
+            width: 2480px;
+            height: auto;
+            display: block;
+            overflow: visible;
+            background: transparent;
+        }
         .timeline-lane { cursor: pointer; outline: none; }
-        .timeline-map { background: #020617; }
         .lane-cabbage { color: #73b2ff; }
         .lane-vision { color: #ff6868; }
         .lane-corona { color: #d19bff; }
         .lane-hitbox {
             fill: none;
             stroke: rgba(255,255,255,0);
-            stroke-width: 92;
+            stroke-width: 116;
             stroke-linecap: round;
             stroke-linejoin: round;
             pointer-events: stroke;
         }
-        .lane-base,
-        .lane-core,
-        .lane-comet-halo,
-        .lane-comet-tail,
-        .lane-comet-core {
+        .branch-draw,
+        .branch-leaf,
+        .branch-ring {
             fill: none;
             stroke-linecap: round;
             stroke-linejoin: round;
             pointer-events: none;
-            transition: stroke-width 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
         }
-        .lane-base { stroke-width: 50; opacity: 0.68; mix-blend-mode: screen; isolation: isolate; }
-        .lane-core { stroke-width: 4.5; opacity: 0.34; mix-blend-mode: screen; }
-        .lane-comet {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.16s ease;
+        .branch-draw {
+            transition: stroke-dashoffset 0.32s ease, stroke-width 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
         }
-        .lane-comet-halo,
-        .lane-comet-tail,
-        .lane-comet-core,
-        .lane-comet-head {
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            pointer-events: none;
-            stroke-dashoffset: 0;
-            animation: none;
-            transition: none;
+        .branch-glow {
+            stroke-width: 42;
+            opacity: 0.16;
+            filter: url(#timelineBranchGlow);
+            mix-blend-mode: screen;
         }
-        .lane-comet-halo {
-            stroke-width: 28;
-            stroke-dasharray: 18 82;
-            opacity: 0.46;
-            filter: url(#timelineCometGlow);
+        .branch-core {
+            stroke-width: 7;
+            opacity: 0.88;
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.12));
         }
-        .lane-comet-tail {
-            stroke: rgba(188,236,255,0.88);
-            stroke-width: 10;
-            stroke-dasharray: 12 88;
-            opacity: 0.9;
-            filter: drop-shadow(0 0 10px rgba(103,205,255,0.44));
-        }
-        .lane-comet-core {
-            stroke: rgba(255,255,255,0.94);
-            stroke-width: 4.4;
-            stroke-dasharray: 6.5 93.5;
-            opacity: 1;
-            filter: drop-shadow(0 0 6px rgba(255,255,255,0.72)) drop-shadow(0 0 16px rgba(103,205,255,0.42));
-        }
-        .lane-comet-head {
-            stroke: rgba(255,255,255,0.98);
-            stroke-width: 8;
-            stroke-dasharray: 1.8 98.2;
-            opacity: 1;
-            filter: drop-shadow(0 0 7px rgba(255,255,255,0.88)) drop-shadow(0 0 18px rgba(103,205,255,0.66));
-        }
-        .lane-cabbage .lane-base { stroke: url(#timelineCabbageBase); }
-        .lane-cabbage .lane-core { stroke: #73b2ff; }
-        .lane-cabbage .lane-comet-halo { stroke: #73b2ff; }
-        .lane-vision .lane-base { stroke: url(#timelineVisionBase); }
-        .lane-vision .lane-core { stroke: #ff6868; }
-        .lane-vision .lane-comet-halo { stroke: #ff6868; }
-        .lane-corona .lane-base { stroke: url(#timelineCoronaBase); }
-        .lane-corona .lane-core { stroke: #d19bff; }
-        .lane-corona .lane-comet-halo { stroke: #d19bff; }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .lane-base { opacity: 0.95; }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .lane-core {
-            stroke-width: 5.2;
-            opacity: 0.58;
-        }
-        .lane-cabbage:is(:hover, :focus-visible, .semantic-active) .lane-core {
-            filter: drop-shadow(0 0 12px rgba(115,178,255,0.72)) drop-shadow(0 0 26px rgba(60,130,255,0.34));
-        }
-        .lane-vision:is(:hover, :focus-visible, .semantic-active) .lane-core {
-            filter: drop-shadow(0 0 12px rgba(255,104,104,0.70)) drop-shadow(0 0 26px rgba(255,80,80,0.30));
-        }
-        .lane-corona:is(:hover, :focus-visible, .semantic-active) .lane-core {
-            filter: drop-shadow(0 0 14px rgba(209,155,255,0.76)) drop-shadow(0 0 30px rgba(160,100,240,0.36));
-        }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .lane-comet {
+        .lane-cabbage .branch-core,
+        .lane-cabbage .branch-glow { stroke: url(#timelineCabbageBranch); }
+        .lane-vision .branch-core,
+        .lane-vision .branch-glow { stroke: url(#timelineVisionBranch); }
+        .lane-corona .branch-core,
+        .lane-corona .branch-glow { stroke: url(#timelineCoronaBranch); }
+        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .branch-glow { opacity: 0.34; }
+        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .branch-core {
+            stroke-width: 9;
             opacity: 1;
         }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .lane-comet-halo,
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .lane-comet-tail,
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .lane-comet-core,
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .lane-comet-head {
-            animation: timelineTrackMarquee 1.35s linear infinite;
+        .lane-cabbage:is(:hover, :focus-visible, .semantic-active) .branch-core {
+            filter: drop-shadow(0 0 13px rgba(115,178,255,0.78)) drop-shadow(0 0 28px rgba(60,130,255,0.34));
         }
-        @keyframes timelineTrackMarquee {
-            from { stroke-dashoffset: 0; }
-            to { stroke-dashoffset: -100; }
+        .lane-vision:is(:hover, :focus-visible, .semantic-active) .branch-core {
+            filter: drop-shadow(0 0 13px rgba(255,104,104,0.74)) drop-shadow(0 0 28px rgba(255,80,80,0.32));
         }
-        /* 交汇融合脉冲 */
-        .timeline-lane.merge-flash .lane-core { animation: mergePulse 0.55s ease-in-out; }
+        .lane-corona:is(:hover, :focus-visible, .semantic-active) .branch-core {
+            filter: drop-shadow(0 0 15px rgba(209,155,255,0.80)) drop-shadow(0 0 32px rgba(160,100,240,0.38));
+        }
+        .timeline-lane.merge-flash .branch-core { animation: mergePulse 0.55s ease-in-out; }
         @keyframes mergePulse {
-            0% { stroke-width: 4.5; }
-            40% { stroke-width: 8; filter: drop-shadow(0 0 18px #c491ff) brightness(1.4); }
-            100% { stroke-width: 4.5; }
+            0% { stroke-width: 7; }
+            40% { stroke-width: 12; filter: drop-shadow(0 0 20px #c491ff) brightness(1.35); }
+            100% { stroke-width: 7; }
         }
-        .timeline-node-glow { opacity: 0.44; transition: opacity 0.35s ease; }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-glow { opacity: 0.78; }
-        .timeline-node-core { transition: r 0.35s ease, filter 0.35s ease; }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-core { r: 14; filter: drop-shadow(0 0 14px currentColor); }
-        .timeline-copy { color: rgba(230,238,255,0.92); line-height: 1.28; }
-        .timeline-copy h3 { margin: 0 0 8px; color: #f8fafc; font-size: 22px; font-weight: 800; letter-spacing: 0; }
-        .timeline-copy p { margin: 0; color: rgba(185,197,220,0.72); font-size: 15px; font-weight: 600; }
+        .branch-leaf {
+            stroke-width: 2.4;
+            opacity: 0.22;
+            transition: opacity 0.35s ease, stroke-width 0.35s ease;
+        }
+        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .branch-leaf {
+            opacity: 0.58;
+            stroke-width: 3;
+        }
+        .timeline-node-glow { opacity: 0.45; transition: opacity 0.35s ease; }
+        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-glow { opacity: 0.82; }
+        .timeline-node-core,
+        .timeline-bud {
+            transition: r 0.35s ease, filter 0.35s ease, transform 0.35s ease;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-core,
+        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-bud {
+            filter: drop-shadow(0 0 14px currentColor);
+            transform: scale(1.08);
+        }
+        .merge-hotspot { cursor: pointer; }
+        .merge-pulse-ring {
+            transform-origin: 1150px 250px;
+            animation: mergeRing 2.8s ease-out infinite;
+        }
+        @keyframes mergeRing {
+            0% { transform: scale(0.82); opacity: 0.66; }
+            72%, 100% { transform: scale(1.28); opacity: 0; }
+        }
+        .timeline-copy {
+            color: rgba(230,238,255,0.92);
+            line-height: 1.34;
+            padding: 14px 16px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(7, 13, 31, 0.68);
+            box-shadow: 0 18px 44px rgba(0,0,0,0.20);
+        }
+        .timeline-copy h3 {
+            margin: 0 0 8px;
+            color: #f8fafc;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+        .timeline-copy p { margin: 0; color: rgba(185,197,220,0.74); font-size: 14px; font-weight: 600; }
         .timeline-copy .gold { color: #ffcc33; }
         .timeline-copy.center { text-align: center; }
-        .timeline-copy.center h3 { font-size: 23px; }
-        .timeline-copy.center p { font-size: 15px; }
-        .timeline-copy.right h3 { font-size: 20px; }
+        .timeline-copy.center h3 { font-size: 21px; }
+        .timeline-copy.right h3 { font-size: 19px; }
         .timeline-year-pill {
-            pointer-events: auto; cursor: pointer;
-            color: rgba(230,222,255,0.88);
-            transition: transform 0.32s cubic-bezier(.34,1.56,.64,1);
-            background: rgba(101,68,170,0.52);
-            border: 1px solid rgba(216,174,255,0.16);
+            pointer-events: auto;
+            cursor: pointer;
+            color: rgba(241,232,255,0.92);
+            transition: transform 0.32s cubic-bezier(.34,1.56,.64,1), box-shadow 0.32s ease;
+            background: rgba(101,68,170,0.58);
+            border: 1px solid rgba(216,174,255,0.18);
             border-radius: 999px;
             font-size: 21px;
             font-weight: 800;
             line-height: 1;
             padding: 8px 16px 9px;
             text-align: center;
-            box-shadow: 0 0 18px rgba(174,110,255,0.18);
+            box-shadow: 0 0 18px rgba(174,110,255,0.20);
         }
-        .timeline-year-pill:hover { transform: scale(1.12); box-shadow: 0 0 28px rgba(174,110,255,0.34); }
+        .timeline-year-pill:hover { transform: scale(1.12); box-shadow: 0 0 28px rgba(174,110,255,0.36); }
+        .timeline-progress {
+            position: absolute;
+            left: 28px;
+            right: 28px;
+            bottom: 16px;
+            z-index: 4;
+            height: 2px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.08);
+        }
+        .timeline-progress span {
+            display: block;
+            width: 100%;
+            height: 100%;
+            transform: scaleX(0);
+            transform-origin: left center;
+            background: linear-gradient(90deg, #73b2ff, #ff6868 42%, #d19bff 82%, #ffcc33);
+            box-shadow: 0 0 12px rgba(209,155,255,0.48);
+            transition: transform 0.12s ease-out;
+        }
         /* 滚动进度导航 */
         .scroll-nav { position: fixed; right: 12px; top: 50%; transform: translateY(-50%); z-index: 500; display: flex; flex-direction: column; align-items: center; }
         .scroll-pct { font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
@@ -1116,14 +1170,15 @@ body.menu-open {
 .page .timeline-wrap {
     max-width: 100%;
     margin: 0 auto;
-    overflow-x: auto;
+    overflow: hidden;
     border-radius: 24px;
 }
 
 .page .timeline-map {
-    min-width: 980px;
+    width: 2480px;
+    min-width: 2480px;
     border-radius: 24px;
-    background: rgba(2, 6, 23, 0.42);
+    background: transparent;
 }
 
 .page .team-scroll-wrap {
@@ -1202,6 +1257,29 @@ body.menu-open {
     .team-card {
         width: min(78vw, 360px);
         padding: 28px;
+    }
+
+    .timeline-wrap {
+        max-width: 100%;
+    }
+
+    .history-timeline-track {
+        width: 2120px;
+        padding: 22px 20px 34px;
+    }
+
+    .timeline-map,
+    .page .timeline-map {
+        width: 2120px;
+        min-width: 2120px;
+    }
+
+    .timeline-copy h3 {
+        font-size: 17px;
+    }
+
+    .timeline-copy p {
+        font-size: 12px;
     }
 
     .member-modal-grid {
@@ -1565,39 +1643,39 @@ body.menu-open {
                     <div class="section-kicker">Our History</div>
                     <h2 class="page-title" id="historyTitle">发展历程</h2>
                     <div class="glass-section">
-<div class="timeline-wrap">
-                        <svg class="timeline-map" viewBox="0 0 1776 395" role="img" aria-labelledby="timelineTitle timelineDesc" xmlns="http://www.w3.org/2000/svg">
-                            <title id="timelineTitle">Corona Engine 发展历程时间轴</title>
-                            <desc id="timelineDesc">蓝色 Cabbage Engine 赛道与红色 Vision 赛道在 2025 年融合为 Corona Engine，并延展到 2026 年之后。</desc>
+<div class="timeline-wrap history-scroll-wrap" id="historyScrollWrap">
+                        <div class="timeline-progress" aria-hidden="true"><span id="historyProgressBar"></span></div>
+                        <div class="history-timeline-track" id="historyTimelineTrack">
+                        <svg class="timeline-map" viewBox="0 0 2480 520" role="img" aria-labelledby="timelineTitle timelineDesc" xmlns="http://www.w3.org/2000/svg">
+                            <title id="timelineTitle">Corona Engine 发展历程分支图</title>
+                            <desc id="timelineDesc">GraphZ 与 Zero 的技术分支分别演进为 Cabbage Engine 与 Vision，并在 2025 年融合为 Corona Engine，继续向 2026 年及之后延展。</desc>
                             <defs>
-                                <linearGradient id="timelineCabbageBase" x1="0" y1="52" x2="880" y2="166" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0" stop-color="#14345b" stop-opacity="0.42"/>
-                                    <stop offset="0.38" stop-color="#2e6fbd" stop-opacity="0.68"/>
-                                    <stop offset="0.72" stop-color="#6a4fc8" stop-opacity="0.78"/>
-                                    <stop offset="0.90" stop-color="#9f78ea" stop-opacity="0.84"/>
-                                    <stop offset="1" stop-color="#b57cff" stop-opacity="0.88"/>
+                                <linearGradient id="timelineCabbageBranch" x1="110" y1="150" x2="1150" y2="250" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0" stop-color="#2563eb" stop-opacity="0.62"/>
+                                    <stop offset="0.42" stop-color="#73b2ff" stop-opacity="0.92"/>
+                                    <stop offset="0.76" stop-color="#8d7cff" stop-opacity="0.96"/>
+                                    <stop offset="1" stop-color="#c491ff" stop-opacity="0.98"/>
                                 </linearGradient>
-                                <linearGradient id="timelineVisionBase" x1="0" y1="278" x2="880" y2="166" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0" stop-color="#5e1722" stop-opacity="0.58"/>
-                                    <stop offset="0.48" stop-color="#cf4a54" stop-opacity="0.70"/>
-                                    <stop offset="0.76" stop-color="#9a4f8a" stop-opacity="0.78"/>
-                                    <stop offset="0.92" stop-color="#b075ec" stop-opacity="0.85"/>
-                                    <stop offset="1" stop-color="#b57cff" stop-opacity="0.88"/>
+                                <linearGradient id="timelineVisionBranch" x1="110" y1="370" x2="1150" y2="250" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0" stop-color="#b91c1c" stop-opacity="0.62"/>
+                                    <stop offset="0.45" stop-color="#ff6868" stop-opacity="0.92"/>
+                                    <stop offset="0.78" stop-color="#b46bda" stop-opacity="0.96"/>
+                                    <stop offset="1" stop-color="#c491ff" stop-opacity="0.98"/>
                                 </linearGradient>
-                                <linearGradient id="timelineCoronaBase" x1="880" y1="166" x2="1760" y2="166" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0" stop-color="#b57cff" stop-opacity="0.88"/>
-                                    <stop offset="0.12" stop-color="#9966e0" stop-opacity="0.82"/>
-                                    <stop offset="0.55" stop-color="#6a3fb8" stop-opacity="0.58"/>
-                                    <stop offset="1" stop-color="#392052" stop-opacity="0.38"/>
+                                <linearGradient id="timelineCoronaBranch" x1="1150" y1="250" x2="2386" y2="258" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0" stop-color="#c491ff" stop-opacity="0.98"/>
+                                    <stop offset="0.42" stop-color="#9f7aea" stop-opacity="0.86"/>
+                                    <stop offset="0.72" stop-color="#ffcc33" stop-opacity="0.78"/>
+                                    <stop offset="1" stop-color="#7dd3fc" stop-opacity="0.42"/>
                                 </linearGradient>
                                 <radialGradient id="timelineMergeGlow" cx="0.5" cy="0.5" r="0.5">
-                                    <stop offset="0" stop-color="#f0c6ff" stop-opacity="1"/>
-                                    <stop offset="0.44" stop-color="#c58cff" stop-opacity="0.75"/>
+                                    <stop offset="0" stop-color="#f4d7ff" stop-opacity="1"/>
+                                    <stop offset="0.42" stop-color="#c58cff" stop-opacity="0.74"/>
                                     <stop offset="1" stop-color="#8a5bff" stop-opacity="0"/>
                                 </radialGradient>
-                                <filter id="timelineCometGlow" x="-18%" y="-180%" width="136%" height="460%" color-interpolation-filters="sRGB">
+                                <filter id="timelineBranchGlow" x="-14%" y="-150%" width="128%" height="400%" color-interpolation-filters="sRGB">
                                     <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/>
-                                    <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.18  0 1 0 0 0.36  0 0 1 0 1  0 0 0 1.15 0" result="glow"/>
+                                    <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.24  0 1 0 0 0.34  0 0 1 0 0.92  0 0 0 1.1 0" result="glow"/>
                                     <feMerge>
                                         <feMergeNode in="glow"/>
                                         <feMergeNode in="SourceGraphic"/>
@@ -1605,128 +1683,137 @@ body.menu-open {
                                 </filter>
                             </defs>
 
-                            <g class="timeline-lane lane-cabbage" tabindex="0" role="group" aria-label="Cabbage Engine 赛道，悬停高亮内部线">
-                                <path class="lane-hitbox" d="M 8 52 H 585 C 688 52 725 66 779 118 C 818 153 845 165 880 166"/>
-                                <path class="lane-base" d="M 8 52 H 585 C 688 52 725 66 779 118 C 818 153 845 165 880 166"/>
-                                <path class="lane-core" d="M 160 52 H 585 C 688 52 725 66 779 118 C 818 153 845 165 880 166 H 1658"/>
-                                <g class="lane-comet" aria-hidden="true">
-                                    <path class="lane-comet-halo" pathLength="100" d="M 160 52 H 585 C 688 52 725 66 779 118 C 818 153 845 165 880 166 H 1658"/>
-                                    <path class="lane-comet-tail" pathLength="100" d="M 160 52 H 585 C 688 52 725 66 779 118 C 818 153 845 165 880 166 H 1658"/>
-                                    <path class="lane-comet-core" pathLength="100" d="M 160 52 H 585 C 688 52 725 66 779 118 C 818 153 845 165 880 166 H 1658"/>
-                                    <path class="lane-comet-head" pathLength="100" d="M 160 52 H 585 C 688 52 725 66 779 118 C 818 153 845 165 880 166 H 1658"/>
-                                </g>
-                                <path d="M 188 52 C 266 52 302 55 356 67" fill="none" stroke="#73b2ff" stroke-width="2.2" opacity="0.22" pointer-events="none"/>
-                                <path d="M 260 83 C 330 84 372 78 438 58" fill="none" stroke="#73b2ff" stroke-width="2" opacity="0.12" pointer-events="none"/>
-                                <circle class="timeline-node-glow" cx="160" cy="52" r="34" fill="#3b82f6"/>
-                                <circle cx="160" cy="52" r="24" fill="none" stroke="#67a8ff" stroke-width="2" opacity="0.34"/>
-                                <circle class="timeline-node-core" cx="472" cy="52" r="12" fill="#5ca4ff" stroke="#101d45" stroke-width="12"/>
+                            <g opacity="0.34" pointer-events="none">
+                                <path d="M 44 250 H 2436" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                                <path d="M 44 150 H 2436 M 44 370 H 2436" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                                <path d="M 320 60 V 468 M 760 60 V 468 M 1150 60 V 468 M 1580 60 V 468 M 2010 60 V 468" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
                             </g>
 
-                            <g class="timeline-lane lane-vision" tabindex="0" role="group" aria-label="Vision 赛道，悬停高亮内部线">
-                                <path class="lane-hitbox" d="M 8 278 H 590 C 690 278 742 262 804 219 C 843 192 863 176 880 166"/>
-                                <path class="lane-base" d="M 8 278 H 590 C 690 278 742 262 804 219 C 843 192 863 176 880 166"/>
-                                <path class="lane-core" d="M 132 278 H 590 C 690 278 742 262 804 219 C 843 192 863 176 880 166 H 1658"/>
-                                <g class="lane-comet" aria-hidden="true">
-                                    <path class="lane-comet-halo" pathLength="100" d="M 132 278 H 590 C 690 278 742 262 804 219 C 843 192 863 176 880 166 H 1658"/>
-                                    <path class="lane-comet-tail" pathLength="100" d="M 132 278 H 590 C 690 278 742 262 804 219 C 843 192 863 176 880 166 H 1658"/>
-                                    <path class="lane-comet-core" pathLength="100" d="M 132 278 H 590 C 690 278 742 262 804 219 C 843 192 863 176 880 166 H 1658"/>
-                                    <path class="lane-comet-head" pathLength="100" d="M 132 278 H 590 C 690 278 742 262 804 219 C 843 192 863 176 880 166 H 1658"/>
-                                </g>
-                                <path d="M 190 278 C 272 278 309 282 368 294" fill="none" stroke="#ff6868" stroke-width="2.2" opacity="0.16" pointer-events="none"/>
-                                <path d="M 260 248 C 328 247 371 254 436 274" fill="none" stroke="#ff6868" stroke-width="2" opacity="0.12" pointer-events="none"/>
-                                <circle class="timeline-node-glow" cx="132" cy="278" r="34" fill="#ef4444"/>
-                                <circle cx="132" cy="278" r="24" fill="none" stroke="#ff7272" stroke-width="2" opacity="0.34"/>
-                                <circle class="timeline-node-core" cx="370" cy="278" r="12" fill="#ff514f" stroke="#361624" stroke-width="12"/>
-                                <circle class="timeline-node-core" cx="603" cy="278" r="12" fill="#ff514f" stroke="#361624" stroke-width="12"/>
+                            <g class="timeline-lane lane-cabbage" tabindex="0" role="group" aria-label="Cabbage Engine 技术分支">
+                                <path class="lane-hitbox" d="M 118 150 C 238 138 344 154 470 164 C 614 177 718 150 826 151 C 970 152 1058 209 1150 250"/>
+                                <path class="branch-draw branch-glow" data-start="0" data-end="0.46" d="M 118 150 C 238 138 344 154 470 164 C 614 177 718 150 826 151 C 970 152 1058 209 1150 250"/>
+                                <path class="branch-draw branch-core" data-start="0" data-end="0.46" d="M 118 150 C 238 138 344 154 470 164 C 614 177 718 150 826 151 C 970 152 1058 209 1150 250"/>
+                                <path class="branch-draw branch-glow" data-start="0.10" data-end="0.22" d="M 486 164 C 530 104 612 82 718 90"/>
+                                <path class="branch-draw branch-core" data-start="0.10" data-end="0.22" d="M 486 164 C 530 104 612 82 718 90"/>
+                                <path class="branch-draw branch-glow" data-start="0.25" data-end="0.38" d="M 820 151 C 870 104 941 91 1032 112"/>
+                                <path class="branch-draw branch-core" data-start="0.25" data-end="0.38" d="M 820 151 C 870 104 941 91 1032 112"/>
+                                <path class="branch-leaf" d="M 642 96 C 624 78 624 58 654 47 M 674 96 C 696 76 722 72 744 90" stroke="#73b2ff"/>
+                                <path class="branch-leaf" d="M 966 105 C 950 82 956 62 986 50 M 997 111 C 1019 92 1048 92 1070 112" stroke="#8d7cff"/>
+                                <circle class="timeline-node-glow" cx="118" cy="150" r="36" fill="#3b82f6"/>
+                                <circle class="timeline-node-core" cx="118" cy="150" r="16" fill="#5ca4ff" stroke="#101d45" stroke-width="10"/>
+                                <circle class="timeline-bud" cx="470" cy="164" r="12" fill="#73b2ff" stroke="#101d45" stroke-width="10"/>
+                                <circle class="timeline-bud" cx="718" cy="90" r="10" fill="#9cc9ff" stroke="#0e1d40" stroke-width="8"/>
+                                <circle class="timeline-bud" cx="1032" cy="112" r="10" fill="#bfa7ff" stroke="#21143f" stroke-width="8"/>
                             </g>
 
-                            <g class="timeline-lane lane-corona" tabindex="0" role="group" aria-label="Corona Engine 赛道，悬停高亮内部线">
-                                <path class="lane-hitbox" d="M 880 166 H 1760"/>
-                                <path class="lane-base" d="M 880 166 H 1760"/>
-                                <path class="lane-core" d="M 880 166 H 1658"/>
-                                <g class="lane-comet" aria-hidden="true">
-                                    <path class="lane-comet-halo" pathLength="100" d="M 880 166 H 1658"/>
-                                    <path class="lane-comet-tail" pathLength="100" d="M 880 166 H 1658"/>
-                                    <path class="lane-comet-core" pathLength="100" d="M 880 166 H 1658"/>
-                                    <path class="lane-comet-head" pathLength="100" d="M 880 166 H 1658"/>
-                                </g>
-                                <circle class="timeline-node-core" cx="1295" cy="166" r="12" fill="#c491ff" stroke="#24183f" stroke-width="12"/>
-                                <circle cx="1658" cy="166" r="24" fill="none" stroke="#c491ff" stroke-width="2.2" opacity="0.46"/>
-                                <circle cx="1658" cy="166" r="10" fill="none" stroke="#c491ff" stroke-width="2" opacity="0.62"/>
-                                <path d="M 1644 166 H 1672 M 1658 152 C 1648 160 1648 172 1658 180 M 1658 152 C 1668 160 1668 172 1658 180" fill="none" stroke="#c491ff" stroke-width="1.8" opacity="0.58" pointer-events="none"/>
+                            <g class="timeline-lane lane-vision" tabindex="0" role="group" aria-label="Vision 渲染技术分支">
+                                <path class="lane-hitbox" d="M 112 370 C 242 382 350 356 466 338 C 578 320 670 340 768 365 C 905 414 1028 320 1150 250"/>
+                                <path class="branch-draw branch-glow" data-start="0" data-end="0.48" d="M 112 370 C 242 382 350 356 466 338 C 578 320 670 340 768 365 C 905 414 1028 320 1150 250"/>
+                                <path class="branch-draw branch-core" data-start="0" data-end="0.48" d="M 112 370 C 242 382 350 356 466 338 C 578 320 670 340 768 365 C 905 414 1028 320 1150 250"/>
+                                <path class="branch-draw branch-glow" data-start="0.12" data-end="0.28" d="M 466 338 C 514 394 596 427 702 424"/>
+                                <path class="branch-draw branch-core" data-start="0.12" data-end="0.28" d="M 466 338 C 514 394 596 427 702 424"/>
+                                <path class="branch-draw branch-glow" data-start="0.28" data-end="0.42" d="M 768 365 C 838 419 934 430 1036 410"/>
+                                <path class="branch-draw branch-core" data-start="0.28" data-end="0.42" d="M 768 365 C 838 419 934 430 1036 410"/>
+                                <path class="branch-leaf" d="M 604 414 C 582 398 580 372 606 354 M 638 420 C 666 404 694 408 718 432" stroke="#ff6868"/>
+                                <path class="branch-leaf" d="M 944 416 C 922 398 922 374 948 358 M 978 412 C 1006 392 1037 396 1061 422" stroke="#c077df"/>
+                                <circle class="timeline-node-glow" cx="112" cy="370" r="36" fill="#ef4444"/>
+                                <circle class="timeline-node-core" cx="112" cy="370" r="16" fill="#ff514f" stroke="#361624" stroke-width="10"/>
+                                <circle class="timeline-bud" cx="466" cy="338" r="12" fill="#ff6868" stroke="#361624" stroke-width="10"/>
+                                <circle class="timeline-bud" cx="702" cy="424" r="10" fill="#ff8585" stroke="#361624" stroke-width="8"/>
+                                <circle class="timeline-bud" cx="1036" cy="410" r="10" fill="#ce7fea" stroke="#27123d" stroke-width="8"/>
                             </g>
 
-                            <g class="merge-hotspot" style="cursor:pointer;">
-                                <circle cx="880" cy="166" r="60" fill="url(#timelineMergeGlow)" opacity="0.9"/>
-                                <circle cx="880" cy="166" r="35" fill="#b984ff" opacity="0.58"/>
-                                <circle cx="880" cy="166" r="14" fill="#ddb7ff"/>
+                            <g class="timeline-lane lane-corona" tabindex="0" role="group" aria-label="Corona Engine 主干">
+                                <path class="lane-hitbox" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
+                                <path class="branch-draw branch-glow" data-start="0.42" data-end="1" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
+                                <path class="branch-draw branch-core" data-start="0.42" data-end="1" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
+                                <path class="branch-draw branch-glow" data-start="0.55" data-end="0.70" d="M 1582 250 C 1635 190 1722 166 1836 182"/>
+                                <path class="branch-draw branch-core" data-start="0.55" data-end="0.70" d="M 1582 250 C 1635 190 1722 166 1836 182"/>
+                                <path class="branch-draw branch-glow" data-start="0.75" data-end="0.92" d="M 2006 232 C 2078 295 2182 320 2304 308"/>
+                                <path class="branch-draw branch-core" data-start="0.75" data-end="0.92" d="M 2006 232 C 2078 295 2182 320 2304 308"/>
+                                <path class="branch-leaf" d="M 1740 178 C 1718 154 1724 130 1758 120 M 1778 180 C 1804 160 1834 164 1858 190" stroke="#d19bff"/>
+                                <path class="branch-leaf" d="M 2190 310 C 2162 292 2162 260 2194 244 M 2228 310 C 2258 292 2290 300 2312 328" stroke="#ffcc33"/>
+                                <circle class="timeline-bud" cx="1582" cy="250" r="12" fill="#c491ff" stroke="#24183f" stroke-width="10"/>
+                                <circle class="timeline-bud" cx="1836" cy="182" r="10" fill="#d19bff" stroke="#24183f" stroke-width="8"/>
+                                <circle class="timeline-bud" cx="2006" cy="232" r="12" fill="#ffcc33" stroke="#3d2d0e" stroke-width="9"/>
+                                <circle class="timeline-bud" cx="2386" cy="258" r="11" fill="#7dd3fc" stroke="#102a3c" stroke-width="9"/>
+                            </g>
+
+                            <g class="merge-hotspot" tabindex="0" role="button" aria-label="2025 年融合节点">
+                                <circle class="merge-pulse-ring" cx="1150" cy="250" r="66" fill="url(#timelineMergeGlow)" opacity="0.82"/>
+                                <circle cx="1150" cy="250" r="58" fill="url(#timelineMergeGlow)" opacity="0.88"/>
+                                <circle cx="1150" cy="250" r="28" fill="#b984ff" opacity="0.66"/>
+                                <circle cx="1150" cy="250" r="13" fill="#f0d4ff"/>
                             </g>
 
                             <g pointer-events="none" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <!-- 蓝色起点图标 -->
-                                <image href="render/Group 14264.png" x="136" y="28" width="48" height="48" opacity="0.92"/>
-                                <!-- 红色起点图标 -->
-                                <image href="render/Group 14265.png" x="108" y="254" width="48" height="48" opacity="0.92"/>
-                                <path d="M 1278 155 h34 l9 12 l-26 15 l-26 -15 z" fill="none" stroke="#c491ff" stroke-width="3" opacity="0.76"/>
-                                <path d="M 1282 158 l13 10 l22 -10" stroke="#c491ff" stroke-width="3" opacity="0.72"/>
+                                <image href="render/Group 14264.png" x="94" y="126" width="48" height="48" opacity="0.92"/>
+                                <image href="render/Group 14265.png" x="88" y="346" width="48" height="48" opacity="0.92"/>
+                                <path d="M 1564 239 h36 l10 12 l-28 17 l-28 -17 z" fill="none" stroke="#c491ff" stroke-width="3" opacity="0.74"/>
+                                <path d="M 1568 242 l14 10 l23 -10" stroke="#c491ff" stroke-width="3" opacity="0.70"/>
+                                <path d="M 2371 258 h30 M 2386 243 C 2376 251 2376 265 2386 273 M 2386 243 C 2396 251 2396 265 2386 273" stroke="#7dd3fc" stroke-width="2" opacity="0.62"/>
                             </g>
 
-                            <foreignObject x="52" y="90" width="265" height="86" data-lane="cabbage">
+                            <foreignObject x="54" y="28" width="302" height="104" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>GraphZ(2017-2021)</h3>
-                                    <p>GraphZ开发的多个用于竞赛与科研的引擎雏形</p>
+                                    <h3>GraphZ (2017-2021)</h3>
+                                    <p>GraphZ 开发多个用于竞赛与科研的引擎雏形</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="318" y="90" width="370" height="92" data-lane="cabbage">
+                            <foreignObject x="386" y="30" width="370" height="106" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>Cabbage Engine正式诞生(2022)</h3>
-                                    <p>对开发的各个雏形引擎进行整合，Cabbage Engine正式诞生</p>
+                                    <h3>Cabbage Engine 正式诞生 (2022)</h3>
+                                    <p>对开发的各个雏形引擎进行整合，Cabbage Engine 正式诞生</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="24" y="315" width="282" height="72" data-lane="vision">
+                            <foreignObject x="48" y="396" width="292" height="92" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Zero (2018-2020)</h3>
-                                    <p>Zero开发Z-Renderer、Paladin</p>
+                                    <p>Zero 开发 Z-Renderer、Paladin</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="300" y="315" width="255" height="78" data-lane="vision">
+                            <foreignObject x="362" y="404" width="340" height="98" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Zero (2020-2021)</h3>
-                                    <p>转向硬件光线追踪<br/>开启新项目LumiRender并完成技术验证</p>
+                                    <p>转向硬件光线追踪<br/>开启新项目 LumiRender 并完成技术验证</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="550" y="315" width="245" height="72" data-lane="vision">
+                            <foreignObject x="720" y="400" width="270" height="86" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Zero (2022)</h3>
-                                    <p>Vision渲染器正式诞生</p>
+                                    <p>Vision 渲染器正式诞生</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="840" y="214" width="80" height="44" data-lane="corona">
+                            <foreignObject x="1110" y="178" width="82" height="44" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2025</div>
                             </foreignObject>
-                            <foreignObject x="750" y="268" width="360" height="120" data-lane="corona">
+                            <foreignObject x="1000" y="306" width="372" height="126" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>Corona Engine 诞生</h3>
                                     <p><span class="gold">Vision 与 Cabbage 的初步融合</span></p>
-                                    <p>解决自研 GPU 编程语言架构难题<br/>发表 SIGGRAPH ASIA顶会</p>
+                                    <p>解决自研 GPU 编程语言架构难题<br/>发表 SIGGRAPH ASIA 顶会</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="1255" y="214" width="80" height="44" data-lane="corona">
+                            <foreignObject x="1540" y="302" width="82" height="44" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2026</div>
                             </foreignObject>
-                            <foreignObject x="1148" y="264" width="342" height="90" data-lane="corona">
+                            <foreignObject x="1400" y="352" width="368" height="90" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>Corona Engine v1.0 蓄势待发</h3>
                                     <p>深度重构，持续打磨，厚积薄发</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="1500" y="244" width="270" height="100" data-lane="corona">
+                            <foreignObject x="1966" y="98" width="350" height="116" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy right">
                                     <h3>支撑高校赛事，学术课题深化</h3>
-                                    <p>主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼3D，冲刺顶会成果。</p>
+                                    <p>主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
                                 </div>
                             </foreignObject>
+                            <foreignObject x="1970" y="250" width="96" height="44" data-lane="corona">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2026+</div>
+                            </foreignObject>
                         </svg>
+                        </div>
                     </div>
                     </div>
                 </div>
@@ -1989,7 +2076,7 @@ function initShellNavigation() {
     });
 
     window.addEventListener('wheel', function(event) {
-        if (event.target.closest('.member-modal-overlay.active, .dl-overlay.active, .team-scroll-wrap')) return;
+        if (event.target.closest('.member-modal-overlay.active, .dl-overlay.active, .team-scroll-wrap, .history-scroll-wrap')) return;
         const scroller = event.target.closest('.page-scroll') || activePageScroll();
         if (scroller === activePageScroll() && canScrollWithin(scroller, event.deltaY)) return;
 
@@ -2129,6 +2216,70 @@ function initTimelineInteractions() {
     });
 }
 
+function initHistoryScroll() {
+    const wrap = document.getElementById('historyScrollWrap');
+    const track = document.getElementById('historyTimelineTrack');
+    const progressBar = document.getElementById('historyProgressBar');
+    if (!wrap || !track) return;
+
+    const branches = Array.prototype.slice.call(track.querySelectorAll('.branch-draw'));
+    branches.forEach(function(path) {
+        const length = path.getTotalLength();
+        path.dataset.pathLength = length;
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+    });
+
+    let offset = 0;
+    let maxScroll = 0;
+
+    function clampOffset() {
+        offset = Math.max(-maxScroll, Math.min(0, offset));
+    }
+
+    function updateBranchGrowth() {
+        const totalWidth = track.scrollWidth || track.getBoundingClientRect().width || 1;
+        const visibleRight = -offset + wrap.clientWidth * 0.82;
+        const growthProgress = maxScroll <= 0 ? 1 : Math.max(0, Math.min(1, visibleRight / totalWidth));
+        const scrollProgress = maxScroll <= 0 ? 1 : Math.max(0, Math.min(1, -offset / maxScroll));
+
+        if (progressBar) {
+            progressBar.style.transform = 'scaleX(' + scrollProgress + ')';
+        }
+
+        branches.forEach(function(path) {
+            const length = parseFloat(path.dataset.pathLength) || 0;
+            const start = parseFloat(path.dataset.start || '0');
+            const end = parseFloat(path.dataset.end || '1');
+            const span = Math.max(0.001, end - start);
+            const localProgress = Math.max(0, Math.min(1, (growthProgress - start) / span));
+            path.style.strokeDashoffset = length * (1 - localProgress);
+        });
+    }
+
+    function applyOffset() {
+        track.style.transform = 'translateX(' + offset + 'px)';
+        updateBranchGrowth();
+    }
+
+    function updateMax() {
+        maxScroll = Math.max(0, track.scrollWidth - wrap.clientWidth);
+        clampOffset();
+        applyOffset();
+    }
+
+    window.setTimeout(updateMax, 0);
+    window.addEventListener('resize', updateMax);
+    wrap.addEventListener('wheel', function(event) {
+        if (maxScroll <= 0) return;
+        event.preventDefault();
+        const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+        offset -= delta;
+        clampOffset();
+        applyOffset();
+    }, { passive: false });
+}
+
 function initTeamScroll() {
     const wrap = document.getElementById('teamScrollWrap');
     const track = document.getElementById('teamBento');
@@ -2207,6 +2358,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initShellNavigation();
     initDownloadModal();
     initMemberModals();
+    initHistoryScroll();
     initTimelineInteractions();
     initTeamScroll();
     initRoleToggle();
