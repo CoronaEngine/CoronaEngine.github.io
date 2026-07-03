@@ -746,12 +746,21 @@ body.menu-open {
     overflow: hidden;
 }
 
-#canvas-container {
+#starfieldBackdrop {
     position: fixed;
     inset: 0;
     z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 130% 95% at 50% 30%, #0b1536 0%, #060e26 42%, #020614 70%, #030305 100%);
+}
+
+#canvas-container {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
     overflow: hidden;
-    background: #030305;
+    background: transparent;
     pointer-events: none;
 }
 
@@ -766,7 +775,7 @@ body.menu-open {
 .ambient-vignette {
     position: fixed;
     inset: 0;
-    z-index: 1;
+    z-index: 2;
     pointer-events: none;
     background:
         radial-gradient(ellipse 70% 62% at 50% 42%, rgba(8, 11, 34, 0.12), rgba(3, 3, 5, 0.12) 58%, rgba(3, 3, 5, 0.56) 100%),
@@ -1328,6 +1337,7 @@ body.menu-open {
     </style>
 </head>
 <body data-page="0">
+    <div id="starfieldBackdrop" aria-hidden="true"></div>
     <div id="canvas-container" aria-hidden="true"></div>
     <div class="ambient-vignette" aria-hidden="true"></div>
 
@@ -2213,6 +2223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setClearColor(0x000000, 0); // alpha:true 本身不会让画布透明，默认清屏仍是不透明黑，必须显式清零
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         document.getElementById('canvas-container').appendChild(renderer.domElement);
@@ -2322,6 +2333,103 @@ document.addEventListener('DOMContentLoaded', function() {
         scene.add(particleSystem);
 
         // ==========================================
+        // 背景星空粒子（独立于上方的形态粒子：位置固定不旋转，只做逐颗异步闪烁）
+        // ==========================================
+        const STAR_COUNT = 2600;
+        const STAR_RADIUS_MIN = 180;
+        const STAR_RADIUS_MAX = 320;
+        const STAR_GOLD_RATIO = 0.08;
+        const STAR_COLOR_GOLD = [1.0, 0.8235, 0.5412];
+        const STAR_COLOR_BLUE = [0.5882, 0.7843, 1.0];
+
+        const starPositions = new Float32Array(STAR_COUNT * 3);
+        const starColors = new Float32Array(STAR_COUNT * 3);
+        const starSizes = new Float32Array(STAR_COUNT);
+        const starPhases = new Float32Array(STAR_COUNT);
+        const starSpeeds = new Float32Array(STAR_COUNT);
+        const starBases = new Float32Array(STAR_COUNT);
+        const starAmps = new Float32Array(STAR_COUNT);
+
+        for (let i = 0; i < STAR_COUNT; i++) {
+            const i3 = i * 3;
+            const su = Math.random();
+            const sv = Math.random();
+            const sTheta = 2 * Math.PI * su;
+            const sPhi = Math.acos(2 * sv - 1);
+            const sr = STAR_RADIUS_MIN + Math.random() * (STAR_RADIUS_MAX - STAR_RADIUS_MIN);
+            starPositions[i3] = sr * Math.sin(sPhi) * Math.cos(sTheta);
+            starPositions[i3 + 1] = sr * Math.sin(sPhi) * Math.sin(sTheta);
+            starPositions[i3 + 2] = sr * Math.cos(sPhi);
+
+            const sIsGold = Math.random() < STAR_GOLD_RATIO;
+            const sColor = sIsGold ? STAR_COLOR_GOLD : STAR_COLOR_BLUE;
+            starColors[i3] = sColor[0]; starColors[i3 + 1] = sColor[1]; starColors[i3 + 2] = sColor[2];
+
+            starSizes[i] = 1.1 + Math.pow(Math.random(), 3) * 3.0;
+            starPhases[i] = Math.random() * Math.PI * 2;
+            starSpeeds[i] = 0.4 + Math.random() * 0.9;
+            starBases[i] = 0.35 + Math.random() * 0.3;
+            starAmps[i] = 0.3 + Math.random() * 0.3;
+        }
+
+        const starGeometry = new THREE.BufferGeometry();
+        starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        starGeometry.setAttribute('aColor', new THREE.BufferAttribute(starColors, 3));
+        starGeometry.setAttribute('aSize', new THREE.BufferAttribute(starSizes, 1));
+        starGeometry.setAttribute('aPhase', new THREE.BufferAttribute(starPhases, 1));
+        starGeometry.setAttribute('aSpeed', new THREE.BufferAttribute(starSpeeds, 1));
+        starGeometry.setAttribute('aBase', new THREE.BufferAttribute(starBases, 1));
+        starGeometry.setAttribute('aAmp', new THREE.BufferAttribute(starAmps, 1));
+
+        const starMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                uTime: { value: 0 },
+                uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) }
+            },
+            vertexShader: `
+                attribute vec3 aColor;
+                attribute float aSize;
+                attribute float aPhase;
+                attribute float aSpeed;
+                attribute float aBase;
+                attribute float aAmp;
+                uniform float uTime;
+                uniform float uPixelRatio;
+                varying vec3 vColor;
+                varying float vAlpha;
+                void main() {
+                    vColor = aColor;
+                    float tw = sin(uTime * aSpeed + aPhase) * 0.5 + 0.5;
+                    vAlpha = aBase + tw * aAmp;
+                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                    gl_Position = projectionMatrix * mvPosition;
+                    gl_PointSize = aSize * uPixelRatio;
+                }
+            `,
+            fragmentShader: `
+                precision mediump float;
+                varying vec3 vColor;
+                varying float vAlpha;
+                void main() {
+                    vec2 uv = gl_PointCoord - vec2(0.5);
+                    float d = length(uv) * 2.0;
+                    float core = exp(-d * d * 3.0);
+                    if (core < 0.02) discard;
+                    gl_FragColor = vec4(vColor, vAlpha * core);
+                }
+            `,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending
+        });
+
+        const starPoints = new THREE.Points(starGeometry, starMaterial);
+        starPoints.renderOrder = -1; // 始终先于形态粒子绘制，保证在最底层
+        scene.add(starPoints);
+
+        const starClock = new THREE.Clock();
+
+        // ==========================================
         // 3. 动态配置
         // ==========================================
         const pageConfigs = [
@@ -2371,6 +2479,7 @@ document.addEventListener('DOMContentLoaded', function() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            starMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
         });
 
         // ==========================================
@@ -2378,6 +2487,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // ==========================================
         function animate() {
             requestAnimationFrame(animate);
+
+            starMaterial.uniforms.uTime.value = starClock.getElapsedTime();
 
             baseCam.lerp(targetCam, 0.02);
             currentRotSpeed += (targetRotSpeed - currentRotSpeed) * 0.02;
