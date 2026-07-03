@@ -7,7 +7,7 @@
     --cabbage-blue: #3b82f6;
     --vision-red: #ef4444;
     --bg-dark: #020617;
-    --card-bg: #0f172a;
+    --card-bg: transparent;
     --card-border: rgba(255, 255, 255, 0.08);
     --text-gray: #94a3b8;
     --tag-purple: #a855f7;
@@ -19,6 +19,84 @@
     
     --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     --slider-speed: 0.8s;
+}
+
+/* ================= Transparent persistent panels ================= */
+.glass-section,
+.page .timeline-map,
+.role-toggle,
+.bento-card,
+.direction-card,
+.team-card,
+.pub-hero-card,
+.timeline-box,
+.merge-content,
+.achievement-card,
+.member-card,
+.core-member-card,
+.scrolling-card,
+.research-panel,
+.pub-card-new,
+.patent-item,
+.comp-card,
+.resource-card {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+.direction-card.research,
+.direction-card.sandbox,
+.scene-panel.infra,
+.founder-card,
+.core-member-card,
+.hero-card,
+.pub-card-new:hover,
+.patent-item:hover,
+.scrolling-card:hover,
+.resource-card:hover {
+    background: transparent !important;
+}
+
+.direction-card:hover,
+.direction-card.research:hover,
+.direction-card.sandbox:hover,
+.member-card:hover,
+.founder-card:hover,
+.core-member-card:hover,
+.pub-hero-card:hover,
+.bento-card:hover,
+.comp-card:hover {
+    box-shadow: none !important;
+}
+
+.glass-section,
+.bento-card,
+.direction-card,
+.team-card,
+.pub-hero-card,
+.timeline-box,
+.merge-content,
+.achievement-card,
+.member-card,
+.core-member-card,
+.scrolling-card,
+.research-panel,
+.pub-card-new,
+.patent-item,
+.comp-card,
+.resource-card {
+    border-color: rgba(255, 255, 255, 0.13) !important;
+}
+
+.scene-overlay {
+    background: linear-gradient(
+        to top,
+        rgba(2, 6, 23, 0.52) 0%,
+        rgba(2, 6, 23, 0.16) 55%,
+        rgba(2, 6, 23, 0.03) 100%
+    ) !important;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }

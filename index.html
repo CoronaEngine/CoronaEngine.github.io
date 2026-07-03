@@ -1205,6 +1205,126 @@ body.menu-open {
     }
 }
 
+/* ================= Transparent persistent panels ================= */
+.glass-section,
+.page .timeline-map,
+.role-toggle,
+.bento-card,
+.team-card,
+.pub-hero-card,
+.member-card,
+.core-member-card,
+.scrolling-card,
+.research-panel,
+.timeline-box,
+.merge-content,
+.achievement-card,
+.pub-card-new,
+.patent-item,
+.comp-card,
+.resource-card,
+.direction-card {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+.bento-card.sandbox,
+.bento-card.research,
+.direction-card.sandbox,
+.direction-card.research,
+.founder-card,
+.core-member-card,
+.hero-card,
+.pub-card-new:hover,
+.patent-item:hover,
+.scrolling-card:hover,
+.resource-card:hover {
+    background: transparent !important;
+}
+
+.bento-card:hover,
+.bento-card.sandbox:hover,
+.bento-card.research:hover,
+.direction-card:hover,
+.direction-card.sandbox:hover,
+.direction-card.research:hover,
+.member-card:hover,
+.founder-card:hover,
+.core-member-card:hover,
+.team-card:hover,
+.pub-hero-card:hover,
+.comp-card:hover {
+    box-shadow: none !important;
+}
+
+.glass-section,
+.bento-card,
+.team-card,
+.pub-hero-card,
+.member-card,
+.core-member-card,
+.scrolling-card,
+.research-panel,
+.timeline-box,
+.merge-content,
+.achievement-card,
+.pub-card-new,
+.patent-item,
+.comp-card,
+.resource-card,
+.direction-card {
+    border-color: rgba(255, 255, 255, 0.13) !important;
+}
+
+.scene-panel.infra {
+    background: transparent !important;
+}
+
+.scene-overlay {
+    background: linear-gradient(
+        to top,
+        rgba(2, 6, 23, 0.52) 0%,
+        rgba(2, 6, 23, 0.16) 55%,
+        rgba(2, 6, 23, 0.03) 100%
+    ) !important;
+}
+
+.shell-logo,
+.menu-button {
+    background: rgba(8, 12, 28, 0.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.menu-panel {
+    background: rgba(8, 12, 28, 0.46);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.member-modal-overlay {
+    background: rgba(4, 9, 20, 0.34);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.member-modal,
+.dl-modal {
+    background: rgba(10, 16, 36, 0.46);
+    box-shadow: 0 20px 62px rgba(0, 0, 0, 0.36);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.dl-overlay {
+    background: rgba(4, 9, 20, 0.30);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
     </style>
 </head>
 <body data-page="0">
