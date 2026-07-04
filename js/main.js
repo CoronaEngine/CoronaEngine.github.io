@@ -494,10 +494,12 @@ function initOrbitSystem() {
         if (!page) return;
         var availW = page.clientWidth * 0.92;
         var availH = (page.clientHeight - 90) * 0.90;
-        var scale = Math.min(1, availW / 1900, availH / 1580) * 2;
+        var fitScale = Math.min(1, availW / 1900, availH / 1580);
+        var scale = fitScale * 2;
         universe.style.transform = 'scale(' + scale + ')';
-        // 用负 margin 抵消 scale 后多余的布局空间，防止 scrollHeight > clientHeight
-        var compensation = Math.round(1580 * (1 - scale) / 2);
+        // 用负 margin 抵消 fitScale（永远 <=1）对应的布局空间，防止 scrollHeight > clientHeight；
+        // 视觉放大部分（scale 中额外的 *2）超出的布局盒由 .orbit-page-scroll 的 overflow:hidden 裁切
+        var compensation = Math.round(1580 * (1 - fitScale) / 2);
         universe.style.marginTop = (-compensation) + 'px';
         universe.style.marginBottom = (-compensation) + 'px';
     }

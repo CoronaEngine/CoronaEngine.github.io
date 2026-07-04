@@ -2317,6 +2317,8 @@ window.goToPage = goToPage;
 
 function canScrollWithin(scroller, deltaY) {
     if (!scroller) return false;
+    const overflowY = window.getComputedStyle(scroller).overflowY;
+    if (overflowY !== 'auto' && overflowY !== 'scroll') return false;
     const max = scroller.scrollHeight - scroller.clientHeight;
     if (max <= 2) return false;
     const atTop = scroller.scrollTop <= 1;
