@@ -1623,9 +1623,9 @@ body.menu-open {
             <button class="menu-item active" type="button" data-page="0" role="menuitem">首页</button>
             <button class="menu-item" type="button" data-page="1" role="menuitem">核心业务</button>
             <button class="menu-item" type="button" data-page="2" role="menuitem">发展历程</button>
-            <button class="menu-item" type="button" data-page="3" role="menuitem">团队成员</button>
-            <button class="menu-item" type="button" data-page="4" role="menuitem">学术成果</button>
-            <button class="menu-item" type="button" data-page="5" role="menuitem">相关竞赛</button>
+            <button class="menu-item" type="button" data-page="3" role="menuitem">学术成果</button>
+            <button class="menu-item" type="button" data-page="4" role="menuitem">相关竞赛</button>
+            <button class="menu-item" type="button" data-page="5" role="menuitem">团队成员</button>
         </nav>
     </header>
 
@@ -2009,19 +2009,7 @@ body.menu-open {
             </div>
         </section>
 
-        <section class="page" id="page-3" aria-labelledby="teamTitle">
-            <div class="page-scroll">
-                <div class="content-stage wide-stage">
-                    <div class="section-kicker">Our Team</div>
-                    <h2 class="page-title" id="teamTitle">核心团队</h2>
-                    <div class="about-section team-section team-force-section">
-                        <div class="team-force" id="teamBento"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="page" id="page-4" aria-labelledby="academicTitle">
+        <section class="page" id="page-3" aria-labelledby="academicTitle">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
                     <div class="section-kicker">Academic Publications & Patents</div>
@@ -2072,7 +2060,7 @@ body.menu-open {
             </div>
         </section>
 
-        <section class="page" id="page-5" aria-labelledby="competitionTitle">
+        <section class="page" id="page-4" aria-labelledby="competitionTitle">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
                     <div class="section-kicker">Competitions</div>
@@ -2124,15 +2112,40 @@ body.menu-open {
                 </div>
             </div>
         </section>
+
+        <section class="page" id="page-5" aria-labelledby="teamTitle">
+            <div class="page-scroll">
+                <div class="content-stage wide-stage">
+                    <div class="section-kicker">Our Team</div>
+                    <h2 class="page-title" id="teamTitle">核心团队</h2>
+                    <div class="about-section team-section team-force-section">
+                        <div class="team-force" id="teamBento"></div>
+                    </div>
+                    <footer class="site-footer">
+                        <div class="footer-left">
+                            <img src="logo/jsut_logo.svg" class="footer-logo" alt="江苏理工学院">
+                        </div>
+                        <div class="footer-right">
+                            <span class="contact-item" tabindex="0" role="button" data-copy="fanhonghui@jsut.edu.cn" data-tip="fanhonghui@jsut.edu.cn" aria-label="复制邮箱">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <span class="contact-item" tabindex="0" role="button" data-copy="939557353" data-tip="QQ群：939557353" aria-label="复制QQ群号">
+                                <i class="fab fa-qq"></i>
+                            </span>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </section>
     </main>
 
     <div class="page-dots" aria-label="分页导航">
         <button class="page-dot active" type="button" data-page="0" aria-label="首页"></button>
         <button class="page-dot" type="button" data-page="1" aria-label="核心业务"></button>
         <button class="page-dot" type="button" data-page="2" aria-label="发展历程"></button>
-        <button class="page-dot" type="button" data-page="3" aria-label="团队成员"></button>
-        <button class="page-dot" type="button" data-page="4" aria-label="学术成果"></button>
-        <button class="page-dot" type="button" data-page="5" aria-label="相关竞赛"></button>
+        <button class="page-dot" type="button" data-page="3" aria-label="学术成果"></button>
+        <button class="page-dot" type="button" data-page="4" aria-label="相关竞赛"></button>
+        <button class="page-dot" type="button" data-page="5" aria-label="团队成员"></button>
     </div>
 
 <div class="member-modal-overlay" id="memberModal">
@@ -2176,20 +2189,6 @@ body.menu-open {
         <div class="patents-grid-new" id="patentsFullContainer" style="grid-template-columns:repeat(2,1fr);gap:16px;"></div>
     </div>
 </div>
-
-<footer class="site-footer">
-    <div class="footer-left">
-        <img src="logo/jsut_logo.svg" class="footer-logo" alt="江苏理工学院">
-    </div>
-    <div class="footer-right">
-        <span class="contact-item" tabindex="0" role="button" data-copy="fanhonghui@jsut.edu.cn" data-tip="fanhonghui@jsut.edu.cn" aria-label="复制邮箱">
-            <i class="fas fa-envelope"></i>
-        </span>
-        <span class="contact-item" tabindex="0" role="button" data-copy="939557353" data-tip="QQ群：939557353" aria-label="复制QQ群号">
-            <i class="fab fa-qq"></i>
-        </span>
-    </div>
-</footer>
 
 <div class="dl-overlay" id="dlOverlay">
     <div class="dl-modal">
@@ -2832,13 +2831,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // ==========================================
         // 3. 动态配置
         // ==========================================
+        const pageShapeMap = [0, 1, 2, 4, 5, 3];
         const pageConfigs = [
             { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
             { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5 },
             { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffccaa, parallax: 0.5 },
-            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2 },
             { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.02, tint: 0xeebbff, parallax: 1.2 },
-            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0xaaccff, parallax: 1.5 }
+            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0xaaccff, parallax: 1.5 },
+            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2 }
         ];
 
         let targetCam = new THREE.Vector3(pageConfigs[0].cam.x, pageConfigs[0].cam.y, pageConfigs[0].cam.z);
@@ -2897,7 +2897,8 @@ document.addEventListener('DOMContentLoaded', function() {
             material.color.copy(currentTint);
 
             const positions = geometry.attributes.position.array;
-            const targetPositions = shapes[currentPage];
+            const shapeIndex = typeof pageShapeMap[currentPage] === 'number' ? pageShapeMap[currentPage] : currentPage;
+            const targetPositions = shapes[shapeIndex];
             
             for(let i = 0; i < particleCount * 3; i++) {
                 positions[i] += (targetPositions[i] - positions[i]) * 0.04;
