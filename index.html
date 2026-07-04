@@ -2091,10 +2091,10 @@ body.menu-open {
                         <div class="orbit-track" id="orbitTrack4"></div>
                         <!-- 卫星节点由 JS 动态生成 -->
                     </div>
-                    <div class="orbit-actions">
+                    <!-- <div class="orbit-actions">
                         <a href="javascript:void(0)" class="pub-ghost-btn" onclick="document.getElementById('papersModal').classList.add('active')">查看全部论文 <i class="fas fa-arrow-right"></i></a>
                         <a href="javascript:void(0)" class="pub-ghost-btn" onclick="document.getElementById('patentsModal').classList.add('active')">查看全部专利 <i class="fas fa-arrow-right"></i></a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>
@@ -2317,6 +2317,8 @@ window.goToPage = goToPage;
 
 function canScrollWithin(scroller, deltaY) {
     if (!scroller) return false;
+    const overflowY = window.getComputedStyle(scroller).overflowY;
+    if (overflowY !== 'auto' && overflowY !== 'scroll') return false;
     const max = scroller.scrollHeight - scroller.clientHeight;
     if (max <= 2) return false;
     const atTop = scroller.scrollTop <= 1;

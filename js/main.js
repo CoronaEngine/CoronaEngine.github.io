@@ -82,11 +82,11 @@ const patentsData = [
 
 // CCF-A 顶会论文（金色 · 最内层）
 const ccfaPapers = [
-    { label: "Real-Time Light Field Tracing", tag: "SIGGRAPH 2026 · CCF-A", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Light-Field Path Tracing", tag: "SIGGRAPH 2026 · CCF-A", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Topology-Aware Polymorphism", tag: "SIGGRAPH Asia 2025 · CCF-A", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
-    { label: "游戏生成", tag: "SIGGRAPH Asia 2026 · CCF-A", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
-    { label: "光场UI算法", tag: "SIGGRAPH Asia 2026 · CCF-A", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
+    { label: "Real-Time Light Field Tracing", tag: "录用 · CCF-A", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Light-Field Path Tracing", tag: "录用 · CCF-A", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Topology-Aware Polymorphism", tag: "公开 · CCF-A", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
+    { label: "游戏生成", tag: "投稿中 · CCF-A", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
+    { label: "光场UI算法", tag: "投稿中 · CCF-A", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
 ];
 
 // 学术论文（紫色 · 第二层）
@@ -436,10 +436,10 @@ function initOrbitSystem() {
 
     // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
-        { items: ring1, radius: 230, tiltDeg: 68, speed: 0.0014, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
-        { items: ring2, radius: 400, tiltDeg: 66, speed: 0.0022, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
-        { items: ring3, radius: 570, tiltDeg: 64, speed: 0.0030, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
-        { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0038, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
+        { items: ring1, radius: 230, tiltDeg: 68, speed: 0.0022, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
+        { items: ring2, radius: 400, tiltDeg: 66, speed: 0.0030, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
+        { items: ring3, radius: 570, tiltDeg: 64, speed: 0.0038, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
+        { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0048, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
     ];
 
     // 设置视觉轨道环尺寸
@@ -494,47 +494,42 @@ function initOrbitSystem() {
         if (!page) return;
         var availW = page.clientWidth * 0.92;
         var availH = (page.clientHeight - 90) * 0.90;
-        var scale = Math.min(1, availW / 1900, availH / 1580);
+        var fitScale = Math.min(1, availW / 1900, availH / 1580);
+        var scale = fitScale * 2;
         universe.style.transform = 'scale(' + scale + ')';
-        // 用负 margin 抵消 scale 后多余的布局空间，防止 scrollHeight > clientHeight
-        var compensation = Math.round(1580 * (1 - scale) / 2);
+        // 用负 margin 抵消 fitScale（永远 <=1）对应的布局空间，防止 scrollHeight > clientHeight；
+        // 视觉放大部分（scale 中额外的 *2）超出的布局盒由 .orbit-page-scroll 的 overflow:hidden 裁切
+        var compensation = Math.round(1580 * (1 - fitScale) / 2);
         universe.style.marginTop = (-compensation) + 'px';
         universe.style.marginBottom = (-compensation) + 'px';
     }
     scaleUniverse();
     window.addEventListener('resize', scaleUniverse);
 
-    // 暂停控制
-    var paused = false;
-    universe.addEventListener('mouseenter', function() { paused = true; });
-    universe.addEventListener('mouseleave', function() { paused = false; });
-
     // 动画循环
     function tick() {
-        if (!paused) {
-            orbits.forEach(function(orbit) {
-                orbit.angle += orbit.speed;
-                var n = orbit.items.length;
-                var tiltRad = orbit.tiltRad;
+        orbits.forEach(function(orbit) {
+            orbit.angle += orbit.speed;
+            var n = orbit.items.length;
+            var tiltRad = orbit.tiltRad;
 
-                orbit.nodes.forEach(function(node, i) {
-                    var a = orbit.angle + (2 * Math.PI / n) * i;
-                    var x = Math.cos(a) * orbit.radius;
-                    var y = Math.sin(a) * orbit.radius * Math.cos(tiltRad);
-                    var z = Math.sin(a) * Math.sin(tiltRad); // -1 .. 1
+            orbit.nodes.forEach(function(node, i) {
+                var a = orbit.angle + (2 * Math.PI / n) * i;
+                var x = Math.cos(a) * orbit.radius;
+                var y = Math.sin(a) * orbit.radius * Math.cos(tiltRad);
+                var z = Math.sin(a) * Math.sin(tiltRad); // -1 .. 1
 
-                    var scale = 0.52 + 0.48 * ((z + 1) / 2);
-                    node.el.style.transform =
-                        'translate(calc(-50% + ' + x.toFixed(2) + 'px), calc(-50% + ' + y.toFixed(2) + 'px)) scale(' + scale.toFixed(3) + ')';
-                    node.el.style.zIndex = Math.round((z + 1) * 90);
+                var scale = 0.52 + 0.48 * ((z + 1) / 2);
+                node.el.style.transform =
+                    'translate(calc(-50% + ' + x.toFixed(2) + 'px), calc(-50% + ' + y.toFixed(2) + 'px)) scale(' + scale.toFixed(3) + ')';
+                node.el.style.zIndex = Math.round((z + 1) * 90);
 
-                    // 转到前方才显示标签
-                    var inFront = z > 0.28;
-                    node.labelEl.style.opacity = inFront ? '1' : '0';
-                    node.labelEl.style.transform = inFront ? 'translateY(0) scale(1)' : 'translateY(5px) scale(0.88)';
-                });
+                // 转到前方才显示标签
+                var inFront = z > 0.28;
+                node.labelEl.style.opacity = inFront ? '1' : '0';
+                node.labelEl.style.transform = inFront ? 'translateY(0) scale(1)' : 'translateY(5px) scale(0.88)';
             });
-        }
+        });
         requestAnimationFrame(tick);
     }
     tick();
