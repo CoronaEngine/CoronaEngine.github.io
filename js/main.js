@@ -356,16 +356,22 @@ function initOrbitSystem() {
     const universe = document.getElementById('orbitUniverse');
     if (!universe) return;
 
-    const paperItems = [
-        { label: 'Light-Field Path Tracing', tag: 'SIGGRAPH 2026 · CCF-A', size: 'xl' },
-        { label: 'Light Field Tracing', tag: 'SIGGRAPH Poster 2026 · CCF-A', size: 'xl' },
-        { label: 'Topology-Aware Polymorphism', tag: 'SIGGRAPH Asia 2025 · CCF-A', size: 'xl' },
-        { label: 'Visibility-Driven MLT', tag: '中科院四区 · 2025', size: 'sm' },
-        { label: 'Hot Reloading Runtime', tag: 'EI · 2025', size: 'sm' },
-        { label: 'Shadow Maps Enhancement', tag: 'EI · 2024', size: 'sm' },
-        { label: 'Parameter-Free MLT', tag: 'EI · 2022', size: 'sm' }
+    // 最重要的三篇论文，放在最内层轨道
+    const flagshipPapers = [
+        { label: 'Light-Field Path Tracing', tag: 'SIGGRAPH 2026 · CCF-A' },
+        { label: 'Light Field Tracing', tag: 'SIGGRAPH Poster 2026 · CCF-A' },
+        { label: 'Topology-Aware Polymorphism', tag: 'SIGGRAPH Asia 2025 · CCF-A' }
     ];
 
+    // 其余论文，放在第二层轨道
+    const otherPapers = [
+        { label: 'Visibility-Driven MLT', tag: '中科院四区 · 2025' },
+        { label: 'Hot Reloading Runtime', tag: 'EI · 2025' },
+        { label: 'Shadow Maps Enhancement', tag: 'EI · 2024' },
+        { label: 'Parameter-Free MLT', tag: 'EI · 2022' }
+    ];
+
+    // 专利，放在第三层轨道
     const patentItems = [
         { label: '三角形邻接信息移动算法', tag: '2018' },
         { label: '法线修正碰撞移动方法', tag: '2019' },
@@ -377,13 +383,18 @@ function initOrbitSystem() {
         { label: '非对称卷积核训练方法', tag: '2024' }
     ];
 
+    //学生竞赛，放在最外层
+    
+
+    // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
-        { items: paperItems, radius: 195, tiltDeg: 68, speed: 0.0032, type: 'paper', angle: 0 },
-        { items: patentItems, radius: 325, tiltDeg: 63, speed: 0.002, type: 'patent', angle: Math.PI / 5 }
+        { items: flagshipPapers, radius: 260, tiltDeg: 68, speed: 0.0014, type: 'paper', sizeClass: 'sat-xl', angle: 0 },
+        { items: otherPapers, radius: 440, tiltDeg: 65, speed: 0.0024, type: 'paper', sizeClass: '', angle: Math.PI / 4 },
+        { items: patentItems, radius: 620, tiltDeg: 62, speed: 0.0036, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 }
     ];
 
     // 设置视觉轨道环尺寸
-    const tracks = [document.getElementById('orbitTrack1'), document.getElementById('orbitTrack2')];
+    const tracks = [document.getElementById('orbitTrack1'), document.getElementById('orbitTrack2'), document.getElementById('orbitTrack3')];
     orbits.forEach(function(o, i) {
         var t = tracks[i];
         if (!t) return;
@@ -401,7 +412,7 @@ function initOrbitSystem() {
         orbit.tiltRad = orbit.tiltDeg * Math.PI / 180;
         orbit.nodes = orbit.items.map(function(item) {
             var node = document.createElement('div');
-            var sizeClass = item.size === 'xl' ? ' sat-xl' : (item.size === 'sm' ? ' sat-sm' : '');
+            var sizeClass = orbit.sizeClass ? ' ' + orbit.sizeClass : '';
             node.className = 'sat-node sat-' + orbit.type + sizeClass;
 
             var lbl = document.createElement('div');
@@ -434,10 +445,10 @@ function initOrbitSystem() {
         if (!page) return;
         var availW = page.clientWidth * 0.92;
         var availH = (page.clientHeight - 90) * 0.90;
-        var scale = Math.min(1, availW / 800, availH / 660);
+        var scale = Math.min(1, availW / 1600, availH / 1320);
         universe.style.transform = 'scale(' + scale + ')';
         // 用负 margin 抵消 scale 后多余的布局空间，防止 scrollHeight > clientHeight
-        var compensation = Math.round(660 * (1 - scale) / 2);
+        var compensation = Math.round(1320 * (1 - scale) / 2);
         universe.style.marginTop = (-compensation) + 'px';
         universe.style.marginBottom = (-compensation) + 'px';
     }

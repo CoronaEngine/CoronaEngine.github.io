@@ -1639,12 +1639,12 @@ body.menu-open {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
+    gap: 56px;
 }
 .orbit-universe {
     position: relative;
-    width: 800px;
-    height: 660px;
+    width: 1600px;
+    height: 1320px;
     flex-shrink: 0;
     transform-origin: center center;
 }
@@ -1653,15 +1653,15 @@ body.menu-open {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 168px;
-    height: 168px;
+    width: 336px;
+    height: 336px;
     border-radius: 50%;
     z-index: 200;
     cursor: default;
 }
 .orbit-planet-glow {
     position: absolute;
-    inset: -30px;
+    inset: -60px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(96,165,250,.35) 0%, rgba(30,58,138,.18) 45%, transparent 70%);
     animation: orbit-planet-breathe 3.5s ease-in-out infinite;
@@ -1669,9 +1669,9 @@ body.menu-open {
 }
 .orbit-planet-pulse {
     position: absolute;
-    inset: -8px;
+    inset: -16px;
     border-radius: 50%;
-    border: 1px solid rgba(96,165,250,.4);
+    border: 2px solid rgba(96,165,250,.4);
     animation: orbit-pulse 3s ease-out infinite;
     pointer-events: none;
 }
@@ -1688,18 +1688,18 @@ body.menu-open {
     inset: 0;
     border-radius: 50%;
     background: radial-gradient(135deg at 35% 35%, #1e3a5f 0%, #0a1628 60%, #060e1c 100%);
-    border: 1.5px solid rgba(96,165,250,.5);
-    box-shadow: 0 0 28px rgba(96,165,250,.3), inset 0 0 20px rgba(0,0,0,.5);
+    border: 3px solid rgba(96,165,250,.5);
+    box-shadow: 0 0 56px rgba(96,165,250,.3), inset 0 0 40px rgba(0,0,0,.5);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 14px;
-    gap: 6px;
+    padding: 28px;
+    gap: 12px;
 }
 .orbit-planet-title {
-    font-size: 1.05rem;
+    font-size: 2.1rem;
     font-weight: 800;
     color: #e0f0ff;
     letter-spacing: .04em;
@@ -1707,12 +1707,12 @@ body.menu-open {
 }
 .orbit-planet-sep {
     display: block;
-    width: 32px;
-    height: 1px;
+    width: 64px;
+    height: 2px;
     background: linear-gradient(90deg, transparent, rgba(96,165,250,.7), transparent);
 }
 .orbit-planet-sub {
-    font-size: 0.62rem;
+    font-size: 1.24rem;
     color: rgba(148,196,255,.8);
     letter-spacing: .06em;
     line-height: 1.4;
@@ -1723,9 +1723,9 @@ body.menu-open {
     top: 50%;
     left: 50%;
     border-radius: 50%;
-    border: 1px solid rgba(96,165,250,.12);
+    border: 2px solid rgba(96,165,250,.12);
     pointer-events: none;
-    box-shadow: 0 0 6px rgba(96,165,250,.06);
+    box-shadow: 0 0 12px rgba(96,165,250,.06);
 }
 /* 卫星节点 */
 .sat-node {
@@ -1735,16 +1735,16 @@ body.menu-open {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 12px;
     pointer-events: none;
     will-change: transform;
 }
 .sat-dot {
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     flex-shrink: 0;
-    box-shadow: 0 0 8px currentColor;
+    box-shadow: 0 0 16px currentColor;
 }
 .sat-paper .sat-dot { background: #60a5fa; color: #60a5fa; }
 .sat-patent .sat-dot { background: #a78bfa; color: #a78bfa; }
@@ -1752,76 +1752,76 @@ body.menu-open {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 6px;
     opacity: 0;
     transition: opacity .35s ease, transform .35s ease;
     pointer-events: none;
     white-space: nowrap;
 }
 .sat-name {
-    font-size: 0.7rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: #e0f0ff;
-    max-width: 160px;
+    max-width: 320px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    text-shadow: 0 1px 6px rgba(0,0,0,.8);
+    text-shadow: 0 2px 12px rgba(0,0,0,.8);
 }
 .sat-tag {
-    font-size: 0.58rem;
+    font-size: 1.16rem;
     font-weight: 700;
     letter-spacing: .06em;
-    padding: 1px 7px;
+    padding: 2px 14px;
     border-radius: 20px;
     text-shadow: none;
 }
 .sat-paper .sat-tag { background: rgba(96,165,250,.15); color: #93c5fd; border: 1px solid rgba(96,165,250,.3); }
 .sat-patent .sat-tag { background: rgba(167,139,250,.15); color: #c4b5fd; border: 1px solid rgba(167,139,250,.3); }
 
-/* 重要卫星 – xl */
+/* 最内层卫星（最重要的三篇论文） – xl */
 .sat-xl .sat-dot {
-    width: 16px;
-    height: 16px;
+    width: 32px;
+    height: 32px;
     position: relative;
-    box-shadow: 0 0 12px currentColor, 0 0 24px currentColor;
+    box-shadow: 0 0 24px currentColor, 0 0 48px currentColor;
 }
 .sat-xl .sat-dot::after {
     content: '';
     position: absolute;
-    inset: -5px;
+    inset: -10px;
     border-radius: 50%;
-    border: 1px solid rgba(96,165,250,.45);
+    border: 2px solid rgba(96,165,250,.45);
     animation: sat-ring-xl 2.2s ease-out infinite;
 }
 @keyframes sat-ring-xl {
     0% { transform: scale(1); opacity: .7; }
     100% { transform: scale(1.9); opacity: 0; }
 }
-.sat-xl .sat-name { font-size: 0.82rem; font-weight: 800; }
-.sat-xl .sat-tag  { font-size: 0.64rem; }
+.sat-xl .sat-name { font-size: 1.64rem; font-weight: 800; }
+.sat-xl .sat-tag  { font-size: 1.28rem; }
 
-/* 次要卫星 – sm */
-.sat-sm .sat-dot { width: 7px; height: 7px; box-shadow: 0 0 5px currentColor; }
-.sat-sm .sat-name { font-size: 0.63rem; }
-.sat-sm .sat-tag  { font-size: 0.54rem; }
+/* 最外层卫星 – sm */
+.sat-sm .sat-dot { width: 14px; height: 14px; box-shadow: 0 0 10px currentColor; }
+.sat-sm .sat-name { font-size: 1.26rem; }
+.sat-sm .sat-tag  { font-size: 1.08rem; }
 
 .orbit-actions {
     display: flex;
-    gap: 16px;
+    gap: 32px;
     flex-wrap: wrap;
     justify-content: center;
 }
 
 @media (max-width: 860px) {
-    .orbit-universe { width: 520px; height: 430px; }
+    .orbit-universe { width: 1040px; height: 860px; }
 }
 @media (max-width: 560px) {
-    .orbit-universe { width: 340px; height: 300px; }
-    .orbit-planet { width: 110px; height: 110px; }
-    .orbit-planet-title { font-size: .8rem; }
-    .orbit-planet-sub { font-size: .52rem; }
-    .sat-name { font-size: .6rem; max-width: 100px; }
+    .orbit-universe { width: 680px; height: 600px; }
+    .orbit-planet { width: 220px; height: 220px; }
+    .orbit-planet-title { font-size: 1.6rem; }
+    .orbit-planet-sub { font-size: 1.04rem; }
+    .sat-name { font-size: 1.2rem; max-width: 200px; }
 }
     </style>
 </head>
@@ -2076,6 +2076,7 @@ body.menu-open {
                         <!-- 轨道环（视觉装饰，由 JS 设置尺寸） -->
                         <div class="orbit-track" id="orbitTrack1"></div>
                         <div class="orbit-track" id="orbitTrack2"></div>
+                        <div class="orbit-track" id="orbitTrack3"></div>
                         <!-- 卫星节点由 JS 动态生成 -->
                     </div>
                     <div class="orbit-actions">
