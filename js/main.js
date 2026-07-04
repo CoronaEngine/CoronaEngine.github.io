@@ -61,18 +61,61 @@ const renderFeatures = [
 
 // ================= 其它数据 =================
 const patentsData = [
-    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", year: "2018" },
-    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", year: "2019" },
-    { title: "一种三维空间内基于降维的实时路径生成方法", year: "2019" },
-    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", year: "2019" },
-    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", year: "2020" },
-    { title: "一种基于深度缓冲加速的光线追踪渲染方法", year: "2021" },
-    { title: "一种基于光线路径复用的动态场景渲染加速方法", year: "2021" },
-    { title: "一种基于非对称卷积核的卷积神经网络训练方法", year: "2024" },
-    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", year: "2024" },
-    { title: "基于凸包优化的非均匀数据的聚类方法", year: "2024" },
-    { title: "基于密度聚类算法的三维物体碰撞体优化方法", year: "2025" },
-    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", year: "2025" }
+    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", year: "2018", short: "三角形邻接信息移动算法" },
+    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", year: "2019", short: "法线修正碰撞移动方法" },
+    { title: "一种三维空间内基于降维的实时路径生成方法", year: "2019", short: "降维实时路径生成方法" },
+    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", year: "2019", short: "动态模糊降采样加速方法" },
+    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", year: "2020", short: "球坐标图元模型压缩方法" },
+    { title: "一种基于深度缓冲加速的光线追踪渲染方法", year: "2021", short: "深度缓冲加速光追渲染" },
+    { title: "一种基于光线路径复用的动态场景渲染加速方法", year: "2021", short: "光线路径复用渲染加速" },
+    { title: "一种基于非对称卷积核的卷积神经网络训练方法", year: "2024", short: "非对称卷积核训练方法" },
+    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", year: "2024", short: "高斯先验卷积网络优化方法" },
+    { title: "基于凸包优化的非均匀数据的聚类方法", year: "2024", short: "凸包优化聚类方法" },
+    { title: "基于密度聚类算法的三维物体碰撞体优化方法", year: "2025", short: "密度聚类碰撞体优化方法" },
+    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", year: "2025", short: "光追训练数据生成方法" },
+    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", year: "2025", short: "屏幕空间阴影优化方法" },
+    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", year: "2026", short: "智能体协同场景生成方法" },
+    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", year: "2026", short: "光场路径追踪调度方法" },
+    { title: "一种基于稀疏时空角重建的实时光场渲染方法", year: "2026", short: "稀疏时空角光场渲染方法" },
+    { title: "一种基于显示原生光线映射的子像素级光线生成方法", year: "2026", short: "子像素光线生成方法" }
+];
+
+// CCF-A 顶会论文（金色 · 最内层）
+const ccfaPapers = [
+    { label: "Real-Time Light Field Tracing", tag: "SIGGRAPH 2026 · CCF-A", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Light-Field Path Tracing", tag: "SIGGRAPH 2026 · CCF-A", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Topology-Aware Polymorphism", tag: "SIGGRAPH Asia 2025 · CCF-A", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
+    { label: "游戏生成", tag: "SIGGRAPH Asia 2026 · CCF-A", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
+    { label: "光场UI算法", tag: "SIGGRAPH Asia 2026 · CCF-A", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
+];
+
+// 学术论文（紫色 · 第二层）
+const academicPapers = [
+    { label: "SK-GAN", tag: "中科院四区 · 投稿中", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "跨学科学业表现建模", tag: "中科院四区 · 投稿中", full: "Hybrid Three-Level Modeling of Cross-Disciplinary Academic Performance in Higher Education", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "Diagnostic-Driven MLT", tag: "中科院四区 · 投稿中", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "Visibility-Driven MLT", tag: "中科院四区 · 2025", full: "Removing Initialization Phase of Visibility-Driven Metropolis Light Transport", year: "2025", venue: "中科院四区", status: "已公开" },
+    { label: "Hot Reloading Runtime", tag: "EI · 2025", full: "Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis", year: "2025", venue: "EI会议", status: "已公开" },
+    { label: "Shadow Maps Enhancement", tag: "EI · 2024", full: "Enhancing Shadow Maps via Screen-Space Visibility", year: "2024", venue: "EI会议", status: "已公开" },
+    { label: "Parameter-Free MLT", tag: "EI · 2022", full: "Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility", year: "2022", venue: "EI会议", status: "已公开" },
+    { label: "多智能体场景创作机制", tag: "中文核心 · 投稿中", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
+    { label: "疲劳驾驶检测方法", tag: "知网 · 2021", full: "基于多视觉特征融合的非侵入式疲劳驾驶检测方法研究", year: "2021", venue: "知网普刊", status: "已公开" },
+    { label: "YOLOv3改进方法", tag: "知网 · 2020", full: "基于深度可分离卷积与通道裁剪的YOLOv3改进方法", year: "2020", venue: "知网普刊", status: "已公开" },
+    { label: "金融时序预测技术", tag: "知网 · 2020", full: "基于多重分形分析法与模糊神经网络的金融时序预测技术研究", year: "2020", venue: "知网普刊", status: "已公开" },
+    { label: "顶点与地形交互算法", tag: "知网 · 2019", full: "一种空间数据结构加速的顶点与地形实时交互算法", year: "2019", venue: "知网普刊", status: "已公开" }
+];
+
+// 学生项目（绿色 · 最外层）
+const studentProjects = [
+    { label: "资源调度与场景预览系统", tag: "国家级 · 2026", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
+    { label: "立体显示交互系统", tag: "国家级 · 2025", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
+    { label: "三维美术资源生成系统", tag: "省级 · 2024", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
+    { label: "文化出海数字化方案", tag: "校级 · 2024", full: "“岁月失语，惟石能言”：基于数字技术的文化出海新方案", year: "2024", level: "校级" },
+    { label: "分布式仿真辅助设计系统", tag: "国家级 · 2022", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
+    { label: "MLT分布式渲染系统", tag: "国家级 · 2020", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
+    { label: "物理仿真海洋探索系统", tag: "国家级 · 2019", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
+    { label: "多语言实时交互仿真系统", tag: "省级 · 2019", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
+    { label: "编程语言教学系统", tag: "国家级 · 2018", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
 ];
 
 // ================= 页面初始化与交互 =================
@@ -80,10 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFeatureBlocks();
     renderTeam();
     renderPatents();
+    renderPapers();
     initSlider();
     initClipboard();
     initFeatureModal();
     initSceneAccordion();
+    initOrbitSystem();
 });
 
 // ================= 渲染效果展示：纵向手风琴（鼠标选择展开） =================
@@ -229,29 +274,30 @@ function renderTeam() {
         });
     }
 
-    function memberButton(person, className, roleText) {
-        return '<button class="team-force-member ' + className + '" type="button" data-member-name="' + escapeHtml(person.n) + '">' +
-            '<span class="team-force-role">' + escapeHtml(roleText || person.r || '') + '</span>' +
-            '<span class="team-force-name">' + escapeHtml(person.n) + '</span>' +
-            '</button>';
+    function creditBtn(person) {
+        return '<button class="credit-name-btn" type="button" data-member-name="' + escapeHtml(person.n) + '">' +
+            escapeHtml(person.n) + '</button>';
     }
 
-    var founderHtml = founders.map(function(person) {
-        return memberButton(person, 'lead', person.tags ? person.tags.join(' / ') : person.r);
-    }).join('');
+    var label1 = '<div class="credit-section-label">创始人</div>';
+    var row1 = '<div class="credit-names-row">' +
+        founders.map(function(p) { return creditBtn(p); }).join('') +
+        '</div>';
 
-    var coreHtml = coreMembers.map(function(person) {
-        return memberButton(person, 'core-member', person.r);
-    }).join('');
+    var label2 = '<div class="credit-section-label">核心团队</div>';
 
-    var supportHtml = scrollingMembers.map(function(person) {
-        return memberButton(person, 'support', person.r);
-    }).join('');
+    var allMembers = [].concat(coreMembers, scrollingMembers);
+    var row2 = '<div class="credit-names-row">' +
+        allMembers.slice(0, 4).map(function(p) { return creditBtn(p); }).join('') +
+        '</div>';
+    var row3 = '<div class="credit-names-row">' +
+        allMembers.slice(4, 8).map(function(p) { return creditBtn(p); }).join('') +
+        '</div>';
+    var row4 = '<div class="credit-names-row">' +
+        allMembers.slice(8).map(function(p) { return creditBtn(p); }).join('') +
+        '</div>';
 
-    container.innerHTML =
-        '<div class="team-force-row founders">' + founderHtml + '</div>' +
-        '<div class="team-force-row core">' + coreHtml + '</div>' +
-        '<div class="team-force-row development">' + supportHtml + '</div>';
+    container.innerHTML = label1 + row1 + label2 + row2 + row3 + row4;
 
     container.querySelectorAll('[data-member-name]').forEach(function(button) {
         button.addEventListener('click', function(event) {
@@ -319,6 +365,28 @@ function renderPatents() {
     if (c2) c2.innerHTML = allHtml;
 }
 
+function renderPapers() {
+    function tagClass(item) {
+        return item.status === '投稿中'
+            ? 'style="background:rgba(148,163,184,0.08);color:#94a3b8;border-color:rgba(148,163,184,0.28);"'
+            : 'style="background:rgba(220,180,60,0.08);color:#e8c860;border-color:rgba(220,180,60,0.35);"';
+    }
+    function cardHtml(item, goldStyle) {
+        var tStyle = goldStyle
+            ? 'style="background:rgba(220,180,60,0.08);color:#e8c860;border-color:rgba(220,180,60,0.35);"'
+            : 'style="background:rgba(180,150,240,0.08);color:#c8b8f8;border-color:rgba(180,150,240,0.30);"';
+        return '<div class="pub-card-new" title="' + item.full + '">' +
+            '<div><span class="pub-tag" ' + tStyle + '>' + item.year + '</span> ' +
+            '<span class="pub-tag" ' + tStyle + '>' + item.venue + '</span> ' +
+            '<span class="pub-tag" ' + tagClass(item) + '>' + item.status + '</span></div>' +
+            '<div class="pub-title-new" style="margin-top:8px;">' + item.full + '</div></div>';
+    }
+    var html = ccfaPapers.map(function(p) { return cardHtml(p, true); }).join('') +
+        academicPapers.map(function(p) { return cardHtml(p, false); }).join('');
+    var container = document.getElementById('papersFullContainer');
+    if (container) container.innerHTML = html;
+}
+
 // ================= 滑动控制逻辑 =================
 let currentIndex = 0;
 const totalSlides = document.querySelectorAll('.slide').length;
@@ -348,3 +416,126 @@ function goToSlide(index) {
 }
 
 window.goToSlide = goToSlide; // 暴露给 HTML 中的 onclick
+
+// ================= 行星轨道 – 学术成果 =================
+function initOrbitSystem() {
+    const universe = document.getElementById('orbitUniverse');
+    if (!universe) return;
+
+    // 第一层（金色）：CCF-A 顶会论文
+    const ring1 = ccfaPapers.map(function(p) { return { label: p.label, tag: p.tag }; });
+
+    // 第二层（紫色）：学术论文
+    const ring2 = academicPapers.map(function(p) { return { label: p.label, tag: p.tag }; });
+
+    // 第三层（蓝色）：发明专利
+    const ring3 = patentsData.map(function(p) { return { label: p.short, tag: p.year + ' · 专利' }; });
+
+    // 第四层（绿色）：学生项目
+    const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
+
+    // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
+    const orbits = [
+        { items: ring1, radius: 230, tiltDeg: 68, speed: 0.0014, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
+        { items: ring2, radius: 400, tiltDeg: 66, speed: 0.0022, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
+        { items: ring3, radius: 570, tiltDeg: 64, speed: 0.0030, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
+        { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0038, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
+    ];
+
+    // 设置视觉轨道环尺寸
+    const tracks = [document.getElementById('orbitTrack1'), document.getElementById('orbitTrack2'), document.getElementById('orbitTrack3'), document.getElementById('orbitTrack4')];
+    orbits.forEach(function(o, i) {
+        var t = tracks[i];
+        if (!t) return;
+        var tiltRad = o.tiltDeg * Math.PI / 180;
+        var w = o.radius * 2;
+        var h = o.radius * 2 * Math.cos(tiltRad);
+        t.style.width = w + 'px';
+        t.style.height = h + 'px';
+        t.style.marginLeft = (-o.radius) + 'px';
+        t.style.marginTop = (-h / 2) + 'px';
+    });
+
+    // 创建卫星 DOM
+    orbits.forEach(function(orbit) {
+        orbit.tiltRad = orbit.tiltDeg * Math.PI / 180;
+        orbit.nodes = orbit.items.map(function(item) {
+            var node = document.createElement('div');
+            var sizeClass = orbit.sizeClass ? ' ' + orbit.sizeClass : '';
+            node.className = 'sat-node sat-' + orbit.type + sizeClass;
+
+            var lbl = document.createElement('div');
+            lbl.className = 'sat-label';
+
+            var name = document.createElement('span');
+            name.className = 'sat-name';
+            name.textContent = item.label;
+
+            var tag = document.createElement('span');
+            tag.className = 'sat-tag';
+            tag.textContent = item.tag;
+
+            lbl.appendChild(name);
+            lbl.appendChild(tag);
+
+            var dot = document.createElement('div');
+            dot.className = 'sat-dot';
+
+            node.appendChild(lbl);
+            node.appendChild(dot);
+            universe.appendChild(node);
+            return { el: node, labelEl: lbl };
+        });
+    });
+
+    // 响应式缩放
+    function scaleUniverse() {
+        var page = document.getElementById('page-3');
+        if (!page) return;
+        var availW = page.clientWidth * 0.92;
+        var availH = (page.clientHeight - 90) * 0.90;
+        var scale = Math.min(1, availW / 1900, availH / 1580);
+        universe.style.transform = 'scale(' + scale + ')';
+        // 用负 margin 抵消 scale 后多余的布局空间，防止 scrollHeight > clientHeight
+        var compensation = Math.round(1580 * (1 - scale) / 2);
+        universe.style.marginTop = (-compensation) + 'px';
+        universe.style.marginBottom = (-compensation) + 'px';
+    }
+    scaleUniverse();
+    window.addEventListener('resize', scaleUniverse);
+
+    // 暂停控制
+    var paused = false;
+    universe.addEventListener('mouseenter', function() { paused = true; });
+    universe.addEventListener('mouseleave', function() { paused = false; });
+
+    // 动画循环
+    function tick() {
+        if (!paused) {
+            orbits.forEach(function(orbit) {
+                orbit.angle += orbit.speed;
+                var n = orbit.items.length;
+                var tiltRad = orbit.tiltRad;
+
+                orbit.nodes.forEach(function(node, i) {
+                    var a = orbit.angle + (2 * Math.PI / n) * i;
+                    var x = Math.cos(a) * orbit.radius;
+                    var y = Math.sin(a) * orbit.radius * Math.cos(tiltRad);
+                    var z = Math.sin(a) * Math.sin(tiltRad); // -1 .. 1
+
+                    var scale = 0.52 + 0.48 * ((z + 1) / 2);
+                    node.el.style.transform =
+                        'translate(calc(-50% + ' + x.toFixed(2) + 'px), calc(-50% + ' + y.toFixed(2) + 'px)) scale(' + scale.toFixed(3) + ')';
+                    node.el.style.zIndex = Math.round((z + 1) * 90);
+
+                    // 转到前方才显示标签
+                    var inFront = z > 0.28;
+                    node.labelEl.style.opacity = inFront ? '1' : '0';
+                    node.labelEl.style.transform = inFront ? 'translateY(0) scale(1)' : 'translateY(5px) scale(0.88)';
+                });
+            });
+        }
+        requestAnimationFrame(tick);
+    }
+    tick();
+}
