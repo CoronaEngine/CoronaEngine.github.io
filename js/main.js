@@ -436,10 +436,10 @@ function initOrbitSystem() {
 
     // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
-        { items: ring1, radius: 230, tiltDeg: 68, speed: 0.0014, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
-        { items: ring2, radius: 400, tiltDeg: 66, speed: 0.0022, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
-        { items: ring3, radius: 570, tiltDeg: 64, speed: 0.0030, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
-        { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0038, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
+        { items: ring1, radius: 230, tiltDeg: 68, speed: 0.0022, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
+        { items: ring2, radius: 400, tiltDeg: 66, speed: 0.0030, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
+        { items: ring3, radius: 570, tiltDeg: 64, speed: 0.0038, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
+        { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0048, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
     ];
 
     // 设置视觉轨道环尺寸
