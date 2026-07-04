@@ -1505,14 +1505,15 @@ body.menu-open {
 }
 
 .team-force-row.core {
-    justify-content: flex-end;
-    padding-right: min(15vw, 150px);
+    justify-content: flex-start;
+    padding-left: 22px;
+    padding-right: 0;
 }
 
 .team-force-row.development {
-    justify-content: center;
+    justify-content: flex-start;
     gap: clamp(14px, 2.2vw, 26px);
-    padding: 10px min(5vw, 52px);
+    padding: 10px 0 10px 22px;
 }
 
 .team-force-member {
@@ -1581,6 +1582,32 @@ body.menu-open {
     display: flex;
     flex-direction: column;
     gap: var(--gap-lg, 24px);
+}
+
+.competition-section .comp-card {
+    background:
+        radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.10), transparent 30%),
+        radial-gradient(circle at 88% 82%, rgba(255, 204, 51, 0.08), transparent 36%),
+        rgba(8, 14, 30, 0.48) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.30) !important;
+    backdrop-filter: blur(18px) saturate(145%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(145%) !important;
+}
+
+.competition-section .hero-card {
+    background:
+        radial-gradient(circle at 80% 82%, rgba(239, 68, 68, 0.10), transparent 44%),
+        radial-gradient(circle at 16% 14%, rgba(255, 255, 255, 0.10), transparent 30%),
+        rgba(8, 14, 30, 0.50) !important;
+}
+
+.competition-section .comp-card:hover {
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.36), 0 0 34px rgba(255, 204, 51, 0.08) !important;
+}
+
+.competition-section .comp-card.preparing {
+    border-style: solid;
 }
 
 @media (max-width: 760px) {
@@ -1932,20 +1959,6 @@ body.menu-open {
                                         <div class="comp-title">Corona Engine 江苏理工学院校内挑战赛</div>
                                         <p class="bio" style="font-size:0.8rem;">由我们主办的校内赛事，一场伴随倒计时的未知挑战，无论是打造硬核的游戏原型，还是制作概念视听短片，都将成为破局的钥匙，赛制细节与入场悬念即将解禁。</p>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="comp-resources">
-                                <div class="resource-card">
-                                    <div class="resource-icon"><i class="fas fa-book"></i></div>
-                                    <div class="resource-info"><h4>官方开发文档</h4><p>API & 图形学入门指南</p></div>
-                                </div>
-                                <div class="resource-card">
-                                    <div class="resource-icon"><i class="fas fa-download"></i></div>
-                                    <div class="resource-info"><h4>测评 SDK 下载</h4><p>预编译库与测试场景</p></div>
-                                </div>
-                                <div class="resource-card">
-                                    <div class="resource-icon"><i class="fas fa-comments"></i></div>
-                                    <div class="resource-info"><h4>开发者社区</h4><p>赛事官方答疑与交流</p></div>
                                 </div>
                             </div>
                         </div>
