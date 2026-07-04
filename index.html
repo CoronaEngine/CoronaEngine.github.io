@@ -76,10 +76,7 @@
             overflow: hidden;
             border-radius: 24px;
             border: 1px solid rgba(255,255,255,0.08);
-            background:
-                radial-gradient(circle at 22% 14%, rgba(62,130,255,0.16), transparent 34%),
-                radial-gradient(circle at 72% 44%, rgba(198,141,255,0.18), transparent 36%),
-                rgba(2, 6, 23, 0.54);
+            background: transparent;
             cursor: grab;
             touch-action: pan-y;
         }
@@ -1019,6 +1016,10 @@ body.menu-open {
     transform: translateY(-80px);
 }
 
+#page-4.page {
+    transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
 .page-scroll {
     height: 100%;
     overflow-x: hidden;
@@ -1128,9 +1129,13 @@ body.menu-open {
 }
 
 /* ?????????? */
+#page-1 .content-stage.wide-stage,
+#page-2 .content-stage.wide-stage,
+#page-4 .content-stage.wide-stage,
 #page-5 .content-stage.wide-stage {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     min-height: calc(100vh - clamp(180px, 24vh, 240px));
 }
 
@@ -1571,29 +1576,29 @@ body.menu-open {
     gap: var(--gap-lg, 24px);
 }
 
-.competition-section .comp-card {
+.comp-card {
     background:
-        radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.10), transparent 30%),
-        radial-gradient(circle at 88% 82%, rgba(255, 204, 51, 0.08), transparent 36%),
-        rgba(8, 14, 30, 0.48) !important;
-    border-color: rgba(255, 255, 255, 0.16) !important;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.30) !important;
-    backdrop-filter: blur(18px) saturate(145%) !important;
-    -webkit-backdrop-filter: blur(18px) saturate(145%) !important;
+        radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.09), transparent 30%),
+        radial-gradient(circle at 88% 82%, rgba(255, 204, 51, 0.06), transparent 36%),
+        rgba(255, 255, 255, 0.035) !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.24) !important;
+    backdrop-filter: blur(14px) saturate(130%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(130%) !important;
 }
 
-.competition-section .hero-card {
+.hero-card {
     background:
-        radial-gradient(circle at 80% 82%, rgba(239, 68, 68, 0.10), transparent 44%),
-        radial-gradient(circle at 16% 14%, rgba(255, 255, 255, 0.10), transparent 30%),
-        rgba(8, 14, 30, 0.50) !important;
+        radial-gradient(circle at 80% 82%, rgba(239, 68, 68, 0.07), transparent 44%),
+        radial-gradient(circle at 16% 14%, rgba(255, 255, 255, 0.09), transparent 30%),
+        rgba(255, 255, 255, 0.035) !important;
 }
 
-.competition-section .comp-card:hover {
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.36), 0 0 34px rgba(255, 204, 51, 0.08) !important;
+.comp-card:hover {
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.30), 0 0 34px rgba(255, 204, 51, 0.08) !important;
 }
 
-.competition-section .comp-card.preparing {
+.comp-card.preparing {
     border-style: solid;
 }
 
@@ -1742,8 +1747,8 @@ body.menu-open {
     will-change: transform;
 }
 .sat-dot {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     flex-shrink: 0;
     box-shadow: 0 0 16px currentColor;
@@ -1763,20 +1768,20 @@ body.menu-open {
     white-space: nowrap;
 }
 .sat-name {
-    font-size: 1.4rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #e0f0ff;
-    max-width: 320px;
+    max-width: 360px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     text-shadow: 0 2px 12px rgba(0,0,0,.8);
 }
 .sat-tag {
-    font-size: 1.16rem;
+    font-size: 0.95rem;
     font-weight: 700;
     letter-spacing: .06em;
-    padding: 2px 14px;
+    padding: 3px 16px;
     border-radius: 20px;
     text-shadow: none;
 }
@@ -1787,8 +1792,8 @@ body.menu-open {
 
 /* 最内层卫星（最重要的三篇论文） – xl */
 .sat-xl .sat-dot {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     position: relative;
     box-shadow: 0 0 24px currentColor, 0 0 48px currentColor;
 }
@@ -1804,18 +1809,18 @@ body.menu-open {
     0% { transform: scale(1); opacity: .7; }
     100% { transform: scale(1.9); opacity: 0; }
 }
-.sat-xl .sat-name { font-size: 1.64rem; font-weight: 800; }
-.sat-xl .sat-tag  { font-size: 1.28rem; }
+.sat-xl .sat-name { font-size: 1.35rem; font-weight: 800; }
+.sat-xl .sat-tag  { font-size: 1.05rem; }
 
 /* 第三层卫星 – sm */
-.sat-sm .sat-dot { width: 14px; height: 14px; box-shadow: 0 0 10px currentColor; }
-.sat-sm .sat-name { font-size: 1.26rem; }
-.sat-sm .sat-tag  { font-size: 1.08rem; }
+.sat-sm .sat-dot { width: 17px; height: 17px; box-shadow: 0 0 10px currentColor; }
+.sat-sm .sat-name { font-size: 1.02rem; }
+.sat-sm .sat-tag  { font-size: 0.88rem; }
 
 /* 最外层卫星（学生项目） – xs */
-.sat-xs .sat-dot { width: 10px; height: 10px; box-shadow: 0 0 8px currentColor; }
-.sat-xs .sat-name { font-size: 1.1rem; max-width: 240px; }
-.sat-xs .sat-tag  { font-size: 0.92rem; padding: 2px 10px; }
+.sat-xs .sat-dot { width: 13px; height: 13px; box-shadow: 0 0 8px currentColor; }
+.sat-xs .sat-name { font-size: 0.9rem; max-width: 260px; }
+.sat-xs .sat-tag  { font-size: 0.76rem; padding: 2px 12px; }
 
 .orbit-actions {
     display: flex;
@@ -1879,9 +1884,9 @@ body.menu-open {
         <section class="page" id="page-1" aria-labelledby="businessTitle">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
-                    <div class="section-kicker">Core Business</div>
+                    <!-- <div class="section-kicker">Core Business</div>
                     <h2 class="page-title" id="businessTitle">核心业务</h2>
-                    <div class="frameless-section unified-feature-section">
+                    <div class="frameless-section unified-feature-section"> -->
                         <div class="hero-showcase feature-section">
                             <div class="feature-block-grid unified-feature-grid" id="coreFeatureGrid" aria-label="核心业务与渲染能力"></div>
                         </div>
@@ -1893,9 +1898,9 @@ body.menu-open {
         <section class="page" id="page-2" aria-labelledby="historyTitle">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
-                    <div class="section-kicker">Our History</div>
+                    <!-- <div class="section-kicker">Our History</div>
                     <h2 class="page-title" id="historyTitle">发展历程</h2>
-                    <div class="frameless-section">
+                    <div class="frameless-section"> -->
 <div class="timeline-wrap history-scroll-wrap" id="historyScrollWrap">
                         <div class="timeline-progress" aria-hidden="true"><span id="historyProgressBar"></span></div>
                         <div class="history-timeline-track" id="historyTimelineTrack">
@@ -2102,9 +2107,9 @@ body.menu-open {
         <section class="page" id="page-4" aria-labelledby="competitionTitle">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
-                    <div class="section-kicker">Competitions</div>
+                    <!-- <div class="section-kicker">Competitions</div>
                     <h2 class="page-title" id="competitionTitle">相关竞赛</h2>
-                    <div class="competition-section">
+                    <div class="competition-section"> -->
                         <div class="page-container">
                             <div class="comp-bento-grid">
                                 <div class="comp-card hero-card preparing">
