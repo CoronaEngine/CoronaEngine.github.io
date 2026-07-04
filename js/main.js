@@ -27,6 +27,38 @@ const scrollingMembers = [
     {n: "范泽敏", r: "引擎开发（Agent）", b: "专注于AI智能体开发，探索大语言模型在游戏引擎中的应用，主导三维场景生成等功能。", avatar: "images/FZM.jpg", link: "https://github.com/fzm2017"}
 ];
 
+// ================= 核心业务与渲染展示 =================
+const businessFeatures = [
+    { title: "零基础创作沙盒", tag: "Creation Sandbox", icon: "fas fa-wand-magic-sparkles", tone: "sandbox", detail: "告别传统繁杂的引擎面板，无论你是懂技术不懂美术，还是懂美术不懂代码，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。" },
+    { title: "积木式编程", tag: "Visual Scripting", icon: "fas fa-puzzle-piece", tone: "sandbox", detail: "用直观的逻辑模块代替生涩代码，所见即所得。" },
+    { title: "AI 场景助手", tag: "AI Scene Assistant", icon: "fas fa-robot", tone: "sandbox", detail: "智能化辅助构建，大幅降低场景搭建的时间成本。" },
+    { title: "零门槛生态", tag: "Beginner Ecosystem", icon: "fas fa-seedling", tone: "sandbox", detail: "专为学生与初学者打造，让创意不再被技术壁垒阻挡。" },
+    { title: "突破边界", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
+    { title: "CPU-GPU 协同", tag: "Heterogeneous Computing", icon: "fas fa-microchip", tone: "research", detail: "已在异构编程语言领域取得实质性突破，释放极致算力。" },
+    { title: "前沿显示支持", tag: "Advanced Display", icon: "fas fa-display", tone: "research", detail: "深度集成并优化立体显示技术，赋能下一代视觉体验。" },
+    { title: "高度可扩展", tag: "Extensible API", icon: "fas fa-code-branch", tone: "research", detail: "为 SIGGRAPH 等学术研究提供透明、可修改的底层 API。" }
+];
+
+const renderFeatures = [
+    { title: "全局光照", tag: "Global Illumination", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。" },
+    { title: "光场显示", tag: "Light Field · 裸眼3D", image: "render/2.png", icon: "fas fa-cube", tone: "research", detail: "面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。" },
+    { title: "实时协同编辑", tag: "Real-Time Collaboration", image: "render/3.png", icon: "fas fa-users-gear", tone: "sandbox", detail: "多人实时协作的场景编辑能力，操作即时同步，团队可在同一场景中并行创作，像在线文档一样顺畅高效。" },
+    { title: "AI 智能体", tag: "AI Agent", image: "render/1.png", icon: "fas fa-robot", tone: "sandbox", detail: "内置 AI 智能体：以自然语言驱动三维场景生成，并通过 MCP 协议直接操控与编排场景，让创作从「手动搭建」走向「对话生成」。" },
+    {
+        title: "引擎基础设施",
+        tag: "Engine Infrastructure",
+        icon: "fas fa-layer-group",
+        tone: "research",
+        items: [
+            { icon: "fas fa-layer-group", text: "大场景流式加载" },
+            { icon: "fas fa-microchip", text: "原生多线程架构" },
+            { icon: "fas fa-laptop-code", text: "PC 全平台覆盖（预计）：Windows / macOS / Linux / HarmonyOS" },
+            { icon: "fas fa-wave-square", text: "算法支持：光照 · 物理 · 动画 · 空间音频" },
+            { icon: "fas fa-ellipsis", text: "更多底层能力持续扩展中……" }
+        ]
+    }
+];
+
 // ================= 其它数据 =================
 const patentsData = [
     { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", year: "2018" },
@@ -45,10 +77,12 @@ const patentsData = [
 
 // ================= 页面初始化与交互 =================
 document.addEventListener('DOMContentLoaded', () => {
+    renderFeatureBlocks();
     renderTeam();
     renderPatents();
     initSlider();
     initClipboard();
+    initFeatureModal();
     initSceneAccordion();
 });
 
@@ -66,6 +100,108 @@ function initSceneAccordion() {
         panel.addEventListener('focus', () => activate(panel));
     });
 }
+
+function renderFeatureBlocks() {
+    const groups = [
+        { container: document.getElementById('businessFeatureGrid'), items: businessFeatures },
+        { container: document.getElementById('renderFeatureGrid'), items: renderFeatures }
+    ];
+
+    groups.forEach(function(group) {
+        if (!group.container) return;
+        group.container.innerHTML = '';
+
+        group.items.forEach(function(item) {
+            const button = document.createElement('button');
+            const tone = item.tone || 'sandbox';
+            button.type = 'button';
+            button.className = 'feature-block tone-' + tone + (item.image ? ' has-image' : '');
+            button.setAttribute('aria-label', item.title + '详情');
+            if (item.image) button.style.setProperty('--feature-image', 'url("' + item.image + '")');
+
+            const icon = document.createElement('span');
+            icon.className = 'feature-block-icon';
+            const iconNode = document.createElement('i');
+            iconNode.className = item.icon || 'fas fa-circle';
+            icon.appendChild(iconNode);
+
+            const title = document.createElement('h3');
+            title.className = 'feature-block-title';
+            title.textContent = item.title;
+
+            button.appendChild(icon);
+            button.appendChild(title);
+            button.addEventListener('click', function() {
+                showFeatureModal(item);
+            });
+
+            group.container.appendChild(button);
+        });
+    });
+}
+
+function showFeatureModal(feature) {
+    const modal = document.getElementById('featureModal');
+    const tag = document.getElementById('featureModalTag');
+    const title = document.getElementById('featureModalTitle');
+    const detail = document.getElementById('featureModalDetail');
+    const list = document.getElementById('featureModalList');
+    if (!modal || !feature || !title) return;
+
+    if (tag) {
+        tag.textContent = feature.tag || '';
+        tag.style.display = feature.tag ? '' : 'none';
+    }
+
+    title.textContent = feature.title || '';
+
+    if (detail) {
+        detail.textContent = feature.detail || '';
+        detail.style.display = feature.detail ? '' : 'none';
+    }
+
+    if (list) {
+        list.innerHTML = '';
+        const items = Array.isArray(feature.items) ? feature.items : [];
+        list.style.display = items.length ? '' : 'none';
+        items.forEach(function(item) {
+            const li = document.createElement('li');
+            const icon = document.createElement('i');
+            icon.className = item.icon || 'fas fa-check';
+            const text = document.createElement('span');
+            text.textContent = item.text || item;
+            li.appendChild(icon);
+            li.appendChild(text);
+            list.appendChild(li);
+        });
+    }
+
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+}
+
+function closeFeatureModal() {
+    const modal = document.getElementById('featureModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+}
+
+function initFeatureModal() {
+    const modal = document.getElementById('featureModal');
+    const close = document.getElementById('featureModalClose');
+    if (!modal) return;
+
+    if (close) close.addEventListener('click', closeFeatureModal);
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) closeFeatureModal();
+    });
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal.classList.contains('active')) closeFeatureModal();
+    });
+}
+
+window.openFeatureModal = showFeatureModal;
 
 function renderTeam() {
     var container = document.getElementById('creditsContainer') || document.getElementById('teamBento');

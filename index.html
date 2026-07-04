@@ -1658,169 +1658,17 @@ body.menu-open {
                 <div class="content-stage wide-stage">
                     <div class="section-kicker">Core Business</div>
                     <h2 class="page-title" id="businessTitle">核心业务</h2>
-                    <div class="glass-section business-frame">
-<div class="split-directions">
-                        <div class="split-intro">
-                            <!-- <span class="split-eyebrow">一个引擎 · 两种可能</span> -->
-                            <h2>面向科研的深度，面向创作的自由</h2>
+                    <div class="frameless-section business-section">
+                        <div class="hero-showcase feature-section feature-section-business">
+                            <div class="section-heading"><h2>面向科研的深度，面向创作的自由</h2></div>
+                            <div class="feature-block-grid business-feature-grid" id="businessFeatureGrid" aria-label="核心业务能力"></div>
                         </div>
-                        <!-- 身份切换拨动开关 -->
-                        <div class="role-toggle" id="roleToggle">
-                            <button class="role-btn" data-role="creator"><i class="fas fa-gamepad"></i> 我是创作者</button>
-                            <button class="role-btn" data-role="developer"><span class="role-icon term-icon">&gt;_</span> 我是开发者</button>
-                        </div>
-                        <div class="bento-grid" id="bentoGrid">
-
-                            <!-- 2x2: 双面切换卡 -->
-                            <div class="bento-card bento-2x2 sandbox" id="heroCard">
-                                <div class="bento-glow"></div>
-                                <!-- 创作者面 -->
-                                <div class="card-face card-face-creator">
-                                    <div class="bento-icon-wrap"><i class="fas fa-wand-magic-sparkles"></i></div>
-                                    <h3>零基础创作沙盒，让灵感即刻落地</h3>
-                                    <p>告别传统繁杂的引擎面板，无论你是懂技术不懂美术，还是懂美术不懂代码，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。</p>
-                                </div>
-                                <!-- 科研者面 -->
-                                <div class="card-face card-face-developer" style="display:none;">
-                                    <div class="bento-icon-wrap"><i class="fas fa-circle-nodes"></i></div>
-                                    <h3>突破边界，专为硬核而生</h3>
-                                    <p>为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。</p>
-                                </div>
-                            </div>
-
-                            <!-- 1x1: 积木式编程 -->
-                            <div class="bento-card sandbox">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-puzzle-piece"></i></div>
-                                <h3>积木式编程</h3>
-                                <p>用直观的逻辑模块代替生涩代码，所见即所得。</p>
-                            </div>
-
-                            <!-- 1x1: AI 场景助手 -->
-                            <div class="bento-card sandbox">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-robot"></i></div>
-                                <h3>AI 场景助手</h3>
-                                <p>智能化辅助构建，大幅降低场景搭建的时间成本。</p>
-                            </div>
-
-                            <!-- 1x1: 零门槛生态 -->
-                            <div class="bento-card sandbox">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-seedling"></i></div>
-                                <h3>零门槛生态</h3>
-                                <p>专为学生与初学者打造，让创意不再被技术壁垒阻挡。</p>
-                            </div>
-
-                            <!-- 2x1: CPU-GPU 协同 -->
-                            <div class="bento-card bento-2x1 research">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-microchip"></i></div>
-                                <h3>CPU-GPU 协同</h3>
-                                <p>已在异构编程语言领域取得实质性突破，释放极致算力。</p>
-                            </div>
-
-                            <!-- 1x1: 前沿显示 -->
-                            <div class="bento-card research">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-display"></i></div>
-                                <h3>前沿显示支持</h3>
-                                <p>深度集成并优化立体显示技术，赋能下一代视觉体验。</p>
-                            </div>
-
-                            <!-- 1x1: 高度可扩展 -->
-                            <div class="bento-card research">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-code-branch"></i></div>
-                                <h3>高度可扩展</h3>
-                                <p>为 SIGGRAPH 等学术研究提供透明、可修改的底层 API。</p>
-                            </div>
-
-                        </div>
-                    </div>
                     </div>
                     <div class="frameless-section render-section">
-<div class="hero-showcase">
-                        <div class="section-heading"><h2>渲染效果展示</h2></div>
-                        <div class="scene-accordion" id="sceneAccordion">
-
-                            <div class="scene-panel active" tabindex="0" data-index="0">
-                                <img class="scene-img" src="render/1.png" loading="lazy" alt="全局光照">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">01</span>
-                                    <h3>全局光照</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">Global Illumination</span>
-                                    <h3>全局光照</h3>
-                                    <p>硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。</p>
-                                </div>
-                            </div>
-
-                            <div class="scene-panel" tabindex="0" data-index="1">
-                                <img class="scene-img" src="render/2.png" loading="lazy" alt="光场显示">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">02</span>
-                                    <h3>光场显示</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">Light Field · 裸眼3D</span>
-                                    <h3>光场显示</h3>
-                                    <p>面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。</p>
-                                </div>
-                            </div>
-
-                            <div class="scene-panel" tabindex="0" data-index="2">
-                                <img class="scene-img" src="render/3.png" loading="lazy" alt="协同编辑">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">03</span>
-                                    <h3>协同编辑</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">Real-Time Collaboration</span>
-                                    <h3>实时协同编辑</h3>
-                                    <p>多人实时协作的场景编辑能力，操作即时同步，团队可在同一场景中并行创作，像在线文档一样顺畅高效。</p>
-                                </div>
-                            </div>
-
-                            <div class="scene-panel" tabindex="0" data-index="3">
-                                <img class="scene-img" src="render/1.png" loading="lazy" alt="AI 智能体">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">04</span>
-                                    <h3>AI 智能体</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">AI Agent</span>
-                                    <h3>AI 智能体</h3>
-                                    <p>内置 AI 智能体：以自然语言驱动三维场景生成，并通过 MCP 协议直接操控与编排场景，让创作从「手动搭建」走向「对话生成」。</p>
-                                </div>
-                            </div>
-
-                            <div class="scene-panel infra" tabindex="0" data-index="4">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">05</span>
-                                    <h3>基础设施</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">Engine Infrastructure</span>
-                                    <h3>引擎基础设施</h3>
-                                    <ul class="scene-list">
-                                        <li><i class="fas fa-layer-group"></i> 大场景流式加载</li>
-                                        <li><i class="fas fa-microchip"></i> 原生多线程架构</li>
-                                        <li><i class="fas fa-laptop-code"></i> PC 全平台覆盖（预计）：Windows / macOS / Linux / HarmonyOS</li>
-                                        <li><i class="fas fa-wave-square"></i> 算法支持：光照 · 物理 · 动画 · 空间音频</li>
-                                        <li><i class="fas fa-ellipsis"></i> 更多底层能力持续扩展中……</li>
-                                    </ul>
-                                </div>
-                            </div>
-
+                        <div class="hero-showcase feature-section feature-section-render">
+                            <div class="section-heading"><h2>渲染效果展示</h2></div>
+                            <div class="feature-block-grid render-feature-grid" id="renderFeatureGrid" aria-label="渲染效果展示"></div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -2165,6 +2013,20 @@ body.menu-open {
                 <div class="member-section"><h4>⚙️ 核心技术栈</h4><p id="memberModalTech"></p></div>
                 <div class="member-section"><h4>🎓 学术与专利</h4><p id="memberModalAch"></p></div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="member-modal-overlay feature-modal-overlay" id="featureModal" aria-hidden="true">
+    <div class="member-modal feature-modal" role="dialog" aria-modal="true" aria-labelledby="featureModalTitle">
+        <button class="member-modal-close feature-modal-close" id="featureModalClose">&times;</button>
+        <div class="feature-modal-header">
+            <span class="feature-modal-tag" id="featureModalTag"></span>
+            <h2 id="featureModalTitle"></h2>
+        </div>
+        <div class="feature-modal-body">
+            <p id="featureModalDetail"></p>
+            <ul class="feature-modal-list" id="featureModalList"></ul>
         </div>
     </div>
 </div>
