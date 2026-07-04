@@ -71,30 +71,48 @@ function renderTeam() {
     var container = document.getElementById('creditsContainer') || document.getElementById('teamBento');
     if (!container) return;
 
-    // 拆分开发组成员
-    var devLow = [], devRender = [], devOther = [];
-    scrollingMembers.forEach(function(m) {
-        if (m.r.indexOf('底层') >= 0) devLow.push(m);
-        else if (m.r.indexOf('渲染') >= 0 || m.r.indexOf('物理') >= 0) devRender.push(m);
-        else devOther.push(m);
-    });
-    // 将剩余成员分配到较短的组
-    devOther.forEach(function(m) { if (devLow.length <= devRender.length) devLow.push(m); else devRender.push(m); });
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, function(ch) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[ch];
+        });
+    }
 
-    var groups = [
-        { label: '创始人', items: founders.map(function(f) { return { role: f.tags ? f.tags.join(' / ') : f.r, name: f.n }; }) },
-        { label: '架构组', items: coreMembers.map(function(m) { return { role: m.r, name: m.n }; }) },
-        { label: '底层开发', items: devLow.map(function(m) { return { role: m.r, name: m.n }; }) },
-        { label: '渲染与物理', items: devRender.map(function(m) { return { role: m.r, name: m.n }; }) }
-    ];
+    function memberButton(person, className, roleText) {
+        return '<button class="team-force-member ' + className + '" type="button" data-member-name="' + escapeHtml(person.n) + '">' +
+            '<span class="team-force-role">' + escapeHtml(roleText || person.r || '') + '</span>' +
+            '<span class="team-force-name">' + escapeHtml(person.n) + '</span>' +
+            '</button>';
+    }
 
-    container.innerHTML = groups.map(function(g) {
-        return '<div class="team-card"><h4>' + g.label + '</h4>' +
-            g.items.map(function(p) {
-                return '<div class="team-person"><span class="tp-name" style="cursor:pointer;" onclick="event.stopPropagation();showMemberModalByName(\'' + p.name + '\')">' + p.name + '</span><span class="tp-role">' + p.role + '</span></div>';
-            }).join('') +
-            '</div>';
+    var founderHtml = founders.map(function(person) {
+        return memberButton(person, 'lead', person.tags ? person.tags.join(' / ') : person.r);
     }).join('');
+
+    var coreHtml = coreMembers.map(function(person) {
+        return memberButton(person, 'core-member', person.r);
+    }).join('');
+
+    var supportHtml = scrollingMembers.map(function(person) {
+        return memberButton(person, 'support', person.r);
+    }).join('');
+
+    container.innerHTML =
+        '<div class="team-force-row founders">' + founderHtml + '</div>' +
+        '<div class="team-force-row core">' + coreHtml + '</div>' +
+        '<div class="team-force-row development">' + supportHtml + '</div>';
+
+    container.querySelectorAll('[data-member-name]').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            showMemberModalByName(button.getAttribute('data-member-name'));
+        });
+    });
 }
 
 // ================= 页脚联系方式：单击复制到剪贴板 =================
