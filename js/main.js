@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initClipboard();
     initFeatureModal();
     initSceneAccordion();
+    initOrbitSystem();
 });
 
 // ================= 渲染效果展示：纵向手风琴（鼠标选择展开） =================
@@ -349,3 +350,132 @@ function goToSlide(index) {
 }
 
 window.goToSlide = goToSlide; // 暴露给 HTML 中的 onclick
+
+// ================= 行星轨道 – 学术成果 =================
+function initOrbitSystem() {
+    const universe = document.getElementById('orbitUniverse');
+    if (!universe) return;
+
+    const paperItems = [
+        { label: 'Light-Field Path Tracing', tag: 'SIGGRAPH 2026 · CCF-A', size: 'xl' },
+        { label: 'Light Field Tracing', tag: 'SIGGRAPH Poster 2026 · CCF-A', size: 'xl' },
+        { label: 'Topology-Aware Polymorphism', tag: 'SIGGRAPH Asia 2025 · CCF-A', size: 'xl' },
+        { label: 'Visibility-Driven MLT', tag: '中科院四区 · 2025', size: 'sm' },
+        { label: 'Hot Reloading Runtime', tag: 'EI · 2025', size: 'sm' },
+        { label: 'Shadow Maps Enhancement', tag: 'EI · 2024', size: 'sm' },
+        { label: 'Parameter-Free MLT', tag: 'EI · 2022', size: 'sm' }
+    ];
+
+    const patentItems = [
+        { label: '三角形邻接信息移动算法', tag: '2018' },
+        { label: '法线修正碰撞移动方法', tag: '2019' },
+        { label: '实时路径生成方法', tag: '2019' },
+        { label: '动态模糊渲染加速', tag: '2019' },
+        { label: '模型压缩与碰撞检测', tag: '2020' },
+        { label: '深度缓冲加速光线追踪', tag: '2021' },
+        { label: '光线路径复用渲染加速', tag: '2021' },
+        { label: '非对称卷积核训练方法', tag: '2024' }
+    ];
+
+    const orbits = [
+        { items: paperItems, radius: 195, tiltDeg: 68, speed: 0.0032, type: 'paper', angle: 0 },
+        { items: patentItems, radius: 325, tiltDeg: 63, speed: 0.002, type: 'patent', angle: Math.PI / 5 }
+    ];
+
+    // 设置视觉轨道环尺寸
+    const tracks = [document.getElementById('orbitTrack1'), document.getElementById('orbitTrack2')];
+    orbits.forEach(function(o, i) {
+        var t = tracks[i];
+        if (!t) return;
+        var tiltRad = o.tiltDeg * Math.PI / 180;
+        var w = o.radius * 2;
+        var h = o.radius * 2 * Math.cos(tiltRad);
+        t.style.width = w + 'px';
+        t.style.height = h + 'px';
+        t.style.marginLeft = (-o.radius) + 'px';
+        t.style.marginTop = (-h / 2) + 'px';
+    });
+
+    // 创建卫星 DOM
+    orbits.forEach(function(orbit) {
+        orbit.tiltRad = orbit.tiltDeg * Math.PI / 180;
+        orbit.nodes = orbit.items.map(function(item) {
+            var node = document.createElement('div');
+            var sizeClass = item.size === 'xl' ? ' sat-xl' : (item.size === 'sm' ? ' sat-sm' : '');
+            node.className = 'sat-node sat-' + orbit.type + sizeClass;
+
+            var lbl = document.createElement('div');
+            lbl.className = 'sat-label';
+
+            var name = document.createElement('span');
+            name.className = 'sat-name';
+            name.textContent = item.label;
+
+            var tag = document.createElement('span');
+            tag.className = 'sat-tag';
+            tag.textContent = item.tag;
+
+            lbl.appendChild(name);
+            lbl.appendChild(tag);
+
+            var dot = document.createElement('div');
+            dot.className = 'sat-dot';
+
+            node.appendChild(lbl);
+            node.appendChild(dot);
+            universe.appendChild(node);
+            return { el: node, labelEl: lbl };
+        });
+    });
+
+    // 响应式缩放
+    function scaleUniverse() {
+        var page = document.getElementById('page-3');
+        if (!page) return;
+        var availW = page.clientWidth * 0.92;
+        var availH = (page.clientHeight - 90) * 0.90;
+        var scale = Math.min(1, availW / 800, availH / 660);
+        universe.style.transform = 'scale(' + scale + ')';
+        // 用负 margin 抵消 scale 后多余的布局空间，防止 scrollHeight > clientHeight
+        var compensation = Math.round(660 * (1 - scale) / 2);
+        universe.style.marginTop = (-compensation) + 'px';
+        universe.style.marginBottom = (-compensation) + 'px';
+    }
+    scaleUniverse();
+    window.addEventListener('resize', scaleUniverse);
+
+    // 暂停控制
+    var paused = false;
+    universe.addEventListener('mouseenter', function() { paused = true; });
+    universe.addEventListener('mouseleave', function() { paused = false; });
+
+    // 动画循环
+    function tick() {
+        if (!paused) {
+            orbits.forEach(function(orbit) {
+                orbit.angle += orbit.speed;
+                var n = orbit.items.length;
+                var tiltRad = orbit.tiltRad;
+
+                orbit.nodes.forEach(function(node, i) {
+                    var a = orbit.angle + (2 * Math.PI / n) * i;
+                    var x = Math.cos(a) * orbit.radius;
+                    var y = Math.sin(a) * orbit.radius * Math.cos(tiltRad);
+                    var z = Math.sin(a) * Math.sin(tiltRad); // -1 .. 1
+
+                    var scale = 0.52 + 0.48 * ((z + 1) / 2);
+                    node.el.style.transform =
+                        'translate(calc(-50% + ' + x.toFixed(2) + 'px), calc(-50% + ' + y.toFixed(2) + 'px)) scale(' + scale.toFixed(3) + ')';
+                    node.el.style.zIndex = Math.round((z + 1) * 90);
+
+                    // 转到前方才显示标签
+                    var inFront = z > 0.28;
+                    node.labelEl.style.opacity = inFront ? '1' : '0';
+                    node.labelEl.style.transform = inFront ? 'translateY(0) scale(1)' : 'translateY(5px) scale(0.88)';
+                });
+            });
+        }
+        requestAnimationFrame(tick);
+    }
+    tick();
+}
