@@ -82,11 +82,11 @@ const patentsData = [
 
 // CCF-A 顶会论文（金色 · 最内层）
 const ccfaPapers = [
-    { label: "Real-Time Light Field Tracing", tag: "SIGGRAPH 2026 · CCF-A", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Light-Field Path Tracing", tag: "SIGGRAPH 2026 · CCF-A", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Topology-Aware Polymorphism", tag: "SIGGRAPH Asia 2025 · CCF-A", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
-    { label: "游戏生成", tag: "SIGGRAPH Asia 2026 · CCF-A", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
-    { label: "光场UI算法", tag: "SIGGRAPH Asia 2026 · CCF-A", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
+    { label: "Real-Time Light Field Tracing", tag: "录用 · CCF-A", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Light-Field Path Tracing", tag: "录用 · CCF-A", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Topology-Aware Polymorphism", tag: "公开 · CCF-A", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
+    { label: "游戏生成", tag: "投稿中 · CCF-A", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
+    { label: "光场UI算法", tag: "投稿中 · CCF-A", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
 ];
 
 // 学术论文（紫色 · 第二层）
@@ -494,7 +494,7 @@ function initOrbitSystem() {
         if (!page) return;
         var availW = page.clientWidth * 0.92;
         var availH = (page.clientHeight - 90) * 0.90;
-        var scale = Math.min(1, availW / 1900, availH / 1580);
+        var scale = Math.min(1, availW / 1900, availH / 1580) * 2;
         universe.style.transform = 'scale(' + scale + ')';
         // 用负 margin 抵消 scale 后多余的布局空间，防止 scrollHeight > clientHeight
         var compensation = Math.round(1580 * (1 - scale) / 2);
@@ -504,37 +504,30 @@ function initOrbitSystem() {
     scaleUniverse();
     window.addEventListener('resize', scaleUniverse);
 
-    // 暂停控制
-    var paused = false;
-    universe.addEventListener('mouseenter', function() { paused = true; });
-    universe.addEventListener('mouseleave', function() { paused = false; });
-
     // 动画循环
     function tick() {
-        if (!paused) {
-            orbits.forEach(function(orbit) {
-                orbit.angle += orbit.speed;
-                var n = orbit.items.length;
-                var tiltRad = orbit.tiltRad;
+        orbits.forEach(function(orbit) {
+            orbit.angle += orbit.speed;
+            var n = orbit.items.length;
+            var tiltRad = orbit.tiltRad;
 
-                orbit.nodes.forEach(function(node, i) {
-                    var a = orbit.angle + (2 * Math.PI / n) * i;
-                    var x = Math.cos(a) * orbit.radius;
-                    var y = Math.sin(a) * orbit.radius * Math.cos(tiltRad);
-                    var z = Math.sin(a) * Math.sin(tiltRad); // -1 .. 1
+            orbit.nodes.forEach(function(node, i) {
+                var a = orbit.angle + (2 * Math.PI / n) * i;
+                var x = Math.cos(a) * orbit.radius;
+                var y = Math.sin(a) * orbit.radius * Math.cos(tiltRad);
+                var z = Math.sin(a) * Math.sin(tiltRad); // -1 .. 1
 
-                    var scale = 0.52 + 0.48 * ((z + 1) / 2);
-                    node.el.style.transform =
-                        'translate(calc(-50% + ' + x.toFixed(2) + 'px), calc(-50% + ' + y.toFixed(2) + 'px)) scale(' + scale.toFixed(3) + ')';
-                    node.el.style.zIndex = Math.round((z + 1) * 90);
+                var scale = 0.52 + 0.48 * ((z + 1) / 2);
+                node.el.style.transform =
+                    'translate(calc(-50% + ' + x.toFixed(2) + 'px), calc(-50% + ' + y.toFixed(2) + 'px)) scale(' + scale.toFixed(3) + ')';
+                node.el.style.zIndex = Math.round((z + 1) * 90);
 
-                    // 转到前方才显示标签
-                    var inFront = z > 0.28;
-                    node.labelEl.style.opacity = inFront ? '1' : '0';
-                    node.labelEl.style.transform = inFront ? 'translateY(0) scale(1)' : 'translateY(5px) scale(0.88)';
-                });
+                // 转到前方才显示标签
+                var inFront = z > 0.28;
+                node.labelEl.style.opacity = inFront ? '1' : '0';
+                node.labelEl.style.transform = inFront ? 'translateY(0) scale(1)' : 'translateY(5px) scale(0.88)';
             });
-        }
+        });
         requestAnimationFrame(tick);
     }
     tick();
