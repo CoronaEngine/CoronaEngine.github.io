@@ -844,7 +844,7 @@ body.menu-open {
     z-index: 1500;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     pointer-events: none;
 }
 
@@ -932,42 +932,51 @@ body.menu-open {
 }
 
 .menu-panel {
-    position: absolute;
-    top: calc(100% + 12px);
-    right: 0;
-    width: min(260px, calc(100vw - 36px));
-    padding: 10px;
-    border-radius: 18px;
+    position: static;
+    width: auto;
+    max-width: calc(100vw - 36px);
+    padding: 6px;
+    border-radius: 999px;
     background: rgba(8, 12, 28, 0.78);
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    opacity: 0;
-    transform: translateY(-8px) scale(0.98);
-    pointer-events: none;
-    transition: opacity 0.22s ease, transform 0.22s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    transition: border-color 0.22s ease, background 0.22s ease;
+}
+
+.menu-panel::-webkit-scrollbar {
+    display: none;
 }
 
 .menu-panel.open {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
     pointer-events: auto;
 }
 
 .menu-item {
-    width: 100%;
+    width: auto;
+    flex: 0 0 auto;
     border: 0;
     background: transparent;
     color: rgba(255, 255, 255, 0.68);
-    border-radius: 12px;
-    padding: 12px 14px;
+    border-radius: 999px;
+    padding: 10px 17px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    justify-content: center;
+    gap: 8px;
     font: inherit;
-    font-size: 0.94rem;
+    font-size: 0.88rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     cursor: pointer;
@@ -981,12 +990,7 @@ body.menu-open {
 }
 
 .menu-item.active::after {
-    content: '';
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #ffcc33;
-    box-shadow: 0 0 12px rgba(255, 204, 51, 0.85);
+    content: none;
 }
 
 #ui-layer {
@@ -1412,6 +1416,228 @@ body.menu-open {
     -webkit-backdrop-filter: blur(4px);
 }
 
+/* ================= Request-specific layout refinements ================= */
+.menu-item.active {
+    color: #111827;
+    background: linear-gradient(135deg, #ffcc33 0%, #f0a800 100%);
+    box-shadow: 0 8px 22px rgba(255, 204, 51, 0.20);
+}
+
+.frameless-section,
+.team-force-section,
+.competition-section {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.render-section {
+    margin-top: 32px;
+}
+
+.business-frame {
+    background:
+        radial-gradient(circle at 12% 0%, rgba(180, 140, 240, 0.14), transparent 38%),
+        radial-gradient(circle at 88% 12%, rgba(56, 189, 248, 0.10), transparent 34%),
+        rgba(5, 10, 24, 0.46) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.30) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.business-frame .role-toggle {
+    background: rgba(10, 16, 36, 0.54) !important;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+}
+
+.business-frame .bento-card {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28) !important;
+}
+
+.business-frame .bento-card.sandbox {
+    background: rgba(20, 14, 42, 0.45) !important;
+    border-color: rgba(180, 140, 240, 0.22) !important;
+}
+
+.business-frame .bento-card.research {
+    background: rgba(8, 16, 36, 0.42) !important;
+    border-color: rgba(56, 189, 248, 0.18) !important;
+}
+
+.business-frame .bento-card:hover {
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42) !important;
+}
+
+.frameless-section .timeline-wrap {
+    border: 0;
+    background: transparent;
+    border-radius: 0;
+}
+
+.team-force-section {
+    width: min(980px, 100%);
+}
+
+.team-force {
+    width: min(980px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(30px, 5vw, 48px);
+}
+
+.team-force-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: clamp(18px, 3vw, 34px);
+}
+
+.team-force-row.founders {
+    padding: 8px 0 8px 22px;
+    border-left: 2px solid #00f3ff;
+}
+
+.team-force-row.core {
+    justify-content: flex-start;
+    padding-left: 22px;
+    padding-right: 0;
+}
+
+.team-force-row.development {
+    justify-content: flex-start;
+    gap: clamp(14px, 2.2vw, 26px);
+    padding: 10px 0 10px 22px;
+}
+
+.team-force-member {
+    position: relative;
+    display: inline-flex;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.team-force-role {
+    position: absolute;
+    left: 50%;
+    top: -28px;
+    transform: translate(-50%, 8px);
+    opacity: 0;
+    color: #ff0066;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.team-force-name {
+    color: rgba(255, 255, 255, 0.92);
+    line-height: 1.1;
+    transition: color 0.28s ease, text-shadow 0.28s ease, transform 0.28s ease;
+}
+
+.team-force-member:hover .team-force-role,
+.team-force-member:focus-visible .team-force-role {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.team-force-member:hover .team-force-name,
+.team-force-member:focus-visible .team-force-name {
+    color: #00f3ff;
+    text-shadow: 0 0 15px rgba(0, 243, 255, 0.72);
+    transform: translateY(-1px);
+}
+
+.team-force-member.lead .team-force-name {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+}
+
+.team-force-member.core-member .team-force-name {
+    color: rgba(255, 255, 255, 0.74);
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    font-weight: 760;
+}
+
+.team-force-member.support .team-force-name {
+    color: rgba(255, 255, 255, 0.52);
+    font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+    font-weight: 400;
+}
+
+.competition-section .page-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg, 24px);
+}
+
+.competition-section .comp-card {
+    background:
+        radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.10), transparent 30%),
+        radial-gradient(circle at 88% 82%, rgba(255, 204, 51, 0.08), transparent 36%),
+        rgba(8, 14, 30, 0.48) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.30) !important;
+    backdrop-filter: blur(18px) saturate(145%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(145%) !important;
+}
+
+.competition-section .hero-card {
+    background:
+        radial-gradient(circle at 80% 82%, rgba(239, 68, 68, 0.10), transparent 44%),
+        radial-gradient(circle at 16% 14%, rgba(255, 255, 255, 0.10), transparent 30%),
+        rgba(8, 14, 30, 0.50) !important;
+}
+
+.competition-section .comp-card:hover {
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.36), 0 0 34px rgba(255, 204, 51, 0.08) !important;
+}
+
+.competition-section .comp-card.preparing {
+    border-style: solid;
+}
+
+@media (max-width: 760px) {
+    .shell-header {
+        left: 12px;
+        right: 12px;
+    }
+
+    .menu-panel {
+        margin-left: auto;
+        padding: 5px;
+    }
+
+    .menu-item {
+        padding: 9px 12px;
+        font-size: 0.78rem;
+    }
+
+    .team-force-row,
+    .team-force-row.core,
+    .team-force-row.development {
+        justify-content: flex-start;
+        padding-right: 0;
+    }
+
+    .team-force-member.lead .team-force-name {
+        font-size: clamp(1.75rem, 10vw, 2.45rem);
+    }
+}
+
     </style>
 </head>
 <body data-page="0">
@@ -1420,24 +1646,14 @@ body.menu-open {
     <div class="ambient-vignette" aria-hidden="true"></div>
 
     <header class="shell-header">
-        <a class="shell-logo" href="#" data-page="0" aria-label="返回首页">
-            <img src="logo/corona.jfif" alt="CoronaEngine">
-            <span>CORONA ENGINE</span>
-        </a>
-        <div class="menu-wrap">
-            <button class="menu-button" id="menuButton" type="button" aria-label="打开菜单" aria-controls="menuPanel" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="menu-panel" id="menuPanel" role="menu" aria-label="页面导航">
-                <button class="menu-item active" type="button" data-page="0" role="menuitem">首页</button>
-                <button class="menu-item" type="button" data-page="1" role="menuitem">核心业务</button>
-                <button class="menu-item" type="button" data-page="2" role="menuitem">发展历程</button>
-                <button class="menu-item" type="button" data-page="3" role="menuitem">团队成员</button>
-                <button class="menu-item" type="button" data-page="4" role="menuitem">学术成果</button>
-            </div>
-        </div>
+        <nav class="menu-panel" id="menuPanel" role="menubar" aria-label="页面导航">
+            <button class="menu-item active" type="button" data-page="0" role="menuitem">首页</button>
+            <button class="menu-item" type="button" data-page="1" role="menuitem">核心业务</button>
+            <button class="menu-item" type="button" data-page="2" role="menuitem">发展历程</button>
+            <button class="menu-item" type="button" data-page="3" role="menuitem">学术成果</button>
+            <button class="menu-item" type="button" data-page="4" role="menuitem">相关竞赛</button>
+            <button class="menu-item" type="button" data-page="5" role="menuitem">团队成员</button>
+        </nav>
     </header>
 
     <main id="ui-layer">
@@ -1469,169 +1685,10 @@ body.menu-open {
                 <div class="content-stage wide-stage">
                     <div class="section-kicker">Core Business</div>
                     <h2 class="page-title" id="businessTitle">核心业务</h2>
-                    <div class="glass-section">
-<div class="split-directions">
-                        <div class="split-intro">
-                            <!-- <span class="split-eyebrow">一个引擎 · 两种可能</span> -->
-                            <h2>面向科研的深度，面向创作的自由</h2>
+                    <div class="frameless-section unified-feature-section">
+                        <div class="hero-showcase feature-section">
+                            <div class="feature-block-grid unified-feature-grid" id="coreFeatureGrid" aria-label="核心业务与渲染能力"></div>
                         </div>
-                        <!-- 身份切换拨动开关 -->
-                        <div class="role-toggle" id="roleToggle">
-                            <button class="role-btn" data-role="creator"><i class="fas fa-gamepad"></i> 我是创作者</button>
-                            <button class="role-btn" data-role="developer"><span class="role-icon term-icon">&gt;_</span> 我是开发者</button>
-                        </div>
-                        <div class="bento-grid" id="bentoGrid">
-
-                            <!-- 2x2: 双面切换卡 -->
-                            <div class="bento-card bento-2x2 sandbox" id="heroCard">
-                                <div class="bento-glow"></div>
-                                <!-- 创作者面 -->
-                                <div class="card-face card-face-creator">
-                                    <div class="bento-icon-wrap"><i class="fas fa-wand-magic-sparkles"></i></div>
-                                    <h3>零基础创作沙盒，让灵感即刻落地</h3>
-                                    <p>告别传统繁杂的引擎面板，无论你是懂技术不懂美术，还是懂美术不懂代码，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。</p>
-                                </div>
-                                <!-- 科研者面 -->
-                                <div class="card-face card-face-developer" style="display:none;">
-                                    <div class="bento-icon-wrap"><i class="fas fa-circle-nodes"></i></div>
-                                    <h3>突破边界，专为硬核而生</h3>
-                                    <p>为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。</p>
-                                </div>
-                            </div>
-
-                            <!-- 1x1: 积木式编程 -->
-                            <div class="bento-card sandbox">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-puzzle-piece"></i></div>
-                                <h3>积木式编程</h3>
-                                <p>用直观的逻辑模块代替生涩代码，所见即所得。</p>
-                            </div>
-
-                            <!-- 1x1: AI 场景助手 -->
-                            <div class="bento-card sandbox">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-robot"></i></div>
-                                <h3>AI 场景助手</h3>
-                                <p>智能化辅助构建，大幅降低场景搭建的时间成本。</p>
-                            </div>
-
-                            <!-- 1x1: 零门槛生态 -->
-                            <div class="bento-card sandbox">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-seedling"></i></div>
-                                <h3>零门槛生态</h3>
-                                <p>专为学生与初学者打造，让创意不再被技术壁垒阻挡。</p>
-                            </div>
-
-                            <!-- 2x1: CPU-GPU 协同 -->
-                            <div class="bento-card bento-2x1 research">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-microchip"></i></div>
-                                <h3>CPU-GPU 协同</h3>
-                                <p>已在异构编程语言领域取得实质性突破，释放极致算力。</p>
-                            </div>
-
-                            <!-- 1x1: 前沿显示 -->
-                            <div class="bento-card research">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-display"></i></div>
-                                <h3>前沿显示支持</h3>
-                                <p>深度集成并优化立体显示技术，赋能下一代视觉体验。</p>
-                            </div>
-
-                            <!-- 1x1: 高度可扩展 -->
-                            <div class="bento-card research">
-                                <div class="bento-glow"></div>
-                                <div class="bento-icon-wrap"><i class="fas fa-code-branch"></i></div>
-                                <h3>高度可扩展</h3>
-                                <p>为 SIGGRAPH 等学术研究提供透明、可修改的底层 API。</p>
-                            </div>
-
-                        </div>
-                    </div>
-                    </div>
-                    <div class="glass-section" style="margin-top:32px;">
-<div class="hero-showcase">
-                        <div class="section-heading"><h2>渲染效果展示</h2></div>
-                        <div class="scene-accordion" id="sceneAccordion">
-
-                            <div class="scene-panel active" tabindex="0" data-index="0">
-                                <img class="scene-img" src="render/1.png" loading="lazy" alt="全局光照">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">01</span>
-                                    <h3>全局光照</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">Global Illumination</span>
-                                    <h3>全局光照</h3>
-                                    <p>硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。</p>
-                                </div>
-                            </div>
-
-                            <div class="scene-panel" tabindex="0" data-index="1">
-                                <img class="scene-img" src="render/2.png" loading="lazy" alt="光场显示">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">02</span>
-                                    <h3>光场显示</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">Light Field · 裸眼3D</span>
-                                    <h3>光场显示</h3>
-                                    <p>面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。</p>
-                                </div>
-                            </div>
-
-                            <div class="scene-panel" tabindex="0" data-index="2">
-                                <img class="scene-img" src="render/3.png" loading="lazy" alt="协同编辑">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">03</span>
-                                    <h3>协同编辑</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">Real-Time Collaboration</span>
-                                    <h3>实时协同编辑</h3>
-                                    <p>多人实时协作的场景编辑能力，操作即时同步，团队可在同一场景中并行创作，像在线文档一样顺畅高效。</p>
-                                </div>
-                            </div>
-
-                            <div class="scene-panel" tabindex="0" data-index="3">
-                                <img class="scene-img" src="render/1.png" loading="lazy" alt="AI 智能体">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">04</span>
-                                    <h3>AI 智能体</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">AI Agent</span>
-                                    <h3>AI 智能体</h3>
-                                    <p>内置 AI 智能体：以自然语言驱动三维场景生成，并通过 MCP 协议直接操控与编排场景，让创作从「手动搭建」走向「对话生成」。</p>
-                                </div>
-                            </div>
-
-                            <div class="scene-panel infra" tabindex="0" data-index="4">
-                                <div class="scene-overlay"></div>
-                                <div class="scene-brief">
-                                    <span class="scene-num">05</span>
-                                    <h3>基础设施</h3>
-                                </div>
-                                <div class="scene-detail">
-                                    <span class="scene-tag">Engine Infrastructure</span>
-                                    <h3>引擎基础设施</h3>
-                                    <ul class="scene-list">
-                                        <li><i class="fas fa-layer-group"></i> 大场景流式加载</li>
-                                        <li><i class="fas fa-microchip"></i> 原生多线程架构</li>
-                                        <li><i class="fas fa-laptop-code"></i> PC 全平台覆盖（预计）：Windows / macOS / Linux / HarmonyOS</li>
-                                        <li><i class="fas fa-wave-square"></i> 算法支持：光照 · 物理 · 动画 · 空间音频</li>
-                                        <li><i class="fas fa-ellipsis"></i> 更多底层能力持续扩展中……</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -1642,7 +1699,7 @@ body.menu-open {
                 <div class="content-stage wide-stage">
                     <div class="section-kicker">Our History</div>
                     <h2 class="page-title" id="historyTitle">发展历程</h2>
-                    <div class="glass-section">
+                    <div class="frameless-section">
 <div class="timeline-wrap history-scroll-wrap" id="historyScrollWrap">
                         <div class="timeline-progress" aria-hidden="true"><span id="historyProgressBar"></span></div>
                         <div class="history-timeline-track" id="historyTimelineTrack">
@@ -1809,9 +1866,6 @@ body.menu-open {
                                     <p>主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="1970" y="250" width="96" height="44" data-lane="corona">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2026+</div>
-                            </foreignObject>
                         </svg>
                         </div>
                     </div>
@@ -1820,29 +1874,12 @@ body.menu-open {
             </div>
         </section>
 
-        <section class="page" id="page-3" aria-labelledby="teamTitle">
-            <div class="page-scroll">
-                <div class="content-stage wide-stage">
-                    <div class="section-kicker">Our Team</div>
-                    <h2 class="page-title" id="teamTitle">团队成员</h2>
-                    <div class="about-section team-section glass-section">
-                        <div class="section-heading">
-                            <h2>核心团队</h2>
-                        </div>
-                        <div class="team-scroll-wrap" id="teamScrollWrap">
-                            <div class="team-bento" id="teamBento"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="page" id="page-4" aria-labelledby="academicTitle">
+        <section class="page" id="page-3" aria-labelledby="academicTitle">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
                     <div class="section-kicker">Academic Publications & Patents</div>
                     <h2 class="page-title small" id="academicTitle">学术成果</h2>
-                    <div class="glass-section">
+                    <div class="frameless-section">
 <div class="about-section">
                     <div class="section-heading">
                         <h2>科研成果</h2>
@@ -1887,14 +1924,79 @@ body.menu-open {
                 </div>
             </div>
         </section>
+
+        <section class="page" id="page-4" aria-labelledby="competitionTitle">
+            <div class="page-scroll">
+                <div class="content-stage wide-stage">
+                    <div class="section-kicker">Competitions</div>
+                    <h2 class="page-title" id="competitionTitle">相关竞赛</h2>
+                    <div class="competition-section">
+                        <div class="page-container">
+                            <div class="comp-bento-grid">
+                                <div class="comp-card hero-card preparing">
+                                    <div class="comp-header">
+                                        <div><span class="pub-tag tag-national">国家级 A类</span> <span class="pub-tag tag-join">参与命题</span> <span class="pub-tag tag-pending"><i class="fas fa-hourglass-half"></i> 筹备中</span></div>
+                                    </div>
+                                    <div class="comp-title">A 类国家级大学生学科竞赛</div>
+                                    <div class="comp-topic"><span><i class="fas fa-flag-checkered"></i> 我们的角色</span>命题方，以 Corona Engine 参与赛事命题</div>
+                                    <p class="bio">我们作为命题方之一参与其中——基于 Corona Engine 设计赛题，赛题细节正在与赛事组委会联合打磨中，将围绕引擎的渲染、物理、动画、场景生成等课题展开。</p>
+                                </div>
+                                <div class="comp-side-stack">
+                                    <div class="comp-card preparing">
+                                        <div class="comp-header">
+                                            <div><span class="pub-tag" style="background:rgba(180,150,240,0.08);color:#c8b8f8;border:1px solid rgba(180,150,240,0.30);border-radius:20px;padding:4px 10px;font-size:0.7rem;font-weight:800;letter-spacing:1px;">省级赛事</span> <span class="pub-tag tag-host">主办方</span> <span class="pub-tag tag-pending">筹备中</span></div>
+                                        </div>
+                                        <div class="comp-title">Corona Engine 江苏省高校联赛</div>
+                                        <p class="bio" style="font-size:0.8rem;">由我们发起并主办的省级赛事，探索渲染与创意的边界，赛事计划采用高强度的限时开发（Jam）赛制，并预设“互动游戏”与“影视短片”双并行赛道，核心主题与评测规则目前仍处于封存状态。</p>
+                                    </div>
+                                    <div class="comp-card preparing">
+                                        <div class="comp-header">
+                                            <div><span class="pub-tag" style="background:rgba(59,130,246,0.08);color:#60a5fa;border:1px solid rgba(59,130,246,0.28);border-radius:20px;padding:4px 10px;font-size:0.7rem;font-weight:800;letter-spacing:1px;">校级赛事</span> <span class="pub-tag tag-host">主办方</span> <span class="pub-tag tag-pending">筹备中</span></div>
+                                        </div>
+                                        <div class="comp-title">Corona Engine 江苏理工学院校内挑战赛</div>
+                                        <p class="bio" style="font-size:0.8rem;">由我们主办的校内赛事，一场伴随倒计时的未知挑战，无论是打造硬核的游戏原型，还是制作概念视听短片，都将成为破局的钥匙，赛制细节与入场悬念即将解禁。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="page" id="page-5" aria-labelledby="teamTitle">
+            <div class="page-scroll">
+                <div class="content-stage wide-stage">
+                    <div class="section-kicker">Our Team</div>
+                    <h2 class="page-title" id="teamTitle">核心团队</h2>
+                    <div class="about-section team-section team-force-section">
+                        <div class="team-force" id="teamBento"></div>
+                    </div>
+                    <footer class="site-footer">
+                        <div class="footer-left">
+                            <img src="logo/jsut_logo.svg" class="footer-logo" alt="江苏理工学院">
+                        </div>
+                        <div class="footer-right">
+                            <span class="contact-item" tabindex="0" role="button" data-copy="fanhonghui@jsut.edu.cn" data-tip="fanhonghui@jsut.edu.cn" aria-label="复制邮箱">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <span class="contact-item" tabindex="0" role="button" data-copy="939557353" data-tip="QQ群：939557353" aria-label="复制QQ群号">
+                                <i class="fab fa-qq"></i>
+                            </span>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </section>
     </main>
 
     <div class="page-dots" aria-label="分页导航">
         <button class="page-dot active" type="button" data-page="0" aria-label="首页"></button>
         <button class="page-dot" type="button" data-page="1" aria-label="核心业务"></button>
         <button class="page-dot" type="button" data-page="2" aria-label="发展历程"></button>
-        <button class="page-dot" type="button" data-page="3" aria-label="团队成员"></button>
-        <button class="page-dot" type="button" data-page="4" aria-label="学术成果"></button>
+        <button class="page-dot" type="button" data-page="3" aria-label="学术成果"></button>
+        <button class="page-dot" type="button" data-page="4" aria-label="相关竞赛"></button>
+        <button class="page-dot" type="button" data-page="5" aria-label="团队成员"></button>
     </div>
 
 <div class="member-modal-overlay" id="memberModal">
@@ -1914,6 +2016,20 @@ body.menu-open {
                 <div class="member-section"><h4>⚙️ 核心技术栈</h4><p id="memberModalTech"></p></div>
                 <div class="member-section"><h4>🎓 学术与专利</h4><p id="memberModalAch"></p></div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="member-modal-overlay feature-modal-overlay" id="featureModal" aria-hidden="true">
+    <div class="member-modal feature-modal" role="dialog" aria-modal="true" aria-labelledby="featureModalTitle">
+        <button class="member-modal-close feature-modal-close" id="featureModalClose">&times;</button>
+        <div class="feature-modal-header">
+            <span class="feature-modal-tag" id="featureModalTag"></span>
+            <h2 id="featureModalTitle"></h2>
+        </div>
+        <div class="feature-modal-body">
+            <p id="featureModalDetail"></p>
+            <ul class="feature-modal-list" id="featureModalList"></ul>
         </div>
     </div>
 </div>
@@ -1938,20 +2054,6 @@ body.menu-open {
         <div class="patents-grid-new" id="patentsFullContainer" style="grid-template-columns:repeat(2,1fr);gap:16px;"></div>
     </div>
 </div>
-
-<footer class="site-footer">
-    <div class="footer-left">
-        <img src="logo/jsut_logo.svg" class="footer-logo" alt="江苏理工学院">
-    </div>
-    <div class="footer-right">
-        <span class="contact-item" tabindex="0" role="button" data-copy="fanhonghui@jsut.edu.cn" data-tip="fanhonghui@jsut.edu.cn" aria-label="复制邮箱">
-            <i class="fas fa-envelope"></i>
-        </span>
-        <span class="contact-item" tabindex="0" role="button" data-copy="939557353" data-tip="QQ群：939557353" aria-label="复制QQ群号">
-            <i class="fab fa-qq"></i>
-        </span>
-    </div>
-</footer>
 
 <div class="dl-overlay" id="dlOverlay">
     <div class="dl-modal">
@@ -1988,7 +2090,7 @@ body.menu-open {
     <script>
 
 let currentPage = 0;
-const totalPages = 5;
+const totalPages = 6;
 let isPaging = false;
 let touchStartY = 0;
 
@@ -2068,7 +2170,7 @@ function initShellNavigation() {
         });
     }
 
-    document.querySelectorAll('[data-page]').forEach(function(el) {
+    document.querySelectorAll('button[data-page], a[data-page]').forEach(function(el) {
         el.addEventListener('click', function(event) {
             event.preventDefault();
             goToPage(this.getAttribute('data-page'));
@@ -2384,7 +2486,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const geometry = new THREE.BufferGeometry();
         
         const shapes = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 6; i++) {
             shapes.push(new Float32Array(particleCount * 3));
         }
 
@@ -2455,6 +2557,16 @@ document.addEventListener('DOMContentLoaded', function() {
             shapes[4][i3] = wX;
             shapes[4][i3+1] = wY + (Math.random() - 0.5) * 2;
             shapes[4][i3+2] = wZ;
+
+            // --- 形状 5: 竞赛旋涡 ---
+            const t = Math.random();
+            const heightTornado = (t - 0.5) * 120;
+            const rTornado = 5 + t * 40;
+            const angleVortex = t * 40 + Math.random() * Math.PI * 2;
+            const rFinal = rTornado * Math.sqrt(Math.random());
+            shapes[5][i3] = rFinal * Math.cos(angleVortex);
+            shapes[5][i3+1] = heightTornado;
+            shapes[5][i3+2] = rFinal * Math.sin(angleVortex);
 
             let colorBlend = Math.random();
             colorBlend = colorBlend < 0.5 ? Math.pow(colorBlend * 2, 2) / 2 : 1 - Math.pow((1 - colorBlend) * 2, 2) / 2;
@@ -2584,12 +2696,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // ==========================================
         // 3. 动态配置
         // ==========================================
+        const pageShapeMap = [0, 1, 2, 4, 5, 3];
         const pageConfigs = [
             { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
             { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5 },
             { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffccaa, parallax: 0.5 },
-            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2 },
-            { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.02, tint: 0xeebbff, parallax: 1.2 }
+            { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.02, tint: 0xeebbff, parallax: 1.2 },
+            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0xaaccff, parallax: 1.5 },
+            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2 }
         ];
 
         let targetCam = new THREE.Vector3(pageConfigs[0].cam.x, pageConfigs[0].cam.y, pageConfigs[0].cam.z);
@@ -2648,7 +2762,8 @@ document.addEventListener('DOMContentLoaded', function() {
             material.color.copy(currentTint);
 
             const positions = geometry.attributes.position.array;
-            const targetPositions = shapes[currentPage];
+            const shapeIndex = typeof pageShapeMap[currentPage] === 'number' ? pageShapeMap[currentPage] : currentPage;
+            const targetPositions = shapes[shapeIndex];
             
             for(let i = 0; i < particleCount * 3; i++) {
                 positions[i] += (targetPositions[i] - positions[i]) * 0.04;
