@@ -102,6 +102,12 @@ function initSceneAccordion() {
 }
 
 function renderFeatureBlocks() {
+    const unifiedContainer = document.getElementById('coreFeatureGrid');
+    if (unifiedContainer) {
+        renderFeatureBlockGroup(unifiedContainer, businessFeatures.concat(renderFeatures));
+        return;
+    }
+
     const groups = [
         { container: document.getElementById('businessFeatureGrid'), items: businessFeatures },
         { container: document.getElementById('renderFeatureGrid'), items: renderFeatures }
@@ -109,34 +115,38 @@ function renderFeatureBlocks() {
 
     groups.forEach(function(group) {
         if (!group.container) return;
-        group.container.innerHTML = '';
+        renderFeatureBlockGroup(group.container, group.items);
+    });
+}
 
-        group.items.forEach(function(item) {
-            const button = document.createElement('button');
-            const tone = item.tone || 'sandbox';
-            button.type = 'button';
-            button.className = 'feature-block tone-' + tone + (item.image ? ' has-image' : '');
-            button.setAttribute('aria-label', item.title + '详情');
-            if (item.image) button.style.setProperty('--feature-image', 'url("' + item.image + '")');
+function renderFeatureBlockGroup(container, items) {
+    container.innerHTML = '';
 
-            const icon = document.createElement('span');
-            icon.className = 'feature-block-icon';
-            const iconNode = document.createElement('i');
-            iconNode.className = item.icon || 'fas fa-circle';
-            icon.appendChild(iconNode);
+    items.forEach(function(item) {
+        const button = document.createElement('button');
+        const tone = item.tone || 'sandbox';
+        button.type = 'button';
+        button.className = 'feature-block tone-' + tone + (item.image ? ' has-image' : '');
+        button.setAttribute('aria-label', item.title + '详情');
+        if (item.image) button.style.setProperty('--feature-image', 'url("' + item.image + '")');
 
-            const title = document.createElement('h3');
-            title.className = 'feature-block-title';
-            title.textContent = item.title;
+        const icon = document.createElement('span');
+        icon.className = 'feature-block-icon';
+        const iconNode = document.createElement('i');
+        iconNode.className = item.icon || 'fas fa-circle';
+        icon.appendChild(iconNode);
 
-            button.appendChild(icon);
-            button.appendChild(title);
-            button.addEventListener('click', function() {
-                showFeatureModal(item);
-            });
+        const title = document.createElement('h3');
+        title.className = 'feature-block-title';
+        title.textContent = item.title;
 
-            group.container.appendChild(button);
+        button.appendChild(icon);
+        button.appendChild(title);
+        button.addEventListener('click', function() {
+            showFeatureModal(item);
         });
+
+        container.appendChild(button);
     });
 }
 
