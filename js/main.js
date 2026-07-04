@@ -229,29 +229,30 @@ function renderTeam() {
         });
     }
 
-    function memberButton(person, className, roleText) {
-        return '<button class="team-force-member ' + className + '" type="button" data-member-name="' + escapeHtml(person.n) + '">' +
-            '<span class="team-force-role">' + escapeHtml(roleText || person.r || '') + '</span>' +
-            '<span class="team-force-name">' + escapeHtml(person.n) + '</span>' +
-            '</button>';
+    function creditBtn(person) {
+        return '<button class="credit-name-btn" type="button" data-member-name="' + escapeHtml(person.n) + '">' +
+            escapeHtml(person.n) + '</button>';
     }
 
-    var founderHtml = founders.map(function(person) {
-        return memberButton(person, 'lead', person.tags ? person.tags.join(' / ') : person.r);
-    }).join('');
+    var label1 = '<div class="credit-section-label">创始人</div>';
+    var row1 = '<div class="credit-names-row">' +
+        founders.map(function(p) { return creditBtn(p); }).join('') +
+        '</div>';
 
-    var coreHtml = coreMembers.map(function(person) {
-        return memberButton(person, 'core-member', person.r);
-    }).join('');
+    var label2 = '<div class="credit-section-label">核心团队</div>';
 
-    var supportHtml = scrollingMembers.map(function(person) {
-        return memberButton(person, 'support', person.r);
-    }).join('');
+    var allMembers = [].concat(coreMembers, scrollingMembers);
+    var row2 = '<div class="credit-names-row">' +
+        allMembers.slice(0, 4).map(function(p) { return creditBtn(p); }).join('') +
+        '</div>';
+    var row3 = '<div class="credit-names-row">' +
+        allMembers.slice(4, 8).map(function(p) { return creditBtn(p); }).join('') +
+        '</div>';
+    var row4 = '<div class="credit-names-row">' +
+        allMembers.slice(8).map(function(p) { return creditBtn(p); }).join('') +
+        '</div>';
 
-    container.innerHTML =
-        '<div class="team-force-row founders">' + founderHtml + '</div>' +
-        '<div class="team-force-row core">' + coreHtml + '</div>' +
-        '<div class="team-force-row development">' + supportHtml + '</div>';
+    container.innerHTML = label1 + row1 + label2 + row2 + row3 + row4;
 
     container.querySelectorAll('[data-member-name]').forEach(function(button) {
         button.addEventListener('click', function(event) {

@@ -1127,6 +1127,19 @@ body.menu-open {
     margin-bottom: 18px;
 }
 
+/* ?????????? */
+#page-5 .content-stage.wide-stage {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - clamp(180px, 24vh, 240px));
+}
+
+#page-5 .team-force-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
 .section-kicker::before {
     content: '';
     width: 38px;
@@ -1485,97 +1498,71 @@ body.menu-open {
     width: min(980px, 100%);
 }
 
-.team-force {
+/* === ??????????? === */
+.team-credits {
     width: min(980px, 100%);
     display: flex;
     flex-direction: column;
-    gap: clamp(30px, 5vw, 48px);
+    align-items: center;
+    text-align: center;
+    gap: 0;
+    padding: 8px 0;
+    margin-top: 80px;
 }
 
-.team-force-row {
+.credit-section-label {
+    color: #fff;
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 18px;
+    margin-top: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    white-space: nowrap;
+}
+
+.credit-section-label::before,
+.credit-section-label::after {
+    content: '';
+    flex: 0 1 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+}
+
+.credit-section-label:first-child {
+    margin-top: 0;
+}
+
+.credit-names-row {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
-    gap: clamp(18px, 3vw, 34px);
+    justify-content: center;
+    align-items: center;
+    gap: clamp(20px, 3.5vw, 44px);
+    margin-bottom: 16px;
 }
 
-.team-force-row.founders {
-    padding: 8px 0 8px 22px;
-    border-left: 2px solid #00f3ff;
-}
-
-.team-force-row.core {
-    justify-content: flex-start;
-    padding-left: 22px;
-    padding-right: 0;
-}
-
-.team-force-row.development {
-    justify-content: flex-start;
-    gap: clamp(14px, 2.2vw, 26px);
-    padding: 10px 0 10px 22px;
-}
-
-.team-force-member {
-    position: relative;
-    display: inline-flex;
+.credit-name-btn {
     border: 0;
     padding: 0;
     background: transparent;
-    color: inherit;
-    font: inherit;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    font-weight: 500;
+    font-family: inherit;
     cursor: pointer;
+    line-height: 1.5;
+    transition: color 0.25s ease, text-shadow 0.25s ease;
 }
 
-.team-force-role {
-    position: absolute;
-    left: 50%;
-    top: -28px;
-    transform: translate(-50%, 8px);
-    opacity: 0;
-    color: #ff0066;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-    pointer-events: none;
-    transition: opacity 0.28s ease, transform 0.28s ease;
-}
-
-.team-force-name {
-    color: rgba(255, 255, 255, 0.92);
-    line-height: 1.1;
-    transition: color 0.28s ease, text-shadow 0.28s ease, transform 0.28s ease;
-}
-
-.team-force-member:hover .team-force-role,
-.team-force-member:focus-visible .team-force-role {
-    opacity: 1;
-    transform: translate(-50%, 0);
-}
-
-.team-force-member:hover .team-force-name,
-.team-force-member:focus-visible .team-force-name {
+.credit-name-btn:hover,
+.credit-name-btn:focus-visible {
     color: #00f3ff;
-    text-shadow: 0 0 15px rgba(0, 243, 255, 0.72);
-    transform: translateY(-1px);
-}
-
-.team-force-member.lead .team-force-name {
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 900;
-}
-
-.team-force-member.core-member .team-force-name {
-    color: rgba(255, 255, 255, 0.74);
-    font-size: clamp(1.35rem, 2.4vw, 2rem);
-    font-weight: 760;
-}
-
-.team-force-member.support .team-force-name {
-    color: rgba(255, 255, 255, 0.52);
-    font-size: clamp(0.95rem, 1.5vw, 1.08rem);
-    font-weight: 400;
+    text-shadow: 0 0 12px rgba(0, 243, 255, 0.65);
 }
 
 .competition-section .page-container {
@@ -1626,15 +1613,15 @@ body.menu-open {
         font-size: 0.78rem;
     }
 
-    .team-force-row,
-    .team-force-row.core,
-    .team-force-row.development {
-        justify-content: flex-start;
-        padding-right: 0;
+    .credit-section-label {
+        margin-top: 28px;
+        margin-bottom: 10px;
     }
-
-    .team-force-member.lead .team-force-name {
-        font-size: clamp(1.75rem, 10vw, 2.45rem);
+    .credit-names-row {
+        gap: clamp(14px, 4vw, 28px);
+    }
+    .credit-name-btn {
+        font-size: clamp(0.95rem, 3.5vw, 1.1rem);
     }
 }
 
@@ -1964,13 +1951,11 @@ body.menu-open {
             </div>
         </section>
 
-        <section class="page" id="page-5" aria-labelledby="teamTitle">
+        <section class="page" id="page-5">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
-                    <div class="section-kicker">Our Team</div>
-                    <h2 class="page-title" id="teamTitle">核心团队</h2>
-                    <div class="about-section team-section team-force-section">
-                        <div class="team-force" id="teamBento"></div>
+                    <div class="about-section team-section team-force-section" style="padding-top:0;border:0;background:transparent;box-shadow:none;">
+                        <div class="team-credits" id="teamBento"></div>
                     </div>
                     <footer class="site-footer">
                         <div class="footer-left">
