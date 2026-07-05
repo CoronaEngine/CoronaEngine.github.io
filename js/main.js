@@ -153,20 +153,104 @@ function initSceneAccordion() {
 }
 
 function renderFeatureBlocks() {
-    const unifiedContainer = document.getElementById('coreFeatureGrid');
-    if (unifiedContainer) {
-        renderFeatureBlockGroup(unifiedContainer, businessFeatures.concat(renderFeatures));
+    const creatorGrid = document.getElementById('creatorGrid');
+    const devGrid = document.getElementById('devGrid');
+
+    if (creatorGrid || devGrid) {
+        const sandboxItems = businessFeatures.filter(function(f) { return f.tone === 'sandbox'; });
+        const devItems = businessFeatures.filter(function(f) { return f.tone === 'research'; }).concat(renderFeatures);
+        if (creatorGrid) renderBizItems(creatorGrid, sandboxItems);
+        if (devGrid)     renderBizItems(devGrid, devItems);
         return;
     }
 
-    const groups = [
-        { container: document.getElementById('businessFeatureGrid'), items: businessFeatures },
-        { container: document.getElementById('renderFeatureGrid'), items: renderFeatures }
-    ];
+    // fallback: legacy unified grid
+    const unifiedContainer = document.getElementById('coreFeatureGrid');
+    if (unifiedContainer) {
+        renderFeatureBlockGroup(unifiedContainer, businessFeatures.concat(renderFeatures));
+    }
+}
 
-    groups.forEach(function(group) {
-        if (!group.container) return;
-        renderFeatureBlockGroup(group.container, group.items);
+function renderBizItems(container, items) {
+    container.innerHTML = '';
+    items.forEach(function(item) {
+        const div = document.createElement('div');
+        div.className = 'biz-item';
+
+        const top = document.createElement('div');
+        top.className = 'biz-item-top';
+
+        const iconWrap = document.createElement('span');
+        iconWrap.className = 'biz-item-icon';
+        const iconEl = document.createElement('i');
+        iconEl.className = item.icon || 'fas fa-circle';
+        iconWrap.appendChild(iconEl);
+
+        const hd = document.createElement('div');
+        hd.className = 'biz-item-hd';
+        const nameEl = document.createElement('h3');
+        nameEl.className = 'biz-item-name';
+        nameEl.textContent = item.title;
+        const tagEl = document.createElement('span');
+        tagEl.className = 'biz-item-tag';
+        tagEl.textContent = item.tag || '';
+        hd.appendChild(nameEl);
+        hd.appendChild(tagEl);
+
+        const chevron = document.createElement('span');
+        chevron.className = 'biz-item-chevron';
+        chevron.innerHTML = '<i class="fas fa-chevron-down"></i>';
+
+        top.appendChild(iconWrap);
+        top.appendChild(hd);
+        top.appendChild(chevron);
+
+        const body = document.createElement('div');
+        body.className = 'biz-item-body';
+        const bodyInner = document.createElement('div');
+        bodyInner.className = 'biz-item-body-inner';
+
+        if (item.detail) {
+            const p = document.createElement('p');
+            p.className = 'biz-item-body-text';
+            p.textContent = item.detail;
+            bodyInner.appendChild(p);
+        }
+        if (Array.isArray(item.items) && item.items.length) {
+            const ul = document.createElement('ul');
+            ul.className = 'biz-detail-list';
+            item.items.forEach(function(li) {
+                const liEl = document.createElement('li');
+                const liIcon = document.createElement('i');
+                liIcon.className = li.icon || 'fas fa-check';
+                const liText = document.createElement('span');
+                liText.textContent = li.text || String(li);
+                liEl.appendChild(liIcon);
+                liEl.appendChild(liText);
+                ul.appendChild(liEl);
+            });
+            bodyInner.appendChild(ul);
+        }
+
+        body.appendChild(bodyInner);
+        div.appendChild(top);
+        div.appendChild(body);
+
+        div.addEventListener('click', function() {
+            const isExpanded = div.classList.contains('expanded');
+            // collapse all
+            container.querySelectorAll('.biz-item').forEach(function(el) {
+                el.classList.remove('expanded');
+                el.querySelector('.biz-item-body').style.maxHeight = '0px';
+            });
+            // expand if wasn't open
+            if (!isExpanded) {
+                div.classList.add('expanded');
+                body.style.maxHeight = body.scrollHeight + 'px';
+            }
+        });
+
+        container.appendChild(div);
     });
 }
 
