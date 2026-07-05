@@ -1850,11 +1850,11 @@ body.menu-open {
             min-height: 100%;
             padding: clamp(16px,2.5vw,36px) clamp(14px,2vw,32px);
             box-sizing: border-box;
-            align-items: start;
+            align-items: stretch;
             gap: clamp(12px,2vw,28px);
         }
-        .biz-col-creator { border-right: 1px solid rgba(255,255,255,0.08); padding-right: clamp(16px,2.5vw,36px); }
-        .biz-col-dev     { padding-left: clamp(16px,2.5vw,36px); }
+        .biz-col-creator { border-right: 1px solid rgba(255,255,255,0.08); padding-right: clamp(16px,2.5vw,36px); height: 100%; box-sizing: border-box; }
+        .biz-col-dev     { padding-left: clamp(16px,2.5vw,36px); height: 100%; box-sizing: border-box; }
         .biz-col-header  { margin-bottom: 14px; }
         .biz-col-role-badge {
             display: inline-flex; align-items: center; gap: 6px;
@@ -2022,19 +2022,9 @@ body.menu-open {
                 <div class="content-stage wide-stage">
                     <div class="biz-two-col">
                         <div class="biz-col biz-col-creator">
-                            <div class="biz-col-header">
-                                <span class="biz-col-role-badge"><i class="fas fa-gamepad"></i> 创作者</span>
-                                <h2 class="biz-col-title" id="bizCreatorTitle">为创作而生</h2>
-                                <p class="biz-col-sub">零门槛进入游戏创作的世界</p>
-                            </div>
                             <div class="biz-bento-grid" id="creatorGrid"></div>
                         </div>
                         <div class="biz-col biz-col-dev">
-                            <div class="biz-col-header">
-                                <span class="biz-col-role-badge"><i class="fas fa-terminal"></i> 开发者</span>
-                                <h2 class="biz-col-title">为探索而造</h2>
-                                <p class="biz-col-sub">极致底层控制力与前沿技术突破</p>
-                            </div>
                             <div class="biz-bento-grid" id="devGrid"></div>
                         </div>
                     </div>
