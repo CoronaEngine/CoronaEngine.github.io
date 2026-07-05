@@ -1010,6 +1010,11 @@ body.menu-open {
     transform: translateY(-80px);
 }
 
+.page:not(.active) .lane-hitbox,
+.page:not(.active) .timeline-lane {
+    pointer-events: none;
+}
+
 #page-4.page {
     transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -1878,7 +1883,7 @@ body.menu-open {
                                 <i class="fas fa-download"></i> 立即下载
                             </a>
                             <a href="https://github.com/CoronaEngine" target="_blank" rel="noopener noreferrer" class="hero-action">
-                                <i class="fab fa-github"></i> 获取开源代码 (MIT协议)
+                                <i class="fab fa-github"></i> 开源代码 
                             </a>
                         </div>
                     </div>
