@@ -63,31 +63,31 @@ const renderFeatures = [
 
 // ================= 其它数据 =================
 const patentsData = [
-    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", year: "2018", short: "三角形邻接信息移动算法" },
-    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", year: "2019", short: "法线修正碰撞移动方法" },
-    { title: "一种三维空间内基于降维的实时路径生成方法", year: "2019", short: "降维实时路径生成方法" },
-    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", year: "2019", short: "动态模糊降采样加速方法" },
-    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", year: "2020", short: "球坐标图元模型压缩方法" },
-    { title: "一种基于深度缓冲加速的光线追踪渲染方法", year: "2021", short: "深度缓冲加速光追渲染" },
-    { title: "一种基于光线路径复用的动态场景渲染加速方法", year: "2021", short: "光线路径复用渲染加速" },
-    { title: "一种基于非对称卷积核的卷积神经网络训练方法", year: "2024", short: "非对称卷积核训练方法" },
-    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", year: "2024", short: "高斯先验卷积网络优化方法" },
-    { title: "基于凸包优化的非均匀数据的聚类方法", year: "2024", short: "凸包优化聚类方法" },
-    { title: "基于密度聚类算法的三维物体碰撞体优化方法", year: "2025", short: "密度聚类碰撞体优化方法" },
-    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", year: "2025", short: "光追训练数据生成方法" },
-    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", year: "2025", short: "屏幕空间阴影优化方法" },
-    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", year: "2026", short: "智能体协同场景生成方法" },
-    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", year: "2026", short: "光场路径追踪调度方法" },
-    { title: "一种基于稀疏时空角重建的实时光场渲染方法", year: "2026", short: "稀疏时空角光场渲染方法" },
-    { title: "一种基于显示原生光线映射的子像素级光线生成方法", year: "2026", short: "子像素光线生成方法" },
-    { label: "基于大模型与流式加载的资源调度与场景预览系统", tag: "国家级 · 2026", short: "资源调度与场景预览系统", year: "2026", level: "国家级" },
-    { label: "立体显示交互系统", tag: "国家级 · 2025", short: "实时交互式立体显示系统", year: "2025", level: "国家级" },
-    { label: "三维美术资源生成与预览系统", tag: "省级 · 2024", short: "三维美术资源生成系统", year: "2024", level: "省级" },
-    { label: "分布式仿真模拟与辅助设计系统", tag: "国家级 · 2022", short: "分布式仿真辅助设计系统", year: "2022", level: "国家级" },
-    { label: "分布式渲染系统", tag: "国家级 · 2020", short: "MLT分布式渲染系统", year: "2020", level: "国家级" },
-    { label: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", tag: "国家级 · 2019", short: "物理仿真海洋探索系统", year: "2019", level: "国家级" },
-    { label: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统", tag: "省级 · 2019", short: "多语言实时交互仿真系统", year: "2019", level: "省级" },
-    { label: "基于Real-Time Ray Tracing的编程语言教学系统", tag: "国家级 · 2018", short: "编程语言教学系统", year: "2018", level: "国家级" }
+    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", tag: "2018 · 专利", label: "三角形邻接信息移动算法" },
+    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", tag: "2019 · 专利", label: "法线修正碰撞移动方法" },
+    { title: "一种三维空间内基于降维的实时路径生成方法", tag: "2019 · 专利", label: "降维实时路径生成方法" },
+    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", tag: "2019 · 专利", label: "动态模糊降采样加速方法" },
+    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", tag: "2020 · 专利", label: "球坐标图元模型压缩方法" },
+    { title: "一种基于深度缓冲加速的光线追踪渲染方法", tag: "2021 · 专利", label: "深度缓冲加速光追渲染" },
+    { title: "一种基于光线路径复用的动态场景渲染加速方法", tag: "2021 · 专利", label: "光线路径复用渲染加速" },
+    { title: "一种基于非对称卷积核的卷积神经网络训练方法", tag: "2024 · 专利", label: "非对称卷积核训练方法" },
+    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", tag: "2024 · 专利", label: "高斯先验卷积网络优化方法" },
+    { title: "基于凸包优化的非均匀数据的聚类方法", tag: "2024 · 专利", label: "凸包优化聚类方法" },
+    { title: "基于密度聚类算法的三维物体碰撞体优化方法", tag: "2025 · 专利", label: "密度聚类碰撞体优化方法" },
+    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", tag: "2025 · 专利", label: "光追训练数据生成方法" },
+    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", tag: "2025 · 专利", label: "屏幕空间阴影优化方法" },
+    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", tag: "2026 · 专利", label: "智能体协同场景生成方法" },
+    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", tag: "2026 · 专利", label: "光场路径追踪调度方法" },
+    { title: "一种基于稀疏时空角重建的实时光场渲染方法", tag: "2026 · 专利", label: "稀疏时空角光场渲染方法" },
+    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026 · 专利", label: "子像素光线生成方法" },
+    { label: "资源调度与场景预览系统", tag: "2026 · 国家级", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
+    { label: "立体显示交互系统", tag: "2025 · 国家级", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
+    { label: "三维美术资源生成系统", tag: "2024 · 省级", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
+    { label: "分布式仿真辅助设计系统", tag: "2022 · 国家级", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
+    { label: "MLT分布式渲染系统", tag: "2020 · 国家级", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
+    { label: "物理仿真海洋探索系统", tag: "2019 · 国家级", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
+    { label: "多语言实时交互仿真系统", tag: "2019 · 省级", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
+    { label: "编程语言教学系统", tag: "2018 · 国家级", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
 ];
 
 // CCF-A 顶会论文（金色 · 最内层）
@@ -429,7 +429,7 @@ function initOrbitSystem() {
     const ring2 = academicPapers.map(function(p) { return { label: p.label, tag: p.tag }; });
 
     // 第三层（蓝色）：发明专利
-    const ring3 = patentsData.map(function(p) { return { label: p.short, tag: p.year + ' · 专利' }; });
+    const ring3 = patentsData.map(function(p) { return { label: p.label, tag: p.tag }; });
 
     // // 第四层（绿色）：学生项目
     // const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
