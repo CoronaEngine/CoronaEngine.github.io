@@ -1842,7 +1842,7 @@ body.menu-open {
     .sat-name { font-size: 1.2rem; max-width: 200px; }
 }
 
-        /* ===== 核心业务：左右分栏 ===== */
+        /* ===== 核心业务：Bento Grid ===== */
         .biz-two-col {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1851,6 +1851,7 @@ body.menu-open {
             padding: clamp(16px,2.5vw,36px) clamp(14px,2vw,32px);
             box-sizing: border-box;
             align-items: start;
+            gap: clamp(12px,2vw,28px);
         }
         .biz-col-creator { border-right: 1px solid rgba(255,255,255,0.08); padding-right: clamp(16px,2.5vw,36px); }
         .biz-col-dev     { padding-left: clamp(16px,2.5vw,36px); }
@@ -1868,79 +1869,111 @@ body.menu-open {
         }
         .biz-col-sub { font-size: 0.82rem; color: rgba(190,210,230,0.55); margin: 0; line-height: 1.5; }
 
-        /* 竖向列表 */
-        .biz-item-col { display: flex; flex-direction: column; gap: 4px; }
+        /* Bento Grid */
+        .biz-bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: minmax(140px,auto) minmax(120px,auto);
+            grid-auto-rows: minmax(110px,auto);
+            gap: 10px;
+        }
 
-        .biz-item {
-            border-radius: 18px;
+        .bento-block {
+            border-radius: 16px;
             cursor: pointer; border: none; outline: none;
-            text-align: left; overflow: hidden;
-            transition: background 0.22s ease;
+            display: flex; flex-direction: column;
+            align-items: flex-start; justify-content: flex-end;
+            padding: 18px 16px;
+            overflow: hidden;
+            transition: background 0.22s ease, box-shadow 0.22s ease;
+            box-sizing: border-box; color: #fff;
         }
-        .biz-col-creator .biz-item         { background: rgba(180,140,240,0.10); }
-        .biz-col-creator .biz-item:hover   { background: rgba(180,140,240,0.17); }
-        .biz-col-creator .biz-item.expanded{ background: rgba(180,140,240,0.18); }
-        .biz-col-dev     .biz-item         { background: rgba(56,189,248,0.08); }
-        .biz-col-dev     .biz-item:hover   { background: rgba(56,189,248,0.14); }
-        .biz-col-dev     .biz-item.expanded{ background: rgba(56,189,248,0.13); }
+        .biz-col-creator .bento-block { background: rgba(180,140,240,0.10); }
+        .biz-col-creator .bento-block:hover { background: rgba(180,140,240,0.17); box-shadow: 0 6px 24px rgba(180,140,240,0.12); }
+        .biz-col-creator .bento-block.expanded { background: rgba(180,140,240,0.16); }
+        .biz-col-dev     .bento-block { background: rgba(56,189,248,0.08); }
+        .biz-col-dev     .bento-block:hover { background: rgba(56,189,248,0.14); box-shadow: 0 6px 24px rgba(56,189,248,0.10); }
+        .biz-col-dev     .bento-block.expanded { background: rgba(56,189,248,0.13); }
 
-        .biz-item-top {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 13px;
-            pointer-events: none; user-select: none;
+        .bento-block:nth-child(1) { grid-column: 1/3; grid-row: 1/3; justify-content: center; align-items: center; text-align: center; }
+        .bento-block:nth-child(2) { grid-column: 3/5; grid-row: 1/2; }
+        .bento-block:nth-child(3) { grid-column: 3/4; grid-row: 2/3; }
+        .bento-block:nth-child(4) { grid-column: 4/5; grid-row: 2/3; }
+
+        /* Extra items (5+): 左3右2 两列布局 */
+        .bento-extra-wrap {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
-        .biz-item-icon {
-            width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+        .bento-extra-left, .bento-extra-right {
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .bento-block-icon {
+            width: 38px; height: 38px; border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.88rem;
-            transition: transform 0.28s cubic-bezier(.34,1.56,.64,1), background 0.22s ease;
+            font-size: 1rem; margin-bottom: 9px; flex-shrink: 0;
         }
-        .biz-col-creator .biz-item-icon         { color: #d4b0ff; background: rgba(180,140,240,0.22); }
-        .biz-col-dev     .biz-item-icon         { color: #72d4f8; background: rgba(56,189,248,0.18); }
-        .biz-item.expanded .biz-item-icon       { transform: scale(1.07); }
-        .biz-col-creator .biz-item.expanded .biz-item-icon { background: rgba(180,140,240,0.32); }
-        .biz-col-dev     .biz-item.expanded .biz-item-icon { background: rgba(56,189,248,0.26); }
+        .bento-block:nth-child(1) .bento-block-icon { width: 52px; height: 52px; font-size: 1.5rem; border-radius: 14px; margin-bottom: 14px; }
+        .bento-extra-wrap .bento-block-icon { margin-bottom: 9px; }
+        .biz-col-creator .bento-block-icon { color: #d4b0ff; background: rgba(180,140,240,0.22); }
+        .biz-col-dev     .bento-block-icon { color: #72d4f8; background: rgba(56,189,248,0.18); }
 
-        .biz-item-hd { flex: 1; min-width: 0; }
-        .biz-item-name {
-            font-size: 0.90rem; font-weight: 700; color: rgba(255,255,255,0.92);
-            margin: 0; line-height: 1.3;
+        .bento-block-title {
+            margin: 0; font-weight: 800; color: rgba(255,255,255,0.93);
+            line-height: 1.25; pointer-events: none; user-select: none;
+            font-size: clamp(0.82rem, 1.1vw, 0.95rem);
+        }
+        .bento-block:nth-child(1) .bento-block-title { font-size: clamp(1rem, 1.7vw, 1.25rem); }
+        .bento-block-tag {
+            font-size: 0.63rem; color: rgba(180,200,228,0.40);
+            pointer-events: none; user-select: none; display: block; margin-top: 3px;
+        }
+
+        /* Push-expand: detail inside block, max-height transition */
+        .bento-block-detail {
+            width: 100%; max-height: 0; overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.26s ease, margin-top 0.26s ease;
+            margin-top: 0;
+        }
+        .bento-block.expanded .bento-block-detail {
+            max-height: 320px; opacity: 1; margin-top: 11px;
+        }
+        .bento-block:nth-child(1) .bento-block-detail { text-align: left; }
+
+        .bento-detail-body {
+            font-size: 0.79rem; color: rgba(215,225,240,0.68);
+            line-height: 1.70; margin: 0; pointer-events: none; user-select: none;
+        }
+        .bento-detail-list { list-style: none; margin: 6px 0 0; padding: 0; }
+        .bento-detail-list li {
+            display: flex; align-items: flex-start; gap: 7px;
+            font-size: 0.75rem; color: rgba(205,218,238,0.56); padding: 3px 0;
             pointer-events: none; user-select: none;
         }
-        .biz-item-tag {
-            font-size: 0.69rem; color: rgba(180,200,228,0.48);
-            pointer-events: none; user-select: none; display: block; margin-top: 1px;
-        }
-        .biz-item-chevron {
-            font-size: 0.72rem; color: rgba(255,255,255,0.28); flex-shrink: 0;
+        .bento-detail-list li i { margin-top: 3px; opacity: 0.50; flex-shrink: 0; }
+
+        /* Chevron indicator */
+        .bento-block-chevron {
+            position: absolute; bottom: 10px; right: 12px;
+            font-size: 0.63rem; color: rgba(255,255,255,0.20);
             transition: transform 0.25s ease, color 0.22s ease;
-            pointer-events: none; user-select: none;
+            pointer-events: none;
         }
-        .biz-item.expanded .biz-item-chevron { transform: rotate(180deg); color: rgba(255,255,255,0.55); }
-
-        /* 展开区域 */
-        .biz-item-body {
-            overflow: hidden; max-height: 0;
-            transition: max-height 0.36s cubic-bezier(0.4,0,0.2,1);
-        }
-        .biz-item.expanded .biz-item-body { max-height: 600px; }
-        .biz-item-body-inner { padding: 0 13px 11px 53px; }
-        .biz-item-body-text {
-            font-size: 0.82rem; color: rgba(215,225,240,0.72);
-            line-height: 1.65; margin: 0;
-            pointer-events: none; user-select: none;
-        }
-        .biz-detail-list { list-style: none; margin: 7px 0 0; padding: 0; }
-        .biz-detail-list li {
-            display: flex; align-items: flex-start; gap: 8px;
-            font-size: 0.79rem; color: rgba(205,218,238,0.62); padding: 3px 0;
-        }
-        .biz-detail-list li i { margin-top: 2px; opacity: 0.55; flex-shrink: 0; }
+        .bento-block.expanded .bento-block-chevron { transform: rotate(180deg); color: rgba(255,255,255,0.42); }
 
         @media (max-width: 820px) {
             .biz-two-col { grid-template-columns: 1fr; padding: 28px 16px; }
             .biz-col-creator { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding-right: 0; padding-bottom: 32px; margin-bottom: 32px; }
             .biz-col-dev { padding-left: 0; }
+            .biz-bento-grid { grid-template-columns: repeat(2,1fr); grid-template-rows: 160px 100px 100px; }
+            .bento-block:nth-child(1) { grid-column: 1/3; grid-row: 1/2; }
+            .bento-block:nth-child(2) { grid-column: 1/3; grid-row: 2/3; }
+            .bento-block:nth-child(3) { grid-column: 1/2; grid-row: 3/4; }
+            .bento-block:nth-child(4) { grid-column: 2/3; grid-row: 3/4; }
         }
     </style>
 </head>
@@ -1994,7 +2027,7 @@ body.menu-open {
                                 <h2 class="biz-col-title" id="bizCreatorTitle">为创作而生</h2>
                                 <p class="biz-col-sub">零门槛进入游戏创作的世界</p>
                             </div>
-                            <div class="biz-item-col" id="creatorGrid"></div>
+                            <div class="biz-bento-grid" id="creatorGrid"></div>
                         </div>
                         <div class="biz-col biz-col-dev">
                             <div class="biz-col-header">
@@ -2002,7 +2035,7 @@ body.menu-open {
                                 <h2 class="biz-col-title">为探索而造</h2>
                                 <p class="biz-col-sub">极致底层控制力与前沿技术突破</p>
                             </div>
-                            <div class="biz-item-col" id="devGrid"></div>
+                            <div class="biz-bento-grid" id="devGrid"></div>
                         </div>
                     </div>
                 </div>
