@@ -1850,11 +1850,11 @@ body.menu-open {
             min-height: 100%;
             padding: clamp(16px,2.5vw,36px) clamp(14px,2vw,32px);
             box-sizing: border-box;
-            align-items: start;
+            align-items: stretch;
             gap: clamp(12px,2vw,28px);
         }
-        .biz-col-creator { border-right: 1px solid rgba(255,255,255,0.08); padding-right: clamp(16px,2.5vw,36px); }
-        .biz-col-dev     { padding-left: clamp(16px,2.5vw,36px); }
+        .biz-col-creator { border-right: 1px solid rgba(255,255,255,0.08); padding-right: clamp(16px,2.5vw,36px); height: clamp(480px,46vw,600px); overflow: hidden; box-sizing: border-box; }
+        .biz-col-dev     { padding-left: clamp(16px,2.5vw,36px); height: clamp(480px,46vw,600px); overflow: hidden; box-sizing: border-box; }
         .biz-col-header  { margin-bottom: 14px; }
         .biz-col-role-badge {
             display: inline-flex; align-items: center; gap: 6px;
@@ -1873,9 +1873,10 @@ body.menu-open {
         .biz-bento-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: minmax(140px,auto) minmax(120px,auto);
-            grid-auto-rows: minmax(110px,auto);
+            grid-template-rows: 1fr 1fr;
+            grid-auto-rows: 1fr;
             gap: 10px;
+            height: 100%;
         }
 
         .bento-block {
@@ -1885,8 +1886,11 @@ body.menu-open {
             align-items: flex-start; justify-content: flex-end;
             padding: 18px 16px;
             overflow: hidden;
-            transition: background 0.22s ease, box-shadow 0.22s ease;
+            transition: background 0.22s ease, box-shadow 0.22s ease,
+                        margin 0.32s cubic-bezier(0.4,0,0.2,1),
+                        padding 0.32s cubic-bezier(0.4,0,0.2,1);
             box-sizing: border-box; color: #fff;
+            position: relative; z-index: 1;
         }
         .biz-col-creator .bento-block { background: rgba(180,140,240,0.10); }
         .biz-col-creator .bento-block:hover { background: rgba(180,140,240,0.17); box-shadow: 0 6px 24px rgba(180,140,240,0.12); }
@@ -1895,21 +1899,38 @@ body.menu-open {
         .biz-col-dev     .bento-block:hover { background: rgba(56,189,248,0.14); box-shadow: 0 6px 24px rgba(56,189,248,0.10); }
         .biz-col-dev     .bento-block.expanded { background: rgba(56,189,248,0.13); }
 
-        .bento-block:nth-child(1) { grid-column: 1/3; grid-row: 1/3; justify-content: center; align-items: center; text-align: center; }
-        .bento-block:nth-child(2) { grid-column: 3/5; grid-row: 1/2; }
-        .bento-block:nth-child(3) { grid-column: 3/4; grid-row: 2/3; }
-        .bento-block:nth-child(4) { grid-column: 4/5; grid-row: 2/3; }
+        .bento-block:nth-child(1) { grid-column: span 2; grid-row: span 2; justify-content: center; align-items: center; text-align: center; }
+        .bento-block:nth-child(2) { grid-column: span 2; }
+        .bento-block:nth-child(3) { grid-column: span 1; }
+        .bento-block:nth-child(4) { grid-column: span 1; }
 
-        /* Extra items (5+): 左3右2 两列布局 */
+        /* Extra items: 两列布局 */
         .bento-extra-wrap {
             grid-column: 1 / -1;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
+            height: 100%;
+            align-items: stretch;
         }
         .bento-extra-left, .bento-extra-right {
-            display: flex; flex-direction: column; gap: 10px;
+            display: flex; flex-direction: column; gap: 10px; height: 100%;
         }
+        .bento-extra-left .bento-block, .bento-extra-right .bento-block {
+            flex: 1 1 0; min-height: 0;
+        }
+        /* 单个extra块：全宽长方形 */
+        .bento-extra-wrap > .bento-block {
+            grid-column: 1 / -1;
+            min-height: 0; height: 100%;
+            justify-content: flex-start;
+            flex-direction: row;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 22px;
+        }
+        .bento-extra-wrap > .bento-block .bento-block-icon { margin-bottom: 0; flex-shrink: 0; }
+        .bento-extra-wrap > .bento-block .bento-block-title { font-size: clamp(0.88rem, 1.2vw, 1.05rem); }
 
         .bento-block-icon {
             width: 38px; height: 38px; border-radius: 10px;
@@ -1940,7 +1961,7 @@ body.menu-open {
             margin-top: 0;
         }
         .bento-block.expanded .bento-block-detail {
-            max-height: 320px; opacity: 1; margin-top: 11px;
+            max-height: 520px; opacity: 1; margin-top: 11px;
         }
         .bento-block:nth-child(1) .bento-block-detail { text-align: left; }
 
@@ -2022,19 +2043,9 @@ body.menu-open {
                 <div class="content-stage wide-stage">
                     <div class="biz-two-col">
                         <div class="biz-col biz-col-creator">
-                            <div class="biz-col-header">
-                                <span class="biz-col-role-badge"><i class="fas fa-gamepad"></i> 创作者</span>
-                                <h2 class="biz-col-title" id="bizCreatorTitle">为创作而生</h2>
-                                <p class="biz-col-sub">零门槛进入游戏创作的世界</p>
-                            </div>
                             <div class="biz-bento-grid" id="creatorGrid"></div>
                         </div>
                         <div class="biz-col biz-col-dev">
-                            <div class="biz-col-header">
-                                <span class="biz-col-role-badge"><i class="fas fa-terminal"></i> 开发者</span>
-                                <h2 class="biz-col-title">为探索而造</h2>
-                                <p class="biz-col-sub">极致底层控制力与前沿技术突破</p>
-                            </div>
                             <div class="biz-bento-grid" id="devGrid"></div>
                         </div>
                     </div>
