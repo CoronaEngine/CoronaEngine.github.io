@@ -87,6 +87,8 @@
             display: block;
             overflow: visible;
             background: transparent;
+            -webkit-mask-image: linear-gradient(to right, black 87%, transparent 100%);
+            mask-image: linear-gradient(to right, black 87%, transparent 100%);
         }
         /* 枝干初始隐藏，等待动画 */
         .branch-draw { opacity: 1; }
@@ -1881,14 +1883,25 @@ body.menu-open {
             </div>
         </section>
 
-        <section class="page" id="page-1" aria-labelledby="businessTitle">
+        <section class="page" id="page-1" aria-labelledby="bizCreatorTitle">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
-                    <!-- <div class="section-kicker">Core Business</div>
-                    <h2 class="page-title" id="businessTitle">核心业务</h2>
-                    <div class="frameless-section unified-feature-section"> -->
-                        <div class="hero-showcase feature-section">
-                            <div class="feature-block-grid unified-feature-grid" id="coreFeatureGrid" aria-label="核心业务与渲染能力"></div>
+                    <div class="biz-two-col">
+                        <div class="biz-col biz-col-creator">
+                            <div class="biz-col-header">
+                                <span class="biz-col-role-badge"><i class="fas fa-gamepad"></i> 创作者</span>
+                                <h2 class="biz-col-title" id="bizCreatorTitle">为创作而生</h2>
+                                <p class="biz-col-sub">零门槛进入游戏创作的世界</p>
+                            </div>
+                            <div class="biz-item-col" id="creatorGrid"></div>
+                        </div>
+                        <div class="biz-col biz-col-dev">
+                            <div class="biz-col-header">
+                                <span class="biz-col-role-badge"><i class="fas fa-terminal"></i> 开发者</span>
+                                <h2 class="biz-col-title">为探索而造</h2>
+                                <p class="biz-col-sub">极致底层控制力与前沿技术突破</p>
+                            </div>
+                            <div class="biz-item-col" id="devGrid"></div>
                         </div>
                     </div>
                 </div>
@@ -1985,16 +1998,7 @@ body.menu-open {
                                 <path class="lane-hitbox" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
                                 <path class="branch-draw branch-glow" data-start="0.42" data-end="1" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
                                 <path class="branch-draw branch-core" data-start="0.42" data-end="1" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
-                                <path class="branch-draw branch-glow" data-start="0.55" data-end="0.70" d="M 1582 250 C 1635 190 1722 166 1836 182"/>
-                                <path class="branch-draw branch-core" data-start="0.55" data-end="0.70" d="M 1582 250 C 1635 190 1722 166 1836 182"/>
-                                <path class="branch-draw branch-glow" data-start="0.75" data-end="0.92" d="M 2006 232 C 2078 295 2182 320 2304 308"/>
-                                <path class="branch-draw branch-core" data-start="0.75" data-end="0.92" d="M 2006 232 C 2078 295 2182 320 2304 308"/>
-                                <path class="branch-leaf" d="M 1740 178 C 1718 154 1724 130 1758 120 M 1778 180 C 1804 160 1834 164 1858 190" stroke="#d19bff"/>
-                                <path class="branch-leaf" d="M 2190 310 C 2162 292 2162 260 2194 244 M 2228 310 C 2258 292 2290 300 2312 328" stroke="#ffcc33"/>
                                 <circle class="timeline-bud" cx="1582" cy="250" r="12" fill="#c491ff" stroke="#24183f" stroke-width="10"/>
-                                <circle class="timeline-bud" cx="1836" cy="182" r="10" fill="#d19bff" stroke="#24183f" stroke-width="8"/>
-                                <circle class="timeline-bud" cx="2006" cy="232" r="12" fill="#ffcc33" stroke="#3d2d0e" stroke-width="9"/>
-                                <circle class="timeline-bud" cx="2386" cy="258" r="11" fill="#7dd3fc" stroke="#102a3c" stroke-width="9"/>
                             </g>
 
                             <g class="merge-hotspot" tabindex="0" role="button" aria-label="2025 年融合节点">
@@ -2009,7 +2013,6 @@ body.menu-open {
                                 <image href="render/Group 14265.png" x="88" y="346" width="48" height="48" opacity="0.92"/>
                                 <path d="M 1564 239 h36 l10 12 l-28 17 l-28 -17 z" fill="none" stroke="#c491ff" stroke-width="3" opacity="0.74"/>
                                 <path d="M 1568 242 l14 10 l23 -10" stroke="#c491ff" stroke-width="3" opacity="0.70"/>
-                                <path d="M 2371 258 h30 M 2386 243 C 2376 251 2376 265 2386 273 M 2386 243 C 2396 251 2396 265 2386 273" stroke="#7dd3fc" stroke-width="2" opacity="0.62"/>
                             </g>
 
                             <foreignObject x="54" y="28" width="302" height="104" data-lane="cabbage">
