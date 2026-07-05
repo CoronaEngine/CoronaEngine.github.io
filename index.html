@@ -1702,9 +1702,9 @@ body.menu-open {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: radial-gradient(135deg at 35% 35%, #1e3a5f 0%, #0a1628 60%, #060e1c 100%);
-    border: 3px solid rgba(96,165,250,.5);
-    box-shadow: 0 0 56px rgba(96,165,250,.3), inset 0 0 40px rgba(0,0,0,.5);
+    background: radial-gradient(135deg at 35% 35%, rgba(30,58,95,.38) 0%, rgba(10,22,40,.32) 60%, rgba(6,14,28,.28) 100%);
+    border: 3px solid rgba(96,165,250,.28);
+    box-shadow: 0 0 56px rgba(96,165,250,.15), inset 0 0 40px rgba(0,0,0,.25);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1714,8 +1714,8 @@ body.menu-open {
     gap: 12px;
 }
 .orbit-planet-title {
-    font-size: 2.1rem;
-    font-weight: 800;
+    font-size: 3.5rem;
+    font-weight: 900;
     color: #e0f0ff;
     letter-spacing: .04em;
     line-height: 1.2;
@@ -2065,16 +2065,10 @@ body.menu-open {
                             <foreignObject x="1540" y="302" width="82" height="44" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2026</div>
                             </foreignObject>
-                            <foreignObject x="1400" y="352" width="368" height="90" data-lane="corona">
+                            <foreignObject x="1400" y="332" width="368" height="140" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>Corona Engine v1.0 蓄势待发</h3>
-                                    <p>深度重构，持续打磨，厚积薄发</p>
-                                </div>
-                            </foreignObject>
-                            <foreignObject x="1966" y="98" width="350" height="116" data-lane="corona">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy right">
-                                    <h3>支撑高校赛事，学术课题深化</h3>
-                                    <p>主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
+                                    <p>深度重构，持续打磨，厚积薄发。支撑高校赛事，学术课题深化，主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
                                 </div>
                             </foreignObject>
                         </svg>
@@ -2728,19 +2722,17 @@ document.addEventListener('DOMContentLoaded', function() {
             shapes[1][i3+1] = r1 * Math.sin(phi) * Math.sin(theta);
             shapes[1][i3+2] = r1 * Math.cos(phi);
 
-            // --- 形状 2: 时空沙漏/虫洞 ---
+            // --- 形状 2: 放射性能量场 ---
             const thetaG = Math.random() * 2 * Math.PI;
-            const throatRadius = 22; // 虫洞最细处（中心）的半径，确保不会挡住文字
-            const maxHeight = 30;    // 虫洞上下延伸的最大高度
+            const phiG = Math.acos(2 * Math.random() - 1); 
+            const safeZone = 28; // 中心绝对没有任何粒子的安全半径
+            const distance = safeZone + Math.pow(Math.random(), 2.5) * 40; 
+            const spikes = Math.pow(Math.sin(thetaG * 6) * Math.sin(phiG * 6), 4) * 15;
+            const r2 = distance + spikes;
 
-            const y = (Math.random() - 0.5) * 2 * maxHeight;
-            const thickness = Math.random() * 4; // 星云外壳的厚度
-
-            const r2 = throatRadius * Math.sqrt(1 + Math.pow(y / 12, 2)) + thickness;
-
-            shapes[2][i3] = r2 * Math.cos(thetaG);
-            shapes[2][i3+1] = y; // Y轴不再是压缩的，而是完全释放
-            shapes[2][i3+2] = r2 * Math.sin(thetaG);
+            shapes[2][i3] = r2 * Math.sin(phiG) * Math.cos(thetaG);
+            shapes[2][i3+1] = r2 * Math.cos(phiG) * 0.4; 
+            shapes[2][i3+2] = r2 * Math.sin(phiG) * Math.sin(thetaG);
 
             // --- 形状 3: 星环圆环 ---
             const R = 35;
@@ -2897,7 +2889,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // ==========================================
         // 3. 动态配置
         // ==========================================
-        const pageShapeMap = [0, 1, 4, 2, 5, 3];
+        const pageShapeMap = [0, 1, 1, 2, 5, 3];
         const pageConfigs = [
             { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
             { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5 },
