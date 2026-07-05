@@ -25,8 +25,10 @@ const scrollingMembers = [
     {n: "张权", r: "引擎开发（Agent）", b: "AI方向在读硕士，专注于引擎内Agent模块的研发，协助推进引擎AI架构的演进，致力于提升引擎工具链的智能化体验。", avatar: "images/ZQ.jpg", link: "https://github.com/fox-zq"},
     {n: "欧阳省文", r: "引擎开发（底层）", b: "专注场景流式加载与几何相关底层算法研发，深度参与大场景资源调度、空间几何与性能优化，致力于提升场景加载与渲染效率。", avatar: "images/OYSW.jpg", link: "https://github.com/6wcczgwszry6"},
     {n: "范泽敏", r: "引擎开发（Agent）", b: "专注于AI智能体开发，探索大语言模型在游戏引擎中的应用，主导三维场景生成等功能。", avatar: "images/FZM.jpg", link: "https://github.com/fzm2017"},
-    {n: "杨星启", r: "引擎开发（前端）", b: "前端页面设计大佬。", avatar: "images/YXQ.jpg", link: "https://github.com/lanmoliu-ops"},
-    {n: "黄俊霖", r: "引擎开发（摸鱼）", b: "这是一只摸鱼的懒狗，什么也没有留下。", avatar: "images/HJL.jpg", link: "https://github.com/ALazyDog-oh"}
+    {n: "杨星启", r: "引擎开发（产品设计）", b: "专注于引擎前端页面的设计与开发，负责官网及编辑器界面的视觉呈现与交互体验，致力于将复杂的引擎功能以直观友好的方式呈现给用户。", avatar: "images/YXQ.jpg", link: "https://github.com/lanmoliu-ops"},
+    {n: "赵嘉琪", r: "引擎开发（产品设计）", b: "专注于引擎前端页面的设计与开发，负责官网及编辑器界面的视觉呈现与交互体验，致力于将复杂的引擎功能以直观友好的方式呈现给用户。", avatar: "images/ZJQ.jpg", link: ""},
+    {n: "王丹敏", r: "引擎开发（产品设计）", b: "专注于引擎前端页面的设计与开发，负责官网及编辑器界面的视觉呈现与交互体验，致力于将复杂的引擎功能以直观友好的方式呈现给用户。", avatar: "images/WDM.jpg", link: ""},
+    {n: "黄俊霖", r: "引擎开发（编辑器与工具链）", b: "负责引擎前端开发及整体技术方案的落地，参与引擎官网与工具链前端的构建与维护。", avatar: "images/HJL.jpg", link: "https://github.com/ALazyDog-oh"}
 ];
 
 // ================= 核心业务与渲染展示 =================
@@ -377,11 +379,25 @@ function renderTeam() {
     var label2 = '<div class="credit-section-label"><span>核心团队</span></div>';
 
     var allMembers = [].concat(coreMembers, scrollingMembers);
-    var row2 = '<div class="credit-names-row">' +
-        allMembers.map(function(p) { return creditBtn(p); }).join('') +
+    var chunkSize = Math.ceil(allMembers.length / 3);
+    var rows2 = '';
+    for (var i = 0; i < 3; i++) {
+        var chunk = allMembers.slice(i * chunkSize, (i + 1) * chunkSize);
+        if (chunk.length > 0) {
+            rows2 += '<div class="credit-names-row">' +
+                chunk.map(function(p) { return creditBtn(p); }).join('') +
+                '</div>';
+        }
+    }
+
+    var label3 = '<div class="credit-section-label"><span>加入我们</span></div>';
+    var row3 = '<div class="credit-join-row">' +
+        '<a href="https://www.jsut.edu.cn" target="_blank" rel="noopener noreferrer"><img src="logo/jsut_logo.svg" class="footer-logo" alt="江苏理工学院"></a>' +
+        '<span class="contact-item" tabindex="0" role="button" data-copy="fanhonghui@jsut.edu.cn" data-tip="fanhonghui@jsut.edu.cn" aria-label="复制邮箱"><i class="fas fa-envelope"></i></span>' +
+        '<span class="contact-item" tabindex="0" role="button" data-copy="939557353" data-tip="QQ群：939557353" aria-label="复制QQ群号"><i class="fab fa-qq"></i></span>' +
         '</div>';
 
-    container.innerHTML = label1 + row1 + label2 + row2;
+    container.innerHTML = label1 + row1 + label2 + rows2 + label3 + row3;
 
     container.querySelectorAll('[data-member-name]').forEach(function(button) {
         button.addEventListener('click', function(event) {
