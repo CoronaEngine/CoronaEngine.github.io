@@ -177,10 +177,11 @@ function renderFeatureBlocks() {
 function renderBizItems(container, items) {
     container.innerHTML = '';
 
-    function buildBlock(item) {
+    function buildBlock(item, colSpan) {
         var block = document.createElement('div');
         block.className = 'bento-block';
         block.style.position = 'relative';
+        block.dataset.colSpan = colSpan || 1;
 
         var iconWrap = document.createElement('div');
         iconWrap.className = 'bento-block-icon';
@@ -235,8 +236,13 @@ function renderBizItems(container, items) {
             var isExpanded = block.classList.contains('expanded');
             container.querySelectorAll('.bento-block.expanded').forEach(function(el) {
                 el.classList.remove('expanded');
+                el.style.gridColumn = '';
             });
-            if (!isExpanded) block.classList.add('expanded');
+            if (!isExpanded) {
+                block.classList.add('expanded');
+                var span = parseInt(block.dataset.colSpan || 1);
+                if (span === 1) block.style.gridColumn = 'span 2';
+            }
         });
 
         return block;
@@ -245,27 +251,32 @@ function renderBizItems(container, items) {
     var mainItems = items.slice(0, 4);
     var extraItems = items.slice(4);
 
-    mainItems.forEach(function(item) {
-        container.appendChild(buildBlock(item));
+    var mainColSpans = [2, 2, 1, 1];
+    mainItems.forEach(function(item, idx) {
+        container.appendChild(buildBlock(item, mainColSpans[idx]));
     });
 
     if (extraItems.length) {
         var wrap = document.createElement('div');
         wrap.className = 'bento-extra-wrap';
 
-        var leftCol = document.createElement('div');
-        leftCol.className = 'bento-extra-left';
-        var rightCol = document.createElement('div');
-        rightCol.className = 'bento-extra-right';
+        if (extraItems.length === 1) {
+            wrap.appendChild(buildBlock(extraItems[0]));
+        } else {
+            var leftCol = document.createElement('div');
+            leftCol.className = 'bento-extra-left';
+            var rightCol = document.createElement('div');
+            rightCol.className = 'bento-extra-right';
 
-        var splitAt = Math.ceil(extraItems.length / 2);
-        extraItems.forEach(function(item, idx) {
-            if (idx < splitAt) leftCol.appendChild(buildBlock(item));
-            else rightCol.appendChild(buildBlock(item));
-        });
+            var splitAt = Math.ceil(extraItems.length / 2);
+            extraItems.forEach(function(item, idx) {
+                if (idx < splitAt) leftCol.appendChild(buildBlock(item));
+                else rightCol.appendChild(buildBlock(item));
+            });
 
-        wrap.appendChild(leftCol);
-        wrap.appendChild(rightCol);
+            wrap.appendChild(leftCol);
+            wrap.appendChild(rightCol);
+        }
         container.appendChild(wrap);
     }
 }
