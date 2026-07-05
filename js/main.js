@@ -544,15 +544,15 @@ function initOrbitSystem() {
     // 第三层（蓝色）：发明专利
     const ring3 = patentsData.map(function(p) { return { label: p.label, tag: p.tag }; });
 
-    // 第三层（绿色）：学生项目
-    const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
+    // // 第四层（绿色）：学生项目
+    // const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
 
     // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
         { items: ring1, radius: 340, tiltDeg: 66, speed: 0.0022, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
         { items: ring2, radius: 520, tiltDeg: 64, speed: 0.0028, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
-        { items: ring4, radius: 700, tiltDeg: 62, speed: 0.0034, type: 'student', sizeClass: 'sat-sm', angle: Math.PI / 3 },
-        { items: ring3, radius: 900, tiltDeg: 60, speed: 0.0040, type: 'patent', sizeClass: 'sat-xs', angle: Math.PI / 6 }
+        { items: ring3, radius: 720, tiltDeg: 62, speed: 0.0034, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
+        // { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0040, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
     ];
 
     // 设置视觉轨道环尺寸
