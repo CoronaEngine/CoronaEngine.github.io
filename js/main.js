@@ -4,8 +4,8 @@
 
 const founders = [
     {n: "范洪辉", r: "联合创始人", tags: ["教授", "博士", "硕士生导师"], b: "江苏理工学院教授、博士、硕士生导师，\"十四五\"计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", exp: "江苏理工学院教授、博士、硕士生导师，\"十四五\"计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", avatar: "images/Fan.jpg", link: "https://baike.baidu.com/item/%E8%8C%83%E6%B4%AA%E8%BE%89/63345374", detail: true},
-    {n: "Zero", r: "联合创始人", tags: ["某初创公司CTO", "校外硕士研究生导师"], b: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", exp: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
-    {n: "邹刘磊", r: "联合创始人", tags: ["资深图形引擎工程师"], b: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", exp: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou", detail: true}
+    {n: "Zero", r: "联合创始人", tags: ["资深图形引擎工程师"], b: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", exp: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
+    {n: "邹刘磊", r: "联合创始人", tags: ["某初创公司CTO", "校外硕士研究生导师"], b: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", exp: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou", detail: true}
 ];
 
 const coreMembers = [
@@ -24,7 +24,9 @@ const scrollingMembers = [
     {n: "Beortust", r: "引擎开发（Agent）", b: "开源社区研究员、RWKV生态开发者，专注于LLM底层原理及Agent智能体在游戏引擎中的深度融合。", avatar: "images/Beortust.jpg", link: "https://github.com/Beortext"},
     {n: "张权", r: "引擎开发（Agent）", b: "AI方向在读硕士，专注于引擎内Agent模块的研发，协助推进引擎AI架构的演进，致力于提升引擎工具链的智能化体验。", avatar: "images/ZQ.jpg", link: "https://github.com/fox-zq"},
     {n: "欧阳省文", r: "引擎开发（底层）", b: "专注场景流式加载与几何相关底层算法研发，深度参与大场景资源调度、空间几何与性能优化，致力于提升场景加载与渲染效率。", avatar: "images/OYSW.jpg", link: "https://github.com/6wcczgwszry6"},
-    {n: "范泽敏", r: "引擎开发（Agent）", b: "专注于AI智能体开发，探索大语言模型在游戏引擎中的应用，主导三维场景生成等功能。", avatar: "images/FZM.jpg", link: "https://github.com/fzm2017"}
+    {n: "范泽敏", r: "引擎开发（Agent）", b: "专注于AI智能体开发，探索大语言模型在游戏引擎中的应用，主导三维场景生成等功能。", avatar: "images/FZM.jpg", link: "https://github.com/fzm2017"},
+    {n: "杨星启", r: "引擎开发（前端）", b: "前端页面设计大佬。", avatar: "images/YXQ.jpg", link: "https://github.com/lanmoliu-ops"},
+    {n: "黄俊霖", r: "引擎开发（摸鱼）", b: "这是一只摸鱼的懒狗，什么也没有留下。", avatar: "images/HJL.jpg", link: "https://github.com/ALazyDog-oh"}
 ];
 
 // ================= 核心业务与渲染展示 =================
@@ -279,25 +281,19 @@ function renderTeam() {
             escapeHtml(person.n) + '</button>';
     }
 
-    var label1 = '<div class="credit-section-label">创始人</div>';
+    var label1 = '<div class="credit-section-label"><span>创始人</span></div>';
     var row1 = '<div class="credit-names-row">' +
         founders.map(function(p) { return creditBtn(p); }).join('') +
         '</div>';
 
-    var label2 = '<div class="credit-section-label">核心团队</div>';
+    var label2 = '<div class="credit-section-label"><span>核心团队</span></div>';
 
     var allMembers = [].concat(coreMembers, scrollingMembers);
     var row2 = '<div class="credit-names-row">' +
-        allMembers.slice(0, 4).map(function(p) { return creditBtn(p); }).join('') +
-        '</div>';
-    var row3 = '<div class="credit-names-row">' +
-        allMembers.slice(4, 8).map(function(p) { return creditBtn(p); }).join('') +
-        '</div>';
-    var row4 = '<div class="credit-names-row">' +
-        allMembers.slice(8).map(function(p) { return creditBtn(p); }).join('') +
+        allMembers.map(function(p) { return creditBtn(p); }).join('') +
         '</div>';
 
-    container.innerHTML = label1 + row1 + label2 + row2 + row3 + row4;
+    container.innerHTML = label1 + row1 + label2 + row2;
 
     container.querySelectorAll('[data-member-name]').forEach(function(button) {
         button.addEventListener('click', function(event) {
@@ -437,9 +433,9 @@ function initOrbitSystem() {
     // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
         { items: ring1, radius: 230, tiltDeg: 68, speed: 0.0022, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
-        { items: ring2, radius: 400, tiltDeg: 66, speed: 0.0030, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
-        { items: ring3, radius: 570, tiltDeg: 64, speed: 0.0038, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
-        { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0048, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
+        { items: ring2, radius: 400, tiltDeg: 66, speed: 0.0028, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
+        { items: ring3, radius: 570, tiltDeg: 64, speed: 0.0034, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
+        { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0040, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
     ];
 
     // 设置视觉轨道环尺寸

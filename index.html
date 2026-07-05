@@ -341,6 +341,11 @@
         .title-interactive {
             display: inline-flex; flex-wrap: wrap; justify-content: center;
             cursor: default; user-select: none;
+            background: linear-gradient(90deg, #ffcc33 0%, #ffffff 50%, #ffcc33 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
         }
         .tl-char {
             display: inline-block;
@@ -1056,6 +1061,9 @@ body.menu-open {
     font-size: clamp(3.2rem, 8vw, 7.4rem);
     line-height: 1;
     margin: 0 0 24px;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 0.2em;
 }
 
 .hero-copy p {
@@ -1252,7 +1260,7 @@ body.menu-open {
 
     .hero-copy .title-interactive {
         font-size: clamp(2.65rem, 15vw, 3.7rem);
-        line-height: 0.95;
+        line-height: 1.15;
     }
 
     .hero-copy .tl-space {
@@ -1506,7 +1514,6 @@ body.menu-open {
 }
 
 .credit-section-label {
-    color: #fff;
     font-size: clamp(1.1rem, 1.6vw, 1.4rem);
     letter-spacing: 0.35em;
     text-transform: uppercase;
@@ -1518,6 +1525,14 @@ body.menu-open {
     justify-content: center;
     gap: 16px;
     white-space: nowrap;
+}
+
+.credit-section-label span {
+    background: linear-gradient(90deg, #ffcc33 0%, #ffffff 50%, #ffcc33 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 .credit-section-label::before,
@@ -2708,26 +2723,16 @@ document.addEventListener('DOMContentLoaded', function() {
             shapes[1][i3+1] = r1 * Math.sin(phi) * Math.sin(theta);
             shapes[1][i3+2] = r1 * Math.cos(phi);
 
-            // --- 形状 2: DNA 双螺旋 ---
-            const h = (Math.random() - 0.5) * 100;
-            const strand = i % 2; 
-            const angleHelix = h * 0.15 + (strand * Math.PI);
-            const rHelix = 12;
-            const nX = (Math.random() - 0.5) * 3;
-            const nY = (Math.random() - 0.5) * 3;
-            const nZ = (Math.random() - 0.5) * 3;
-            if (Math.random() < 0.1) {
-                const bridgeT = Math.random();
-                const a1 = h * 0.15;
-                const a2 = h * 0.15 + Math.PI;
-                shapes[2][i3] = (rHelix * Math.cos(a1)) + bridgeT * (rHelix * Math.cos(a2) - rHelix * Math.cos(a1)) + nX;
-                shapes[2][i3+1] = h + nY;
-                shapes[2][i3+2] = (rHelix * Math.sin(a1)) + bridgeT * (rHelix * Math.sin(a2) - rHelix * Math.sin(a1)) + nZ;
-            } else {
-                shapes[2][i3] = rHelix * Math.cos(angleHelix) + nX;
-                shapes[2][i3+1] = h + nY;
-                shapes[2][i3+2] = rHelix * Math.sin(angleHelix) + nZ;
-            }
+            // --- 形状 2: 成长螺旋星云 ---
+            const uG = Math.random();
+            const vG = Math.random();
+            const thetaG = 2 * Math.PI * uG;
+            const phiG = Math.acos(2 * vG - 1);
+            const r2 = 26 * Math.pow(vG, 0.4) + (Math.random() - 0.5) * 6;
+            const spinG = r2 * 0.12;
+            shapes[2][i3] = r2 * Math.sin(phiG) * Math.cos(thetaG + spinG);
+            shapes[2][i3+1] = r2 * Math.sin(phiG) * Math.sin(thetaG + spinG) * 0.6;
+            shapes[2][i3+2] = r2 * Math.cos(phiG);
 
             // --- 形状 3: 星环圆环 ---
             const R = 35;
