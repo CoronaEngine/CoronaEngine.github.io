@@ -28,7 +28,8 @@ const scrollingMembers = [
     {n: "杨星启", r: "引擎开发（产品设计）", b: "专注于引擎前端页面的设计与开发，负责官网及编辑器界面的视觉呈现与交互体验，致力于将复杂的引擎功能以直观友好的方式呈现给用户。", avatar: "images/YXQ.jpg", link: "https://github.com/lanmoliu-ops"},
     {n: "赵嘉琪", r: "引擎开发（产品设计）", b: "专注于引擎前端页面的设计与开发，负责官网及编辑器界面的视觉呈现与交互体验，致力于将复杂的引擎功能以直观友好的方式呈现给用户。", avatar: "images/ZJQ.jpg", link: ""},
     {n: "王丹敏", r: "引擎开发（产品设计）", b: "专注于引擎前端页面的设计与开发，负责官网及编辑器界面的视觉呈现与交互体验，致力于将复杂的引擎功能以直观友好的方式呈现给用户。", avatar: "images/WDM.jpg", link: ""},
-    {n: "黄俊霖", r: "引擎开发（编辑器与工具链）", b: "负责引擎前端开发及整体技术方案的落地，参与引擎官网与工具链前端的构建与维护。", avatar: "images/HJL.jpg", link: "https://github.com/ALazyDog-oh"}
+    {n: "黄俊霖", r: "引擎开发（编辑器与工具链）", b: "负责引擎前端开发及整体技术方案的落地，参与引擎官网与工具链前端的构建与维护。", avatar: "images/HJL.jpg", link: "https://github.com/ALazyDog-oh"},
+    {n: "霍笑甜", r: "引擎开发（编辑器与工具链）", b: "负责引擎前端开发及整体技术方案的落地，参与引擎官网与工具链前端的构建与维护。", avatar: "images/HXT.jpg", link: "https://github.com/Paper206422"}
 ];
 
 // ================= 核心业务与渲染展示 =================
@@ -175,85 +176,106 @@ function renderFeatureBlocks() {
 
 function renderBizItems(container, items) {
     container.innerHTML = '';
-    items.forEach(function(item) {
-        const div = document.createElement('div');
-        div.className = 'biz-item';
 
-        const top = document.createElement('div');
-        top.className = 'biz-item-top';
+    items.slice(0, 4).forEach(function(item) {
+        var block = document.createElement('div');
+        block.className = 'bento-block';
 
-        const iconWrap = document.createElement('span');
-        iconWrap.className = 'biz-item-icon';
-        const iconEl = document.createElement('i');
+        var iconWrap = document.createElement('div');
+        iconWrap.className = 'bento-block-icon';
+        var iconEl = document.createElement('i');
         iconEl.className = item.icon || 'fas fa-circle';
         iconWrap.appendChild(iconEl);
 
-        const hd = document.createElement('div');
-        hd.className = 'biz-item-hd';
-        const nameEl = document.createElement('h3');
-        nameEl.className = 'biz-item-name';
-        nameEl.textContent = item.title;
-        const tagEl = document.createElement('span');
-        tagEl.className = 'biz-item-tag';
-        tagEl.textContent = item.tag || '';
-        hd.appendChild(nameEl);
-        hd.appendChild(tagEl);
+        var title = document.createElement('h3');
+        title.className = 'bento-block-title';
+        title.textContent = item.title;
 
-        const chevron = document.createElement('span');
-        chevron.className = 'biz-item-chevron';
-        chevron.innerHTML = '<i class="fas fa-chevron-down"></i>';
+        block.appendChild(iconWrap);
+        block.appendChild(title);
 
-        top.appendChild(iconWrap);
-        top.appendChild(hd);
-        top.appendChild(chevron);
-
-        const body = document.createElement('div');
-        body.className = 'biz-item-body';
-        const bodyInner = document.createElement('div');
-        bodyInner.className = 'biz-item-body-inner';
-
-        if (item.detail) {
-            const p = document.createElement('p');
-            p.className = 'biz-item-body-text';
-            p.textContent = item.detail;
-            bodyInner.appendChild(p);
-        }
-        if (Array.isArray(item.items) && item.items.length) {
-            const ul = document.createElement('ul');
-            ul.className = 'biz-detail-list';
-            item.items.forEach(function(li) {
-                const liEl = document.createElement('li');
-                const liIcon = document.createElement('i');
-                liIcon.className = li.icon || 'fas fa-check';
-                const liText = document.createElement('span');
-                liText.textContent = li.text || String(li);
-                liEl.appendChild(liIcon);
-                liEl.appendChild(liText);
-                ul.appendChild(liEl);
-            });
-            bodyInner.appendChild(ul);
+        if (item.tag) {
+            var tag = document.createElement('span');
+            tag.className = 'bento-block-tag';
+            tag.textContent = item.tag;
+            block.appendChild(tag);
         }
 
-        body.appendChild(bodyInner);
-        div.appendChild(top);
-        div.appendChild(body);
-
-        div.addEventListener('click', function() {
-            const isExpanded = div.classList.contains('expanded');
-            // collapse all
-            container.querySelectorAll('.biz-item').forEach(function(el) {
-                el.classList.remove('expanded');
-                el.querySelector('.biz-item-body').style.maxHeight = '0px';
-            });
-            // expand if wasn't open
-            if (!isExpanded) {
-                div.classList.add('expanded');
-                body.style.maxHeight = body.scrollHeight + 'px';
-            }
+        block.addEventListener('click', function() {
+            openBentoOverlay(container, item);
         });
 
-        container.appendChild(div);
+        container.appendChild(block);
     });
+
+    var overlay = document.createElement('div');
+    overlay.className = 'bento-expanded-overlay';
+    container.appendChild(overlay);
+
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.classList.remove('active');
+    });
+}
+
+function openBentoOverlay(container, item) {
+    var overlay = container.querySelector('.bento-expanded-overlay');
+    if (!overlay) return;
+
+    overlay.innerHTML = '';
+
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'bento-exp-close';
+    closeBtn.type = 'button';
+    closeBtn.setAttribute('aria-label', '关闭');
+    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    closeBtn.addEventListener('click', function() {
+        overlay.classList.remove('active');
+    });
+    overlay.appendChild(closeBtn);
+
+    var iconWrap = document.createElement('div');
+    iconWrap.className = 'bento-exp-icon';
+    var iconEl = document.createElement('i');
+    iconEl.className = item.icon || 'fas fa-circle';
+    iconWrap.appendChild(iconEl);
+    overlay.appendChild(iconWrap);
+
+    if (item.tag) {
+        var tag = document.createElement('span');
+        tag.className = 'bento-exp-tag';
+        tag.textContent = item.tag;
+        overlay.appendChild(tag);
+    }
+
+    var title = document.createElement('h3');
+    title.className = 'bento-exp-title';
+    title.textContent = item.title;
+    overlay.appendChild(title);
+
+    if (item.detail) {
+        var body = document.createElement('p');
+        body.className = 'bento-exp-body';
+        body.textContent = item.detail;
+        overlay.appendChild(body);
+    }
+
+    if (Array.isArray(item.items) && item.items.length) {
+        var ul = document.createElement('ul');
+        ul.className = 'bento-exp-list';
+        item.items.forEach(function(li) {
+            var liEl = document.createElement('li');
+            var liIcon = document.createElement('i');
+            liIcon.className = li.icon || 'fas fa-check';
+            var liText = document.createElement('span');
+            liText.textContent = li.text || String(li);
+            liEl.appendChild(liIcon);
+            liEl.appendChild(liText);
+            ul.appendChild(liEl);
+        });
+        overlay.appendChild(ul);
+    }
+
+    overlay.classList.add('active');
 }
 
 function renderFeatureBlockGroup(container, items) {
