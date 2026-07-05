@@ -177,21 +177,21 @@ function renderFeatureBlocks() {
 function renderBizItems(container, items) {
     container.innerHTML = '';
 
-    items.slice(0, 4).forEach(function(item) {
+    function buildBlock(item) {
         var block = document.createElement('div');
         block.className = 'bento-block';
+        block.style.position = 'relative';
 
         var iconWrap = document.createElement('div');
         iconWrap.className = 'bento-block-icon';
         var iconEl = document.createElement('i');
         iconEl.className = item.icon || 'fas fa-circle';
         iconWrap.appendChild(iconEl);
+        block.appendChild(iconWrap);
 
         var title = document.createElement('h3');
         title.className = 'bento-block-title';
         title.textContent = item.title;
-
-        block.appendChild(iconWrap);
         block.appendChild(title);
 
         if (item.tag) {
@@ -201,81 +201,72 @@ function renderBizItems(container, items) {
             block.appendChild(tag);
         }
 
+        var detail = document.createElement('div');
+        detail.className = 'bento-block-detail';
+        if (item.detail) {
+            var body = document.createElement('p');
+            body.className = 'bento-detail-body';
+            body.textContent = item.detail;
+            detail.appendChild(body);
+        }
+        if (Array.isArray(item.items) && item.items.length) {
+            var ul = document.createElement('ul');
+            ul.className = 'bento-detail-list';
+            item.items.forEach(function(li) {
+                var liEl = document.createElement('li');
+                var liIcon = document.createElement('i');
+                liIcon.className = li.icon || 'fas fa-check';
+                var liText = document.createElement('span');
+                liText.textContent = li.text || String(li);
+                liEl.appendChild(liIcon);
+                liEl.appendChild(liText);
+                ul.appendChild(liEl);
+            });
+            detail.appendChild(ul);
+        }
+        block.appendChild(detail);
+
+        var chevron = document.createElement('span');
+        chevron.className = 'bento-block-chevron';
+        chevron.innerHTML = '<i class="fas fa-chevron-down"></i>';
+        block.appendChild(chevron);
+
         block.addEventListener('click', function() {
-            openBentoOverlay(container, item);
+            var isExpanded = block.classList.contains('expanded');
+            container.querySelectorAll('.bento-block.expanded').forEach(function(el) {
+                el.classList.remove('expanded');
+            });
+            if (!isExpanded) block.classList.add('expanded');
         });
 
-        container.appendChild(block);
-    });
-
-    var overlay = document.createElement('div');
-    overlay.className = 'bento-expanded-overlay';
-    container.appendChild(overlay);
-
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) overlay.classList.remove('active');
-    });
-}
-
-function openBentoOverlay(container, item) {
-    var overlay = container.querySelector('.bento-expanded-overlay');
-    if (!overlay) return;
-
-    overlay.innerHTML = '';
-
-    var closeBtn = document.createElement('button');
-    closeBtn.className = 'bento-exp-close';
-    closeBtn.type = 'button';
-    closeBtn.setAttribute('aria-label', '关闭');
-    closeBtn.innerHTML = '<i class="fas fa-times"></i>';
-    closeBtn.addEventListener('click', function() {
-        overlay.classList.remove('active');
-    });
-    overlay.appendChild(closeBtn);
-
-    var iconWrap = document.createElement('div');
-    iconWrap.className = 'bento-exp-icon';
-    var iconEl = document.createElement('i');
-    iconEl.className = item.icon || 'fas fa-circle';
-    iconWrap.appendChild(iconEl);
-    overlay.appendChild(iconWrap);
-
-    if (item.tag) {
-        var tag = document.createElement('span');
-        tag.className = 'bento-exp-tag';
-        tag.textContent = item.tag;
-        overlay.appendChild(tag);
+        return block;
     }
 
-    var title = document.createElement('h3');
-    title.className = 'bento-exp-title';
-    title.textContent = item.title;
-    overlay.appendChild(title);
+    var mainItems = items.slice(0, 4);
+    var extraItems = items.slice(4);
 
-    if (item.detail) {
-        var body = document.createElement('p');
-        body.className = 'bento-exp-body';
-        body.textContent = item.detail;
-        overlay.appendChild(body);
-    }
+    mainItems.forEach(function(item) {
+        container.appendChild(buildBlock(item));
+    });
 
-    if (Array.isArray(item.items) && item.items.length) {
-        var ul = document.createElement('ul');
-        ul.className = 'bento-exp-list';
-        item.items.forEach(function(li) {
-            var liEl = document.createElement('li');
-            var liIcon = document.createElement('i');
-            liIcon.className = li.icon || 'fas fa-check';
-            var liText = document.createElement('span');
-            liText.textContent = li.text || String(li);
-            liEl.appendChild(liIcon);
-            liEl.appendChild(liText);
-            ul.appendChild(liEl);
+    if (extraItems.length) {
+        var wrap = document.createElement('div');
+        wrap.className = 'bento-extra-wrap';
+
+        var leftCol = document.createElement('div');
+        leftCol.className = 'bento-extra-left';
+        var rightCol = document.createElement('div');
+        rightCol.className = 'bento-extra-right';
+
+        extraItems.forEach(function(item, idx) {
+            if (idx < 3) leftCol.appendChild(buildBlock(item));
+            else rightCol.appendChild(buildBlock(item));
         });
-        overlay.appendChild(ul);
-    }
 
-    overlay.classList.add('active');
+        wrap.appendChild(leftCol);
+        wrap.appendChild(rightCol);
+        container.appendChild(wrap);
+    }
 }
 
 function renderFeatureBlockGroup(container, items) {
@@ -553,15 +544,15 @@ function initOrbitSystem() {
     // 第三层（蓝色）：发明专利
     const ring3 = patentsData.map(function(p) { return { label: p.label, tag: p.tag }; });
 
-    // // 第四层（绿色）：学生项目
-    // const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
+    // 第三层（绿色）：学生项目
+    const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
 
     // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
         { items: ring1, radius: 340, tiltDeg: 66, speed: 0.0022, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
         { items: ring2, radius: 520, tiltDeg: 64, speed: 0.0028, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
-        { items: ring3, radius: 720, tiltDeg: 62, speed: 0.0034, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
-        // { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0040, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
+        { items: ring4, radius: 700, tiltDeg: 62, speed: 0.0034, type: 'student', sizeClass: 'sat-sm', angle: Math.PI / 3 },
+        { items: ring3, radius: 900, tiltDeg: 60, speed: 0.0040, type: 'patent', sizeClass: 'sat-xs', angle: Math.PI / 6 }
     ];
 
     // 设置视觉轨道环尺寸
