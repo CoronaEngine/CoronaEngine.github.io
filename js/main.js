@@ -4,8 +4,8 @@
 
 const founders = [
     {n: "范洪辉", r: "联合创始人", tags: ["教授", "博士", "硕士生导师"], b: "江苏理工学院教授、博士、硕士生导师，\"十四五\"计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", exp: "江苏理工学院教授、博士、硕士生导师，\"十四五\"计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", avatar: "images/Fan.jpg", link: "https://baike.baidu.com/item/%E8%8C%83%E6%B4%AA%E8%BE%89/63345374", detail: true},
-    {n: "Zero", r: "联合创始人", tags: ["某初创公司CTO", "校外硕士研究生导师"], b: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", exp: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
-    {n: "邹刘磊", r: "联合创始人", tags: ["资深图形引擎工程师"], b: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", exp: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou", detail: true}
+    {n: "Zero", r: "联合创始人", tags: ["资深图形引擎工程师"], b: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", exp: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
+    {n: "邹刘磊", r: "联合创始人", tags: ["某初创公司CTO", "校外硕士研究生导师"], b: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", exp: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou", detail: true}
 ];
 
 const coreMembers = [
@@ -24,7 +24,9 @@ const scrollingMembers = [
     {n: "Beortust", r: "引擎开发（Agent）", b: "开源社区研究员、RWKV生态开发者，专注于LLM底层原理及Agent智能体在游戏引擎中的深度融合。", avatar: "images/Beortust.jpg", link: "https://github.com/Beortext"},
     {n: "张权", r: "引擎开发（Agent）", b: "AI方向在读硕士，专注于引擎内Agent模块的研发，协助推进引擎AI架构的演进，致力于提升引擎工具链的智能化体验。", avatar: "images/ZQ.jpg", link: "https://github.com/fox-zq"},
     {n: "欧阳省文", r: "引擎开发（底层）", b: "专注场景流式加载与几何相关底层算法研发，深度参与大场景资源调度、空间几何与性能优化，致力于提升场景加载与渲染效率。", avatar: "images/OYSW.jpg", link: "https://github.com/6wcczgwszry6"},
-    {n: "范泽敏", r: "引擎开发（Agent）", b: "专注于AI智能体开发，探索大语言模型在游戏引擎中的应用，主导三维场景生成等功能。", avatar: "images/FZM.jpg", link: "https://github.com/fzm2017"}
+    {n: "范泽敏", r: "引擎开发（Agent）", b: "专注于AI智能体开发，探索大语言模型在游戏引擎中的应用，主导三维场景生成等功能。", avatar: "images/FZM.jpg", link: "https://github.com/fzm2017"},
+    {n: "杨星启", r: "引擎开发（前端）", b: "前端页面设计大佬。", avatar: "images/YXQ.jpg", link: "https://github.com/lanmoliu-ops"},
+    {n: "黄俊霖", r: "引擎开发（摸鱼）", b: "这是一只摸鱼的懒狗，什么也没有留下。", avatar: "images/HJL.jpg", link: "https://github.com/ALazyDog-oh"}
 ];
 
 // ================= 核心业务与渲染展示 =================
@@ -61,32 +63,40 @@ const renderFeatures = [
 
 // ================= 其它数据 =================
 const patentsData = [
-    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", year: "2018", short: "三角形邻接信息移动算法" },
-    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", year: "2019", short: "法线修正碰撞移动方法" },
-    { title: "一种三维空间内基于降维的实时路径生成方法", year: "2019", short: "降维实时路径生成方法" },
-    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", year: "2019", short: "动态模糊降采样加速方法" },
-    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", year: "2020", short: "球坐标图元模型压缩方法" },
-    { title: "一种基于深度缓冲加速的光线追踪渲染方法", year: "2021", short: "深度缓冲加速光追渲染" },
-    { title: "一种基于光线路径复用的动态场景渲染加速方法", year: "2021", short: "光线路径复用渲染加速" },
-    { title: "一种基于非对称卷积核的卷积神经网络训练方法", year: "2024", short: "非对称卷积核训练方法" },
-    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", year: "2024", short: "高斯先验卷积网络优化方法" },
-    { title: "基于凸包优化的非均匀数据的聚类方法", year: "2024", short: "凸包优化聚类方法" },
-    { title: "基于密度聚类算法的三维物体碰撞体优化方法", year: "2025", short: "密度聚类碰撞体优化方法" },
-    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", year: "2025", short: "光追训练数据生成方法" },
-    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", year: "2025", short: "屏幕空间阴影优化方法" },
-    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", year: "2026", short: "智能体协同场景生成方法" },
-    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", year: "2026", short: "光场路径追踪调度方法" },
-    { title: "一种基于稀疏时空角重建的实时光场渲染方法", year: "2026", short: "稀疏时空角光场渲染方法" },
-    { title: "一种基于显示原生光线映射的子像素级光线生成方法", year: "2026", short: "子像素光线生成方法" }
+    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", tag: "2018 · 专利", label: "三角形邻接信息移动算法" },
+    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", tag: "2019 · 专利", label: "法线修正碰撞移动方法" },
+    { title: "一种三维空间内基于降维的实时路径生成方法", tag: "2019 · 专利", label: "降维实时路径生成方法" },
+    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", tag: "2019 · 专利", label: "动态模糊降采样加速方法" },
+    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", tag: "2020 · 专利", label: "球坐标图元模型压缩方法" },
+    { title: "一种基于深度缓冲加速的光线追踪渲染方法", tag: "2021 · 专利", label: "深度缓冲加速光追渲染" },
+    { title: "一种基于光线路径复用的动态场景渲染加速方法", tag: "2021 · 专利", label: "光线路径复用渲染加速" },
+    { title: "一种基于非对称卷积核的卷积神经网络训练方法", tag: "2024 · 专利", label: "非对称卷积核训练方法" },
+    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", tag: "2024 · 专利", label: "高斯先验卷积网络优化方法" },
+    { title: "基于凸包优化的非均匀数据的聚类方法", tag: "2024 · 专利", label: "凸包优化聚类方法" },
+    { title: "基于密度聚类算法的三维物体碰撞体优化方法", tag: "2025 · 专利", label: "密度聚类碰撞体优化方法" },
+    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", tag: "2025 · 专利", label: "光追训练数据生成方法" },
+    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", tag: "2025 · 专利", label: "屏幕空间阴影优化方法" },
+    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", tag: "2026 · 专利", label: "智能体协同场景生成方法" },
+    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", tag: "2026 · 专利", label: "光场路径追踪调度方法" },
+    { title: "一种基于稀疏时空角重建的实时光场渲染方法", tag: "2026 · 专利", label: "稀疏时空角光场渲染方法" },
+    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026 · 专利", label: "子像素光线生成方法" },
+    { label: "资源调度与场景预览系统", tag: "2026 · 国家级", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
+    { label: "立体显示交互系统", tag: "2025 · 国家级", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
+    { label: "三维美术资源生成系统", tag: "2024 · 省级", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
+    { label: "分布式仿真辅助设计系统", tag: "2022 · 国家级", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
+    { label: "MLT分布式渲染系统", tag: "2020 · 国家级", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
+    { label: "物理仿真海洋探索系统", tag: "2019 · 国家级", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
+    { label: "多语言实时交互仿真系统", tag: "2019 · 省级", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
+    { label: "编程语言教学系统", tag: "2018 · 国家级", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
 ];
 
 // CCF-A 顶会论文（金色 · 最内层）
 const ccfaPapers = [
-    { label: "Real-Time Light Field Tracing", tag: "录用 · CCF-A", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Light-Field Path Tracing", tag: "录用 · CCF-A", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Topology-Aware Polymorphism", tag: "公开 · CCF-A", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
-    { label: "游戏生成", tag: "投稿中 · CCF-A", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
-    { label: "光场UI算法", tag: "投稿中 · CCF-A", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
+    { label: "Real-Time Light Field Tracing", tag: "录用 · CCF-A会议", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Light-Field Path Tracing", tag: "录用 · CCF-A会议", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Topology-Aware Polymorphism", tag: "公开 · CCF-A会议", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
+    { label: "游戏生成", tag: "投稿中 · CCF-A会议", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
+    { label: "光场UI算法", tag: "投稿中 · CCF-A会议", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
 ];
 
 // 学术论文（紫色 · 第二层）
@@ -94,29 +104,25 @@ const academicPapers = [
     { label: "SK-GAN", tag: "中科院四区 · 投稿中", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "投稿中" },
     { label: "跨学科学业表现建模", tag: "中科院四区 · 投稿中", full: "Hybrid Three-Level Modeling of Cross-Disciplinary Academic Performance in Higher Education", year: "2026", venue: "中科院四区", status: "投稿中" },
     { label: "Diagnostic-Driven MLT", tag: "中科院四区 · 投稿中", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "Visibility-Driven MLT", tag: "中科院四区 · 2025", full: "Removing Initialization Phase of Visibility-Driven Metropolis Light Transport", year: "2025", venue: "中科院四区", status: "已公开" },
-    { label: "Hot Reloading Runtime", tag: "EI · 2025", full: "Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis", year: "2025", venue: "EI会议", status: "已公开" },
-    { label: "Shadow Maps Enhancement", tag: "EI · 2024", full: "Enhancing Shadow Maps via Screen-Space Visibility", year: "2024", venue: "EI会议", status: "已公开" },
-    { label: "Parameter-Free MLT", tag: "EI · 2022", full: "Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility", year: "2022", venue: "EI会议", status: "已公开" },
+    { label: "Visibility-Driven MLT", tag: "2025 · 中科院四区", full: "Removing Initialization Phase of Visibility-Driven Metropolis Light Transport", year: "2025", venue: "中科院四区", status: "已公开" },
+    { label: "Hot Reloading Runtime", tag: "2025 · EI会议", full: "Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis", year: "2025", venue: "EI会议", status: "已公开" },
+    { label: "Shadow Maps Enhancement", tag: "2024 · EI会议", full: "Enhancing Shadow Maps via Screen-Space Visibility", year: "2024", venue: "EI会议", status: "已公开" },
+    { label: "Parameter-Free MLT", tag: "2022 · EI会议", full: "Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility", year: "2022", venue: "EI会议", status: "已公开" },
     { label: "多智能体场景创作机制", tag: "中文核心 · 投稿中", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
-    { label: "疲劳驾驶检测方法", tag: "知网 · 2021", full: "基于多视觉特征融合的非侵入式疲劳驾驶检测方法研究", year: "2021", venue: "知网普刊", status: "已公开" },
-    { label: "YOLOv3改进方法", tag: "知网 · 2020", full: "基于深度可分离卷积与通道裁剪的YOLOv3改进方法", year: "2020", venue: "知网普刊", status: "已公开" },
-    { label: "金融时序预测技术", tag: "知网 · 2020", full: "基于多重分形分析法与模糊神经网络的金融时序预测技术研究", year: "2020", venue: "知网普刊", status: "已公开" },
-    { label: "顶点与地形交互算法", tag: "知网 · 2019", full: "一种空间数据结构加速的顶点与地形实时交互算法", year: "2019", venue: "知网普刊", status: "已公开" }
 ];
 
-// 学生项目（绿色 · 最外层）
-const studentProjects = [
-    { label: "资源调度与场景预览系统", tag: "国家级 · 2026", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
-    { label: "立体显示交互系统", tag: "国家级 · 2025", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
-    { label: "三维美术资源生成系统", tag: "省级 · 2024", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
-    { label: "文化出海数字化方案", tag: "校级 · 2024", full: "“岁月失语，惟石能言”：基于数字技术的文化出海新方案", year: "2024", level: "校级" },
-    { label: "分布式仿真辅助设计系统", tag: "国家级 · 2022", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
-    { label: "MLT分布式渲染系统", tag: "国家级 · 2020", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
-    { label: "物理仿真海洋探索系统", tag: "国家级 · 2019", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
-    { label: "多语言实时交互仿真系统", tag: "省级 · 2019", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
-    { label: "编程语言教学系统", tag: "国家级 · 2018", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
-];
+// // 学生项目（绿色 · 最外层）
+// const studentProjects = [
+//     { label: "资源调度与场景预览系统", tag: "国家级 · 2026", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
+//     { label: "立体显示交互系统", tag: "国家级 · 2025", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
+//     { label: "三维美术资源生成系统", tag: "省级 · 2024", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
+//     { label: "文化出海数字化方案", tag: "校级 · 2024", full: "“岁月失语，惟石能言”：基于数字技术的文化出海新方案", year: "2024", level: "校级" },
+//     { label: "分布式仿真辅助设计系统", tag: "国家级 · 2022", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
+//     { label: "MLT分布式渲染系统", tag: "国家级 · 2020", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
+//     { label: "物理仿真海洋探索系统", tag: "国家级 · 2019", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
+//     { label: "多语言实时交互仿真系统", tag: "省级 · 2019", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
+//     { label: "编程语言教学系统", tag: "国家级 · 2018", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
+// ];
 
 // ================= 页面初始化与交互 =================
 document.addEventListener('DOMContentLoaded', () => {
@@ -279,25 +285,19 @@ function renderTeam() {
             escapeHtml(person.n) + '</button>';
     }
 
-    var label1 = '<div class="credit-section-label">创始人</div>';
+    var label1 = '<div class="credit-section-label"><span>创始人</span></div>';
     var row1 = '<div class="credit-names-row">' +
         founders.map(function(p) { return creditBtn(p); }).join('') +
         '</div>';
 
-    var label2 = '<div class="credit-section-label">核心团队</div>';
+    var label2 = '<div class="credit-section-label"><span>核心团队</span></div>';
 
     var allMembers = [].concat(coreMembers, scrollingMembers);
     var row2 = '<div class="credit-names-row">' +
-        allMembers.slice(0, 4).map(function(p) { return creditBtn(p); }).join('') +
-        '</div>';
-    var row3 = '<div class="credit-names-row">' +
-        allMembers.slice(4, 8).map(function(p) { return creditBtn(p); }).join('') +
-        '</div>';
-    var row4 = '<div class="credit-names-row">' +
-        allMembers.slice(8).map(function(p) { return creditBtn(p); }).join('') +
+        allMembers.map(function(p) { return creditBtn(p); }).join('') +
         '</div>';
 
-    container.innerHTML = label1 + row1 + label2 + row2 + row3 + row4;
+    container.innerHTML = label1 + row1 + label2 + row2;
 
     container.querySelectorAll('[data-member-name]').forEach(function(button) {
         button.addEventListener('click', function(event) {
@@ -429,17 +429,17 @@ function initOrbitSystem() {
     const ring2 = academicPapers.map(function(p) { return { label: p.label, tag: p.tag }; });
 
     // 第三层（蓝色）：发明专利
-    const ring3 = patentsData.map(function(p) { return { label: p.short, tag: p.year + ' · 专利' }; });
+    const ring3 = patentsData.map(function(p) { return { label: p.label, tag: p.tag }; });
 
-    // 第四层（绿色）：学生项目
-    const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
+    // // 第四层（绿色）：学生项目
+    // const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
 
     // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
-        { items: ring1, radius: 230, tiltDeg: 68, speed: 0.0022, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
-        { items: ring2, radius: 400, tiltDeg: 66, speed: 0.0030, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
-        { items: ring3, radius: 570, tiltDeg: 64, speed: 0.0038, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
-        { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0048, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
+        { items: ring1, radius: 340, tiltDeg: 66, speed: 0.0022, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
+        { items: ring2, radius: 520, tiltDeg: 64, speed: 0.0028, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
+        { items: ring3, radius: 720, tiltDeg: 62, speed: 0.0034, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
+        // { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0040, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
     ];
 
     // 设置视觉轨道环尺寸

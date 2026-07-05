@@ -74,8 +74,6 @@
             max-width: 96vw;
             margin: 24px auto 60px auto;
             overflow: hidden;
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.08);
             background: transparent;
             cursor: default;
         }
@@ -89,6 +87,8 @@
             display: block;
             overflow: visible;
             background: transparent;
+            -webkit-mask-image: linear-gradient(to right, black 87%, transparent 100%);
+            mask-image: linear-gradient(to right, black 87%, transparent 100%);
         }
         /* 枝干初始隐藏，等待动画 */
         .branch-draw { opacity: 1; }
@@ -230,15 +230,7 @@
         }
         .timeline-year-pill:hover { transform: scale(1.12); box-shadow: 0 0 28px rgba(174,110,255,0.36); }
         .timeline-progress {
-            position: absolute;
-            left: 28px;
-            right: 28px;
-            bottom: 16px;
-            z-index: 4;
-            height: 2px;
-            border-radius: 999px;
-            overflow: hidden;
-            background: rgba(255,255,255,0.08);
+            display: none;
         }
         .timeline-progress span {
             display: block;
@@ -341,6 +333,11 @@
         .title-interactive {
             display: inline-flex; flex-wrap: wrap; justify-content: center;
             cursor: default; user-select: none;
+            background: linear-gradient(90deg, #ffcc33 0%, #ffffff 50%, #ffcc33 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
         }
         .tl-char {
             display: inline-block;
@@ -1005,6 +1002,11 @@ body.menu-open {
     transform: translateY(-80px);
 }
 
+.page:not(.active) .lane-hitbox,
+.page:not(.active) .timeline-lane {
+    pointer-events: none;
+}
+
 #page-4.page {
     transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -1056,6 +1058,9 @@ body.menu-open {
     font-size: clamp(3.2rem, 8vw, 7.4rem);
     line-height: 1;
     margin: 0 0 24px;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 0.2em;
 }
 
 .hero-copy p {
@@ -1252,7 +1257,7 @@ body.menu-open {
 
     .hero-copy .title-interactive {
         font-size: clamp(2.65rem, 15vw, 3.7rem);
-        line-height: 0.95;
+        line-height: 1.15;
     }
 
     .hero-copy .tl-space {
@@ -1506,7 +1511,6 @@ body.menu-open {
 }
 
 .credit-section-label {
-    color: #fff;
     font-size: clamp(1.1rem, 1.6vw, 1.4rem);
     letter-spacing: 0.35em;
     text-transform: uppercase;
@@ -1518,6 +1522,14 @@ body.menu-open {
     justify-content: center;
     gap: 16px;
     white-space: nowrap;
+}
+
+.credit-section-label span {
+    background: linear-gradient(90deg, #ffcc33 0%, #ffffff 50%, #ffcc33 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 .credit-section-label::before,
@@ -1682,9 +1694,9 @@ body.menu-open {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: radial-gradient(135deg at 35% 35%, #1e3a5f 0%, #0a1628 60%, #060e1c 100%);
-    border: 3px solid rgba(96,165,250,.5);
-    box-shadow: 0 0 56px rgba(96,165,250,.3), inset 0 0 40px rgba(0,0,0,.5);
+    background: radial-gradient(135deg at 35% 35%, rgba(30,58,95,.62) 0%, rgba(10,22,40,.56) 60%, rgba(6,14,28,.50) 100%);
+    border: 3px solid rgba(96,165,250,.42);
+    box-shadow: 0 0 56px rgba(96,165,250,.22), inset 0 0 40px rgba(0,0,0,.38);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1694,8 +1706,8 @@ body.menu-open {
     gap: 12px;
 }
 .orbit-planet-title {
-    font-size: 2.1rem;
-    font-weight: 800;
+    font-size: 3.5rem;
+    font-weight: 900;
     color: #e0f0ff;
     letter-spacing: .04em;
     line-height: 1.2;
@@ -1863,7 +1875,7 @@ body.menu-open {
                                 <i class="fas fa-download"></i> 立即下载
                             </a>
                             <a href="https://github.com/CoronaEngine" target="_blank" rel="noopener noreferrer" class="hero-action">
-                                <i class="fab fa-github"></i> 获取开源代码 (MIT协议)
+                                <i class="fab fa-github"></i> 开源代码 
                             </a>
                         </div>
                     </div>
@@ -1871,14 +1883,25 @@ body.menu-open {
             </div>
         </section>
 
-        <section class="page" id="page-1" aria-labelledby="businessTitle">
+        <section class="page" id="page-1" aria-labelledby="bizCreatorTitle">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
-                    <!-- <div class="section-kicker">Core Business</div>
-                    <h2 class="page-title" id="businessTitle">核心业务</h2>
-                    <div class="frameless-section unified-feature-section"> -->
-                        <div class="hero-showcase feature-section">
-                            <div class="feature-block-grid unified-feature-grid" id="coreFeatureGrid" aria-label="核心业务与渲染能力"></div>
+                    <div class="biz-two-col">
+                        <div class="biz-col biz-col-creator">
+                            <div class="biz-col-header">
+                                <span class="biz-col-role-badge"><i class="fas fa-gamepad"></i> 创作者</span>
+                                <h2 class="biz-col-title" id="bizCreatorTitle">为创作而生</h2>
+                                <p class="biz-col-sub">零门槛进入游戏创作的世界</p>
+                            </div>
+                            <div class="biz-item-col" id="creatorGrid"></div>
+                        </div>
+                        <div class="biz-col biz-col-dev">
+                            <div class="biz-col-header">
+                                <span class="biz-col-role-badge"><i class="fas fa-terminal"></i> 开发者</span>
+                                <h2 class="biz-col-title">为探索而造</h2>
+                                <p class="biz-col-sub">极致底层控制力与前沿技术突破</p>
+                            </div>
+                            <div class="biz-item-col" id="devGrid"></div>
                         </div>
                     </div>
                 </div>
@@ -1894,7 +1917,7 @@ body.menu-open {
 <div class="timeline-wrap history-scroll-wrap" id="historyScrollWrap">
                         <div class="timeline-progress" aria-hidden="true"><span id="historyProgressBar"></span></div>
                         <div class="history-timeline-track" id="historyTimelineTrack">
-                        <svg class="timeline-map" viewBox="0 0 2480 520" role="img" aria-labelledby="timelineTitle timelineDesc" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="timeline-map" viewBox="0 0 1820 520" role="img" aria-labelledby="timelineTitle timelineDesc" xmlns="http://www.w3.org/2000/svg">
                             <title id="timelineTitle">Corona Engine 发展历程分支图</title>
                             <desc id="timelineDesc">GraphZ 与 Zero 的技术分支分别演进为 Cabbage Engine 与 Vision，并在 2025 年融合为 Corona Engine，继续向 2026 年及之后延展。</desc>
                             <defs>
@@ -1975,16 +1998,7 @@ body.menu-open {
                                 <path class="lane-hitbox" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
                                 <path class="branch-draw branch-glow" data-start="0.42" data-end="1" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
                                 <path class="branch-draw branch-core" data-start="0.42" data-end="1" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
-                                <path class="branch-draw branch-glow" data-start="0.55" data-end="0.70" d="M 1582 250 C 1635 190 1722 166 1836 182"/>
-                                <path class="branch-draw branch-core" data-start="0.55" data-end="0.70" d="M 1582 250 C 1635 190 1722 166 1836 182"/>
-                                <path class="branch-draw branch-glow" data-start="0.75" data-end="0.92" d="M 2006 232 C 2078 295 2182 320 2304 308"/>
-                                <path class="branch-draw branch-core" data-start="0.75" data-end="0.92" d="M 2006 232 C 2078 295 2182 320 2304 308"/>
-                                <path class="branch-leaf" d="M 1740 178 C 1718 154 1724 130 1758 120 M 1778 180 C 1804 160 1834 164 1858 190" stroke="#d19bff"/>
-                                <path class="branch-leaf" d="M 2190 310 C 2162 292 2162 260 2194 244 M 2228 310 C 2258 292 2290 300 2312 328" stroke="#ffcc33"/>
                                 <circle class="timeline-bud" cx="1582" cy="250" r="12" fill="#c491ff" stroke="#24183f" stroke-width="10"/>
-                                <circle class="timeline-bud" cx="1836" cy="182" r="10" fill="#d19bff" stroke="#24183f" stroke-width="8"/>
-                                <circle class="timeline-bud" cx="2006" cy="232" r="12" fill="#ffcc33" stroke="#3d2d0e" stroke-width="9"/>
-                                <circle class="timeline-bud" cx="2386" cy="258" r="11" fill="#7dd3fc" stroke="#102a3c" stroke-width="9"/>
                             </g>
 
                             <g class="merge-hotspot" tabindex="0" role="button" aria-label="2025 年融合节点">
@@ -1999,7 +2013,6 @@ body.menu-open {
                                 <image href="render/Group 14265.png" x="88" y="346" width="48" height="48" opacity="0.92"/>
                                 <path d="M 1564 239 h36 l10 12 l-28 17 l-28 -17 z" fill="none" stroke="#c491ff" stroke-width="3" opacity="0.74"/>
                                 <path d="M 1568 242 l14 10 l23 -10" stroke="#c491ff" stroke-width="3" opacity="0.70"/>
-                                <path d="M 2371 258 h30 M 2386 243 C 2376 251 2376 265 2386 273 M 2386 243 C 2396 251 2396 265 2386 273" stroke="#7dd3fc" stroke-width="2" opacity="0.62"/>
                             </g>
 
                             <foreignObject x="54" y="28" width="302" height="104" data-lane="cabbage">
@@ -2045,16 +2058,10 @@ body.menu-open {
                             <foreignObject x="1540" y="302" width="82" height="44" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2026</div>
                             </foreignObject>
-                            <foreignObject x="1400" y="352" width="368" height="90" data-lane="corona">
+                            <foreignObject x="1400" y="332" width="368" height="140" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>Corona Engine v1.0 蓄势待发</h3>
-                                    <p>深度重构，持续打磨，厚积薄发</p>
-                                </div>
-                            </foreignObject>
-                            <foreignObject x="1966" y="98" width="350" height="116" data-lane="corona">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy right">
-                                    <h3>支撑高校赛事，学术课题深化</h3>
-                                    <p>主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
+                                    <p>深度重构，持续打磨，厚积薄发。支撑高校赛事，学术课题深化，主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
                                 </div>
                             </foreignObject>
                         </svg>
@@ -2486,6 +2493,127 @@ function initTimelineInteractions() {
     });
 }
 
+function initTimelineComet() {
+    var svg = document.querySelector('.timeline-map');
+    if (!svg) return;
+    var cabbage = document.querySelector('.lane-cabbage');
+    var vision  = document.querySelector('.lane-vision');
+    var corona  = document.querySelector('.lane-corona');
+    if (!cabbage || !vision || !corona) return;
+
+    var NS = 'http://www.w3.org/2000/svg';
+    var defs = svg.querySelector('defs');
+
+    // 彗星辉光滤镜
+    var f = document.createElementNS(NS, 'filter');
+    f.id = 'cometGlowF';
+    f.setAttribute('x', '-120%'); f.setAttribute('y', '-120%');
+    f.setAttribute('width', '340%'); f.setAttribute('height', '340%');
+    var fb = document.createElementNS(NS, 'feGaussianBlur');
+    fb.setAttribute('in', 'SourceGraphic'); fb.setAttribute('stdDeviation', '10'); fb.setAttribute('result', 'b');
+    var fm = document.createElementNS(NS, 'feMerge');
+    var fn1 = document.createElementNS(NS, 'feMergeNode'); fn1.setAttribute('in', 'b');
+    var fn2 = document.createElementNS(NS, 'feMergeNode'); fn2.setAttribute('in', 'SourceGraphic');
+    fm.appendChild(fn1); fm.appendChild(fn2);
+    f.appendChild(fb); f.appendChild(fm);
+    defs.appendChild(f);
+
+    // 彗星容器
+    var cg = document.createElementNS(NS, 'g');
+    cg.setAttribute('pointer-events', 'none');
+    svg.appendChild(cg);
+
+    function makeComet(color) {
+        var g = document.createElementNS(NS, 'g');
+        g.style.display = 'none';
+        var outer = document.createElementNS(NS, 'circle');
+        outer.setAttribute('r', '26'); outer.setAttribute('fill', color);
+        outer.setAttribute('opacity', '0.30'); outer.setAttribute('filter', 'url(#cometGlowF)');
+        var mid = document.createElementNS(NS, 'circle');
+        mid.setAttribute('r', '10'); mid.setAttribute('fill', color);
+        mid.setAttribute('opacity', '0.55'); mid.setAttribute('filter', 'url(#cometGlowF)');
+        var core = document.createElementNS(NS, 'circle');
+        core.setAttribute('r', '4.5'); core.setAttribute('fill', '#ffffff');
+        core.setAttribute('opacity', '1');
+        g.appendChild(outer); g.appendChild(mid); g.appendChild(core);
+        cg.appendChild(g);
+        return g;
+    }
+
+    var cabbageComet = makeComet('#73b2ff');
+    var visionComet  = makeComet('#ff6868');
+
+    // 取各分支主路径（第一条 branch-core）
+    var cMain = cabbage.querySelectorAll('.branch-core')[0];
+    var vMain = vision.querySelectorAll('.branch-core')[0];
+    var rMain = corona.querySelectorAll('.branch-core')[0];
+
+    function runComet(comet, paths, dur, hoverFn) {
+        if (comet._raf) cancelAnimationFrame(comet._raf);
+        if (comet._to)  clearTimeout(comet._to);
+        var lens = Array.prototype.map.call(paths, function(p) { return p.getTotalLength(); });
+        var total = lens.reduce(function(a, b) { return a + b; }, 0);
+        var t0 = performance.now();
+        comet.style.display = '';
+
+        function tick(now) {
+            var t  = Math.min((now - t0) / (dur * 1000), 1);
+            var d  = t * total;
+            var pt = null;
+            for (var i = 0; i < paths.length; i++) {
+                if (d <= lens[i]) { pt = paths[i].getPointAtLength(d); break; }
+                d -= lens[i];
+            }
+            if (!pt) pt = paths[paths.length - 1].getPointAtLength(lens[lens.length - 1]);
+            comet.setAttribute('transform', 'translate(' + pt.x + ',' + pt.y + ')');
+            if (t < 1) {
+                comet._raf = requestAnimationFrame(tick);
+            } else {
+                comet.style.display = 'none';
+                if (hoverFn()) {
+                    comet._to = setTimeout(function() {
+                        if (hoverFn()) runComet(comet, paths, dur, hoverFn);
+                    }, 160);
+                }
+            }
+        }
+        comet._raf = requestAnimationFrame(tick);
+    }
+
+    function stopComet(comet) {
+        if (comet._raf) { cancelAnimationFrame(comet._raf); comet._raf = null; }
+        if (comet._to)  { clearTimeout(comet._to); comet._to = null; }
+        comet.style.display = 'none';
+    }
+
+    var cHover = false, vHover = false, rHover = false;
+
+    cabbage.addEventListener('mouseenter', function() {
+        cHover = true;
+        runComet(cabbageComet, [cMain, rMain], 1.8, function() { return cHover; });
+    });
+    cabbage.addEventListener('mouseleave', function() { cHover = false; stopComet(cabbageComet); });
+
+    vision.addEventListener('mouseenter', function() {
+        vHover = true;
+        runComet(visionComet, [vMain, rMain], 1.8, function() { return vHover; });
+    });
+    vision.addEventListener('mouseleave', function() { vHover = false; stopComet(visionComet); });
+
+    corona.addEventListener('mouseenter', function() {
+        rHover = true;
+        runComet(cabbageComet, [cMain, rMain], 1.8, function() { return rHover; });
+        setTimeout(function() {
+            if (rHover) runComet(visionComet, [vMain, rMain], 1.8, function() { return rHover; });
+        }, 200);
+    });
+    corona.addEventListener('mouseleave', function() {
+        rHover = false;
+        stopComet(cabbageComet);
+        stopComet(visionComet);
+    });
+}
+
 function initHistoryScroll() {
     const track = document.getElementById('historyTimelineTrack');
     if (!track) return;
@@ -2650,6 +2778,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initMemberModals();
     initHistoryScroll();
     initTimelineInteractions();
+    initTimelineComet();
     initTeamScroll();
     initRoleToggle();
 });
@@ -2708,26 +2837,17 @@ document.addEventListener('DOMContentLoaded', function() {
             shapes[1][i3+1] = r1 * Math.sin(phi) * Math.sin(theta);
             shapes[1][i3+2] = r1 * Math.cos(phi);
 
-            // --- 形状 2: DNA 双螺旋 ---
-            const h = (Math.random() - 0.5) * 100;
-            const strand = i % 2; 
-            const angleHelix = h * 0.15 + (strand * Math.PI);
-            const rHelix = 12;
-            const nX = (Math.random() - 0.5) * 3;
-            const nY = (Math.random() - 0.5) * 3;
-            const nZ = (Math.random() - 0.5) * 3;
-            if (Math.random() < 0.1) {
-                const bridgeT = Math.random();
-                const a1 = h * 0.15;
-                const a2 = h * 0.15 + Math.PI;
-                shapes[2][i3] = (rHelix * Math.cos(a1)) + bridgeT * (rHelix * Math.cos(a2) - rHelix * Math.cos(a1)) + nX;
-                shapes[2][i3+1] = h + nY;
-                shapes[2][i3+2] = (rHelix * Math.sin(a1)) + bridgeT * (rHelix * Math.sin(a2) - rHelix * Math.sin(a1)) + nZ;
-            } else {
-                shapes[2][i3] = rHelix * Math.cos(angleHelix) + nX;
-                shapes[2][i3+1] = h + nY;
-                shapes[2][i3+2] = rHelix * Math.sin(angleHelix) + nZ;
-            }
+            // --- 形状 2: 时空沙漏/虫洞 ---
+            const thetaG = Math.random() * 2 * Math.PI;
+            const throatRadius = 22; // 虫洞最细处（中心）的半径，确保不会挡住文字
+            const maxHeight = 30;    // 虫洞上下延伸的最大高度
+            const y = (Math.random() - 0.5) * 2 * maxHeight;
+            const thickness = Math.random() * 4; // 星云外壳的厚度
+            const r2 = throatRadius * Math.sqrt(1 + Math.pow(y / 12, 2)) + thickness;
+
+            shapes[2][i3] = r2 * Math.cos(thetaG);
+            shapes[2][i3+1] = y; // Y轴不再是压缩的，而是完全释放
+            shapes[2][i3+2] = r2 * Math.sin(thetaG);
 
             // --- 形状 3: 星环圆环 ---
             const R = 35;
@@ -2884,7 +3004,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // ==========================================
         // 3. 动态配置
         // ==========================================
-        const pageShapeMap = [0, 1, 2, 4, 5, 3];
+        const pageShapeMap = [0, 1, 1, 2, 5, 3];
         const pageConfigs = [
             { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
             { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5 },
