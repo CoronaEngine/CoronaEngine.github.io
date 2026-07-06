@@ -1193,8 +1193,8 @@ nav {
 
 /* --- 5. 竞赛 --- */
 .comp-bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: var(--gap-lg); flex: 1; } 
-.comp-side-stack { display: flex; flex-direction: column; gap: var(--gap-lg); min-height: 100%; justify-content: stretch; }
-.comp-card { background: linear-gradient(145deg, var(--card-bg), #020617); border: 1px solid var(--card-border); border-radius: 24px; padding: clamp(26px, 3vw, 44px); transition: var(--transition); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: 15px; flex: 1; min-width: 0; } 
+.comp-side-stack { display: flex; flex-direction: column; gap: var(--gap-lg); min-height: 100%; justify-content: flex-start; align-items: stretch; }
+.comp-card { background: linear-gradient(145deg, var(--card-bg), #020617); border: 1px solid var(--card-border); border-radius: 24px; padding: clamp(26px, 3vw, 44px); transition: var(--transition); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: 15px; flex: 0 1 auto; min-width: 0; }
 .comp-card:hover { transform: translateY(-5px); border-color: var(--primary-gold); box-shadow: 0 15px 30px rgba(255, 204, 51, 0.1); }
 .comp-card::before { content: '\f091'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -20px; bottom: -30px; font-size: 8rem; color: rgba(255, 255, 255, 0.02); transform: rotate(-15deg); pointer-events: none; transition: var(--transition); }
 .comp-card:hover::before { color: rgba(255, 204, 51, 0.05); transform: rotate(0deg) scale(1.1); }
@@ -1208,6 +1208,36 @@ nav {
 .comp-title { font-size: 1.25rem; color: #fff; font-weight: 700; line-height: 1.4; }
 .comp-topic { background: rgba(255, 204, 51, 0.05); border-left: 3px solid var(--primary-gold); padding: 12px 15px; border-radius: 0 8px 8px 0; font-size: 0.9rem; color: #cbd5e1; margin: 5px 0; }
 .comp-topic span { color: var(--primary-gold); font-weight: 800; margin-right: 8px; font-size: 0.8rem;}
+
+/* 默认隐藏详细内容，悬停时展开 */
+.comp-card .comp-topic,
+.comp-card .bio {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: max-height 0.4s ease, opacity 0.32s ease, margin 0.32s ease, padding 0.32s ease;
+}
+.comp-card .comp-topic {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.comp-card:hover .comp-topic,
+.comp-card:hover .bio {
+    max-height: 800px;
+    opacity: 1;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.comp-card:hover .bio {
+    padding-top: 0;
+    padding-bottom: 0;
+}
 
 .tag-national { background: rgba(239, 68, 68, 0.1); color: var(--vision-red); border: 1px solid rgba(239, 68, 68, 0.2); }
 .tag-provincial { background: rgba(59, 130, 246, 0.1); color: var(--cabbage-blue); border: 1px solid rgba(59, 130, 246, 0.2); }
