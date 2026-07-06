@@ -349,20 +349,35 @@ function openBentoFocus(block, item, container) {
     _bentoFocusSource = block;
     _bentoFocusGrid   = container;
 
-    // dim all blocks in both grids
+    // scatter all blocks outward from the clicked block
+    var focusCX = rect.left + rect.width  / 2;
+    var focusCY = rect.top  + rect.height / 2;
     ['creatorGrid', 'devGrid'].forEach(function(id) {
         var g = document.getElementById(id);
         if (g) g.classList.add('has-focus');
         var w = g && g.querySelector('.bento-extra-wrap');
         if (w) w.classList.add('has-focus');
+        if (!g) return;
+        g.querySelectorAll('.bento-block').forEach(function(b) {
+            if (b === block) return;
+            var br = b.getBoundingClientRect();
+            var bCX = br.left + br.width  / 2;
+            var bCY = br.top  + br.height / 2;
+            var dx = bCX - focusCX;
+            var dy = bCY - focusCY;
+            var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            var push = 40;
+            b.style.setProperty('--scatter-x', (dx / dist * push).toFixed(1) + 'px');
+            b.style.setProperty('--scatter-y', (dy / dist * push).toFixed(1) + 'px');
+        });
     });
     block.classList.add('focus-source');
 
     // calculate target center position
     var vw = window.innerWidth;
     var vh = window.innerHeight;
-    var targetW = Math.min(560, vw * 0.88);
-    var targetH = Math.min(vh * 0.76, 620);
+    var targetW = Math.min(400, vw * 0.68);
+    var targetH = Math.min(vh * 0.56, 460);
     var targetL = (vw - targetW) / 2;
     var targetT = (vh - targetH) / 2;
 
@@ -432,6 +447,11 @@ function closeBentoFocus() {
             if (g) g.classList.remove('has-focus');
             var w = g && g.querySelector('.bento-extra-wrap');
             if (w) w.classList.remove('has-focus');
+            if (!g) return;
+            g.querySelectorAll('.bento-block').forEach(function(b) {
+                b.style.removeProperty('--scatter-x');
+                b.style.removeProperty('--scatter-y');
+            });
         });
         _bentoFocusGrid = null;
     }
