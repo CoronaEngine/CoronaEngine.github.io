@@ -561,9 +561,28 @@ function renderTeam() {
         });
     }
 
+    // 每个名字包一层 wrap，内含按钮 + 悬浮卡片
     function creditBtn(person) {
-        return '<button class="credit-name-btn" type="button" data-member-name="' + escapeHtml(person.n) + '">' +
-            escapeHtml(person.n) + '</button>';
+        var tagsHtml = '';
+        if (Array.isArray(person.tags) && person.tags.length) {
+            tagsHtml = '<div class="team-hover-tags">' +
+                person.tags.map(function(t) { return '<span class="team-hover-tag">' + escapeHtml(t) + '</span>'; }).join('') +
+                '</div>';
+        }
+        return '<span class="credit-name-wrap" data-member-name="' + escapeHtml(person.n) + '">' +
+            '<button class="credit-name-btn" type="button">' + escapeHtml(person.n) + '</button>' +
+            '<div class="team-hover-card" role="tooltip">' +
+                '<div class="team-hover-head">' +
+                    '<img class="team-hover-avatar" src="' + escapeHtml(person.avatar || '') + '" alt="' + escapeHtml(person.n) + '">' +
+                    '<div class="team-hover-id">' +
+                        '<h4>' + escapeHtml(person.n) + '</h4>' +
+                        '<span class="team-hover-role">' + escapeHtml(person.r || '') + '</span>' +
+                    '</div>' +
+                '</div>' +
+                tagsHtml +
+                '<p class="team-hover-bio">' + escapeHtml(person.b || person.exp || '') + '</p>' +
+            '</div>' +
+            '</span>';
     }
 
     var label1 = '<div class="credit-section-label"><span>创始人</span></div>';
@@ -594,47 +613,19 @@ function renderTeam() {
 
     container.innerHTML = label1 + row1 + label2 + rows2 + label3 + row3;
 
-    container.querySelectorAll('[data-member-name]').forEach(function(button) {
-        // 悬停展开/移出收起：成员详情
-        button.addEventListener('mouseenter', function(event) {
-            event.stopPropagation();
-            if (_memberHoverTimer) { clearTimeout(_memberHoverTimer); _memberHoverTimer = null; }
-            showMemberModalByName(button.getAttribute('data-member-name'));
+    // 悬停联动：模糊周边、显示当前卡片
+    container.classList.add('team-hover-ready');
+    container.querySelectorAll('.credit-name-wrap').forEach(function(wrap) {
+        wrap.addEventListener('mouseenter', function() {
+            container.classList.add('has-hover');
+            wrap.classList.add('hovered');
         });
-        button.addEventListener('mouseleave', function() {
-            scheduleMemberModalClose();
+        wrap.addEventListener('mouseleave', function() {
+            container.classList.remove('has-hover');
+            wrap.classList.remove('hovered');
         });
     });
 }
-
-// 成员弹窗悬停延时关闭（鼠标从名字移动到弹窗内容时不收起）
-var _memberHoverTimer = null;
-function scheduleMemberModalClose() {
-    if (_memberHoverTimer) clearTimeout(_memberHoverTimer);
-    _memberHoverTimer = setTimeout(function() {
-        var modal = document.getElementById('memberModal');
-        if (modal) modal.classList.remove('active');
-        _memberHoverTimer = null;
-    }, 220);
-}
-(function() {
-    function ready(fn) {
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', fn);
-        } else { fn(); }
-    }
-    ready(function() {
-        var modalContent = document.querySelector('#memberModal .member-modal');
-        if (modalContent) {
-            modalContent.addEventListener('mouseenter', function() {
-                if (_memberHoverTimer) { clearTimeout(_memberHoverTimer); _memberHoverTimer = null; }
-            });
-            modalContent.addEventListener('mouseleave', function() {
-                scheduleMemberModalClose();
-            });
-        }
-    });
-})();
 
 // ================= 页脚联系方式：单击复制到剪贴板 =================
 function initClipboard() {
