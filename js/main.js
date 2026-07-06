@@ -562,32 +562,32 @@ function renderTeam() {
     }
 
     // 每个名字包一层 wrap，内含按钮 + 悬浮卡片
-    function creditBtn(person) {
+    function creditBtn(person, isFounder) {
         var tagsHtml = '';
         if (Array.isArray(person.tags) && person.tags.length) {
             tagsHtml = '<div class="team-hover-tags">' +
                 person.tags.map(function(t) { return '<span class="team-hover-tag">' + escapeHtml(t) + '</span>'; }).join('') +
                 '</div>';
         }
-        return '<span class="credit-name-wrap" data-member-name="' + escapeHtml(person.n) + '">' +
+        return '<span class="credit-name-wrap' + (isFounder ? ' founder-wrap' : '') + '" data-member-name="' + escapeHtml(person.n) + '">' +
             '<button class="credit-name-btn" type="button">' + escapeHtml(person.n) + '</button>' +
             '<div class="team-hover-card" role="tooltip">' +
-                '<div class="team-hover-head">' +
+                '<div class="team-hover-left">' +
                     '<img class="team-hover-avatar" src="' + escapeHtml(person.avatar || '') + '" alt="' + escapeHtml(person.n) + '">' +
-                    '<div class="team-hover-id">' +
-                        '<h4>' + escapeHtml(person.n) + '</h4>' +
-                        '<span class="team-hover-role">' + escapeHtml(person.r || '') + '</span>' +
-                    '</div>' +
+                    '<h4>' + escapeHtml(person.n) + '</h4>' +
+                    '<span class="team-hover-role">' + escapeHtml(person.r || '') + '</span>' +
+                    tagsHtml +
                 '</div>' +
-                tagsHtml +
-                '<p class="team-hover-bio">' + escapeHtml(person.b || person.exp || '') + '</p>' +
+                '<div class="team-hover-right">' +
+                    '<p class="team-hover-bio">' + escapeHtml(person.b || person.exp || '') + '</p>' +
+                '</div>' +
             '</div>' +
             '</span>';
     }
 
     var label1 = '<div class="credit-section-label"><span>创始人</span></div>';
     var row1 = '<div class="credit-names-row">' +
-        founders.map(function(p) { return creditBtn(p); }).join('') +
+        founders.map(function(p) { return creditBtn(p, true); }).join('') +
         '</div>';
 
     var label2 = '<div class="credit-section-label"><span>核心团队</span></div>';
@@ -757,9 +757,9 @@ function initOrbitSystem() {
     // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
         { items: ring1, radius: 340, tiltDeg: 66, speed: 0.0022, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
-        { items: ring2, radius: 500, tiltDeg: 64, speed: 0.0028, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
+        { items: ring2, radius: 500, tiltDeg: 64, speed: 0.0026, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
         { items: ring3, radius: 680, tiltDeg: 62, speed: 0.0034, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
-        { items: ring4, radius: 800, tiltDeg: 58, speed: 0.0046, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
+        { items: ring4, radius: 800, tiltDeg: 58, speed: 0.0038, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
     ];
 
     // 设置视觉轨道环尺寸，并绑定 hover 暂停

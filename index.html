@@ -1609,13 +1609,16 @@ body.menu-open {
     filter: none;
 }
 
-/* 悬浮卡片：默认隐藏，悬停时上方显示 */
+/* 悬浮卡片：默认隐藏，悬停时上方显示（左右分栏，模仿原版弹窗） */
 .team-hover-card {
     position: absolute;
     bottom: calc(100% + 18px);
     left: 50%;
     transform: translateX(-50%) translateY(8px);
-    width: 300px;
+    width: 460px;
+    max-width: 90vw;
+    display: flex;
+    gap: 16px;
     background: rgba(10,16,36,0.94);
     border: 1px solid rgba(180,140,240,0.28);
     border-radius: 16px;
@@ -1642,21 +1645,27 @@ body.menu-open {
     transform: translateX(-50%) translateY(0);
 }
 
-.team-hover-head {
+/* 左栏：头像 + 名字 + 角色 + 标签 */
+.team-hover-left {
+    width: 36%;
+    flex-shrink: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
+    text-align: center;
+    gap: 6px;
+    padding-top: 4px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    padding-right: 14px;
 }
 .team-hover-avatar {
-    width: 56px; height: 56px;
-    border-radius: 14px;
+    width: 72px; height: 72px;
+    border-radius: 18px;
     object-fit: cover;
-    border: 1px solid rgba(180,140,240,0.30);
+    border: 2px solid rgba(180,140,240,0.30);
     flex-shrink: 0;
 }
-.team-hover-id { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.team-hover-id h4 {
+.team-hover-left h4 {
     margin: 0;
     font-size: 1.05rem;
     font-weight: 700;
@@ -1664,6 +1673,7 @@ body.menu-open {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100%;
 }
 .team-hover-role {
     font-size: 0.72rem;
@@ -1672,8 +1682,9 @@ body.menu-open {
 .team-hover-tags {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 5px;
-    margin-bottom: 8px;
+    margin-top: 4px;
 }
 .team-hover-tag {
     font-size: 0.65rem;
@@ -1683,11 +1694,53 @@ body.menu-open {
     border: 1px solid rgba(180,140,240,0.24);
     color: rgba(220,200,255,0.78);
 }
+
+/* 右栏：介绍 */
+.team-hover-right {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    justify-content: center;
+}
 .team-hover-bio {
     margin: 0;
-    font-size: 0.76rem;
-    line-height: 1.6;
-    color: rgba(200,210,225,0.70);
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: rgba(200,210,225,0.72);
+}
+
+/* 创始人卡片加宽 */
+.founder-wrap .team-hover-card {
+    width: 540px;
+    max-width: 92vw;
+}
+.founder-wrap .team-hover-avatar {
+    width: 84px; height: 84px;
+}
+.founder-wrap .team-hover-left h4 {
+    font-size: 1.18rem;
+}
+.founder-wrap .team-hover-bio {
+    font-size: 0.82rem;
+}
+/* 创始人卡片溢出翻转：靠近右边缘时向左偏移，避免超出页面 */
+.founder-wrap:nth-child(2):hover .team-hover-card,
+.founder-wrap:nth-child(3):hover .team-hover-card {
+    left: auto;
+    right: 0;
+    transform: translateY(8px);
+}
+.founder-wrap:nth-child(2).hovered .team-hover-card,
+.founder-wrap:nth-child(3).hovered .team-hover-card {
+    transform: translateY(0);
+}
+.founder-wrap:nth-child(2) .team-hover-card::after,
+.founder-wrap:nth-child(3) .team-hover-card::after {
+    left: auto;
+    right: 28px;
+    transform: none;
 }
 
 .competition-section .page-container {
