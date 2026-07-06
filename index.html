@@ -1593,6 +1593,103 @@ body.menu-open {
     text-shadow: 0 0 12px rgba(0, 243, 255, 0.65);
 }
 
+/* ===== 团队悬停浮层（模仿学术成果轨道） ===== */
+.credit-name-wrap {
+    position: relative;
+    display: inline-flex;
+    transition: opacity 0.28s ease, filter 0.28s ease;
+}
+/* 悬停时模糊周边 */
+.team-hover-ready.has-hover .credit-name-wrap:not(.hovered) {
+    opacity: 0.22;
+    filter: blur(1.4px);
+}
+.team-hover-ready.has-hover .credit-name-wrap.hovered {
+    opacity: 1;
+    filter: none;
+}
+
+/* 悬浮卡片：默认隐藏，悬停时上方显示 */
+.team-hover-card {
+    position: absolute;
+    bottom: calc(100% + 18px);
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    width: 300px;
+    background: rgba(10,16,36,0.94);
+    border: 1px solid rgba(180,140,240,0.28);
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.55), 0 0 24px rgba(180,140,240,0.10);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s cubic-bezier(.34,1.56,.64,1);
+    z-index: 50;
+}
+.team-hover-card::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-top-color: rgba(180,140,240,0.28);
+}
+.credit-name-wrap.hovered .team-hover-card {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.team-hover-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.team-hover-avatar {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 1px solid rgba(180,140,240,0.30);
+    flex-shrink: 0;
+}
+.team-hover-id { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.team-hover-id h4 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.team-hover-role {
+    font-size: 0.72rem;
+    color: rgba(180,200,225,0.55);
+}
+.team-hover-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+.team-hover-tag {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(180,140,240,0.12);
+    border: 1px solid rgba(180,140,240,0.24);
+    color: rgba(220,200,255,0.78);
+}
+.team-hover-bio {
+    margin: 0;
+    font-size: 0.76rem;
+    line-height: 1.6;
+    color: rgba(200,210,225,0.70);
+}
+
 .competition-section .page-container {
     display: flex;
     flex-direction: column;
