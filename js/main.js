@@ -729,16 +729,16 @@ function initOrbitSystem() {
     if (!universe) return;
 
     // 第一层（金色）：CCF-A 顶会论文
-    const ring1 = ccfaPapers.map(function(p) { return { label: p.label, tag: p.tag }; });
+    const ring1 = ccfaPapers.map(function(p) { return { label: p.label, tag: p.tag, full: p.full }; });
 
     // 第二层（紫色）：学术论文
-    const ring2 = academicPapers.map(function(p) { return { label: p.label, tag: p.tag }; });
+    const ring2 = academicPapers.map(function(p) { return { label: p.label, tag: p.tag, full: p.full }; });
 
     // 第三层（蓝色）：发明专利
-    const ring3 = patentsData.map(function(p) { return { label: p.label, tag: p.tag }; });
+    const ring3 = patentsData.map(function(p) { return { label: p.label, tag: p.tag, full: p.full }; });
 
     // 第四层（绿色）：学生项目
-    const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
+    const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag, full: p.title }; });
 
     // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
@@ -748,7 +748,7 @@ function initOrbitSystem() {
         { items: ring4, radius: 800, tiltDeg: 58, speed: 0.0046, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
     ];
 
-    // 设置视觉轨道环尺寸
+    // 设置视觉轨道环尺寸，并绑定 hover 暂停
     const tracks = [document.getElementById('orbitTrack1'), document.getElementById('orbitTrack2'), document.getElementById('orbitTrack3'), document.getElementById('orbitTrack4')];
     orbits.forEach(function(o, i) {
         var t = tracks[i];
@@ -760,15 +760,21 @@ function initOrbitSystem() {
         t.style.height = h + 'px';
         t.style.marginLeft = (-o.radius) + 'px';
         t.style.marginTop = (-h / 2) + 'px';
+        t.style.pointerEvents = 'auto';
+        t.addEventListener('mouseenter', function() { o.trackHovered = true; });
+        t.addEventListener('mouseleave', function() { o.trackHovered = false; });
     });
 
     // 创建卫星 DOM
     orbits.forEach(function(orbit) {
         orbit.tiltRad = orbit.tiltDeg * Math.PI / 180;
+        orbit.nodeHovered = false;
+        orbit.trackHovered = false;
         orbit.nodes = orbit.items.map(function(item) {
             var node = document.createElement('div');
             var sizeClass = orbit.sizeClass ? ' ' + orbit.sizeClass : '';
             node.className = 'sat-node sat-' + orbit.type + sizeClass;
+            node.style.pointerEvents = 'auto';
 
             var lbl = document.createElement('div');
             lbl.className = 'sat-label';
@@ -787,9 +793,24 @@ function initOrbitSystem() {
             var dot = document.createElement('div');
             dot.className = 'sat-dot';
 
+            var fullEl = document.createElement('div');
+            fullEl.className = 'sat-hover-full';
+            fullEl.textContent = item.full || item.label;
+
             node.appendChild(lbl);
             node.appendChild(dot);
+            node.appendChild(fullEl);
             universe.appendChild(node);
+
+            node.addEventListener('mouseenter', function() {
+                orbit.nodeHovered = true;
+                node.classList.add('hovered');
+            });
+            node.addEventListener('mouseleave', function() {
+                orbit.nodeHovered = false;
+                node.classList.remove('hovered');
+            });
+
             return { el: node, labelEl: lbl };
         });
     });
@@ -815,7 +836,7 @@ function initOrbitSystem() {
     // 动画循环
     function tick() {
         orbits.forEach(function(orbit) {
-            orbit.angle += orbit.speed;
+            if (!orbit.trackHovered && !orbit.nodeHovered) orbit.angle += orbit.speed;
             var n = orbit.items.length;
             var tiltRad = orbit.tiltRad;
 
