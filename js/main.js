@@ -151,9 +151,26 @@ function renderFeatureBlocks() {
     const devGrid = document.getElementById('devGrid');
 
     if (creatorGrid || devGrid) {
-        const sandboxItems = businessFeatures.filter(function(f) { return f.tone === 'sandbox'; }).concat([renderFeatures[2], renderFeatures[4]]);
-        const devItems = businessFeatures.filter(function(f) { return f.tone === 'research'; }).concat([renderFeatures[0], renderFeatures[3], renderFeatures[1]]);
-        if (creatorGrid) renderBizItems(creatorGrid, sandboxItems);
+        // 创作者：零基础创作沙盒 + 4 个小块
+        var creatorItems = [
+            businessFeatures[0],   // 零基础创作沙盒
+            businessFeatures[1],   // 积木式编程
+            businessFeatures[2],   // AI 场景助手
+            businessFeatures[3],   // 零门槛生态
+            renderFeatures[2]      // 实时协同编辑
+        ];
+        // 开发者：突破边界 + 7 个小块
+        var devItems = [
+            businessFeatures[4],   // 突破边界
+            businessFeatures[5],   // CPU-GPU 协同
+            businessFeatures[6],   // 前沿显示支持
+            businessFeatures[7],   // 高度可扩展
+            renderFeatures[0],     // 全局光照
+            renderFeatures[1],     // 光场显示
+            renderFeatures[4],     // 引擎基础设施
+            renderFeatures[3]      // AI 智能体
+        ];
+        if (creatorGrid) renderBizItems(creatorGrid, creatorItems);
         if (devGrid)     renderBizItems(devGrid, devItems);
         return;
     }
@@ -168,11 +185,13 @@ function renderFeatureBlocks() {
 function renderBizItems(container, items) {
     container.innerHTML = '';
 
-    function buildBlock(item, colSpan) {
+    function buildBlock(item, isFeatured) {
         var block = document.createElement('div');
-        block.className = 'bento-block';
-        block.style.position = 'relative';
-        block.dataset.colSpan = colSpan || 1;
+        block.className = 'bento-block' + (isFeatured ? ' bento-featured' : '');
+        if (item.image) {
+            block.classList.add('has-image');
+            block.style.setProperty('--feature-image', 'url("' + item.image + '")');
+        }
 
         var iconWrap = document.createElement('div');
         iconWrap.className = 'bento-block-icon';
@@ -230,37 +249,12 @@ function renderBizItems(container, items) {
         return block;
     }
 
-    var mainItems = items.slice(0, 4);
-    var extraItems = items.slice(4);
-
-    var mainColSpans = [2, 2, 1, 1];
-    mainItems.forEach(function(item, idx) {
-        container.appendChild(buildBlock(item, mainColSpans[idx]));
+    // 第一个块为重点块
+    container.appendChild(buildBlock(items[0], true));
+    // 其余为小方块
+    items.slice(1).forEach(function(item) {
+        container.appendChild(buildBlock(item, false));
     });
-
-    if (extraItems.length) {
-        var wrap = document.createElement('div');
-        wrap.className = 'bento-extra-wrap';
-
-        if (extraItems.length === 1) {
-            wrap.appendChild(buildBlock(extraItems[0]));
-        } else {
-            var leftCol = document.createElement('div');
-            leftCol.className = 'bento-extra-left';
-            var rightCol = document.createElement('div');
-            rightCol.className = 'bento-extra-right';
-
-            var splitAt = Math.ceil(extraItems.length / 2);
-            extraItems.forEach(function(item, idx) {
-                if (idx < splitAt) leftCol.appendChild(buildBlock(item));
-                else rightCol.appendChild(buildBlock(item));
-            });
-
-            wrap.appendChild(leftCol);
-            wrap.appendChild(rightCol);
-        }
-        container.appendChild(wrap);
-    }
 }
 
 // ---- Bento spotlight focus ----
@@ -355,8 +349,6 @@ function openBentoFocus(block, item, container) {
     ['creatorGrid', 'devGrid'].forEach(function(id) {
         var g = document.getElementById(id);
         if (g) g.classList.add('has-focus');
-        var w = g && g.querySelector('.bento-extra-wrap');
-        if (w) w.classList.add('has-focus');
         if (!g) return;
         g.querySelectorAll('.bento-block').forEach(function(b) {
             if (b === block) return;
@@ -445,8 +437,6 @@ function closeBentoFocus() {
         ['creatorGrid', 'devGrid'].forEach(function(id) {
             var g = document.getElementById(id);
             if (g) g.classList.remove('has-focus');
-            var w = g && g.querySelector('.bento-extra-wrap');
-            if (w) w.classList.remove('has-focus');
             if (!g) return;
             g.querySelectorAll('.bento-block').forEach(function(b) {
                 b.style.removeProperty('--scatter-x');
