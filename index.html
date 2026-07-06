@@ -867,6 +867,10 @@ body.menu-open {
 
 .menu-wrap {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
 }
 
 .menu-button {
@@ -917,7 +921,7 @@ body.menu-open {
 .menu-panel {
     position: static;
     width: auto;
-    max-width: calc(100vw - 36px);
+    max-width: 0;
     padding: 6px;
     border-radius: 999px;
     background: rgba(8, 12, 28, 0.78);
@@ -928,12 +932,13 @@ body.menu-open {
     display: flex;
     align-items: center;
     gap: 4px;
-    opacity: 1;
+    opacity: 0;
     transform: none;
-    pointer-events: auto;
-    overflow-x: auto;
+    pointer-events: none;
+    overflow: hidden;
+    white-space: nowrap;
     scrollbar-width: none;
-    transition: border-color 0.22s ease, background 0.22s ease;
+    transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.26s ease, border-color 0.22s ease, background 0.22s ease;
 }
 
 .menu-panel::-webkit-scrollbar {
@@ -941,8 +946,8 @@ body.menu-open {
 }
 
 .menu-panel.open {
+    max-width: calc(100vw - 90px);
     opacity: 1;
-    transform: none;
     pointer-events: auto;
 }
 
@@ -1003,12 +1008,18 @@ body.menu-open {
 }
 
 .page:not(.active) .lane-hitbox,
-.page:not(.active) .timeline-lane {
-    pointer-events: none;
+.page:not(.active) .timeline-lane,
+.page:not(.active) .sat-node,
+.page:not(.active) .orbit-track {
+    pointer-events: none !important;
 }
 
 #page-4.page {
-    transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: transform 0.09s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#page-1.page {
+    transition: opacity 0.09s cubic-bezier(0.25, 1, 0.5, 1), transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .page-scroll {
@@ -1834,6 +1845,62 @@ body.menu-open {
 .sat-xs .sat-name { font-size: 0.9rem; max-width: 260px; }
 .sat-xs .sat-tag  { font-size: 0.76rem; padding: 2px 12px; }
 
+/* 卫星 hover 交互 */
+.sat-node { cursor: default; }
+.sat-dot { transition: transform 0.22s ease, box-shadow 0.22s ease; }
+.sat-node.hovered .sat-dot {
+    transform: scale(1.4);
+    box-shadow: 0 0 32px currentColor, 0 0 64px currentColor;
+}
+.sat-node.hovered .sat-label {
+    opacity: 1 !important;
+    transform: translateY(-20px) scale(1.4) !important;
+}
+.sat-node.hovered .sat-name {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    max-width: 320px;
+    text-align: center;
+}
+.sat-hover-full {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(8, 18, 36, 0.94);
+    border: 1px solid rgba(96, 165, 250, 0.45);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #e0f0ff;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.5;
+    max-width: 320px;
+    min-width: 120px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 9999;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+.sat-node.hovered .sat-hover-full { opacity: 1; }
+
+/* 虚化非悬停节点 */
+#orbitUniverse.has-hover .sat-node {
+    opacity: 0.2;
+    filter: blur(1.5px);
+    transition: opacity 0.25s ease, filter 0.25s ease;
+}
+#orbitUniverse.has-hover .sat-node.hovered {
+    opacity: 1;
+    filter: none;
+}
+
 .orbit-actions {
     display: flex;
     gap: 32px;
@@ -1891,25 +1958,63 @@ body.menu-open {
 
         .bento-block {
             border-radius: 16px;
-            cursor: pointer; border: none; outline: none;
+            cursor: pointer; outline: none;
             display: flex; flex-direction: column;
             align-items: flex-start; justify-content: flex-end;
             padding: 18px 16px;
             background-size: cover;
             background-position: center;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(14px) saturate(130%);
+            -webkit-backdrop-filter: blur(14px) saturate(130%);
             transition: background 0.22s ease, box-shadow 0.22s ease,
                         margin 0.32s cubic-bezier(0.4,0,0.2,1),
                         padding 0.32s cubic-bezier(0.4,0,0.2,1);
             box-sizing: border-box; color: #fff;
             position: relative; z-index: 1;
         }
-        .biz-col-creator .bento-block { background: rgba(180,140,240,0.22); }
-        .biz-col-creator .bento-block:hover { background: rgba(180,140,240,0.32); box-shadow: 0 6px 24px rgba(180,140,240,0.18); }
-        .biz-col-creator .bento-block.expanded { background: rgba(180,140,240,0.28); }
-        .biz-col-dev     .bento-block { background: rgba(56,189,248,0.18); }
-        .biz-col-dev     .bento-block:hover { background: rgba(56,189,248,0.28); box-shadow: 0 6px 24px rgba(56,189,248,0.18); }
-        .biz-col-dev     .bento-block.expanded { background: rgba(56,189,248,0.22); }
+        .biz-col-creator .bento-block {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(180,140,240,0.20), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(180,140,240,0.10), transparent 36%),
+                rgba(255, 255, 255, 0.035);
+            border-color: rgba(180,140,240,0.20);
+        }
+        .biz-col-creator .bento-block:hover {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(180,140,240,0.30), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(180,140,240,0.14), transparent 36%),
+                rgba(255, 255, 255, 0.05);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.30), 0 0 34px rgba(180,140,240,0.18);
+        }
+        .biz-col-creator .bento-block.expanded {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(180,140,240,0.26), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(180,140,240,0.12), transparent 36%),
+                rgba(255, 255, 255, 0.045);
+        }
+        .biz-col-dev     .bento-block {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(56,189,248,0.16), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(56,189,248,0.08), transparent 36%),
+                rgba(255, 255, 255, 0.035);
+            border-color: rgba(56,189,248,0.20);
+        }
+        .biz-col-dev     .bento-block:hover {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(56,189,248,0.26), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(56,189,248,0.12), transparent 36%),
+                rgba(255, 255, 255, 0.05);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.30), 0 0 34px rgba(56,189,248,0.18);
+        }
+        .biz-col-dev     .bento-block.expanded {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(56,189,248,0.22), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(56,189,248,0.10), transparent 36%),
+                rgba(255, 255, 255, 0.045);
+        }
 
         /* 有封面图的块：图片背景 + 渐变遮罩 */
         .bento-block.has-image {
@@ -2181,14 +2286,19 @@ body.menu-open {
     <div class="ambient-vignette" aria-hidden="true"></div>
 
     <header class="shell-header">
-        <nav class="menu-panel" id="menuPanel" role="menubar" aria-label="页面导航">
-            <button class="menu-item active" type="button" data-page="0" role="menuitem">首页</button>
-            <button class="menu-item" type="button" data-page="1" role="menuitem">核心业务</button>
-            <button class="menu-item" type="button" data-page="2" role="menuitem">发展历程</button>
-            <button class="menu-item" type="button" data-page="3" role="menuitem">学术成果</button>
-            <button class="menu-item" type="button" data-page="4" role="menuitem">相关竞赛</button>
-            <button class="menu-item" type="button" data-page="5" role="menuitem">团队介绍</button>
-        </nav>
+        <div class="menu-wrap">
+            <nav class="menu-panel" id="menuPanel" role="menubar" aria-label="页面导航">
+                <button class="menu-item active" type="button" data-page="0" role="menuitem">首页</button>
+                <button class="menu-item" type="button" data-page="1" role="menuitem">核心业务</button>
+                <button class="menu-item" type="button" data-page="2" role="menuitem">发展历程</button>
+                <button class="menu-item" type="button" data-page="3" role="menuitem">学术成果</button>
+                <button class="menu-item" type="button" data-page="4" role="menuitem">相关竞赛</button>
+                <button class="menu-item" type="button" data-page="5" role="menuitem">团队介绍</button>
+            </nav>
+            <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="menuPanel" aria-label="打开页面导航">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
     </header>
 
     <main id="ui-layer">
@@ -2662,7 +2772,7 @@ function initShellNavigation() {
     });
 
     window.addEventListener('wheel', function(event) {
-        if (event.target.closest('.member-modal-overlay.active, .dl-overlay.active, .team-scroll-wrap, .history-scroll-wrap')) return;
+        if (event.target.closest('.member-modal-overlay.active, .dl-overlay.active, .team-scroll-wrap')) return;
         const scroller = event.target.closest('.page-scroll') || activePageScroll();
         if (scroller === activePageScroll() && canScrollWithin(scroller, event.deltaY)) return;
 
