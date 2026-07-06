@@ -145,6 +145,7 @@
             opacity: 0.62;
             stroke-linecap: round;
             transition: opacity 0.35s ease;
+            pointer-events: none;
         }
         .lane-cabbage .branch-dashed { stroke: #8d7cff; }
         .lane-vision .branch-dashed { stroke: #c077df; }
@@ -251,6 +252,8 @@
         .timeline-node-core[data-card],
         .timeline-bud[data-card],
         .merge-hotspot[data-card] { cursor: pointer; }
+        .timeline-map foreignObject { pointer-events: none; }
+        .timeline-map foreignObject .timeline-year-pill { pointer-events: auto; }
         /* 支线卡片：仅虚线边框区分，尺寸与主线统一 */
         .timeline-copy.sideline {
             border: 1px dashed rgba(180,195,220,0.22);
