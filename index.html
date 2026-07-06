@@ -1847,12 +1847,12 @@ body.menu-open {
 .sat-node { cursor: default; }
 .sat-dot { transition: transform 0.22s ease, box-shadow 0.22s ease; }
 .sat-node.hovered .sat-dot {
-    transform: scale(1.6);
+    transform: scale(1.4);
     box-shadow: 0 0 32px currentColor, 0 0 64px currentColor;
 }
 .sat-node.hovered .sat-label {
     opacity: 1 !important;
-    transform: translateY(0) scale(1.4) !important;
+    transform: translateY(-20px) scale(1.4) !important;
 }
 .sat-node.hovered .sat-name {
     white-space: normal;
@@ -1886,6 +1886,17 @@ body.menu-open {
     box-shadow: 0 4px 24px rgba(0,0,0,0.5);
 }
 .sat-node.hovered .sat-hover-full { opacity: 1; }
+
+/* 虚化非悬停节点 */
+#orbitUniverse.has-hover .sat-node {
+    opacity: 0.2;
+    filter: blur(1.5px);
+    transition: opacity 0.25s ease, filter 0.25s ease;
+}
+#orbitUniverse.has-hover .sat-node.hovered {
+    opacity: 1;
+    filter: none;
+}
 
 .orbit-actions {
     display: flex;

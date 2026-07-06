@@ -807,11 +807,13 @@ function initOrbitSystem() {
                 orbit.nodeHovered = true;
                 node.classList.add('hovered');
                 name.textContent = name.dataset.full;
+                universe.classList.add('has-hover');
             });
             node.addEventListener('mouseleave', function() {
                 orbit.nodeHovered = false;
                 node.classList.remove('hovered');
                 name.textContent = item.label;
+                universe.classList.remove('has-hover');
             });
 
             return { el: node, labelEl: lbl };
