@@ -243,7 +243,12 @@ function renderBizItems(container, items) {
         block.appendChild(chevron);
 
         block.addEventListener('click', function() {
-            openBentoFocus(block, item, container);
+            // 块内展开/收起，不再弹出浮层
+            var wasExpanded = block.classList.contains('expanded');
+            container.querySelectorAll('.bento-block.expanded').forEach(function(b) {
+                b.classList.remove('expanded');
+            });
+            if (!wasExpanded) block.classList.add('expanded');
         });
 
         return block;
