@@ -211,24 +211,22 @@
         .timeline-copy {
             color: rgba(230,238,255,0.92);
             line-height: 1.42;
-            padding: 20px 24px;
-            border-radius: 22px;
+            padding: 16px 20px;
+            border-radius: 20px;
             border: 1px solid rgba(255,255,255,0.08);
             background: rgba(7, 13, 31, 0.68);
             box-shadow: 0 18px 44px rgba(0,0,0,0.20);
         }
         .timeline-copy h3 {
-            margin: 0 0 10px;
+            margin: 0 0 8px;
             color: #f8fafc;
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 800;
             letter-spacing: 0;
         }
-        .timeline-copy p { margin: 0; color: rgba(185,197,220,0.78); font-size: 18px; font-weight: 600; }
+        .timeline-copy p { margin: 0; color: rgba(185,197,220,0.78); font-size: 14px; font-weight: 600; }
         .timeline-copy .gold { color: #ffcc33; }
         .timeline-copy.center { text-align: center; }
-        .timeline-copy.center h3 { font-size: 28px; }
-        .timeline-copy.right h3 { font-size: 24px; }
         /* 内容卡片默认隐藏，悬停对应节点时由 JS 显示单张 */
         .timeline-map foreignObject .timeline-copy {
             opacity: 0;
@@ -253,23 +251,9 @@
         .timeline-node-core[data-card],
         .timeline-bud[data-card],
         .merge-hotspot[data-card] { cursor: pointer; }
-        /* 支线卡片：更小、更暗、虚线边框 + 支线标签 */
+        /* 支线卡片：仅虚线边框区分，尺寸与主线统一 */
         .timeline-copy.sideline {
-            padding: 16px 20px;
-            border-radius: 18px;
-            background: rgba(7, 13, 31, 0.46);
-            border: 1px dashed rgba(180,195,220,0.14);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        }
-        .timeline-copy.sideline h3 {
-            font-size: 20px;
-            margin-bottom: 6px;
-            color: rgba(210,222,242,0.82);
-            font-weight: 700;
-        }
-        .timeline-copy.sideline p {
-            font-size: 15px;
-            color: rgba(165,180,206,0.62);
+            border: 1px dashed rgba(180,195,220,0.22);
         }
         .timeline-copy.sideline .lane-tag {
             display: inline-block;
@@ -2772,45 +2756,45 @@ body.menu-open {
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2023</div>
                             </foreignObject>
 
-                            <foreignObject id="card-cabbage-1" x="0" y="186" width="340" height="124" data-lane="cabbage">
+                            <foreignObject id="card-cabbage-1" x="0" y="175" width="300" height="120" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Cabbage Engine 前身</h3>
                                     <p>GraphZ 开发多个用于竞赛与科研的引擎雏形</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-cabbage-2" x="340" y="186" width="340" height="124" data-lane="cabbage">
+                            <foreignObject id="card-cabbage-2" x="310" y="175" width="300" height="120" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Cabbage Engine 诞生</h3>
                                     <p>GraphZ 对各个雏形引擎进行整合，Cabbage Engine 雏形诞生</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-cabbage-3" x="620" y="105" width="280" height="92" data-lane="cabbage">
+                            <foreignObject id="card-cabbage-3" x="620" y="95" width="300" height="120" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy sideline">
                                     <span class="lane-tag">支线</span>
                                     <h3>Cabbage Engine (2022~2025)</h3>
                                     <p>用于支持实验室多个竞赛与科研项目</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-vision-1" x="0" y="396" width="240" height="124" data-lane="vision">
+                            <foreignObject id="card-vision-1" x="0" y="388" width="300" height="120" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Vision Renderer 前身</h3>
                                     <p>Zero 开发 Z-Renderer、Paladin</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-vision-2" x="340" y="396" width="240" height="124" data-lane="vision">
+                            <foreignObject id="card-vision-2" x="310" y="388" width="300" height="120" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Vision Renderer 前身</h3>
                                     <p>转向硬件光线追踪，开启新项目 LumiRender</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-vision-3" x="620" y="448" width="240" height="104" data-lane="vision">
+                            <foreignObject id="card-vision-3" x="620" y="440" width="300" height="120" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy sideline">
                                     <span class="lane-tag">支线</span>
                                     <h3>Vision Renderer 前身 (2021)</h3>
                                     <p>LumiRender 聚焦服装渲染，完成技术验证</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-vision-4" x="840" y="396" width="260" height="124" data-lane="vision">
+                            <foreignObject id="card-vision-4" x="840" y="388" width="300" height="120" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Vision Renderer 诞生</h3>
                                     <p>使用 EDSL 重写 LumiRender，Vision 渲染器正式诞生</p>
@@ -2819,13 +2803,13 @@ body.menu-open {
                             <foreignObject x="1110" y="178" width="82" height="44" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2025</div>
                             </foreignObject>
-                            <foreignObject id="card-corona-2023" x="760" y="300" width="380" height="110" data-lane="corona">
+                            <foreignObject id="card-corona-2023" x="760" y="276" width="300" height="120" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>融合前夜</h3>
                                     <p><span class="gold">Vision 与 Cabbage 各自成熟，蓄势融合</span></p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-corona-2025" x="980" y="300" width="410" height="130" data-lane="corona">
+                            <foreignObject id="card-corona-2025" x="970" y="276" width="300" height="120" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>Corona Engine 诞生</h3>
                                     <p><span class="gold">Vision 与 Cabbage 的初步融合</span></p>
@@ -2834,7 +2818,7 @@ body.menu-open {
                             <foreignObject x="1540" y="302" width="82" height="44" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2026</div>
                             </foreignObject>
-                            <foreignObject id="card-corona-2026" x="1380" y="326" width="410" height="130" data-lane="corona">
+                            <foreignObject id="card-corona-2026" x="1400" y="268" width="300" height="120" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>Corona Engine v1.0 正式版</h3>
                                     <p>深度重构，蓄势待发</p>
