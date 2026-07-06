@@ -237,11 +237,6 @@ function renderBizItems(container, items) {
         }
         block.appendChild(detail);
 
-        var chevron = document.createElement('span');
-        chevron.className = 'bento-block-chevron';
-        chevron.innerHTML = '<i class="fas fa-chevron-down"></i>';
-        block.appendChild(chevron);
-
         // 鼠标悬停展开/移出收起：块内显示具体内容
         block.addEventListener('mouseenter', function() {
             container.querySelectorAll('.bento-block.expanded').forEach(function(b) {
