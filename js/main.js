@@ -187,7 +187,7 @@ function renderBizItems(container, items) {
 
     function buildBlock(item, isFeatured) {
         var block = document.createElement('div');
-        block.className = 'bento-block' + (isFeatured ? ' bento-featured' : '');
+        block.className = 'bento-block' + (isFeatured ? ' bento-featured expanded' : '');
         if (item.image) {
             block.classList.add('has-image');
             block.style.setProperty('--feature-image', 'url("' + item.image + '")');
@@ -243,9 +243,6 @@ function renderBizItems(container, items) {
                 if (b !== block) b.classList.remove('expanded');
             });
             block.classList.add('expanded');
-        });
-        block.addEventListener('mouseleave', function() {
-            block.classList.remove('expanded');
         });
 
         return block;
