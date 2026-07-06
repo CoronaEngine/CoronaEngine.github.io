@@ -867,6 +867,10 @@ body.menu-open {
 
 .menu-wrap {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
 }
 
 .menu-button {
@@ -917,7 +921,7 @@ body.menu-open {
 .menu-panel {
     position: static;
     width: auto;
-    max-width: calc(100vw - 36px);
+    max-width: 0;
     padding: 6px;
     border-radius: 999px;
     background: rgba(8, 12, 28, 0.78);
@@ -928,12 +932,13 @@ body.menu-open {
     display: flex;
     align-items: center;
     gap: 4px;
-    opacity: 1;
+    opacity: 0;
     transform: none;
-    pointer-events: auto;
-    overflow-x: auto;
+    pointer-events: none;
+    overflow: hidden;
+    white-space: nowrap;
     scrollbar-width: none;
-    transition: border-color 0.22s ease, background 0.22s ease;
+    transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.26s ease, border-color 0.22s ease, background 0.22s ease;
 }
 
 .menu-panel::-webkit-scrollbar {
@@ -941,8 +946,8 @@ body.menu-open {
 }
 
 .menu-panel.open {
+    max-width: calc(100vw - 90px);
     opacity: 1;
-    transform: none;
     pointer-events: auto;
 }
 
@@ -2181,14 +2186,19 @@ body.menu-open {
     <div class="ambient-vignette" aria-hidden="true"></div>
 
     <header class="shell-header">
-        <nav class="menu-panel" id="menuPanel" role="menubar" aria-label="页面导航">
-            <button class="menu-item active" type="button" data-page="0" role="menuitem">首页</button>
-            <button class="menu-item" type="button" data-page="1" role="menuitem">核心业务</button>
-            <button class="menu-item" type="button" data-page="2" role="menuitem">发展历程</button>
-            <button class="menu-item" type="button" data-page="3" role="menuitem">学术成果</button>
-            <button class="menu-item" type="button" data-page="4" role="menuitem">相关竞赛</button>
-            <button class="menu-item" type="button" data-page="5" role="menuitem">团队介绍</button>
-        </nav>
+        <div class="menu-wrap">
+            <nav class="menu-panel" id="menuPanel" role="menubar" aria-label="页面导航">
+                <button class="menu-item active" type="button" data-page="0" role="menuitem">首页</button>
+                <button class="menu-item" type="button" data-page="1" role="menuitem">核心业务</button>
+                <button class="menu-item" type="button" data-page="2" role="menuitem">发展历程</button>
+                <button class="menu-item" type="button" data-page="3" role="menuitem">学术成果</button>
+                <button class="menu-item" type="button" data-page="4" role="menuitem">相关竞赛</button>
+                <button class="menu-item" type="button" data-page="5" role="menuitem">团队介绍</button>
+            </nav>
+            <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="menuPanel" aria-label="打开页面导航">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
     </header>
 
     <main id="ui-layer">
