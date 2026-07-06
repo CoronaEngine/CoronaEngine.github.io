@@ -2169,6 +2169,20 @@ body.menu-open {
         }
         .bento-featured .bento-block-detail { text-align: left; }
 
+        /* 非重点块：展开时隐藏图标、标题、tag 和图片遮罩，仅保留详情 */
+        .bento-block:not(.bento-featured).expanded .bento-block-icon,
+        .bento-block:not(.bento-featured).expanded .bento-block-title,
+        .bento-block:not(.bento-featured).expanded .bento-block-tag {
+            display: none;
+        }
+        .bento-block:not(.bento-featured).expanded.has-image::before {
+            opacity: 0;
+        }
+        .bento-block:not(.bento-featured).expanded {
+            justify-content: center;
+            align-items: flex-start;
+        }
+
         .bento-detail-body {
             font-size: 0.79rem; color: rgba(215,225,240,0.68);
             line-height: 1.70; margin: 0; pointer-events: none; user-select: none;
