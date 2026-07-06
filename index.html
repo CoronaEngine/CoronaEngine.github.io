@@ -187,6 +187,17 @@
             opacity: 0.58;
             stroke-width: 3;
         }
+        .timeline-node-halo { opacity: 0.3; transition: opacity 0.4s ease; }
+        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-halo { opacity: 0.65; }
+        .timeline-node-ring {
+            transition: stroke-opacity 0.4s ease, transform 0.4s ease;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-ring {
+            opacity: 0.9 !important;
+            transform: scale(1.15);
+        }
         .timeline-node-glow { opacity: 0.45; transition: opacity 0.35s ease; }
         .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-glow { opacity: 0.82; }
         .timeline-node-core,
@@ -197,12 +208,12 @@
         }
         .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-core,
         .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-bud {
-            filter: drop-shadow(0 0 14px currentColor);
-            transform: scale(1.08);
+            filter: drop-shadow(0 0 16px currentColor);
+            transform: scale(1.12);
         }
         .merge-hotspot { cursor: pointer; }
         .merge-pulse-ring {
-            transform-origin: 1150px 250px;
+            transform-origin: 1220px 290px;
             animation: mergeRing 2.8s ease-out infinite;
         }
         @keyframes mergeRing {
@@ -2627,23 +2638,23 @@ body.menu-open {
 <div class="timeline-wrap history-scroll-wrap" id="historyScrollWrap">
                         <div class="timeline-progress" aria-hidden="true"><span id="historyProgressBar"></span></div>
                         <div class="history-timeline-track" id="historyTimelineTrack">
-                        <svg class="timeline-map" viewBox="-40 -80 1880 720" role="img" aria-labelledby="timelineTitle timelineDesc" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="timeline-map" viewBox="-40 -80 1840 720" role="img" aria-labelledby="timelineTitle timelineDesc" xmlns="http://www.w3.org/2000/svg">
                             <title id="timelineTitle">Corona Engine 发展历程分支图</title>
                             <desc id="timelineDesc">GraphZ 与 Zero 的技术分支分别演进为 Cabbage Engine 与 Vision，并在 2025 年融合为 Corona Engine，继续向 2026 年及之后延展。</desc>
                             <defs>
-                                <linearGradient id="timelineCabbageBranch" x1="140" y1="110" x2="760" y2="110" gradientUnits="userSpaceOnUse">
+                                <linearGradient id="timelineCabbageBranch" x1="180" y1="110" x2="1220" y2="290" gradientUnits="userSpaceOnUse">
                                     <stop offset="0" stop-color="#2563eb" stop-opacity="0.62"/>
                                     <stop offset="0.42" stop-color="#73b2ff" stop-opacity="0.92"/>
                                     <stop offset="0.76" stop-color="#8d7cff" stop-opacity="0.96"/>
                                     <stop offset="1" stop-color="#c491ff" stop-opacity="0.98"/>
                                 </linearGradient>
-                                <linearGradient id="timelineVisionBranch" x1="140" y1="470" x2="760" y2="470" gradientUnits="userSpaceOnUse">
+                                <linearGradient id="timelineVisionBranch" x1="180" y1="470" x2="1220" y2="290" gradientUnits="userSpaceOnUse">
                                     <stop offset="0" stop-color="#b91c1c" stop-opacity="0.62"/>
                                     <stop offset="0.45" stop-color="#ff6868" stop-opacity="0.92"/>
                                     <stop offset="0.78" stop-color="#b46bda" stop-opacity="0.96"/>
                                     <stop offset="1" stop-color="#c491ff" stop-opacity="0.98"/>
                                 </linearGradient>
-                                <linearGradient id="timelineCoronaBranch" x1="1060" y1="290" x2="2386" y2="290" gradientUnits="userSpaceOnUse">
+                                <linearGradient id="timelineCoronaBranch" x1="1000" y1="290" x2="2386" y2="290" gradientUnits="userSpaceOnUse">
                                     <stop offset="0" stop-color="#c491ff" stop-opacity="0.98"/>
                                     <stop offset="0.42" stop-color="#9f7aea" stop-opacity="0.86"/>
                                     <stop offset="0.72" stop-color="#ffcc33" stop-opacity="0.78"/>
@@ -2654,176 +2665,204 @@ body.menu-open {
                                     <stop offset="0.42" stop-color="#c58cff" stop-opacity="0.74"/>
                                     <stop offset="1" stop-color="#8a5bff" stop-opacity="0"/>
                                 </radialGradient>
+                                <radialGradient id="nodeCabbageGrad" cx="0.4" cy="0.35" r="0.7">
+                                    <stop offset="0" stop-color="#a8d4ff"/>
+                                    <stop offset="0.5" stop-color="#5ca4ff"/>
+                                    <stop offset="1" stop-color="#2563eb"/>
+                                </radialGradient>
+                                <radialGradient id="nodeVisionGrad" cx="0.4" cy="0.35" r="0.7">
+                                    <stop offset="0" stop-color="#ffb4b4"/>
+                                    <stop offset="0.5" stop-color="#ff6868"/>
+                                    <stop offset="1" stop-color="#dc2626"/>
+                                </radialGradient>
+                                <radialGradient id="nodeCoronaGrad" cx="0.4" cy="0.35" r="0.7">
+                                    <stop offset="0" stop-color="#e9d5ff"/>
+                                    <stop offset="0.5" stop-color="#c491ff"/>
+                                    <stop offset="1" stop-color="#7c3aed"/>
+                                </radialGradient>
+                                <filter id="nodeGlow" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+                                    <feGaussianBlur stdDeviation="5" result="blur"/>
+                                    <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.5  0 1 0 0 0.6  0 0 1 0 1  0 0 0 0.8 0"/>
+                                </filter>
                                 <filter id="timelineBranchGlow" x="-14%" y="-150%" width="128%" height="400%" color-interpolation-filters="sRGB">
-                                    <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/>
-                                    <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.24  0 1 0 0 0.34  0 0 1 0 0.92  0 0 0 1.1 0" result="glow"/>
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur1"/>
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur2"/>
+                                    <feColorMatrix in="blur1" type="matrix" values="1 0 0 0 0.24  0 1 0 0 0.34  0 0 1 0 0.92  0 0 0 1.2 0" result="glow1"/>
+                                    <feColorMatrix in="blur2" type="matrix" values="1 0 0 0 0.4  0 1 0 0 0.5  0 0 1 0 1  0 0 0 1.1 0" result="glow2"/>
                                     <feMerge>
-                                        <feMergeNode in="glow"/>
+                                        <feMergeNode in="glow1"/>
+                                        <feMergeNode in="glow2"/>
                                         <feMergeNode in="SourceGraphic"/>
                                     </feMerge>
                                 </filter>
                             </defs>
 
-                            <g opacity="0.34" pointer-events="none">
-                                <path d="M 44 290 H 2436" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-                                <path d="M 44 110 H 2436 M 44 470 H 2436" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                                <path d="M 140 -40 V 580 M 380 -40 V 580 M 620 -40 V 580 M 760 -40 V 580 M 1060 -40 V 580 M 1260 -40 V 580 M 1680 -40 V 580" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                            <g opacity="0.28" pointer-events="none">
+                                <path d="M 40 290 H 2400" stroke="rgba(167,139,250,0.12)" stroke-width="1.5"/>
+                                <path d="M 40 110 H 2400 M 40 470 H 2400" stroke="rgba(167,139,250,0.06)" stroke-width="1"/>
+                                <path d="M 180 -40 V 600 M 400 -40 V 600 M 600 -40 V 600 M 780 -40 V 600 M 1000 -40 V 600 M 1220 -40 V 600 M 1640 -40 V 600" stroke="rgba(167,139,250,0.05)" stroke-width="1"/>
                             </g>
 
                             <g class="timeline-lane lane-cabbage" tabindex="0" role="group" aria-label="Cabbage Engine 技术分支">
-                                <path class="lane-hitbox" d="M 140 110 C 340 118 560 102 760 110 C 940 170 1080 230 1260 290"/>
-                                <path class="branch-draw branch-glow" data-start="0" data-end="0.28" d="M 140 110 C 340 118 560 102 760 110"/>
-                                <path class="branch-draw branch-core" data-start="0" data-end="0.28" d="M 140 110 C 340 118 560 102 760 110"/>
-                                <path class="branch-draw branch-glow" data-start="0.28" data-end="0.55" d="M 760 110 C 940 170 1080 230 1260 290"/>
-                                <path class="branch-draw branch-core" data-start="0.28" data-end="0.55" d="M 760 110 C 940 170 1080 230 1260 290"/>
-                                <path class="branch-dashed" data-start="0.25" data-end="0.42" d="M 760 110 C 840 58 940 38 1060 40"/>
-                                <path class="branch-dashed" data-start="0.40" data-end="0.58" d="M 1060 40 C 1150 100 1210 190 1260 290"/>
-                                <path class="branch-dashed" data-start="0.28" data-end="0.48" d="M 760 110 C 840 170 940 230 1060 290"/>
-                                <path class="branch-leaf" d="M 1000 35 C 982 17 982 0 1012 -11 M 1032 35 C 1054 15 1080 11 1102 29" stroke="#8d7cff"/>
-                                <circle class="timeline-node-glow" cx="140" cy="110" r="36" fill="#3b82f6" data-card="card-cabbage-1"/>
-                                <circle class="timeline-node-core" cx="140" cy="110" r="16" fill="#5ca4ff" stroke="#101d45" stroke-width="10" data-card="card-cabbage-1"/>
-                                <circle class="timeline-node-glow" cx="760" cy="110" r="30" fill="#3b82f6" opacity="0.5" data-card="card-cabbage-2"/>
-                                <circle class="timeline-node-core" cx="760" cy="110" r="14" fill="#73b2ff" stroke="#101d45" stroke-width="9" data-card="card-cabbage-2"/>
-                                <circle cx="1060" cy="40" r="24" fill="transparent" data-card="card-cabbage-3"/>
-                                <circle class="timeline-bud" cx="1060" cy="40" r="10" fill="#bfa7ff" stroke="#21143f" stroke-width="8" data-card="card-cabbage-3"/>
+                                <path class="lane-hitbox" d="M 180 110 C 360 120 540 100 780 110 C 920 165 1060 225 1220 290"/>
+                                <path class="branch-draw branch-glow" data-start="0" data-end="0.28" d="M 180 110 C 360 120 540 100 780 110"/>
+                                <path class="branch-draw branch-core" data-start="0" data-end="0.28" d="M 180 110 C 360 120 540 100 780 110"/>
+                                <path class="branch-draw branch-glow" data-start="0.28" data-end="0.55" d="M 780 110 C 920 165 1060 225 1220 290"/>
+                                <path class="branch-draw branch-core" data-start="0.28" data-end="0.55" d="M 780 110 C 920 165 1060 225 1220 290"/>
+                                <path class="branch-dashed" data-start="0.25" data-end="0.42" d="M 780 110 C 850 56 940 32 1000 36"/>
+                                <path class="branch-dashed" data-start="0.40" data-end="0.58" d="M 1000 36 C 1090 95 1160 190 1220 290"/>
+                                <path class="branch-dashed" data-start="0.28" data-end="0.48" d="M 780 110 C 860 172 940 232 1000 290"/>
+                                <path class="branch-leaf" d="M 940 32 C 922 14 922 -4 952 -15 M 972 32 C 994 12 1020 8 1042 26" stroke="#8d7cff"/>
+                                <circle class="timeline-node-halo" cx="180" cy="110" r="32" fill="url(#nodeCabbageGrad)" filter="url(#nodeGlow)" opacity="0.35" data-card="card-cabbage-1"/>
+                                <circle class="timeline-node-ring" cx="180" cy="110" r="20" fill="none" stroke="#73b2ff" stroke-width="2" opacity="0.6" data-card="card-cabbage-1"/>
+                                <circle class="timeline-node-core" cx="180" cy="110" r="12" fill="url(#nodeCabbageGrad)" stroke="#0c1a38" stroke-width="8" data-card="card-cabbage-1"/>
+                                <circle class="timeline-node-halo" cx="780" cy="110" r="26" fill="url(#nodeCabbageGrad)" filter="url(#nodeGlow)" opacity="0.3" data-card="card-cabbage-2"/>
+                                <circle class="timeline-node-ring" cx="780" cy="110" r="16" fill="none" stroke="#73b2ff" stroke-width="1.5" opacity="0.5" data-card="card-cabbage-2"/>
+                                <circle class="timeline-node-core" cx="780" cy="110" r="10" fill="url(#nodeCabbageGrad)" stroke="#0c1a38" stroke-width="7" data-card="card-cabbage-2"/>
+                                <circle cx="1000" cy="36" r="22" fill="transparent" data-card="card-cabbage-3"/>
+                                <circle class="timeline-bud" cx="1000" cy="36" r="8" fill="#bfa7ff" stroke="#1a0f36" stroke-width="7" data-card="card-cabbage-3"/>
                             </g>
 
                             <g class="timeline-lane lane-vision" tabindex="0" role="group" aria-label="Vision 渲染技术分支">
-                                <path class="lane-hitbox" d="M 140 470 C 340 478 560 462 760 470 C 940 410 1080 350 1260 290"/>
-                                <path class="branch-draw branch-glow" data-start="0" data-end="0.45" d="M 140 470 C 340 478 560 462 760 470"/>
-                                <path class="branch-draw branch-core" data-start="0" data-end="0.45" d="M 140 470 C 340 478 560 462 760 470"/>
-                                <path class="branch-draw branch-glow" data-start="0.45" data-end="0.65" d="M 760 470 C 940 410 1080 350 1260 290"/>
-                                <path class="branch-draw branch-core" data-start="0.45" data-end="0.65" d="M 760 470 C 940 410 1080 350 1260 290"/>
-                                <path class="branch-dashed" data-start="0.22" data-end="0.32" d="M 380 470 C 460 520 540 540 620 540"/>
-                                <path class="branch-dashed" data-start="0.30" data-end="0.42" d="M 620 540 C 680 528 720 500 760 470"/>
-                                <path class="branch-dashed" data-start="0.45" data-end="0.55" d="M 760 470 C 860 410 960 350 1060 290"/>
-                                <path class="branch-leaf" d="M 560 535 C 538 517 536 491 562 473 M 594 540 C 622 524 650 528 674 552" stroke="#c077df"/>
-                                <circle class="timeline-node-glow" cx="140" cy="470" r="36" fill="#ef4444" data-card="card-vision-1"/>
-                                <circle class="timeline-node-core" cx="140" cy="470" r="16" fill="#ff514f" stroke="#361624" stroke-width="10" data-card="card-vision-1"/>
-                                <circle class="timeline-node-glow" cx="380" cy="470" r="30" fill="#ef4444" opacity="0.5" data-card="card-vision-2"/>
-                                <circle class="timeline-node-core" cx="380" cy="470" r="14" fill="#ff6868" stroke="#361624" stroke-width="9" data-card="card-vision-2"/>
-                                <circle cx="620" cy="540" r="24" fill="transparent" data-card="card-vision-3"/>
-                                <circle class="timeline-bud" cx="620" cy="540" r="10" fill="#ff8585" stroke="#361624" stroke-width="8" data-card="card-vision-3"/>
-                                <circle class="timeline-node-glow" cx="760" cy="470" r="30" fill="#ef4444" opacity="0.5" data-card="card-vision-4"/>
-                                <circle class="timeline-node-core" cx="760" cy="470" r="14" fill="#ce7fea" stroke="#27123d" stroke-width="9" data-card="card-vision-4"/>
+                                <path class="lane-hitbox" d="M 180 470 C 360 480 540 460 780 470 C 920 415 1060 355 1220 290"/>
+                                <path class="branch-draw branch-glow" data-start="0" data-end="0.45" d="M 180 470 C 360 480 540 460 780 470"/>
+                                <path class="branch-draw branch-core" data-start="0" data-end="0.45" d="M 180 470 C 360 480 540 460 780 470"/>
+                                <path class="branch-draw branch-glow" data-start="0.45" data-end="0.65" d="M 780 470 C 920 415 1060 355 1220 290"/>
+                                <path class="branch-draw branch-core" data-start="0.45" data-end="0.65" d="M 780 470 C 920 415 1060 355 1220 290"/>
+                                <path class="branch-dashed" data-start="0.22" data-end="0.32" d="M 400 470 C 480 520 550 542 600 542"/>
+                                <path class="branch-dashed" data-start="0.30" data-end="0.42" d="M 600 542 C 660 530 710 502 780 470"/>
+                                <path class="branch-dashed" data-start="0.45" data-end="0.55" d="M 780 470 C 870 412 940 352 1000 290"/>
+                                <path class="branch-leaf" d="M 540 538 C 518 520 516 494 542 476 M 574 542 C 602 526 630 530 654 554" stroke="#c077df"/>
+                                <circle class="timeline-node-halo" cx="180" cy="470" r="32" fill="url(#nodeVisionGrad)" filter="url(#nodeGlow)" opacity="0.35" data-card="card-vision-1"/>
+                                <circle class="timeline-node-ring" cx="180" cy="470" r="20" fill="none" stroke="#ff8585" stroke-width="2" opacity="0.6" data-card="card-vision-1"/>
+                                <circle class="timeline-node-core" cx="180" cy="470" r="12" fill="url(#nodeVisionGrad)" stroke="#30101a" stroke-width="8" data-card="card-vision-1"/>
+                                <circle class="timeline-node-halo" cx="400" cy="470" r="26" fill="url(#nodeVisionGrad)" filter="url(#nodeGlow)" opacity="0.3" data-card="card-vision-2"/>
+                                <circle class="timeline-node-ring" cx="400" cy="470" r="16" fill="none" stroke="#ff8585" stroke-width="1.5" opacity="0.5" data-card="card-vision-2"/>
+                                <circle class="timeline-node-core" cx="400" cy="470" r="10" fill="url(#nodeVisionGrad)" stroke="#30101a" stroke-width="7" data-card="card-vision-2"/>
+                                <circle cx="600" cy="542" r="22" fill="transparent" data-card="card-vision-3"/>
+                                <circle class="timeline-bud" cx="600" cy="542" r="8" fill="#ff8585" stroke="#30101a" stroke-width="7" data-card="card-vision-3"/>
+                                <circle class="timeline-node-halo" cx="780" cy="470" r="26" fill="url(#nodeVisionGrad)" filter="url(#nodeGlow)" opacity="0.3" data-card="card-vision-4"/>
+                                <circle class="timeline-node-ring" cx="780" cy="470" r="16" fill="none" stroke="#ce7fea" stroke-width="1.5" opacity="0.55" data-card="card-vision-4"/>
+                                <circle class="timeline-node-core" cx="780" cy="470" r="10" fill="url(#nodeVisionGrad)" stroke="#20102f" stroke-width="7" data-card="card-vision-4"/>
                             </g>
 
                             <g class="timeline-lane lane-corona" tabindex="0" role="group" aria-label="Corona Engine 主干">
-                                <path class="lane-hitbox" d="M 1060 290 C 1140 278 1200 282 1260 290 C 1400 306 1540 274 1680 290"/>
-                                <path class="branch-dashed" data-start="0.48" data-end="0.62" d="M 1060 290 C 1140 278 1200 282 1260 290"/>
-                                <path class="branch-draw branch-glow" data-start="0.60" data-end="1" d="M 1260 290 C 1400 306 1540 274 1680 290"/>
-                                <path class="branch-draw branch-core" data-start="0.60" data-end="1" d="M 1260 290 C 1400 306 1540 274 1680 290"/>
-                                <circle cx="1060" cy="290" r="26" fill="transparent" data-card="card-corona-2023"/>
-                                <circle class="timeline-bud" cx="1060" cy="290" r="11" fill="#a78bfa" stroke="#24183f" stroke-width="9" data-card="card-corona-2023"/>
-                                <circle cx="1680" cy="290" r="26" fill="transparent" data-card="card-corona-2026"/>
-                                <circle class="timeline-bud" cx="1680" cy="290" r="12" fill="#c491ff" stroke="#24183f" stroke-width="10" data-card="card-corona-2026"/>
+                                <path class="lane-hitbox" d="M 1000 290 C 1090 276 1150 278 1220 290 C 1360 308 1520 272 1640 290"/>
+                                <path class="branch-dashed" data-start="0.45" data-end="0.6" d="M 1000 290 C 1090 276 1150 278 1220 290"/>
+                                <path class="branch-draw branch-glow" data-start="0.58" data-end="1" d="M 1220 290 C 1360 308 1520 272 1640 290"/>
+                                <path class="branch-draw branch-core" data-start="0.58" data-end="1" d="M 1220 290 C 1360 308 1520 272 1640 290"/>
+                                <circle cx="1000" cy="290" r="24" fill="transparent" data-card="card-corona-2023"/>
+                                <circle class="timeline-bud" cx="1000" cy="290" r="10" fill="#a78bfa" stroke="#1e1438" stroke-width="8" data-card="card-corona-2023"/>
+                                <circle cx="1640" cy="290" r="26" fill="transparent" data-card="card-corona-2026"/>
+                                <circle class="timeline-bud" cx="1640" cy="290" r="11" fill="#c491ff" stroke="#1e1438" stroke-width="9" data-card="card-corona-2026"/>
                             </g>
 
                             <g class="merge-hotspot" tabindex="0" role="button" aria-label="2025 年融合节点" data-card="card-corona-2025">
-                                <circle class="merge-pulse-ring" cx="1260" cy="290" r="66" fill="url(#timelineMergeGlow)" opacity="0.82"/>
-                                <circle cx="1260" cy="290" r="58" fill="url(#timelineMergeGlow)" opacity="0.88"/>
-                                <circle cx="1260" cy="290" r="28" fill="#b984ff" opacity="0.66"/>
-                                <circle cx="1260" cy="290" r="13" fill="#f0d4ff"/>
+                                <circle class="merge-pulse-ring" cx="1220" cy="290" r="62" fill="url(#timelineMergeGlow)" opacity="0.82"/>
+                                <circle cx="1220" cy="290" r="54" fill="url(#timelineMergeGlow)" opacity="0.88"/>
+                                <circle class="timeline-node-halo" cx="1220" cy="290" r="36" fill="url(#nodeCoronaGrad)" filter="url(#nodeGlow)" opacity="0.5"/>
+                                <circle cx="1220" cy="290" r="24" fill="url(#nodeCoronaGrad)" opacity="0.85"/>
+                                <circle cx="1220" cy="290" r="11" fill="#f0d4ff"/>
                             </g>
 
                             <g pointer-events="none" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <image href="render/Group 14264.png" x="116" y="86" width="48" height="48" opacity="0.92"/>
-                                <image href="render/Group 14265.png" x="116" y="446" width="48" height="48" opacity="0.92"/>
-                                <path d="M 1664 279 h36 l10 12 l-28 17 l-28 -17 z" fill="none" stroke="#c491ff" stroke-width="3" opacity="0.74"/>
-                                <path d="M 1668 282 l14 10 l23 -10" stroke="#c491ff" stroke-width="3" opacity="0.70"/>
+                                <image href="render/Group 14264.png" x="156" y="86" width="48" height="48" opacity="0.92"/>
+                                <image href="render/Group 14265.png" x="156" y="446" width="48" height="48" opacity="0.92"/>
+                                <path d="M 1624 279 h36 l10 12 l-28 17 l-28 -17 z" fill="none" stroke="#c491ff" stroke-width="3" opacity="0.74"/>
+                                <path d="M 1628 282 l14 10 l23 -10" stroke="#c491ff" stroke-width="3" opacity="0.70"/>
                             </g>
 
                             <!-- Cabbage 分支年份标签（节点上方） -->
-                            <foreignObject x="88" y="32" width="104" height="36" data-lane="cabbage">
+                            <foreignObject x="128" y="32" width="104" height="36" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill compact">2017-2021</div>
                             </foreignObject>
-                            <foreignObject x="726" y="32" width="68" height="36" data-lane="cabbage">
+                            <foreignObject x="746" y="32" width="68" height="36" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2022</div>
                             </foreignObject>
-                            <foreignObject x="1000" y="-38" width="120" height="36" data-lane="cabbage">
+                            <foreignObject x="940" y="-38" width="120" height="36" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill compact">2022~2025</div>
                             </foreignObject>
                             <!-- Vision 分支年份标签 -->
-                            <foreignObject x="88" y="432" width="104" height="36" data-lane="vision">
+                            <foreignObject x="128" y="432" width="104" height="36" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill compact">2018-2020</div>
                             </foreignObject>
-                            <foreignObject x="346" y="432" width="68" height="36" data-lane="vision">
+                            <foreignObject x="366" y="432" width="68" height="36" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2020</div>
                             </foreignObject>
-                            <foreignObject x="586" y="502" width="68" height="36" data-lane="vision">
+                            <foreignObject x="566" y="504" width="68" height="36" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2021</div>
                             </foreignObject>
-                            <foreignObject x="726" y="432" width="68" height="36" data-lane="vision">
+                            <foreignObject x="746" y="432" width="68" height="36" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2022</div>
                             </foreignObject>
                             <!-- 2023 年份标签（主干上方） -->
-                            <foreignObject x="1026" y="212" width="68" height="36" data-lane="corona">
+                            <foreignObject x="966" y="212" width="68" height="36" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2023</div>
                             </foreignObject>
 
-                            <foreignObject id="card-cabbage-1" x="20" y="135" width="300" height="120" data-lane="cabbage">
+                            <foreignObject id="card-cabbage-1" x="40" y="135" width="300" height="120" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Cabbage Engine 前身</h3>
                                     <p>GraphZ 开发多个用于竞赛与科研的引擎雏形</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-cabbage-2" x="620" y="135" width="300" height="120" data-lane="cabbage">
+                            <foreignObject id="card-cabbage-2" x="640" y="135" width="300" height="120" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Cabbage Engine 诞生</h3>
                                     <p>GraphZ 对各个雏形引擎进行整合，Cabbage Engine 雏形诞生</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-cabbage-3" x="910" y="-20" width="300" height="120" data-lane="cabbage">
+                            <foreignObject id="card-cabbage-3" x="850" y="-20" width="300" height="120" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy sideline">
                                     <span class="lane-tag">支线</span>
                                     <h3>Cabbage Engine (2022~2025)</h3>
                                     <p>用于支持实验室多个竞赛与科研项目</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-vision-1" x="20" y="488" width="300" height="120" data-lane="vision">
+                            <foreignObject id="card-vision-1" x="40" y="488" width="300" height="120" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Vision Renderer 前身</h3>
                                     <p>Zero 开发 Z-Renderer、Paladin</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-vision-2" x="240" y="488" width="300" height="120" data-lane="vision">
+                            <foreignObject id="card-vision-2" x="260" y="488" width="300" height="120" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Vision Renderer 前身</h3>
                                     <p>转向硬件光线追踪，开启新项目 LumiRender</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-vision-3" x="470" y="558" width="300" height="120" data-lane="vision">
+                            <foreignObject id="card-vision-3" x="450" y="560" width="300" height="120" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy sideline">
                                     <span class="lane-tag">支线</span>
                                     <h3>Vision Renderer 前身 (2021)</h3>
                                     <p>LumiRender 聚焦服装渲染，完成技术验证</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-vision-4" x="620" y="488" width="300" height="120" data-lane="vision">
+                            <foreignObject id="card-vision-4" x="640" y="488" width="300" height="120" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Vision Renderer 诞生</h3>
                                     <p>使用 EDSL 重写 LumiRender，Vision 渲染器正式诞生</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="1219" y="218" width="82" height="44" data-lane="corona">
+                            <foreignObject x="1179" y="218" width="82" height="44" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2025</div>
                             </foreignObject>
-                            <foreignObject id="card-corona-2023" x="910" y="316" width="300" height="120" data-lane="corona">
+                            <foreignObject id="card-corona-2023" x="850" y="316" width="300" height="120" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>融合前夜</h3>
                                     <p><span class="gold">Vision 与 Cabbage 各自成熟，蓄势融合</span></p>
                                 </div>
                             </foreignObject>
-                            <foreignObject id="card-corona-2025" x="1110" y="316" width="300" height="120" data-lane="corona">
+                            <foreignObject id="card-corona-2025" x="1070" y="316" width="300" height="120" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>Corona Engine 诞生</h3>
                                     <p><span class="gold">Vision 与 Cabbage 的初步融合</span></p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="1640" y="212" width="82" height="44" data-lane="corona">
+                            <foreignObject x="1600" y="212" width="82" height="44" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2026</div>
                             </foreignObject>
-                            <foreignObject id="card-corona-2026" x="1530" y="316" width="300" height="120" data-lane="corona">
+                            <foreignObject id="card-corona-2026" x="1490" y="316" width="300" height="120" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>Corona Engine v1.0 正式版</h3>
                                     <p>深度重构，蓄势待发</p>
