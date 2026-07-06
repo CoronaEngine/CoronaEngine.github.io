@@ -598,12 +598,46 @@ function renderTeam() {
     container.innerHTML = label1 + row1 + label2 + rows2 + label3 + row3;
 
     container.querySelectorAll('[data-member-name]').forEach(function(button) {
-        button.addEventListener('click', function(event) {
+        // 悬停展开/移出收起：成员详情
+        button.addEventListener('mouseenter', function(event) {
             event.stopPropagation();
+            if (_memberHoverTimer) { clearTimeout(_memberHoverTimer); _memberHoverTimer = null; }
             showMemberModalByName(button.getAttribute('data-member-name'));
+        });
+        button.addEventListener('mouseleave', function() {
+            scheduleMemberModalClose();
         });
     });
 }
+
+// 成员弹窗悬停延时关闭（鼠标从名字移动到弹窗内容时不收起）
+var _memberHoverTimer = null;
+function scheduleMemberModalClose() {
+    if (_memberHoverTimer) clearTimeout(_memberHoverTimer);
+    _memberHoverTimer = setTimeout(function() {
+        var modal = document.getElementById('memberModal');
+        if (modal) modal.classList.remove('active');
+        _memberHoverTimer = null;
+    }, 220);
+}
+(function() {
+    function ready(fn) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fn);
+        } else { fn(); }
+    }
+    ready(function() {
+        var modalContent = document.querySelector('#memberModal .member-modal');
+        if (modalContent) {
+            modalContent.addEventListener('mouseenter', function() {
+                if (_memberHoverTimer) { clearTimeout(_memberHoverTimer); _memberHoverTimer = null; }
+            });
+            modalContent.addEventListener('mouseleave', function() {
+                scheduleMemberModalClose();
+            });
+        }
+    });
+})();
 
 // ================= 页脚联系方式：单击复制到剪贴板 =================
 function initClipboard() {
