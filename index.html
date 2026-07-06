@@ -1599,8 +1599,14 @@ body.menu-open {
     display: inline-flex;
     transition: opacity 0.28s ease, filter 0.28s ease;
 }
-/* 悬停时模糊周边 */
-.team-hover-ready.has-hover .credit-name-wrap:not(.hovered) {
+.credit-section-label,
+.credit-join-row {
+    transition: opacity 0.28s ease, filter 0.28s ease;
+}
+/* 悬停时模糊周边名字 + 分组标题 + 加入我们行 */
+.team-hover-ready.has-hover .credit-name-wrap:not(.hovered),
+.team-hover-ready.has-hover .credit-section-label,
+.team-hover-ready.has-hover .credit-join-row {
     opacity: 0.22;
     filter: blur(1.4px);
 }
@@ -1615,8 +1621,7 @@ body.menu-open {
     bottom: calc(100% + 18px);
     left: 50%;
     transform: translateX(-50%) translateY(8px);
-    width: 460px;
-    max-width: 90vw;
+    width: min(620px, 92vw);
     display: flex;
     gap: 16px;
     background: rgba(10,16,36,0.94);
@@ -1713,8 +1718,7 @@ body.menu-open {
 
 /* 创始人卡片加宽 */
 .founder-wrap .team-hover-card {
-    width: 540px;
-    max-width: 92vw;
+    width: min(720px, 95vw);
 }
 .founder-wrap .team-hover-avatar {
     width: 84px; height: 84px;
