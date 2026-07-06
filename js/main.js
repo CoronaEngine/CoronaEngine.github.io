@@ -782,6 +782,7 @@ function initOrbitSystem() {
             var name = document.createElement('span');
             name.className = 'sat-name';
             name.textContent = item.label;
+            name.dataset.full = item.full || item.label;
 
             var tag = document.createElement('span');
             tag.className = 'sat-tag';
@@ -805,10 +806,12 @@ function initOrbitSystem() {
             node.addEventListener('mouseenter', function() {
                 orbit.nodeHovered = true;
                 node.classList.add('hovered');
+                name.textContent = name.dataset.full;
             });
             node.addEventListener('mouseleave', function() {
                 orbit.nodeHovered = false;
                 node.classList.remove('hovered');
+                name.textContent = item.label;
             });
 
             return { el: node, labelEl: lbl };
