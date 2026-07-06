@@ -66,23 +66,6 @@ const renderFeatures = [
 
 // ================= 其它数据 =================
 const patentsData = [
-    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", tag: "2018 · 专利", label: "三角形邻接信息移动算法" },
-    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", tag: "2019 · 专利", label: "法线修正碰撞移动方法" },
-    { title: "一种三维空间内基于降维的实时路径生成方法", tag: "2019 · 专利", label: "降维实时路径生成方法" },
-    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", tag: "2019 · 专利", label: "动态模糊降采样加速方法" },
-    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", tag: "2020 · 专利", label: "球坐标图元模型压缩方法" },
-    { title: "一种基于深度缓冲加速的光线追踪渲染方法", tag: "2021 · 专利", label: "深度缓冲加速光追渲染" },
-    { title: "一种基于光线路径复用的动态场景渲染加速方法", tag: "2021 · 专利", label: "光线路径复用渲染加速" },
-    { title: "一种基于非对称卷积核的卷积神经网络训练方法", tag: "2024 · 专利", label: "非对称卷积核训练方法" },
-    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", tag: "2024 · 专利", label: "高斯先验卷积网络优化方法" },
-    { title: "基于凸包优化的非均匀数据的聚类方法", tag: "2024 · 专利", label: "凸包优化聚类方法" },
-    { title: "基于密度聚类算法的三维物体碰撞体优化方法", tag: "2025 · 专利", label: "密度聚类碰撞体优化方法" },
-    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", tag: "2025 · 专利", label: "光追训练数据生成方法" },
-    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", tag: "2025 · 专利", label: "屏幕空间阴影优化方法" },
-    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", tag: "2026 · 专利", label: "智能体协同场景生成方法" },
-    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", tag: "2026 · 专利", label: "光场路径追踪调度方法" },
-    { title: "一种基于稀疏时空角重建的实时光场渲染方法", tag: "2026 · 专利", label: "稀疏时空角光场渲染方法" },
-    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026 · 专利", label: "子像素光线生成方法" },
     { label: "资源调度与场景预览系统", tag: "2026 · 国家级", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
     { label: "立体显示交互系统", tag: "2025 · 国家级", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
     { label: "三维美术资源生成系统", tag: "2024 · 省级", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
@@ -114,18 +97,26 @@ const academicPapers = [
     { label: "多智能体场景创作机制", tag: "中文核心 · 投稿中", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
 ];
 
-// // 学生项目（绿色 · 最外层）
-// const studentProjects = [
-//     { label: "资源调度与场景预览系统", tag: "国家级 · 2026", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
-//     { label: "立体显示交互系统", tag: "国家级 · 2025", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
-//     { label: "三维美术资源生成系统", tag: "省级 · 2024", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
-//     { label: "文化出海数字化方案", tag: "校级 · 2024", full: "“岁月失语，惟石能言”：基于数字技术的文化出海新方案", year: "2024", level: "校级" },
-//     { label: "分布式仿真辅助设计系统", tag: "国家级 · 2022", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
-//     { label: "MLT分布式渲染系统", tag: "国家级 · 2020", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
-//     { label: "物理仿真海洋探索系统", tag: "国家级 · 2019", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
-//     { label: "多语言实时交互仿真系统", tag: "省级 · 2019", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
-//     { label: "编程语言教学系统", tag: "国家级 · 2018", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
-// ];
+// 学生项目（绿色 · 最外层）
+const studentProjects = [
+    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", tag: "2018 · 专利", label: "三角形邻接信息移动算法" },
+    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", tag: "2019 · 专利", label: "法线修正碰撞移动方法" },
+    { title: "一种三维空间内基于降维的实时路径生成方法", tag: "2019 · 专利", label: "降维实时路径生成方法" },
+    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", tag: "2019 · 专利", label: "动态模糊降采样加速方法" },
+    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", tag: "2020 · 专利", label: "球坐标图元模型压缩方法" },
+    { title: "一种基于深度缓冲加速的光线追踪渲染方法", tag: "2021 · 专利", label: "深度缓冲加速光追渲染" },
+    { title: "一种基于光线路径复用的动态场景渲染加速方法", tag: "2021 · 专利", label: "光线路径复用渲染加速" },
+    { title: "一种基于非对称卷积核的卷积神经网络训练方法", tag: "2024 · 专利", label: "非对称卷积核训练方法" },
+    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", tag: "2024 · 专利", label: "高斯先验卷积网络优化方法" },
+    { title: "基于凸包优化的非均匀数据的聚类方法", tag: "2024 · 专利", label: "凸包优化聚类方法" },
+    { title: "基于密度聚类算法的三维物体碰撞体优化方法", tag: "2025 · 专利", label: "密度聚类碰撞体优化方法" },
+    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", tag: "2025 · 专利", label: "光追训练数据生成方法" },
+    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", tag: "2025 · 专利", label: "屏幕空间阴影优化方法" },
+    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", tag: "2026 · 专利", label: "智能体协同场景生成方法" },
+    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", tag: "2026 · 专利", label: "光场路径追踪调度方法" },
+    { title: "一种基于稀疏时空角重建的实时光场渲染方法", tag: "2026 · 专利", label: "稀疏时空角光场渲染方法" },
+    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026 · 专利", label: "子像素光线生成方法" }
+];
 
 // ================= 页面初始化与交互 =================
 document.addEventListener('DOMContentLoaded', () => {
@@ -160,8 +151,8 @@ function renderFeatureBlocks() {
     const devGrid = document.getElementById('devGrid');
 
     if (creatorGrid || devGrid) {
-        const sandboxItems = businessFeatures.filter(function(f) { return f.tone === 'sandbox'; }).concat(renderFeatures.slice(4, 5));
-        const devItems = businessFeatures.filter(function(f) { return f.tone === 'research'; }).concat(renderFeatures.slice(0, 4));
+        const sandboxItems = businessFeatures.filter(function(f) { return f.tone === 'sandbox'; }).concat([renderFeatures[2], renderFeatures[4]]);
+        const devItems = businessFeatures.filter(function(f) { return f.tone === 'research'; }).concat([renderFeatures[0], renderFeatures[3], renderFeatures[1]]);
         if (creatorGrid) renderBizItems(creatorGrid, sandboxItems);
         if (devGrid)     renderBizItems(devGrid, devItems);
         return;
@@ -233,16 +224,7 @@ function renderBizItems(container, items) {
         block.appendChild(chevron);
 
         block.addEventListener('click', function() {
-            var isExpanded = block.classList.contains('expanded');
-            container.querySelectorAll('.bento-block.expanded').forEach(function(el) {
-                el.classList.remove('expanded');
-                el.style.gridColumn = '';
-            });
-            if (!isExpanded) {
-                block.classList.add('expanded');
-                var span = parseInt(block.dataset.colSpan || 1);
-                if (span === 1) block.style.gridColumn = 'span 2';
-            }
+            openBentoFocus(block, item, container);
         });
 
         return block;
@@ -280,6 +262,205 @@ function renderBizItems(container, items) {
         container.appendChild(wrap);
     }
 }
+
+// ---- Bento spotlight focus ----
+var _bentoFocusOverlay = null;
+var _bentoFocusCard    = null;
+var _bentoFocusSource  = null;
+var _bentoFocusGrid    = null;
+
+function openBentoFocus(block, item, container) {
+    closeBentoFocus();
+
+    var rect = block.getBoundingClientRect();
+    var col  = block.closest('.biz-col-creator') ? 'creator' : 'dev';
+
+    // overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'bento-focus-overlay';
+    overlay.addEventListener('click', closeBentoFocus);
+    document.body.appendChild(overlay);
+    _bentoFocusOverlay = overlay;
+
+    // card
+    var card = document.createElement('div');
+    card.className = 'bento-focus-card ' + col + '-tone';
+
+    // start at block rect (FLIP start position)
+    card.style.left   = rect.left + 'px';
+    card.style.top    = rect.top  + 'px';
+    card.style.width  = rect.width  + 'px';
+    card.style.height = rect.height + 'px';
+    card.style.transform = 'none';
+    card.style.opacity = '0';
+    card.style.transition = 'none';
+
+    // close button
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'bento-focus-close';
+    closeBtn.type = 'button';
+    closeBtn.setAttribute('aria-label', '关闭');
+    closeBtn.innerHTML = '<i class="fas fa-xmark"></i>';
+    closeBtn.addEventListener('click', function(e) { e.stopPropagation(); closeBentoFocus(); });
+    card.appendChild(closeBtn);
+
+    // icon
+    var iconWrap = document.createElement('div');
+    iconWrap.className = 'bento-focus-icon';
+    iconWrap.innerHTML = '<i class="' + (item.icon || 'fas fa-circle') + '"></i>';
+    card.appendChild(iconWrap);
+
+    // tag
+    if (item.tag) {
+        var tag = document.createElement('span');
+        tag.className = 'bento-focus-tag';
+        tag.textContent = item.tag;
+        card.appendChild(tag);
+    }
+
+    // title
+    var title = document.createElement('h3');
+    title.className = 'bento-focus-title';
+    title.textContent = item.title;
+    card.appendChild(title);
+
+    // body text
+    if (item.detail) {
+        var body = document.createElement('p');
+        body.className = 'bento-focus-body';
+        body.textContent = item.detail;
+        card.appendChild(body);
+    }
+
+    // list items
+    if (Array.isArray(item.items) && item.items.length) {
+        var ul = document.createElement('ul');
+        ul.className = 'bento-focus-list';
+        item.items.forEach(function(li) {
+            var liEl = document.createElement('li');
+            liEl.innerHTML = '<i class="' + (li.icon || 'fas fa-check') + '"></i><span>' + (li.text || String(li)) + '</span>';
+            ul.appendChild(liEl);
+        });
+        card.appendChild(ul);
+    }
+
+    document.body.appendChild(card);
+    _bentoFocusCard   = card;
+    _bentoFocusSource = block;
+    _bentoFocusGrid   = container;
+
+    // scatter all blocks outward from the clicked block
+    var focusCX = rect.left + rect.width  / 2;
+    var focusCY = rect.top  + rect.height / 2;
+    ['creatorGrid', 'devGrid'].forEach(function(id) {
+        var g = document.getElementById(id);
+        if (g) g.classList.add('has-focus');
+        var w = g && g.querySelector('.bento-extra-wrap');
+        if (w) w.classList.add('has-focus');
+        if (!g) return;
+        g.querySelectorAll('.bento-block').forEach(function(b) {
+            if (b === block) return;
+            var br = b.getBoundingClientRect();
+            var bCX = br.left + br.width  / 2;
+            var bCY = br.top  + br.height / 2;
+            var dx = bCX - focusCX;
+            var dy = bCY - focusCY;
+            var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            var push = 40;
+            b.style.setProperty('--scatter-x', (dx / dist * push).toFixed(1) + 'px');
+            b.style.setProperty('--scatter-y', (dy / dist * push).toFixed(1) + 'px');
+        });
+    });
+    block.classList.add('focus-source');
+
+    // calculate target center position
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var targetW = Math.min(400, vw * 0.68);
+    var targetH = Math.min(vh * 0.56, 460);
+    var targetL = (vw - targetW) / 2;
+    var targetT = (vh - targetH) / 2;
+
+    // first frame: place at block rect without transition
+    requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+            // re-enable transitions and animate to center
+            card.style.transition =
+                'left 0.46s cubic-bezier(0.34,1.08,0.64,1),' +
+                'top 0.46s cubic-bezier(0.34,1.08,0.64,1),' +
+                'width 0.46s cubic-bezier(0.34,1.08,0.64,1),' +
+                'height 0.46s cubic-bezier(0.34,1.08,0.64,1),' +
+                'opacity 0.28s ease';
+            card.style.left    = targetL + 'px';
+            card.style.top     = targetT + 'px';
+            card.style.width   = targetW + 'px';
+            card.style.height  = targetH + 'px';
+            card.style.opacity = '1';
+            overlay.classList.add('active');
+        });
+    });
+}
+
+function closeBentoFocus() {
+    if (_bentoFocusCard) {
+        var card = _bentoFocusCard;
+        var src  = _bentoFocusSource;
+
+        // animate card back toward source block if still in viewport
+        if (src) {
+            var rect = src.getBoundingClientRect();
+            card.style.transition =
+                'left 0.32s cubic-bezier(0.4,0,0.2,1),' +
+                'top 0.32s cubic-bezier(0.4,0,0.2,1),' +
+                'width 0.32s cubic-bezier(0.4,0,0.2,1),' +
+                'height 0.32s cubic-bezier(0.4,0,0.2,1),' +
+                'opacity 0.24s ease';
+            card.style.left    = rect.left   + 'px';
+            card.style.top     = rect.top    + 'px';
+            card.style.width   = rect.width  + 'px';
+            card.style.height  = rect.height + 'px';
+            card.style.opacity = '0';
+        } else {
+            card.style.transition = 'opacity 0.22s ease';
+            card.style.opacity = '0';
+        }
+
+        setTimeout(function() { if (card.parentNode) card.parentNode.removeChild(card); }, 350);
+        _bentoFocusCard = null;
+    }
+
+    if (_bentoFocusOverlay) {
+        _bentoFocusOverlay.classList.remove('active');
+        var ov = _bentoFocusOverlay;
+        setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 380);
+        _bentoFocusOverlay = null;
+    }
+
+    if (_bentoFocusSource) {
+        _bentoFocusSource.classList.remove('focus-source');
+        _bentoFocusSource = null;
+    }
+
+    if (_bentoFocusGrid) {
+        ['creatorGrid', 'devGrid'].forEach(function(id) {
+            var g = document.getElementById(id);
+            if (g) g.classList.remove('has-focus');
+            var w = g && g.querySelector('.bento-extra-wrap');
+            if (w) w.classList.remove('has-focus');
+            if (!g) return;
+            g.querySelectorAll('.bento-block').forEach(function(b) {
+                b.style.removeProperty('--scatter-x');
+                b.style.removeProperty('--scatter-y');
+            });
+        });
+        _bentoFocusGrid = null;
+    }
+}
+
+// close on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && _bentoFocusCard) closeBentoFocus();
+});
 
 function renderFeatureBlockGroup(container, items) {
     container.innerHTML = '';
@@ -556,15 +737,15 @@ function initOrbitSystem() {
     // 第三层（蓝色）：发明专利
     const ring3 = patentsData.map(function(p) { return { label: p.label, tag: p.tag }; });
 
-    // // 第四层（绿色）：学生项目
-    // const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
+    // 第四层（绿色）：学生项目
+    const ring4 = studentProjects.map(function(p) { return { label: p.label, tag: p.tag }; });
 
     // 四层轨道：由里到外，卫星尺寸逐步变小，速度逐步加快
     const orbits = [
         { items: ring1, radius: 340, tiltDeg: 66, speed: 0.0022, type: 'ccfa', sizeClass: 'sat-xl', angle: 0 },
-        { items: ring2, radius: 520, tiltDeg: 64, speed: 0.0028, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
-        { items: ring3, radius: 720, tiltDeg: 62, speed: 0.0034, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
-        // { items: ring4, radius: 740, tiltDeg: 62, speed: 0.0040, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
+        { items: ring2, radius: 500, tiltDeg: 64, speed: 0.0028, type: 'academic', sizeClass: '', angle: Math.PI / 4 },
+        { items: ring3, radius: 680, tiltDeg: 62, speed: 0.0034, type: 'patent', sizeClass: 'sat-sm', angle: Math.PI / 6 },
+        { items: ring4, radius: 800, tiltDeg: 58, speed: 0.0046, type: 'student', sizeClass: 'sat-xs', angle: Math.PI / 3 }
     ];
 
     // 设置视觉轨道环尺寸
