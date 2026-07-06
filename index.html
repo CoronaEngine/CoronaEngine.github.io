@@ -1013,7 +1013,11 @@ body.menu-open {
 }
 
 #page-4.page {
-    transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: transform 0.09s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+#page-1.page {
+    transition: opacity 0.09s cubic-bezier(0.25, 1, 0.5, 1), transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .page-scroll {
@@ -1896,25 +1900,63 @@ body.menu-open {
 
         .bento-block {
             border-radius: 16px;
-            cursor: pointer; border: none; outline: none;
+            cursor: pointer; outline: none;
             display: flex; flex-direction: column;
             align-items: flex-start; justify-content: flex-end;
             padding: 18px 16px;
             background-size: cover;
             background-position: center;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.24);
+            backdrop-filter: blur(14px) saturate(130%);
+            -webkit-backdrop-filter: blur(14px) saturate(130%);
             transition: background 0.22s ease, box-shadow 0.22s ease,
                         margin 0.32s cubic-bezier(0.4,0,0.2,1),
                         padding 0.32s cubic-bezier(0.4,0,0.2,1);
             box-sizing: border-box; color: #fff;
             position: relative; z-index: 1;
         }
-        .biz-col-creator .bento-block { background: rgba(180,140,240,0.22); }
-        .biz-col-creator .bento-block:hover { background: rgba(180,140,240,0.32); box-shadow: 0 6px 24px rgba(180,140,240,0.18); }
-        .biz-col-creator .bento-block.expanded { background: rgba(180,140,240,0.28); }
-        .biz-col-dev     .bento-block { background: rgba(56,189,248,0.18); }
-        .biz-col-dev     .bento-block:hover { background: rgba(56,189,248,0.28); box-shadow: 0 6px 24px rgba(56,189,248,0.18); }
-        .biz-col-dev     .bento-block.expanded { background: rgba(56,189,248,0.22); }
+        .biz-col-creator .bento-block {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(180,140,240,0.20), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(180,140,240,0.10), transparent 36%),
+                rgba(255, 255, 255, 0.035);
+            border-color: rgba(180,140,240,0.20);
+        }
+        .biz-col-creator .bento-block:hover {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(180,140,240,0.30), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(180,140,240,0.14), transparent 36%),
+                rgba(255, 255, 255, 0.05);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.30), 0 0 34px rgba(180,140,240,0.18);
+        }
+        .biz-col-creator .bento-block.expanded {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(180,140,240,0.26), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(180,140,240,0.12), transparent 36%),
+                rgba(255, 255, 255, 0.045);
+        }
+        .biz-col-dev     .bento-block {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(56,189,248,0.16), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(56,189,248,0.08), transparent 36%),
+                rgba(255, 255, 255, 0.035);
+            border-color: rgba(56,189,248,0.20);
+        }
+        .biz-col-dev     .bento-block:hover {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(56,189,248,0.26), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(56,189,248,0.12), transparent 36%),
+                rgba(255, 255, 255, 0.05);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.30), 0 0 34px rgba(56,189,248,0.18);
+        }
+        .biz-col-dev     .bento-block.expanded {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(56,189,248,0.22), transparent 40%),
+                radial-gradient(circle at 88% 82%, rgba(56,189,248,0.10), transparent 36%),
+                rgba(255, 255, 255, 0.045);
+        }
 
         /* 有封面图的块：图片背景 + 渐变遮罩 */
         .bento-block.has-image {
@@ -2672,7 +2714,7 @@ function initShellNavigation() {
     });
 
     window.addEventListener('wheel', function(event) {
-        if (event.target.closest('.member-modal-overlay.active, .dl-overlay.active, .team-scroll-wrap, .history-scroll-wrap')) return;
+        if (event.target.closest('.member-modal-overlay.active, .dl-overlay.active, .team-scroll-wrap')) return;
         const scroller = event.target.closest('.page-scroll') || activePageScroll();
         if (scroller === activePageScroll() && canScrollWithin(scroller, event.deltaY)) return;
 
