@@ -237,18 +237,15 @@ function renderBizItems(container, items) {
         }
         block.appendChild(detail);
 
-        var chevron = document.createElement('span');
-        chevron.className = 'bento-block-chevron';
-        chevron.innerHTML = '<i class="fas fa-chevron-down"></i>';
-        block.appendChild(chevron);
-
-        block.addEventListener('click', function() {
-            // 块内展开/收起，不再弹出浮层
-            var wasExpanded = block.classList.contains('expanded');
+        // 鼠标悬停展开/移出收起：块内显示具体内容
+        block.addEventListener('mouseenter', function() {
             container.querySelectorAll('.bento-block.expanded').forEach(function(b) {
-                b.classList.remove('expanded');
+                if (b !== block) b.classList.remove('expanded');
             });
-            if (!wasExpanded) block.classList.add('expanded');
+            block.classList.add('expanded');
+        });
+        block.addEventListener('mouseleave', function() {
+            block.classList.remove('expanded');
         });
 
         return block;

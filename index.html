@@ -2169,6 +2169,20 @@ body.menu-open {
         }
         .bento-featured .bento-block-detail { text-align: left; }
 
+        /* 非重点块：展开时隐藏图标、标题、tag 和图片遮罩，仅保留详情 */
+        .bento-block:not(.bento-featured).expanded .bento-block-icon,
+        .bento-block:not(.bento-featured).expanded .bento-block-title,
+        .bento-block:not(.bento-featured).expanded .bento-block-tag {
+            display: none;
+        }
+        .bento-block:not(.bento-featured).expanded.has-image::before {
+            opacity: 0;
+        }
+        .bento-block:not(.bento-featured).expanded {
+            justify-content: center;
+            align-items: flex-start;
+        }
+
         .bento-detail-body {
             font-size: 0.79rem; color: rgba(215,225,240,0.68);
             line-height: 1.70; margin: 0; pointer-events: none; user-select: none;
@@ -2341,7 +2355,7 @@ body.menu-open {
                         </h1>
                         <p>做前沿技术的无畏探索者，也做每一颗创作灵感的引路星</p>
                         <div class="hero-buttons">
-                            <a id="btnDownload" href="javascript:void(0)" class="hero-action primary">
+                            <a href="https://github.com/CoronaEngine" class="hero-action primary">
                                 <i class="fas fa-download"></i> 立即下载
                             </a>
                             <a href="https://github.com/CoronaEngine" target="_blank" rel="noopener noreferrer" class="hero-action">
