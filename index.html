@@ -229,6 +229,35 @@
             box-shadow: 0 0 18px rgba(174,110,255,0.20);
         }
         .timeline-year-pill:hover { transform: scale(1.12); box-shadow: 0 0 28px rgba(174,110,255,0.36); }
+        /* 节点年份小标签（次级层级，区别于里程碑年份胶囊） */
+        .timeline-year-tag {
+            pointer-events: auto;
+            color: rgba(241,232,255,0.94);
+            background: rgba(101,68,170,0.40);
+            border: 1px solid rgba(216,174,255,0.18);
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1;
+            padding: 5px 6px 6px;
+            text-align: center;
+            white-space: nowrap;
+            box-shadow: 0 0 12px rgba(174,110,255,0.16);
+            transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease;
+        }
+        .timeline-year-tag:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(174,110,255,0.30); }
+        [data-lane="cabbage"] .timeline-year-tag {
+            color: #d4e6ff;
+            background: rgba(37,99,235,0.22);
+            border-color: rgba(115,178,255,0.34);
+            box-shadow: 0 0 12px rgba(60,130,255,0.20);
+        }
+        [data-lane="vision"] .timeline-year-tag {
+            color: #ffdada;
+            background: rgba(185,28,28,0.20);
+            border-color: rgba(255,104,104,0.32);
+            box-shadow: 0 0 12px rgba(255,80,80,0.18);
+        }
         .timeline-progress {
             display: none;
         }
@@ -2645,31 +2674,46 @@ body.menu-open {
 
                             <foreignObject x="54" y="28" width="302" height="104" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>GraphZ (2017-2021)</h3>
+                                    <h3>GraphZ</h3>
                                     <p>GraphZ 开发多个用于竞赛与科研的引擎雏形</p>
                                 </div>
                             </foreignObject>
+                            <foreignObject x="70" y="172" width="96" height="34" data-lane="cabbage">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2017-2021</div>
+                            </foreignObject>
                             <foreignObject x="386" y="30" width="370" height="106" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>Cabbage Engine 正式诞生 (2022)</h3>
+                                    <h3>Cabbage Engine 正式诞生</h3>
                                     <p>对开发的各个雏形引擎进行整合，Cabbage Engine 正式诞生</p>
                                 </div>
                             </foreignObject>
+                            <foreignObject x="440" y="182" width="64" height="34" data-lane="cabbage">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2022</div>
+                            </foreignObject>
+                            <foreignObject x="60" y="322" width="104" height="34" data-lane="vision">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2018-2020</div>
+                            </foreignObject>
                             <foreignObject x="48" y="396" width="292" height="92" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>Zero (2018-2020)</h3>
+                                    <h3>Zero</h3>
                                     <p>Zero 开发 Z-Renderer、Paladin</p>
                                 </div>
                             </foreignObject>
+                            <foreignObject x="414" y="290" width="104" height="34" data-lane="vision">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2020-2021</div>
+                            </foreignObject>
                             <foreignObject x="362" y="404" width="340" height="98" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>Zero (2020-2021)</h3>
+                                    <h3>Zero</h3>
                                     <p>转向硬件光线追踪<br/>开启新项目 LumiRender 并完成技术验证</p>
                                 </div>
                             </foreignObject>
+                            <foreignObject x="670" y="376" width="64" height="34" data-lane="vision">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2022</div>
+                            </foreignObject>
                             <foreignObject x="720" y="400" width="270" height="86" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>Zero (2022)</h3>
+                                    <h3>Zero</h3>
                                     <p>Vision 渲染器正式诞生</p>
                                 </div>
                             </foreignObject>
@@ -2683,10 +2727,10 @@ body.menu-open {
                                     <p>解决自研 GPU 编程语言架构难题<br/>发表 SIGGRAPH ASIA 顶会</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="1540" y="302" width="82" height="44" data-lane="corona">
+                            <foreignObject x="1540" y="180" width="82" height="44" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2026</div>
                             </foreignObject>
-                            <foreignObject x="1400" y="332" width="368" height="140" data-lane="corona">
+                            <foreignObject x="1400" y="300" width="368" height="140" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
                                     <h3>Corona Engine v1.0 蓄势待发</h3>
                                     <p>深度重构，持续打磨，厚积薄发。支撑高校赛事，学术课题深化，主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
