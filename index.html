@@ -193,6 +193,8 @@
             72%, 100% { transform: scale(1.28); opacity: 0; }
         }
         .timeline-copy {
+            pointer-events: auto;
+            cursor: pointer;
             color: rgba(230,238,255,0.92);
             line-height: 1.34;
             padding: 14px 16px;
@@ -200,15 +202,35 @@
             border: 1px solid rgba(255,255,255,0.08);
             background: rgba(7, 13, 31, 0.68);
             box-shadow: 0 18px 44px rgba(0,0,0,0.20);
+            transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+        }
+        .timeline-copy:is(:hover, :focus-within) {
+            border-color: rgba(255,255,255,0.18);
+            box-shadow: 0 22px 52px rgba(0,0,0,0.30);
         }
         .timeline-copy h3 {
-            margin: 0 0 8px;
+            margin: 0;
             color: #f8fafc;
             font-size: 20px;
             font-weight: 800;
             letter-spacing: 0;
         }
-        .timeline-copy p { margin: 0; color: rgba(185,197,220,0.74); font-size: 14px; font-weight: 600; }
+        /* 详情默认收起，悬停/聚焦时展开 */
+        .timeline-copy p {
+            margin: 0;
+            color: rgba(185,197,220,0.74);
+            font-size: 14px;
+            font-weight: 600;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.4s ease;
+        }
+        .timeline-copy:is(:hover, :focus-within) p {
+            max-height: 180px;
+            opacity: 1;
+            margin-top: 8px;
+        }
         .timeline-copy .gold { color: #ffcc33; }
         .timeline-copy.center { text-align: center; }
         .timeline-copy.center h3 { font-size: 21px; }
@@ -2621,34 +2643,19 @@ body.menu-open {
                                 <path class="lane-hitbox" d="M 115 150 C 320 138 560 148 760 158 C 940 168 1050 205 1150 250"/>
                                 <path class="branch-draw branch-glow" data-start="0" data-end="0.46" d="M 115 150 C 320 138 560 148 760 158 C 940 168 1050 205 1150 250"/>
                                 <path class="branch-draw branch-core" data-start="0" data-end="0.46" d="M 115 150 C 320 138 560 148 760 158 C 940 168 1050 205 1150 250"/>
-                                <path class="branch-draw branch-glow" data-start="0.14" data-end="0.26" d="M 439 146 C 470 100 500 84 545 86"/>
-                                <path class="branch-draw branch-core" data-start="0.14" data-end="0.26" d="M 439 146 C 470 100 500 84 545 86"/>
-                                <path class="branch-draw branch-glow" data-start="0.30" data-end="0.42" d="M 965 186 C 1000 140 1030 124 1065 128"/>
-                                <path class="branch-draw branch-core" data-start="0.30" data-end="0.42" d="M 965 186 C 1000 140 1030 124 1065 128"/>
-                                <path class="branch-leaf" d="M 469 90 C 451 72 451 52 481 41 M 501 90 C 523 70 549 66 571 84" stroke="#73b2ff"/>
-                                <path class="branch-leaf" d="M 999 121 C 983 98 989 78 1019 66 M 1030 127 C 1052 108 1081 108 1103 128" stroke="#8d7cff"/>
                                 <circle class="timeline-node-glow" cx="115" cy="150" r="36" fill="#3b82f6"/>
                                 <circle class="timeline-node-core" cx="115" cy="150" r="16" fill="#5ca4ff" stroke="#101d45" stroke-width="10"/>
                                 <circle class="timeline-bud" cx="760" cy="158" r="12" fill="#73b2ff" stroke="#101d45" stroke-width="10"/>
-                                <circle class="timeline-bud" cx="545" cy="86" r="10" fill="#9cc9ff" stroke="#0e1d40" stroke-width="8"/>
-                                <circle class="timeline-bud" cx="1065" cy="128" r="10" fill="#bfa7ff" stroke="#21143f" stroke-width="8"/>
                             </g>
 
                             <g class="timeline-lane lane-vision" tabindex="0" role="group" aria-label="Vision 渲染技术分支">
                                 <path class="lane-hitbox" d="M 112 372 C 260 388 350 402 438 400 C 560 398 660 396 760 392 C 920 388 1060 300 1150 250"/>
                                 <path class="branch-draw branch-glow" data-start="0" data-end="0.48" d="M 112 372 C 260 388 350 402 438 400 C 560 398 660 396 760 392 C 920 388 1060 300 1150 250"/>
                                 <path class="branch-draw branch-core" data-start="0" data-end="0.48" d="M 112 372 C 260 388 350 402 438 400 C 560 398 660 396 760 392 C 920 388 1060 300 1150 250"/>
-                                <path class="branch-draw branch-glow" data-start="0.16" data-end="0.28" d="M 600 397 C 620 446 650 462 695 460"/>
-                                <path class="branch-draw branch-core" data-start="0.16" data-end="0.28" d="M 600 397 C 620 446 650 462 695 460"/>
-                                <path class="branch-draw branch-glow" data-start="0.32" data-end="0.44" d="M 950 385 C 980 434 1010 450 1055 448"/>
-                                <path class="branch-draw branch-core" data-start="0.32" data-end="0.44" d="M 950 385 C 980 434 1010 450 1055 448"/>
-                                <path class="branch-leaf" d="M 619 456 C 601 474 601 494 631 505 M 651 456 C 673 476 699 480 721 462" stroke="#ff6868"/>
-                                <path class="branch-leaf" d="M 989 448 C 973 471 979 491 1009 503 M 1020 442 C 1042 461 1071 461 1093 442" stroke="#c077df"/>
                                 <circle class="timeline-node-glow" cx="112" cy="372" r="36" fill="#ef4444"/>
                                 <circle class="timeline-node-core" cx="112" cy="372" r="16" fill="#ff514f" stroke="#361624" stroke-width="10"/>
                                 <circle class="timeline-bud" cx="438" cy="400" r="12" fill="#ff6868" stroke="#361624" stroke-width="10"/>
                                 <circle class="timeline-bud" cx="760" cy="392" r="12" fill="#ff8585" stroke="#361624" stroke-width="10"/>
-                                <circle class="timeline-bud" cx="1055" cy="448" r="10" fill="#ce7fea" stroke="#27123d" stroke-width="8"/>
                             </g>
 
                             <g class="timeline-lane lane-corona" tabindex="0" role="group" aria-label="Corona Engine 主干">
@@ -2674,7 +2681,7 @@ body.menu-open {
 
                             <foreignObject x="54" y="28" width="302" height="104" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>GraphZ</h3>
+                                    <h3>Cabbage Engine 前身</h3>
                                     <p>GraphZ 开发多个用于竞赛与科研的引擎雏形</p>
                                 </div>
                             </foreignObject>
@@ -2683,7 +2690,7 @@ body.menu-open {
                             </foreignObject>
                             <foreignObject x="575" y="30" width="370" height="106" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>Cabbage Engine 正式诞生</h3>
+                                    <h3>Cabbage Engine 诞生</h3>
                                     <p>对开发的各个雏形引擎进行整合，Cabbage Engine 正式诞生</p>
                                 </div>
                             </foreignObject>
@@ -2695,7 +2702,7 @@ body.menu-open {
                             </foreignObject>
                             <foreignObject x="48" y="396" width="292" height="92" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>Zero</h3>
+                                    <h3>Vision Renderer 前身</h3>
                                     <p>Zero 开发 Z-Renderer、Paladin</p>
                                 </div>
                             </foreignObject>
@@ -2704,7 +2711,7 @@ body.menu-open {
                             </foreignObject>
                             <foreignObject x="268" y="404" width="340" height="98" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>Zero</h3>
+                                    <h3>Vision Renderer 前身</h3>
                                     <p>转向硬件光线追踪<br/>开启新项目 LumiRender 并完成技术验证</p>
                                 </div>
                             </foreignObject>
@@ -2713,7 +2720,7 @@ body.menu-open {
                             </foreignObject>
                             <foreignObject x="625" y="400" width="270" height="86" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
-                                    <h3>Zero</h3>
+                                    <h3>Vision Renderer 诞生</h3>
                                     <p>Vision 渲染器正式诞生</p>
                                 </div>
                             </foreignObject>
@@ -2732,7 +2739,7 @@ body.menu-open {
                             </foreignObject>
                             <foreignObject x="1400" y="300" width="368" height="140" data-lane="corona">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
-                                    <h3>Corona Engine v1.0 蓄势待发</h3>
+                                    <h3>Corona Engine v1.0 正式版</h3>
                                     <p>深度重构，持续打磨，厚积薄发。支撑高校赛事，学术课题深化，主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
                                 </div>
                             </foreignObject>
