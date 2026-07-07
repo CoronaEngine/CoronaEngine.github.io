@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -87,8 +87,8 @@
             display: block;
             overflow: visible;
             background: transparent;
-            -webkit-mask-image: linear-gradient(to right, black 87%, transparent 100%);
-            mask-image: linear-gradient(to right, black 87%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, black 92%, transparent 100%);
+            mask-image: linear-gradient(to right, black 92%, transparent 100%);
         }
         /* 枝干初始隐藏，等待动画 */
         .branch-draw { opacity: 1; }
@@ -125,15 +125,15 @@
             transition: stroke-dashoffset 0.32s ease, stroke-width 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
         }
         .branch-glow {
-            stroke-width: 42;
-            opacity: 0.16;
+            stroke-width: 52;
+            opacity: 0.20;
             filter: url(#timelineBranchGlow);
             mix-blend-mode: screen;
         }
         .branch-core {
-            stroke-width: 7;
-            opacity: 0.88;
-            filter: drop-shadow(0 0 12px rgba(255,255,255,0.12));
+            stroke-width: 8;
+            opacity: 0.92;
+            filter: drop-shadow(0 0 16px rgba(255,255,255,0.18));
         }
         .lane-cabbage .branch-core,
         .lane-cabbage .branch-glow { stroke: url(#timelineCabbageBranch); }
@@ -143,17 +143,17 @@
         .lane-corona .branch-glow { stroke: url(#timelineCoronaBranch); }
         .timeline-lane:is(:hover, :focus-visible, .semantic-active) .branch-glow { opacity: 0.34; }
         .timeline-lane:is(:hover, :focus-visible, .semantic-active) .branch-core {
-            stroke-width: 9;
+            stroke-width: 10;
             opacity: 1;
         }
         .lane-cabbage:is(:hover, :focus-visible, .semantic-active) .branch-core {
-            filter: drop-shadow(0 0 13px rgba(115,178,255,0.78)) drop-shadow(0 0 28px rgba(60,130,255,0.34));
+            filter: drop-shadow(0 0 20px rgba(115,178,255,0.85)) drop-shadow(0 0 40px rgba(60,130,255,0.40));
         }
         .lane-vision:is(:hover, :focus-visible, .semantic-active) .branch-core {
-            filter: drop-shadow(0 0 13px rgba(255,104,104,0.74)) drop-shadow(0 0 28px rgba(255,80,80,0.32));
+            filter: drop-shadow(0 0 20px rgba(255,104,104,0.82)) drop-shadow(0 0 40px rgba(255,80,80,0.38));
         }
         .lane-corona:is(:hover, :focus-visible, .semantic-active) .branch-core {
-            filter: drop-shadow(0 0 15px rgba(209,155,255,0.80)) drop-shadow(0 0 32px rgba(160,100,240,0.38));
+            filter: drop-shadow(0 0 22px rgba(209,155,255,0.88)) drop-shadow(0 0 44px rgba(160,100,240,0.44));
         }
         .timeline-lane.merge-flash .branch-core { animation: mergePulse 0.55s ease-in-out; }
         @keyframes mergePulse {
@@ -171,7 +171,7 @@
             stroke-width: 3;
         }
         .timeline-node-glow { opacity: 0.45; transition: opacity 0.35s ease; }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-glow { opacity: 0.82; }
+        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-glow { opacity: 0.90; }
         .timeline-node-core,
         .timeline-bud {
             transition: r 0.35s ease, filter 0.35s ease, transform 0.35s ease;
@@ -180,13 +180,24 @@
         }
         .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-core,
         .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-bud {
-            filter: drop-shadow(0 0 14px currentColor);
-            transform: scale(1.08);
+            filter: drop-shadow(0 0 20px currentColor);
+            transform: scale(1.12);
         }
         .merge-hotspot { cursor: pointer; }
+        .merge-hotspot:is(:hover, :focus-visible) .merge-pulse-ring { animation-duration: 1.8s; }
+        .merge-hotspot:is(:hover, :focus-visible) .merge-pulse-ring-2 { animation-duration: 2.4s; }
+        .merge-hotspot:is(:hover, :focus-visible) circle:not([class]) { filter: brightness(1.25); }
         .merge-pulse-ring {
             transform-origin: 1150px 250px;
             animation: mergeRing 2.8s ease-out infinite;
+        }
+        .merge-pulse-ring-2 {
+            transform-origin: 1150px 250px;
+            animation: mergeRing2 3.8s ease-out infinite;
+        }
+        @keyframes mergeRing2 {
+            0% { transform: scale(0.70); opacity: 0.40; }
+            72%, 100% { transform: scale(1.42); opacity: 0; }
         }
         @keyframes mergeRing {
             0% { transform: scale(0.82); opacity: 0.66; }
@@ -207,6 +218,24 @@
         .timeline-copy:is(:hover, :focus-within) {
             border-color: rgba(255,255,255,0.18);
             box-shadow: 0 22px 52px rgba(0,0,0,0.30);
+        }
+        foreignObject[data-lane="cabbage"] .timeline-copy {
+            border-left: 3px solid rgba(59,130,246,0.30);
+        }
+        foreignObject[data-lane="cabbage"] .timeline-copy:is(:hover, :focus-within) {
+            border-left-color: rgba(59,130,246,0.60);
+        }
+        foreignObject[data-lane="vision"] .timeline-copy {
+            border-left: 3px solid rgba(239,68,68,0.30);
+        }
+        foreignObject[data-lane="vision"] .timeline-copy:is(:hover, :focus-within) {
+            border-left-color: rgba(239,68,68,0.60);
+        }
+        foreignObject[data-lane="corona"] .timeline-copy {
+            border-left: 3px solid rgba(196,145,255,0.30);
+        }
+        foreignObject[data-lane="corona"] .timeline-copy:is(:hover, :focus-within) {
+            border-left-color: rgba(196,145,255,0.60);
         }
         .timeline-copy h3 {
             margin: 0;
@@ -251,6 +280,8 @@
             box-shadow: 0 0 18px rgba(174,110,255,0.20);
         }
         .timeline-year-pill:hover { transform: scale(1.12); box-shadow: 0 0 28px rgba(174,110,255,0.36); }
+        foreignObject[data-lane="cabbage"] .timeline-year-pill:hover { background: rgba(37,99,235,0.55); }
+        foreignObject[data-lane="vision"] .timeline-year-pill:hover { background: rgba(185,28,28,0.52); }
         [data-lane="cabbage"] .timeline-year-pill {
             color: #d4e6ff;
             background: rgba(37,99,235,0.42);
@@ -2585,13 +2616,13 @@ body.menu-open {
                             <defs>
                                 <linearGradient id="timelineCabbageBranch" x1="110" y1="150" x2="1150" y2="250" gradientUnits="userSpaceOnUse">
                                     <stop offset="0" stop-color="#2563eb" stop-opacity="0.62"/>
-                                    <stop offset="0.42" stop-color="#73b2ff" stop-opacity="0.92"/>
+                                    <stop offset="0.42" stop-color="#60a5fa" stop-opacity="0.94"/>
                                     <stop offset="0.76" stop-color="#8d7cff" stop-opacity="0.96"/>
                                     <stop offset="1" stop-color="#c491ff" stop-opacity="0.98"/>
                                 </linearGradient>
                                 <linearGradient id="timelineVisionBranch" x1="110" y1="370" x2="1150" y2="250" gradientUnits="userSpaceOnUse">
                                     <stop offset="0" stop-color="#b91c1c" stop-opacity="0.62"/>
-                                    <stop offset="0.45" stop-color="#ff6868" stop-opacity="0.92"/>
+                                    <stop offset="0.45" stop-color="#fb6f6f" stop-opacity="0.94"/>
                                     <stop offset="0.78" stop-color="#b46bda" stop-opacity="0.96"/>
                                     <stop offset="1" stop-color="#c491ff" stop-opacity="0.98"/>
                                 </linearGradient>
@@ -2607,8 +2638,8 @@ body.menu-open {
                                     <stop offset="1" stop-color="#8a5bff" stop-opacity="0"/>
                                 </radialGradient>
                                 <filter id="timelineBranchGlow" x="-14%" y="-150%" width="128%" height="400%" color-interpolation-filters="sRGB">
-                                    <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/>
-                                    <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.24  0 1 0 0 0.34  0 0 1 0 0.92  0 0 0 1.1 0" result="glow"/>
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur"/>
+                                    <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.28  0 1 0 0 0.38  0 0 1 0 0.94  0 0 0 1.2 0" result="glow"/>
                                     <feMerge>
                                         <feMergeNode in="glow"/>
                                         <feMergeNode in="SourceGraphic"/>
@@ -2650,6 +2681,7 @@ body.menu-open {
 
                             <g class="merge-hotspot" tabindex="0" role="button" aria-label="2025 年融合节点">
                                 <circle class="merge-pulse-ring" cx="1150" cy="250" r="66" fill="url(#timelineMergeGlow)" opacity="0.82"/>
+                                <circle class="merge-pulse-ring-2" cx="1150" cy="250" r="56" fill="url(#timelineMergeGlow)" opacity="0.50"/>
                                 <circle cx="1150" cy="250" r="58" fill="url(#timelineMergeGlow)" opacity="0.88"/>
                                 <circle cx="1150" cy="250" r="28" fill="#b984ff" opacity="0.66"/>
                                 <circle cx="1150" cy="250" r="13" fill="#f0d4ff"/>
