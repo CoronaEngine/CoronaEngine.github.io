@@ -251,34 +251,17 @@
             box-shadow: 0 0 18px rgba(174,110,255,0.20);
         }
         .timeline-year-pill:hover { transform: scale(1.12); box-shadow: 0 0 28px rgba(174,110,255,0.36); }
-        /* 节点年份小标签（次级层级，区别于里程碑年份胶囊） */
-        .timeline-year-tag {
-            pointer-events: auto;
-            color: rgba(241,232,255,0.94);
-            background: rgba(101,68,170,0.40);
-            border: 1px solid rgba(216,174,255,0.18);
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 800;
-            line-height: 1;
-            padding: 5px 6px 6px;
-            text-align: center;
-            white-space: nowrap;
-            box-shadow: 0 0 12px rgba(174,110,255,0.16);
-            transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s ease;
-        }
-        .timeline-year-tag:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(174,110,255,0.30); }
-        [data-lane="cabbage"] .timeline-year-tag {
+        [data-lane="cabbage"] .timeline-year-pill {
             color: #d4e6ff;
-            background: rgba(37,99,235,0.22);
-            border-color: rgba(115,178,255,0.34);
-            box-shadow: 0 0 12px rgba(60,130,255,0.20);
+            background: rgba(37,99,235,0.42);
+            border-color: rgba(115,178,255,0.54);
+            box-shadow: 0 0 18px rgba(60,130,255,0.28);
         }
-        [data-lane="vision"] .timeline-year-tag {
+        [data-lane="vision"] .timeline-year-pill {
             color: #ffdada;
-            background: rgba(185,28,28,0.20);
-            border-color: rgba(255,104,104,0.32);
-            box-shadow: 0 0 12px rgba(255,80,80,0.18);
+            background: rgba(185,28,28,0.40);
+            border-color: rgba(255,104,104,0.52);
+            box-shadow: 0 0 18px rgba(255,80,80,0.26);
         }
         .timeline-progress {
             display: none;
@@ -2596,7 +2579,7 @@ body.menu-open {
 <div class="timeline-wrap history-scroll-wrap" id="historyScrollWrap">
                         <div class="timeline-progress" aria-hidden="true"><span id="historyProgressBar"></span></div>
                         <div class="history-timeline-track" id="historyTimelineTrack">
-                        <svg class="timeline-map" viewBox="0 0 1820 520" role="img" aria-labelledby="timelineTitle timelineDesc" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="timeline-map" viewBox="0 0 1820 720" role="img" aria-labelledby="timelineTitle timelineDesc" xmlns="http://www.w3.org/2000/svg">
                             <title id="timelineTitle">Corona Engine 发展历程分支图</title>
                             <desc id="timelineDesc">GraphZ 与 Zero 的技术分支分别演进为 Cabbage Engine 与 Vision，并在 2025 年融合为 Corona Engine，继续向 2026 年及之后延展。</desc>
                             <defs>
@@ -2685,40 +2668,40 @@ body.menu-open {
                                     <p>GraphZ 开发多个用于竞赛与科研的引擎雏形</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="70" y="172" width="96" height="34" data-lane="cabbage">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2017-2021</div>
+                            <foreignObject x="56" y="190" width="168" height="44" data-lane="cabbage">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2017-2021</div>
                             </foreignObject>
-                            <foreignObject x="575" y="30" width="370" height="106" data-lane="cabbage">
+                            <foreignObject x="575" y="50" width="370" height="106" data-lane="cabbage">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Cabbage Engine 诞生</h3>
                                     <p>对开发的各个雏形引擎进行整合，Cabbage Engine 正式诞生</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="728" y="184" width="64" height="34" data-lane="cabbage">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2022</div>
+                            <foreignObject x="720" y="160" width="82" height="44" data-lane="cabbage">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2022</div>
                             </foreignObject>
-                            <foreignObject x="60" y="322" width="104" height="34" data-lane="vision">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2018-2020</div>
+                            <foreignObject x="50" y="290" width="160" height="44" data-lane="vision">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2018-2020</div>
                             </foreignObject>
-                            <foreignObject x="48" y="396" width="292" height="92" data-lane="vision">
+                            <foreignObject x="30" y="415" width="240" height="92" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Vision Renderer 前身</h3>
                                     <p>Zero 开发 Z-Renderer、Paladin</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="386" y="290" width="104" height="34" data-lane="vision">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2020-2021</div>
+                            <foreignObject x="372" y="328" width="160" height="44" data-lane="vision">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2020-2021</div>
                             </foreignObject>
-                            <foreignObject x="268" y="404" width="340" height="98" data-lane="vision">
+                            <foreignObject x="320" y="415" width="260" height="98" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Vision Renderer 前身</h3>
                                     <p>转向硬件光线追踪<br/>开启新项目 LumiRender 并完成技术验证</p>
                                 </div>
                             </foreignObject>
-                            <foreignObject x="728" y="352" width="64" height="34" data-lane="vision">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-tag">2022</div>
+                            <foreignObject x="720" y="328" width="82" height="44" data-lane="vision">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2022</div>
                             </foreignObject>
-                            <foreignObject x="625" y="400" width="270" height="86" data-lane="vision">
+                            <foreignObject x="650" y="415" width="250" height="86" data-lane="vision">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy">
                                     <h3>Vision Renderer 诞生</h3>
                                     <p>Vision 渲染器正式诞生</p>
