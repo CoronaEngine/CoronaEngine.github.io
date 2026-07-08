@@ -2984,7 +2984,6 @@ function initHistoryCardsScroll() {
     let friction = 0.96;
     let wheelActive = false;
     let wheelTimeout = null;
-    let canNavigateNext = true;
     let autoPlaying = true;
 
     function updateMaxScroll() {
@@ -3038,38 +3037,51 @@ function initHistoryCardsScroll() {
         rafId = requestAnimationFrame(tick);
     }
 
+    let lastNavTime = 0;
+
     function onWheel(event) {
         if (maxScroll <= 0) return;
         event.preventDefault();
         event.stopPropagation();
 
-        // 滚轮唤醒
+        // 唤醒
         if (!autoPlaying) {
             autoPlaying = true;
             scrollVelocity = autoSpeed;
         }
 
-        if (event.deltaY < 0) {
-            scrollVelocity += event.deltaY * 4.5;
+        // 方向敏感加速
+        if (event.deltaY > 0) {
+            scrollVelocity += event.deltaY * 12;
         } else {
             scrollVelocity += event.deltaY * 0.6;
         }
         scrollVelocity = Math.max(-8, Math.min(scrollVelocity, 16));
 
-        // 停在末尾继续滚 -> 切页
-        if (scrollOffset >= maxScroll && event.deltaY > 0 && canNavigateNext) {
-            canNavigateNext = false;
-            if (typeof window.goToPage === 'function') {
-                window.goToPage(3);
+        // 到底 -> 下一页（往前推）
+        if (scrollOffset >= maxScroll - 5 && event.deltaY > 0 && scrollVelocity > autoSpeed) {
+            var now = Date.now();
+            if (now - lastNavTime > 1200) {
+                lastNavTime = now;
+                scrollOffset = maxScroll;
+                autoPlaying = false;
+                scrollVelocity = 0;
+                applyScroll();
+                if (typeof window.goToPage === 'function') window.goToPage(3);
             }
             return;
         }
 
-        // 回到第一张继续往上 -> 上一页
-        if (scrollOffset <= 0 && event.deltaY < 0 && canNavigateNext) {
-            canNavigateNext = false;
-            if (typeof window.goToPage === 'function') {
-                window.goToPage(1);
+        // 到开头 -> 上一页（往回拉）
+        if (scrollOffset <= 5 && event.deltaY < 0 && scrollVelocity < 0) {
+            var now2 = Date.now();
+            if (now2 - lastNavTime > 1200) {
+                lastNavTime = now2;
+                scrollOffset = 0;
+                autoPlaying = false;
+                scrollVelocity = 0;
+                applyScroll();
+                if (typeof window.goToPage === 'function') window.goToPage(1);
             }
             return;
         }
@@ -3084,6 +3096,7 @@ function initHistoryCardsScroll() {
     }
 
     container.addEventListener('wheel', onWheel, { passive: false });
+
     var pageScroll = container.closest('.page-scroll');
     if (pageScroll) {
         pageScroll.addEventListener('wheel', onWheel, { passive: false, capture: true });
@@ -3103,7 +3116,6 @@ function initHistoryCardsScroll() {
         scrollOffset = 0;
         scrollVelocity = autoSpeed;
         autoPlaying = true;
-        canNavigateNext = true;
         applyScroll();
         updateMaxScroll();
 
