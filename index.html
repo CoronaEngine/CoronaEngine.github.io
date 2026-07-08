@@ -2972,159 +2972,132 @@ function initHistoryCardsScroll() {
     const progressBar = document.getElementById('historyProgressBar');
     if (!container || !track) return;
 
+    // 隐藏底部的旧版进度条
+    if (progressBar && progressBar.parentElement) {
+        progressBar.parentElement.style.display = 'none';
+    }
+
+    const cards = Array.from(track.querySelectorAll('.history-card-col'));
+    if (cards.length === 0) return;
+
     let scrollOffset = 0;
-    let maxScroll = 0;
-    let autoSpeed = 2.5;
-    let scrollVelocity = 0;
-    let rafId = null;
-    let friction = 0.96;
-    let wheelActive = false;
-    let wheelTimeout = null;
-    let autoPlaying = true;
+    let targetOffset = 0;
+    let isTicking = false;
+    const lerpFactor = 0.08; // 阻尼顺滑系数
 
-    function updateMaxScroll() {
-        maxScroll = Math.max(0, track.scrollWidth - container.clientWidth);
-        applyScroll();
-    }
+    // 3D 空间轨道参数
+    const radiusY = 320; // 决定上下跨度
+    const radiusZ = 450; // 决定前后纵深
+    const cardAngleSpacing = Math.PI / 4.5; 
+    const maxScroll = cards.length - 1;
 
-    function applyScroll() {
-        track.style.transform = 'translateX(' + (-scrollOffset) + 'px)';
-        updateProgress();
-    }
+    // X轴交错散点排布 (Tripo3D的灵魂，让卡片不在一条直线上)
+    const staggerX = [-120, 140, -160, 150, -100, 160, -140];
 
-    function updateProgress() {
-        if (!progressBar) return;
-        var pct = maxScroll > 0 ? (scrollOffset / maxScroll) * 100 : 0;
-        progressBar.style.width = Math.min(100, pct) + '%';
-    }
-
-    function tick() {
-        if (maxScroll <= 0) { rafId = requestAnimationFrame(tick); return; }
-
-        if (autoPlaying) {
-            scrollOffset += scrollVelocity;
+    function updateAnimation() {
+        scrollOffset += (targetOffset - scrollOffset) * lerpFactor;
+        if (Math.abs(targetOffset - scrollOffset) < 0.001) {
+            scrollOffset = targetOffset;
+            isTicking = false;
         }
 
-        if (!wheelActive && autoPlaying) {
-            if (scrollVelocity > autoSpeed + 0.02) {
-                scrollVelocity = scrollVelocity * friction + autoSpeed * (1 - friction);
-            } else if (scrollVelocity < autoSpeed - 0.02) {
-                scrollVelocity = scrollVelocity * friction + autoSpeed * (1 - friction);
-            } else {
-                scrollVelocity = autoSpeed;
-            }
+        cards.forEach((card, index) => {
+            let angle = (index - scrollOffset) * cardAngleSpacing;
+            
+            // 计算 X 轴的散落与视差
+            let x = staggerX[index % staggerX.length];
+            let parallaxX = x * Math.cos(angle);
+            
+            // 计算 Y 轴和 Z 轴的环形轨道
+            let y = Math.sin(angle) * radiusY;
+            let z = Math.cos(angle) * radiusZ - radiusZ;
+
+            // 根据 Z 深度计算缩放和透明度
+            let zProgress = (z + radiusZ * 1.6) / (radiusZ * 1.6);
+            zProgress = Math.max(0, Math.min(1, zProgress));
+
+            let scale = 0.5 + 0.5 * zProgress;
+            let opacity = zProgress * zProgress;
+
+            // 转到后方时彻底隐藏
+            if (Math.cos(angle) < 0) opacity = 0;
+
+            card.style.pointerEvents = opacity > 0.6 ? 'auto' : 'none';
+            card.style.zIndex = Math.round(zProgress * 100);
+            card.style.transform = `translate3d(${parallaxX}px, ${y}px, ${z}px) scale(${scale})`;
+            card.style.opacity = opacity.toFixed(3);
+        });
+
+        if (isTicking) requestAnimationFrame(updateAnimation);
+    }
+
+    function requestRender() {
+        if (!isTicking) {
+            isTicking = true;
+            requestAnimationFrame(updateAnimation);
         }
-
-        // 到底 -> 停
-        if (scrollOffset >= maxScroll) {
-            scrollOffset = maxScroll;
-            if (autoPlaying) {
-                autoPlaying = false;
-                scrollVelocity = 0;
-                applyScroll();
-                rafId = requestAnimationFrame(tick);
-                return;
-            }
-        }
-
-        if (scrollOffset < 0) scrollOffset = 0;
-
-        applyScroll();
-        rafId = requestAnimationFrame(tick);
     }
 
     let lastNavTime = 0;
-
     function onWheel(event) {
-        if (maxScroll <= 0) return;
         event.preventDefault();
         event.stopPropagation();
+        let delta = event.deltaY || event.deltaX;
+        
+        // 控制滚轮灵敏度
+        targetOffset += delta * 0.0025;
+        targetOffset = Math.max(-0.5, Math.min(targetOffset, maxScroll + 0.5));
+        requestRender();
 
-        // 唤醒
-        if (!autoPlaying) {
-            autoPlaying = true;
-            scrollVelocity = autoSpeed;
-        }
-
-        // 方向敏感加速
-        if (event.deltaY > 0) {
-            scrollVelocity += event.deltaY * 12;
-        } else {
-            scrollVelocity += event.deltaY * 0.6;
-        }
-        scrollVelocity = Math.max(-8, Math.min(scrollVelocity, 16));
-
-        // 到底 -> 下一页（往前推）
-        if (scrollOffset >= maxScroll - 5 && event.deltaY > 0 && scrollVelocity > autoSpeed) {
-            var now = Date.now();
-            if (now - lastNavTime > 1200) {
+        // 触底/触顶时，跨页跳转
+        if (targetOffset >= maxScroll + 0.4 && delta > 15) {
+            let now = Date.now();
+            if (now - lastNavTime > 1000) {
                 lastNavTime = now;
-                scrollOffset = maxScroll;
-                autoPlaying = false;
-                scrollVelocity = 0;
-                applyScroll();
                 if (typeof window.goToPage === 'function') window.goToPage(3);
             }
-            return;
         }
-
-        // 到开头 -> 上一页（往回拉）
-        if (scrollOffset <= 5 && event.deltaY < 0 && scrollVelocity < 0) {
-            var now2 = Date.now();
-            if (now2 - lastNavTime > 1200) {
-                lastNavTime = now2;
-                scrollOffset = 0;
-                autoPlaying = false;
-                scrollVelocity = 0;
-                applyScroll();
+        if (targetOffset <= -0.4 && delta < -15) {
+            let now = Date.now();
+            if (now - lastNavTime > 1000) {
+                lastNavTime = now;
                 if (typeof window.goToPage === 'function') window.goToPage(1);
             }
-            return;
         }
-
-        wheelActive = true;
-        if (wheelTimeout) clearTimeout(wheelTimeout);
-        wheelTimeout = setTimeout(function() {
-            wheelActive = false;
-        }, 350);
-
-        applyScroll();
     }
+
+    // 移动端滑动支持
+    let touchStartY = 0;
+    let baseOffset = 0;
+    container.addEventListener('touchstart', e => {
+        touchStartY = e.touches[0].clientY;
+        baseOffset = targetOffset;
+    }, { passive: true });
+    
+    container.addEventListener('touchmove', e => {
+        let diffY = touchStartY - e.touches[0].clientY;
+        targetOffset = baseOffset + diffY * 0.015;
+        targetOffset = Math.max(-0.5, Math.min(targetOffset, maxScroll + 0.5));
+        requestRender();
+    }, { passive: true });
 
     container.addEventListener('wheel', onWheel, { passive: false });
-
     var pageScroll = container.closest('.page-scroll');
-    if (pageScroll) {
-        pageScroll.addEventListener('wheel', onWheel, { passive: false, capture: true });
-    }
+    if (pageScroll) pageScroll.addEventListener('wheel', onWheel, { passive: false, capture: true });
 
-    scrollVelocity = autoSpeed;
-    rafId = requestAnimationFrame(tick);
-    window.setTimeout(updateMaxScroll, 150);
-    window.addEventListener('resize', updateMaxScroll);
-
-    var cards = Array.prototype.slice.call(track.querySelectorAll('.history-card'));
-    cards.forEach(function(card) {
-        card.classList.add('history-card-anim-hidden');
+    // 清理旧版 CSS 动画残留
+    cards.forEach(card => {
+        card.classList.remove('history-card-anim-hidden', 'history-card-anim-visible');
+        card.style.transition = 'none'; 
     });
+    
+    requestRender();
 
+    // 每次翻页到这一页时，重置入场动画
     window.playHistoryAnimation = function() {
-        scrollOffset = 0;
-        scrollVelocity = autoSpeed;
-        autoPlaying = true;
-        applyScroll();
-        updateMaxScroll();
-
-        cards.forEach(function(card, i) {
-            card.classList.remove('history-card-anim-visible');
-            card.classList.add('history-card-anim-hidden');
-            (function(c, idx) {
-                window.setTimeout(function() {
-                    c.classList.remove('history-card-anim-hidden');
-                    c.classList.add('history-card-anim-visible');
-                }, idx * 130 + 50);
-            })(card, i);
-        });
+        scrollOffset = -3; // 从深空远处飞入
+        targetOffset = 0;
+        requestRender();
     };
 }
 
