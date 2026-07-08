@@ -71,7 +71,7 @@
        .history-scroll-container {
            position: relative;
            width: 100%;
-           height: 520px;
+            height: 680px;
            overflow: hidden;
            margin: 0;
            padding: 0;
@@ -87,7 +87,7 @@
        }
         .history-card-col {
             flex-shrink: 0;
-            width: 340px;
+            width: 460px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -109,7 +109,7 @@
             -webkit-backdrop-filter: blur(14px);
             border: 1px solid rgba(255,255,255,0.08);
             border-radius: 20px;
-            padding: 28px 24px;
+            padding: 44px 36px;
             transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
             overflow: hidden;
         }
@@ -141,7 +141,7 @@
 
         .history-card-year {
             display: inline-block;
-            font-size: 0.75rem;
+            font-size: 0.9rem;
             font-weight: 800;
             padding: 4px 14px;
             border-radius: 999px;
@@ -171,14 +171,14 @@
         .history-card h3 {
             margin: 0 0 10px;
             color: #f8fafc;
-            font-size: 1.15rem;
+            font-size: 1.5rem;
             font-weight: 800;
             letter-spacing: 0;
         }
         .history-card p {
             margin: 0;
             color: rgba(185,197,220,0.72);
-            font-size: 0.88rem;
+            font-size: 1.05rem;
             line-height: 1.55;
             font-weight: 500;
         }
@@ -259,7 +259,7 @@
         .pub-hero-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
         .pub-hero-card {
             position: relative; overflow: hidden; border-radius: 20px;
-            padding: 36px 28px; min-height: 260px;
+            padding: 44px 36px; min-height: 260px;
             display: flex; flex-direction: column; justify-content: flex-end; gap: 12px;
             background: linear-gradient(160deg, rgba(10,20,45,0.90), rgba(4,8,22,0.95));
             border: 1px solid rgba(255,255,255,0.06);
@@ -280,7 +280,7 @@
         }
         .pub-hero-tags .hl-gold { background: rgba(220,180,60,0.08); color: #e8c860; border-color: rgba(220,180,60,0.35); }
         .pub-hero-tags .hl-cyan { background: transparent; color: #60e0e8; border-color: rgba(40,200,210,0.35); }
-        .pub-hero-card h3 { font-size: 0.95rem; font-weight: 700; color: rgba(255,255,255,0.88); line-height: 1.5; margin: 0; position: relative; z-index: 1; }
+        .pub-hero-card h3 { font-size: 1.05rem; font-weight: 700; color: rgba(255,255,255,0.88); line-height: 1.5; margin: 0; position: relative; z-index: 1; }
         .pub-hero-status { font-size: 0.72rem; color: rgba(180,200,225,0.50); position: relative; z-index: 1; }
         @media (max-width: 900px) { .pub-hero-row { grid-template-columns: 1fr; } }
 
@@ -507,8 +507,8 @@
         .bento-card h3 { font-size: 1.1rem; font-weight: 700; color: #fff; margin: 0; }
         .bento-2x2 h3 { font-size: 1.5rem; }
         .bento-2x1 h3 { font-size: 1.2rem; }
-        .bento-card p { font-size: 0.82rem; color: rgba(200,215,235,0.55); margin: 0; max-width: 240px; }
-        .bento-2x2 p { font-size: 0.95rem; max-width: 440px; line-height: 1.6; }
+        .bento-card p { font-size: 0.9rem; color: rgba(200,215,235,0.55); margin: 0; max-width: 240px; }
+        .bento-2x2 p { font-size: 1.05rem; max-width: 440px; line-height: 1.6; }
 
         /* 旧卡片样式已废弃 */
         .direction-card {
@@ -1282,20 +1282,20 @@ body.menu-open {
         padding: 28px;
     }
 
-    .history-scroll-container {
-        height: 420px;
-    }
+   .history-scroll-container {
+        height: 480px;
+   }
     .history-card-col {
-        width: 280px;
+        width: 380px;
     }
     .history-card {
-        padding: 20px 18px;
+        padding: 28px 22px;
     }
     .history-card h3 {
-        font-size: 1rem;
+        font-size: 1.25rem;
     }
     .history-card p {
-        font-size: 0.78rem;
+        font-size: 0.92rem;
     }
 
     .member-modal-grid {
@@ -1703,7 +1703,7 @@ body.menu-open {
     font-size: 1.18rem;
 }
 .founder-wrap .team-hover-bio {
-    font-size: 0.82rem;
+    font-size: 0.9rem;
 }
 /* 创始人卡片溢出翻转：靠近右边缘时向左偏移，避免超出页面 */
 .founder-wrap:nth-child(2):hover .team-hover-card,
@@ -1931,7 +1931,7 @@ body.menu-open {
     text-shadow: 0 2px 12px rgba(0,0,0,.8);
 }
 .sat-tag {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     font-weight: 700;
     letter-spacing: .06em;
     padding: 3px 16px;
@@ -1962,7 +1962,7 @@ body.menu-open {
     0% { transform: scale(1); opacity: .7; }
     100% { transform: scale(1.9); opacity: 0; }
 }
-.sat-xl .sat-name { font-size: 1.35rem; font-weight: 800; }
+.sat-xl .sat-name { font-size: 1.5rem; font-weight: 800; }
 .sat-xl .sat-tag  { font-size: 1.05rem; }
 
 /* 第三层卫星 – sm */
@@ -2042,7 +2042,7 @@ body.menu-open {
     .orbit-universe { width: 1040px; height: 860px; }
 }
 @media (max-width: 560px) {
-    .orbit-universe { width: 680px; height: 600px; }
+    .orbit-universe { width: 680px; height: 680px; }
     .orbit-planet { width: 220px; height: 220px; }
     .orbit-planet-title { font-size: 1.6rem; }
     .orbit-planet-sub { font-size: 1.04rem; }
@@ -2074,7 +2074,7 @@ body.menu-open {
             font-size: clamp(1.35rem,2.2vw,1.75rem); font-weight: 900; color: #fff;
             margin: 0 0 5px; line-height: 1.2;
         }
-        .biz-col-sub { font-size: 0.82rem; color: rgba(190,210,230,0.55); margin: 0; line-height: 1.5; }
+        .biz-col-sub { font-size: 0.9rem; color: rgba(190,210,230,0.55); margin: 0; line-height: 1.5; }
 
         /* Bento Grid */
         .biz-bento-grid {
@@ -2434,7 +2434,7 @@ body.menu-open {
         }
         .bento-focus-list li {
             display: flex; align-items: flex-start; gap: 9px;
-            font-size: 0.82rem; color: rgba(200, 218, 240, 0.62);
+            font-size: 0.9rem; color: rgba(200, 218, 240, 0.62);
             padding: 5px 0; border-top: 1px solid rgba(255,255,255,0.05);
         }
         .bento-focus-list li:first-child { border-top: none; }
@@ -2584,7 +2584,9 @@ body.menu-open {
                                 </div>
                             </div>
 
-                        </div>
+                        
+
+</div>
                         <div class="history-scroll-progress" aria-hidden="true">
                             <span id="historyProgressBar"></span>
                         </div>
@@ -2976,7 +2978,7 @@ function initHistoryCardsScroll() {
 
     let scrollOffset = 0;
     let maxScroll = 0;
-    let autoSpeed = 2.5;         // 基准速度（px/帧）
+    let autoSpeed = 2.5;
     let scrollVelocity = 0;
     let rafId = null;
     let friction = 0.96;
@@ -2986,7 +2988,6 @@ function initHistoryCardsScroll() {
 
     function updateMaxScroll() {
         maxScroll = Math.max(0, track.scrollWidth - container.clientWidth);
-        scrollOffset = ((scrollOffset % maxScroll) + maxScroll) % maxScroll;
         applyScroll();
     }
 
@@ -2998,7 +2999,7 @@ function initHistoryCardsScroll() {
     function updateProgress() {
         if (!progressBar) return;
         var pct = maxScroll > 0 ? (scrollOffset / maxScroll) * 100 : 0;
-        progressBar.style.width = pct + '%';
+        progressBar.style.width = Math.min(100, pct) + '%';
     }
 
     function tick() {
@@ -3016,22 +3017,26 @@ function initHistoryCardsScroll() {
             }
         }
 
-        // 滚到底 → 切下一页
-        if (maxScroll > 0 && scrollOffset >= maxScroll + 60 && canNavigateNext && wheelActive) {
+        // 到头循环
+        if (scrollOffset >= maxScroll + 60) {
+            scrollOffset = 0;
+        }
+        if (scrollOffset < 0) {
+            scrollOffset = maxScroll;
+        }
+
+        // 滚到底切下一页
+        if (maxScroll > 0 && scrollOffset >= maxScroll - 20 && canNavigateNext && wheelActive && scrollVelocity > autoSpeed) {
             canNavigateNext = false;
             if (typeof window.goToPage === 'function') {
                 window.goToPage(3);
             }
         }
 
-        if (scrollOffset >= maxScroll + 200) scrollOffset -= maxScroll;
-        if (scrollOffset < -200) scrollOffset += maxScroll;
-
         applyScroll();
         rafId = requestAnimationFrame(tick);
     }
 
-    // ===== 滚轮 —— 捕获阶段确保优先拦截 =====
     function onWheel(event) {
         if (maxScroll <= 0) return;
         event.preventDefault();
@@ -3050,19 +3055,16 @@ function initHistoryCardsScroll() {
     }
 
     container.addEventListener('wheel', onWheel, { passive: false });
-    // 也挂在父级上捕获，防止被 page-scroll 拦截
     var pageScroll = container.closest('.page-scroll');
     if (pageScroll) {
         pageScroll.addEventListener('wheel', onWheel, { passive: false, capture: true });
     }
 
-    // Init
     scrollVelocity = autoSpeed;
     rafId = requestAnimationFrame(tick);
     window.setTimeout(updateMaxScroll, 150);
     window.addEventListener('resize', updateMaxScroll);
 
-    // ===== 入场动画 =====
     var cards = Array.prototype.slice.call(track.querySelectorAll('.history-card'));
     cards.forEach(function(card) {
         card.classList.add('history-card-anim-hidden');
