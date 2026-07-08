@@ -2985,14 +2985,14 @@ function initHistoryCardsScroll() {
     let isTicking = false;
     const lerpFactor = 0.08; // 阻尼顺滑系数
 
-    // 3D 空间轨道参数
-    const radiusY = 320; // 决定上下跨度
+    // --- 改为水平 3D 旋转的轨道参数 ---
+    const radiusX = 420; // 决定左右散开的宽度
     const radiusZ = 450; // 决定前后纵深
     const cardAngleSpacing = Math.PI / 4.5; 
     const maxScroll = cards.length - 1;
 
-    // X轴交错散点排布 (Tripo3D的灵魂，让卡片不在一条直线上)
-    const staggerX = [-120, 140, -160, 150, -100, 160, -140];
+    // Y 轴交错散点排布 (让卡片上下错落，不至于死板地排成一横排)
+    const staggerY = [-80, 100, -110, 80, -70, 120, -90];
 
     function updateAnimation() {
         scrollOffset += (targetOffset - scrollOffset) * lerpFactor;
@@ -3004,13 +3004,14 @@ function initHistoryCardsScroll() {
         cards.forEach((card, index) => {
             let angle = (index - scrollOffset) * cardAngleSpacing;
             
-            // 计算 X 轴的散落与视差
-            let x = staggerX[index % staggerX.length];
-            let parallaxX = x * Math.cos(angle);
-            
-            // 计算 Y 轴和 Z 轴的环形轨道
-            let y = Math.sin(angle) * radiusY;
+            // X 轴和 Z 轴构成水平圆环轨道
+            let x = Math.sin(angle) * radiusX;
             let z = Math.cos(angle) * radiusZ - radiusZ;
+
+            // Y 轴引入上下散落和视差补偿
+            let yBase = staggerY[index % staggerY.length];
+            // 越偏向后方的卡片，上下偏移稍微收束一点
+            let parallaxY = yBase * Math.cos(angle);
 
             // 根据 Z 深度计算缩放和透明度
             let zProgress = (z + radiusZ * 1.6) / (radiusZ * 1.6);
@@ -3019,12 +3020,14 @@ function initHistoryCardsScroll() {
             let scale = 0.5 + 0.5 * zProgress;
             let opacity = zProgress * zProgress;
 
-            // 转到后方时彻底隐藏
+            // 转到后方半圆时彻底隐藏
             if (Math.cos(angle) < 0) opacity = 0;
 
             card.style.pointerEvents = opacity > 0.6 ? 'auto' : 'none';
             card.style.zIndex = Math.round(zProgress * 100);
-            card.style.transform = `translate3d(${parallaxX}px, ${y}px, ${z}px) scale(${scale})`;
+            
+            // 注意这里位移映射的改变：x映射到X，parallaxY映射到Y
+            card.style.transform = `translate3d(${x}px, ${parallaxY}px, ${z}px) scale(${scale})`;
             card.style.opacity = opacity.toFixed(3);
         });
 
@@ -3044,12 +3047,10 @@ function initHistoryCardsScroll() {
         event.stopPropagation();
         let delta = event.deltaY || event.deltaX;
         
-        // 控制滚轮灵敏度
         targetOffset += delta * 0.0025;
         targetOffset = Math.max(-0.5, Math.min(targetOffset, maxScroll + 0.5));
         requestRender();
 
-        // 触底/触顶时，跨页跳转
         if (targetOffset >= maxScroll + 0.4 && delta > 15) {
             let now = Date.now();
             if (now - lastNavTime > 1000) {
@@ -3066,17 +3067,17 @@ function initHistoryCardsScroll() {
         }
     }
 
-    // 移动端滑动支持
-    let touchStartY = 0;
+    // 移动端滑动支持（改为横向滑动体验更好）
+    let touchStartX = 0;
     let baseOffset = 0;
     container.addEventListener('touchstart', e => {
-        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
         baseOffset = targetOffset;
     }, { passive: true });
     
     container.addEventListener('touchmove', e => {
-        let diffY = touchStartY - e.touches[0].clientY;
-        targetOffset = baseOffset + diffY * 0.015;
+        let diffX = touchStartX - e.touches[0].clientX;
+        targetOffset = baseOffset + diffX * 0.015;
         targetOffset = Math.max(-0.5, Math.min(targetOffset, maxScroll + 0.5));
         requestRender();
     }, { passive: true });
@@ -3085,7 +3086,6 @@ function initHistoryCardsScroll() {
     var pageScroll = container.closest('.page-scroll');
     if (pageScroll) pageScroll.addEventListener('wheel', onWheel, { passive: false, capture: true });
 
-    // 清理旧版 CSS 动画残留
     cards.forEach(card => {
         card.classList.remove('history-card-anim-hidden', 'history-card-anim-visible');
         card.style.transition = 'none'; 
@@ -3093,9 +3093,8 @@ function initHistoryCardsScroll() {
     
     requestRender();
 
-    // 每次翻页到这一页时，重置入场动画
     window.playHistoryAnimation = function() {
-        scrollOffset = -3; // 从深空远处飞入
+        scrollOffset = -3; 
         targetOffset = 0;
         requestRender();
     };
