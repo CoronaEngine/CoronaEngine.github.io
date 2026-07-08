@@ -124,10 +124,11 @@ const bentoLayout = {
         { title: "所见即所得", tag: "Beginner Ecosystem", icon: "fas fa-seedling", tone: "sandbox", detail: "搭建与游玩无缝切换，无需等待，随时随地测试你的每一个灵感。" },
         { title: "AI 助手", tag: "Real-Time Collaboration", image: "render/3.png", icon: "fas fa-users-gear", tone: "sandbox", detail: "智能化辅助构建、美术资产一键生成，大幅降低场景搭建的时间成本。" }
     ],
-    // 右栏 · 开发者：突破边界 + 8 个小块
+    // 右栏 · 开发者：突破边界 + 9 个小块
     devGrid: [
         { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
-        { title: "多线程", tag: "Native Multithreading", icon: "fas fa-bolt", tone: "research", detail: "原生多线程架构，任务调度与并行计算深度融合，充分释放多核算力，保障大规模场景的高效运行。" },
+        { title: "异步", tag: "Async", icon: "fas fa-bolt", tone: "research", detail: "异步任务调度模型，IO 与计算解耦并行，避免阻塞主线程，保障大规模场景的流畅运行。" },
+        { title: "异构", tag: "Heterogeneous", icon: "fas fa-microchip", tone: "research", detail: "CPU-GPU 异构协同计算，按负载特性分派任务，充分释放多核与显卡的极致算力。" },
         { title: "物理", tag: "Physics", icon: "fas fa-atom", tone: "research", detail: "刚体动力学与碰撞检测系统，为交互与仿真提供真实可信的物理表现。" },
         { title: "动画", tag: "Animation", icon: "fas fa-person-running", tone: "research", detail: "骨骼动画与状态混合系统，让角色与物体的运动自然流畅。" },
         { title: "全局光照", tag: "Global Illumination", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。" },
