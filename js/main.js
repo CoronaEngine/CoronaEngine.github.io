@@ -35,8 +35,8 @@ const scrollingMembers = [
 // ================= 核心业务与渲染展示 =================
 const businessFeatures = [
     { title: "零基础创作沙盒，让灵感即刻落地", tag: "Creation Sandbox", icon: "fas fa-wand-magic-sparkles", tone: "sandbox", detail: "告别传统繁杂的引擎面板，无论你是懂技术不懂美术，还是懂美术不懂代码，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。" },
-    { title: "积木式编程", tag: "Visual Scripting", icon: "fas fa-puzzle-piece", tone: "sandbox", detail: "用直观的逻辑模块代替生涩代码，所见即所得。" },
-    { title: "AI 场景助手", tag: "AI Scene Assistant", icon: "fas fa-robot", tone: "sandbox", detail: "智能化辅助构建，大幅降低场景搭建的时间成本。" },
+    { title: "可视化编程", tag: "Visual Scripting", icon: "fas fa-puzzle-piece", tone: "sandbox", detail: "用直观的逻辑模块代替生涩代码，所见即所得。" },
+    { title: "AI助手", tag: "AI Scene Assistant", icon: "fas fa-robot", tone: "sandbox", detail: "智能化辅助构建，大幅降低场景搭建的时间成本。" },
     { title: "零门槛生态", tag: "Beginner Ecosystem", icon: "fas fa-seedling", tone: "sandbox", detail: "专为学生与初学者打造，让创意不再被技术壁垒阻挡。" },
     { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
     { title: "CPU-GPU 协同", tag: "Heterogeneous Computing", icon: "fas fa-microchip", tone: "research", detail: "已在异构编程语言领域取得实质性突破，释放极致算力。" },
