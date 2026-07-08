@@ -124,11 +124,12 @@ const bentoLayout = {
         { title: "所见即所得", tag: "Beginner Ecosystem", icon: "fas fa-seedling", tone: "sandbox", detail: "搭建与游玩无缝切换，无需等待，随时随地测试你的每一个灵感。" },
         { title: "AI 助手", tag: "Real-Time Collaboration", image: "render/3.png", icon: "fas fa-users-gear", tone: "sandbox", detail: "智能化辅助构建、美术资产一键生成，大幅降低场景搭建的时间成本。" }
     ],
-    // 右栏 · 开发者：突破边界 + 7 个小块
+    // 右栏 · 开发者：突破边界 + 8 个小块
     devGrid: [
         { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
         { title: "多线程", tag: "Native Multithreading", icon: "fas fa-bolt", tone: "research", detail: "原生多线程架构，任务调度与并行计算深度融合，充分释放多核算力，保障大规模场景的高效运行。" },
-        { title: "物理与动画", tag: "Physics & Animation", icon: "fas fa-person-running", tone: "research", detail: "集成刚体动力学、碰撞检测与骨骼动画系统，为交互与仿真提供真实可信的物理表现。" },
+        { title: "物理", tag: "Physics", icon: "fas fa-atom", tone: "research", detail: "刚体动力学与碰撞检测系统，为交互与仿真提供真实可信的物理表现。" },
+        { title: "动画", tag: "Animation", icon: "fas fa-person-running", tone: "research", detail: "骨骼动画与状态混合系统，让角色与物体的运动自然流畅。" },
         { title: "全局光照", tag: "Global Illumination", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。" },
         { title: "立体显示", tag: "Light Field · 裸眼3D", image: "render/2.png", icon: "fas fa-cube", tone: "research", detail: "面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。" },
         { title: "C++/JS/Py三层架构", tag: "Layered Architecture", icon: "fas fa-layer-group", tone: "research", detail: "C++ 高性能内核、JavaScript 逻辑层、Python 脚本层三层协同，兼顾运行效率与开发灵活性。" },
