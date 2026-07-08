@@ -133,7 +133,7 @@ const bentoLayout = {
         { title: "动画", tag: "Animation", icon: "fas fa-person-running", tone: "research", detail: "骨骼动画与状态混合系统，让角色与物体的运动自然流畅。" },
         { title: "全局光照", tag: "Global Illumination", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。" },
         { title: "立体显示", tag: "Light Field · 裸眼3D", image: "render/2.png", icon: "fas fa-cube", tone: "research", detail: "面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。" },
-        { title: "C++/JS/Py三层架构", tag: "Layered Architecture", icon: "fas fa-layer-group", tone: "research", detail: "C++ 高性能内核、JavaScript 逻辑层、Python 脚本层三层协同，兼顾运行效率与开发灵活性。" },
+        { title: "三层架构", tag: "Layered Architecture", icon: "fas fa-layer-group", tone: "research", detail: "C++ 高性能内核、JavaScript 逻辑层、Python 脚本层三层协同，兼顾运行效率与开发灵活性。" },
         { title: "自研EDSL语言", tag: "Embedded DSL", icon: "fas fa-microchip", tone: "research", detail: "自研嵌入式领域特定语言（EDSL），统一 CPU-GPU 异构编程，以简洁语法释放极致算力。" },
         { title: "流式加载", tag: "Streaming Loading", icon: "fas fa-download", tone: "research", detail: "大场景资源按需流式调度，实现超大世界的无缝加载与渲染，显著降低内存占用。" },
     ]
