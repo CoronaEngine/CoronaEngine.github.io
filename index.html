@@ -2985,6 +2985,7 @@ function initHistoryCardsScroll() {
     let wheelActive = false;
     let wheelTimeout = null;
     let canNavigateNext = true;
+    let autoPlaying = true;
 
     function updateMaxScroll() {
         maxScroll = Math.max(0, track.scrollWidth - container.clientWidth);
@@ -3005,9 +3006,11 @@ function initHistoryCardsScroll() {
     function tick() {
         if (maxScroll <= 0) { rafId = requestAnimationFrame(tick); return; }
 
-        scrollOffset += scrollVelocity;
+        if (autoPlaying) {
+            scrollOffset += scrollVelocity;
+        }
 
-        if (!wheelActive) {
+        if (!wheelActive && autoPlaying) {
             if (scrollVelocity > autoSpeed + 0.02) {
                 scrollVelocity = scrollVelocity * friction + autoSpeed * (1 - friction);
             } else if (scrollVelocity < autoSpeed - 0.02) {
@@ -3017,21 +3020,19 @@ function initHistoryCardsScroll() {
             }
         }
 
-        // 到头循环
-        if (scrollOffset >= maxScroll + 60) {
-            scrollOffset = 0;
-        }
-        if (scrollOffset < 0) {
+        // 到底 -> 停
+        if (scrollOffset >= maxScroll) {
             scrollOffset = maxScroll;
-        }
-
-        // 滚到底切下一页
-        if (maxScroll > 0 && scrollOffset >= maxScroll - 20 && canNavigateNext && wheelActive && scrollVelocity > autoSpeed) {
-            canNavigateNext = false;
-            if (typeof window.goToPage === 'function') {
-                window.goToPage(3);
+            if (autoPlaying) {
+                autoPlaying = false;
+                scrollVelocity = 0;
+                applyScroll();
+                rafId = requestAnimationFrame(tick);
+                return;
             }
         }
+
+        if (scrollOffset < 0) scrollOffset = 0;
 
         applyScroll();
         rafId = requestAnimationFrame(tick);
@@ -3042,8 +3043,27 @@ function initHistoryCardsScroll() {
         event.preventDefault();
         event.stopPropagation();
 
-        scrollVelocity += event.deltaY * 0.6;
+        // 滚轮唤醒
+        if (!autoPlaying) {
+            autoPlaying = true;
+            scrollVelocity = autoSpeed;
+        }
+
+        if (event.deltaY < 0) {
+            scrollVelocity += event.deltaY * 2.5;
+        } else {
+            scrollVelocity += event.deltaY * 0.6;
+        }
         scrollVelocity = Math.max(-8, Math.min(scrollVelocity, 16));
+
+        // 停在末尾继续滚 -> 切页
+        if (scrollOffset >= maxScroll && event.deltaY > 0 && canNavigateNext) {
+            canNavigateNext = false;
+            if (typeof window.goToPage === 'function') {
+                window.goToPage(3);
+            }
+            return;
+        }
 
         wheelActive = true;
         if (wheelTimeout) clearTimeout(wheelTimeout);
@@ -3073,6 +3093,7 @@ function initHistoryCardsScroll() {
     window.playHistoryAnimation = function() {
         scrollOffset = 0;
         scrollVelocity = autoSpeed;
+        autoPlaying = true;
         canNavigateNext = true;
         applyScroll();
         updateMaxScroll();
