@@ -2972,11 +2972,6 @@ function initHistoryCardsScroll() {
     const progressBar = document.getElementById('historyProgressBar');
     if (!container || !track) return;
 
-    // 隐藏底部的旧版进度条
-    if (progressBar && progressBar.parentElement) {
-        progressBar.parentElement.style.display = 'none';
-    }
-
     const cards = Array.from(track.querySelectorAll('.history-card-col'));
     if (cards.length === 0) return;
 
@@ -2991,8 +2986,8 @@ function initHistoryCardsScroll() {
     const cardAngleSpacing = Math.PI / 4.5; 
     const maxScroll = cards.length - 1;
 
-    // Y 轴交错散点排布 (让卡片上下错落，不至于死板地排成一横排)
-    const staggerY = [-80, 100, -110, 80, -70, 120, -90];
+    // Y 轴交错散点排布 (让卡片上下错落，不至于死板地排成一横排，加大间距避免重叠)
+    const staggerY = [-160, 190, -210, 160, -140, 220, -180];
 
     function updateAnimation() {
         scrollOffset += (targetOffset - scrollOffset) * lerpFactor;
@@ -3030,6 +3025,11 @@ function initHistoryCardsScroll() {
             card.style.transform = `translate3d(${x}px, ${parallaxY}px, ${z}px) scale(${scale})`;
             card.style.opacity = opacity.toFixed(3);
         });
+
+        if (progressBar) {
+            let progress = Math.max(0, Math.min(1, scrollOffset / maxScroll));
+            progressBar.style.width = (progress * 100).toFixed(2) + '%';
+        }
 
         if (isTicking) requestAnimationFrame(updateAnimation);
     }
