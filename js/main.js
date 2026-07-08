@@ -124,17 +124,14 @@ const bentoLayout = {
         { title: "所见即所得", tag: "Beginner Ecosystem", icon: "fas fa-seedling", tone: "sandbox", detail: "搭建与游玩无缝切换，无需等待，随时随地测试你的每一个灵感。" },
         { title: "AI 助手", tag: "Real-Time Collaboration", image: "render/3.png", icon: "fas fa-users-gear", tone: "sandbox", detail: "智能化辅助构建、美术资产一键生成，大幅降低场景搭建的时间成本。" }
     ],
-    // 右栏 · 开发者：突破边界 + 9 个小块
+    // 右栏 · 开发者：核心大块 + 6 个尺寸参差的小块
     devGrid: [
-        { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
-        { title: "异步", tag: "Async", icon: "fas fa-bolt", tone: "research", detail: "异步任务调度模型，IO 与计算解耦并行，避免阻塞主线程，保障大规模场景的流畅运行。" },
-        { title: "异构", tag: "Heterogeneous", icon: "fas fa-microchip", tone: "research", detail: "CPU-GPU 异构协同计算，按负载特性分派任务，充分释放多核与显卡的极致算力。" },
-        { title: "物理", tag: "Physics", icon: "fas fa-atom", tone: "research", detail: "刚体动力学与碰撞检测系统，为交互与仿真提供真实可信的物理表现。" },
-        { title: "动画", tag: "Animation", icon: "fas fa-person-running", tone: "research", detail: "骨骼动画与状态混合系统，让角色与物体的运动自然流畅。" },
+        { title: "零基础创作沙盒，让灵感即刻落地", tag: "Creation Sandbox", icon: "fas fa-wand-magic-sparkles", tone: "research", detail: "专为学生与初学者打造，让创意不再被技术壁垒阻挡。告别传统繁杂的引擎面板，无论你是否有美术与技术基础，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。" },
         { title: "全局光照", tag: "Global Illumination", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。" },
+        { title: "异步", tag: "Async", icon: "fas fa-bolt", tone: "research", detail: "异步任务调度模型，IO 与计算解耦并行，避免阻塞主线程，保障大规模场景的流畅运行。" },
+        { title: "物理", tag: "Physics", icon: "fas fa-atom", tone: "research", detail: "刚体动力学与碰撞检测系统，为交互与仿真提供真实可信的物理表现。" },
         { title: "立体显示", tag: "Light Field · 裸眼3D", image: "render/2.png", icon: "fas fa-cube", tone: "research", detail: "面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。" },
-        { title: "三层架构", tag: "Layered Architecture", icon: "fas fa-layer-group", tone: "research", detail: "C++ 高性能内核、JavaScript 逻辑层、Python 脚本层三层协同，兼顾运行效率与开发灵活性。" },
-        { title: "自研EDSL语言", tag: "Embedded DSL", icon: "fas fa-microchip", tone: "research", detail: "自研嵌入式领域特定语言（EDSL），统一 CPU-GPU 异构编程，以简洁语法释放极致算力。" },
+        { title: "自研EDSL语言", tag: "Embedded DSL", icon: "fas fa-code", tone: "research", detail: "自研嵌入式领域特定语言（EDSL），统一 CPU-GPU 异构编程，以简洁语法释放极致算力。" },
         { title: "流式加载", tag: "Streaming Loading", icon: "fas fa-download", tone: "research", detail: "大场景资源按需流式调度，实现超大世界的无缝加载与渲染，显著降低内存占用。" },
     ]
 };
