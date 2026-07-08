@@ -126,7 +126,7 @@ const bentoLayout = {
     ],
     // 右栏 · 开发者：核心大块 + 6 个尺寸参差的小块
     devGrid: [
-        { title: "零基础创作沙盒，让灵感即刻落地", tag: "Creation Sandbox", icon: "fas fa-wand-magic-sparkles", tone: "research", detail: "专为学生与初学者打造，让创意不再被技术壁垒阻挡。告别传统繁杂的引擎面板，无论你是否有美术与技术基础，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。" },
+        { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
         { title: "全局光照", tag: "Global Illumination", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。" },
         { title: "异步", tag: "Async", icon: "fas fa-bolt", tone: "research", detail: "异步任务调度模型，IO 与计算解耦并行，避免阻塞主线程，保障大规模场景的流畅运行。" },
         { title: "物理", tag: "Physics", icon: "fas fa-atom", tone: "research", detail: "刚体动力学与碰撞检测系统，为交互与仿真提供真实可信的物理表现。" },
