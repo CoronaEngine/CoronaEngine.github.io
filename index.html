@@ -67,259 +67,193 @@
             position: relative;
             z-index: 1;
         }
-        /* 发展历程时间轴 */
-        .timeline-wrap {
+        /* 发展历程 — 卡片横向滚动 */
+       .history-scroll-container {
+           position: relative;
+           width: 100%;
+           height: 520px;
+           overflow: hidden;
+           margin: 0;
+           padding: 0;
+       }
+       .history-cards-track {
+           display: flex;
+           flex-wrap: nowrap;
+           height: 100%;
+           padding: 40px 40px;
+           gap: 0;
+           will-change: transform;
+           position: relative;
+       }
+        .history-card-col {
+            flex-shrink: 0;
+            width: 340px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 30px;
             position: relative;
-            width: 100%;
-            max-width: 96vw;
-            margin: 24px auto 60px auto;
-            overflow: hidden;
-            background: transparent;
-            cursor: default;
         }
-        .history-timeline-track {
-            width: 100%;
-            padding: 16px 16px 28px;
+        .history-card-col:nth-child(odd) {
+            justify-content: flex-start;
+            padding-top: 30px;
         }
-        .timeline-map {
-            width: 100%;
-            height: auto;
-            display: block;
-            overflow: visible;
-            background: transparent;
-            -webkit-mask-image: linear-gradient(to right, black 92%, transparent 100%);
-            mask-image: linear-gradient(to right, black 92%, transparent 100%);
+        .history-card-col:nth-child(even) {
+            justify-content: flex-end;
+            padding-bottom: 30px;
         }
-        /* 枝干初始隐藏，等待动画 */
-        .branch-draw { opacity: 1; }
-        /* 节点和标签初始隐藏 */
-        .history-anim-hidden {
-            opacity: 0;
-            transition: none;
-        }
-        .history-anim-visible {
-            transition: opacity 0.55s ease;
-            opacity: 1;
-        }
-        .timeline-lane { cursor: pointer; outline: none; }
-        .lane-cabbage { color: #73b2ff; }
-        .lane-vision { color: #ff6868; }
-        .lane-corona { color: #d19bff; }
-        .lane-hitbox {
-            fill: none;
-            stroke: rgba(255,255,255,0);
-            stroke-width: 116;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            pointer-events: stroke;
-        }
-        .branch-draw,
-        .branch-leaf,
-        .branch-ring {
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            pointer-events: none;
-        }
-        .branch-draw {
-            transition: stroke-dashoffset 0.32s ease, stroke-width 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
-        }
-        .branch-glow {
-            stroke-width: 52;
-            opacity: 0.20;
-            filter: url(#timelineBranchGlow);
-            mix-blend-mode: screen;
-        }
-        .branch-core {
-            stroke-width: 8;
-            opacity: 0.92;
-            filter: drop-shadow(0 0 16px rgba(255,255,255,0.18));
-        }
-        .lane-cabbage .branch-core,
-        .lane-cabbage .branch-glow { stroke: url(#timelineCabbageBranch); }
-        .lane-vision .branch-core,
-        .lane-vision .branch-glow { stroke: url(#timelineVisionBranch); }
-        .lane-corona .branch-core,
-        .lane-corona .branch-glow { stroke: url(#timelineCoronaBranch); }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .branch-glow { opacity: 0.34; }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .branch-core {
-            stroke-width: 10;
-            opacity: 1;
-        }
-        .lane-cabbage:is(:hover, :focus-visible, .semantic-active) .branch-core {
-            filter: drop-shadow(0 0 20px rgba(115,178,255,0.85)) drop-shadow(0 0 40px rgba(60,130,255,0.40));
-        }
-        .lane-vision:is(:hover, :focus-visible, .semantic-active) .branch-core {
-            filter: drop-shadow(0 0 20px rgba(255,104,104,0.82)) drop-shadow(0 0 40px rgba(255,80,80,0.38));
-        }
-        .lane-corona:is(:hover, :focus-visible, .semantic-active) .branch-core {
-            filter: drop-shadow(0 0 22px rgba(209,155,255,0.88)) drop-shadow(0 0 44px rgba(160,100,240,0.44));
-        }
-        .timeline-lane.merge-flash .branch-core { animation: mergePulse 0.55s ease-in-out; }
-        @keyframes mergePulse {
-            0% { stroke-width: 7; }
-            40% { stroke-width: 12; filter: drop-shadow(0 0 20px #c491ff) brightness(1.35); }
-            100% { stroke-width: 7; }
-        }
-        .branch-leaf {
-            stroke-width: 2.4;
-            opacity: 0.22;
-            transition: opacity 0.35s ease, stroke-width 0.35s ease;
-        }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .branch-leaf {
-            opacity: 0.58;
-            stroke-width: 3;
-        }
-        .timeline-node-glow { opacity: 0.45; transition: opacity 0.35s ease; }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-glow { opacity: 0.90; }
-        .timeline-node-core,
-        .timeline-bud {
-            transition: r 0.35s ease, filter 0.35s ease, transform 0.35s ease;
-            transform-box: fill-box;
-            transform-origin: center;
-        }
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-node-core,
-        .timeline-lane:is(:hover, :focus-visible, .semantic-active) .timeline-bud {
-            filter: drop-shadow(0 0 20px currentColor);
-            transform: scale(1.12);
-        }
-        .merge-hotspot { cursor: pointer; }
-        .merge-hotspot:is(:hover, :focus-visible) .merge-pulse-ring { animation-duration: 1.8s; }
-        .merge-hotspot:is(:hover, :focus-visible) .merge-pulse-ring-2 { animation-duration: 2.4s; }
-        .merge-hotspot:is(:hover, :focus-visible) circle:not([class]) { filter: brightness(1.25); }
-        .merge-pulse-ring {
-            transform-origin: 1150px 250px;
-            animation: mergeRing 2.8s ease-out infinite;
-        }
-        .merge-pulse-ring-2 {
-            transform-origin: 1150px 250px;
-            animation: mergeRing2 3.8s ease-out infinite;
-        }
-        @keyframes mergeRing2 {
-            0% { transform: scale(0.70); opacity: 0.40; }
-            72%, 100% { transform: scale(1.42); opacity: 0; }
-        }
-        @keyframes mergeRing {
-            0% { transform: scale(0.82); opacity: 0.66; }
-            72%, 100% { transform: scale(1.28); opacity: 0; }
-        }
-        .timeline-copy {
-            pointer-events: auto;
-            cursor: pointer;
-            color: rgba(230,238,255,0.92);
-            line-height: 1.34;
-            padding: 14px 16px;
-            border-radius: 18px;
+        .history-card {
+            position: relative;
+            background: rgba(7, 13, 31, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(7, 13, 31, 0.68);
-            box-shadow: 0 18px 44px rgba(0,0,0,0.20);
-            transition: border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+            border-radius: 20px;
+            padding: 28px 24px;
+            transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+            overflow: hidden;
         }
-        .timeline-copy:is(:hover, :focus-within) {
+        .history-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 20px 0 0 20px;
+        }
+        .history-card:hover {
             border-color: rgba(255,255,255,0.18);
-            box-shadow: 0 22px 52px rgba(0,0,0,0.30);
+            box-shadow: 0 22px 52px rgba(0,0,0,0.35);
+            transform: translateY(-4px);
         }
-        foreignObject[data-lane="cabbage"] .timeline-copy {
-            border-left: 3px solid rgba(59,130,246,0.30);
+        .history-card-col:nth-child(even) .history-card:hover {
+            transform: translateY(4px);
         }
-        foreignObject[data-lane="cabbage"] .timeline-copy:is(:hover, :focus-within) {
-            border-left-color: rgba(59,130,246,0.60);
+        .history-card.lane-cabbage::before { background: linear-gradient(180deg, #2563eb, #60a5fa); }
+        .history-card.lane-cabbage:hover { border-color: rgba(59,130,246,0.40); }
+        .history-card.lane-vision::before { background: linear-gradient(180deg, #b91c1c, #fb6f6f); }
+        .history-card.lane-vision:hover { border-color: rgba(239,68,68,0.40); }
+        .history-card.lane-corona::before { background: linear-gradient(180deg, #c491ff, #9f7aea); }
+        .history-card.lane-corona:hover { border-color: rgba(196,145,255,0.40); }
+        .history-card.lane-merge::before { background: linear-gradient(180deg, #ffcc33, #c491ff); }
+        .history-card.lane-merge:hover { border-color: rgba(255,204,51,0.40); }
+
+        .history-card-year {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 4px 14px;
+            border-radius: 999px;
+            margin-bottom: 14px;
+            letter-spacing: 0.02em;
         }
-        foreignObject[data-lane="vision"] .timeline-copy {
-            border-left: 3px solid rgba(239,68,68,0.30);
+        .lane-cabbage .history-card-year {
+            color: #a5d0ff;
+            background: rgba(37,99,235,0.28);
+            border: 1px solid rgba(115,178,255,0.30);
         }
-        foreignObject[data-lane="vision"] .timeline-copy:is(:hover, :focus-within) {
-            border-left-color: rgba(239,68,68,0.60);
+        .lane-vision .history-card-year {
+            color: #ffb8b8;
+            background: rgba(185,28,28,0.28);
+            border: 1px solid rgba(255,104,104,0.30);
         }
-        foreignObject[data-lane="corona"] .timeline-copy {
-            border-left: 3px solid rgba(196,145,255,0.30);
+        .lane-corona .history-card-year {
+            color: #e4c6ff;
+            background: rgba(139,92,246,0.28);
+            border: 1px solid rgba(196,145,255,0.30);
         }
-        foreignObject[data-lane="corona"] .timeline-copy:is(:hover, :focus-within) {
-            border-left-color: rgba(196,145,255,0.60);
+        .lane-merge .history-card-year {
+            color: #ffe599;
+            background: rgba(220,160,40,0.24);
+            border: 1px solid rgba(255,204,51,0.34);
         }
-        .timeline-copy h3 {
-            margin: 0;
+        .history-card h3 {
+            margin: 0 0 10px;
             color: #f8fafc;
-            font-size: 20px;
+            font-size: 1.15rem;
             font-weight: 800;
             letter-spacing: 0;
         }
-        /* 详情默认收起，悬停/聚焦时展开 */
-        .timeline-copy p {
+        .history-card p {
             margin: 0;
-            color: rgba(185,197,220,0.74);
-            font-size: 14px;
-            font-weight: 600;
-            max-height: 0;
-            opacity: 0;
+            color: rgba(185,197,220,0.72);
+            font-size: 0.88rem;
+            line-height: 1.55;
+            font-weight: 500;
+        }
+        .history-card .gold { color: #ffcc33; font-weight: 700; }
+
+        /* Lane icons for cards */
+        .history-card-icon {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 36px;
+            height: 36px;
+            opacity: 0.50;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .history-card:hover .history-card-icon { opacity: 0.82; }
+        .lane-cabbage .history-card-icon { background: radial-gradient(circle, #60a5fa 0%, transparent 70%); border-radius: 50%; }
+        .lane-vision .history-card-icon { background: radial-gradient(circle, #fb6f6f 0%, transparent 70%); border-radius: 50%; }
+        .lane-corona .history-card-icon { background: radial-gradient(circle, #c491ff 0%, transparent 70%); border-radius: 50%; }
+        .lane-merge .history-card-icon { background: radial-gradient(circle, #ffcc33 0%, transparent 70%); border-radius: 50%; }
+
+        /* Connector lines between cards */
+        .history-card-col:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            width: 50px;
+            height: 2px;
+            transform: translateY(-50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .history-card-col:nth-child(odd)::after {
+            background: linear-gradient(90deg, rgba(255,255,255,0.12), transparent);
+        }
+        .history-card-col:nth-child(even)::after {
+            background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent);
+        }
+
+        /* 左下角滚动进度条 */
+        .history-scroll-progress {
+            position: absolute;
+            bottom: 24px;
+            left: 32px;
+            width: 160px;
+            height: 4px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
             overflow: hidden;
-            transition: max-height 0.4s ease, opacity 0.35s ease, margin-top 0.4s ease;
+            z-index: 10;
         }
-        .timeline-copy:is(:hover, :focus-within) p {
-            max-height: 180px;
-            opacity: 1;
-            margin-top: 8px;
-        }
-        .timeline-copy .gold { color: #ffcc33; }
-        .timeline-copy.center { text-align: center; }
-        .timeline-copy.center h3 { font-size: 21px; }
-        .timeline-copy.right h3 { font-size: 19px; }
-        .timeline-year-pill {
-            pointer-events: auto;
-            cursor: pointer;
-            color: rgba(241,232,255,0.92);
-            transition: transform 0.32s cubic-bezier(.34,1.56,.64,1), box-shadow 0.32s ease;
-            background: rgba(101,68,170,0.58);
-            border: 1px solid rgba(216,174,255,0.18);
-            border-radius: 999px;
-            font-size: 21px;
-            font-weight: 800;
-            line-height: 1;
-            padding: 8px 16px 9px;
-            text-align: center;
-            box-shadow: 0 0 18px rgba(174,110,255,0.20);
-        }
-        .timeline-year-pill:hover { transform: scale(1.12); box-shadow: 0 0 28px rgba(174,110,255,0.36); }
-        foreignObject[data-lane="cabbage"] .timeline-year-pill:hover { background: rgba(37,99,235,0.55); }
-        foreignObject[data-lane="vision"] .timeline-year-pill:hover { background: rgba(185,28,28,0.52); }
-        [data-lane="cabbage"] .timeline-year-pill {
-            color: #d4e6ff;
-            background: rgba(37,99,235,0.42);
-            border-color: rgba(115,178,255,0.54);
-            box-shadow: 0 0 18px rgba(60,130,255,0.28);
-        }
-        [data-lane="vision"] .timeline-year-pill {
-            color: #ffdada;
-            background: rgba(185,28,28,0.40);
-            border-color: rgba(255,104,104,0.52);
-            box-shadow: 0 0 18px rgba(255,80,80,0.26);
-        }
-        .timeline-progress {
-            display: none;
-        }
-        .timeline-progress span {
+        .history-scroll-progress span {
             display: block;
-            width: 100%;
             height: 100%;
-            transform: scaleX(0);
-            transform-origin: left center;
-            background: linear-gradient(90deg, #73b2ff, #ff6868 42%, #d19bff 82%, #ffcc33);
-            box-shadow: 0 0 12px rgba(209,155,255,0.48);
-            transition: transform 0.12s ease-out;
+            width: 0%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #2563eb, #60a5fa 30%, #c491ff 60%, #ffcc33);
+            box-shadow: 0 0 10px rgba(196,145,255,0.40);
+            transition: width 0.08s linear;
         }
-        /* 滚动进度导航 */
-        .scroll-nav { position: fixed; right: 12px; top: 50%; transform: translateY(-50%); z-index: 500; display: flex; flex-direction: column; align-items: center; }
-        .scroll-pct { font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
-        .scroll-track { display: flex; flex-direction: column; align-items: center; gap: 28px; position: relative; }
-        .scroll-track::before { content: ''; position: absolute; left: 50%; top: 4px; bottom: 4px; width: 1px; background: rgba(255,255,255,0.10); transform: translateX(-50%); }
-        .scroll-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.15); cursor: pointer; position: relative; flex-shrink: 0; transition: all 0.3s ease; }
-        .scroll-dot.active { background: #c8a8f8; box-shadow: 0 0 10px rgba(180,130,240,0.50); }
-        .scroll-dot .sdi { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease; cursor: pointer; }
-        .scroll-dot .sdi svg { width: 20px; height: 20px; display: block; }
-        .scroll-dot:hover .sdi,
-        .scroll-dot.active .sdi { opacity: 1; color: #c8a8f8; border-color: rgba(200,168,248,0.40); }
-        .scroll-dot::after { content: attr(data-label); position: absolute; right: 58px; top: 50%; transform: translateY(-50%); background: rgba(8,12,28,0.90); border: 1px solid rgba(255,255,255,0.10); border-radius: 6px; color: rgba(255,255,255,0.75); font-size: 0.68rem; padding: 4px 12px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.25s ease; }
-        .scroll-dot:hover::after { opacity: 1; }
+
+        /* 动画入场 */
+        .history-card-anim-hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: none;
+        }
+        .history-card-anim-visible {
+            transition: opacity 0.55s ease, transform 0.55s cubic-bezier(.34,1.56,.64,1);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
 
         /* 顶会 Hero 三列 */
         .pub-hero-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
@@ -1269,19 +1203,6 @@ body.menu-open {
     padding-top: 0;
 }
 
-.page .timeline-wrap {
-    max-width: 100%;
-    margin: 0 auto;
-    overflow: hidden;
-    border-radius: 24px;
-}
-
-.page .timeline-map {
-    width: 100%;
-    min-width: unset;
-    border-radius: 24px;
-    background: transparent;
-}
 
 .page .team-scroll-wrap {
     overflow: hidden;
@@ -1361,28 +1282,20 @@ body.menu-open {
         padding: 28px;
     }
 
-    .timeline-wrap {
-        max-width: 100%;
-        margin: 16px auto 40px auto;
+    .history-scroll-container {
+        height: 420px;
     }
-
-    .history-timeline-track {
-        width: 100%;
-        padding: 12px 12px 24px;
+    .history-card-col {
+        width: 280px;
     }
-
-    .timeline-map,
-    .page .timeline-map {
-        width: 100%;
-        min-width: unset;
+    .history-card {
+        padding: 20px 18px;
     }
-
-    .timeline-copy h3 {
-        font-size: 17px;
+    .history-card h3 {
+        font-size: 1rem;
     }
-
-    .timeline-copy p {
-        font-size: 12px;
+    .history-card p {
+        font-size: 0.78rem;
     }
 
     .member-modal-grid {
@@ -1397,7 +1310,7 @@ body.menu-open {
 
 /* ================= Transparent persistent panels ================= */
 .glass-section,
-.page .timeline-map,
+.history-scroll-container,
 .role-toggle,
 .bento-card,
 .team-card,
@@ -1574,9 +1487,7 @@ body.menu-open {
     box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42) !important;
 }
 
-.frameless-section .timeline-wrap {
-    border: 0;
-    background: transparent;
+.frameless-section .history-scroll-container {
     border-radius: 0;
 }
 
@@ -2607,163 +2518,76 @@ body.menu-open {
         <section class="page" id="page-2" aria-labelledby="historyTitle">
             <div class="page-scroll">
                 <div class="content-stage wide-stage">
-                    <!-- <div class="section-kicker">Our History</div>
-                    <h2 class="page-title" id="historyTitle">发展历程</h2>
-                    <div class="frameless-section"> -->
-<div class="timeline-wrap history-scroll-wrap" id="historyScrollWrap">
-                        <div class="timeline-progress" aria-hidden="true"><span id="historyProgressBar"></span></div>
-                        <div class="history-timeline-track" id="historyTimelineTrack">
-                        <svg class="timeline-map" viewBox="0 0 1820 720" role="img" aria-labelledby="timelineTitle timelineDesc" xmlns="http://www.w3.org/2000/svg">
-                            <title id="timelineTitle">Corona Engine 发展历程分支图</title>
-                            <desc id="timelineDesc">GraphZ 与 Zero 的技术分支分别演进为 Cabbage Engine 与 Vision，并在 2025 年融合为 Corona Engine，继续向 2026 年及之后延展。</desc>
-                            <defs>
-                                <linearGradient id="timelineCabbageBranch" x1="110" y1="150" x2="1150" y2="250" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0" stop-color="#2563eb" stop-opacity="0.62"/>
-                                    <stop offset="0.42" stop-color="#60a5fa" stop-opacity="0.94"/>
-                                    <stop offset="0.76" stop-color="#8d7cff" stop-opacity="0.96"/>
-                                    <stop offset="1" stop-color="#c491ff" stop-opacity="0.98"/>
-                                </linearGradient>
-                                <linearGradient id="timelineVisionBranch" x1="110" y1="370" x2="1150" y2="250" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0" stop-color="#b91c1c" stop-opacity="0.62"/>
-                                    <stop offset="0.45" stop-color="#fb6f6f" stop-opacity="0.94"/>
-                                    <stop offset="0.78" stop-color="#b46bda" stop-opacity="0.96"/>
-                                    <stop offset="1" stop-color="#c491ff" stop-opacity="0.98"/>
-                                </linearGradient>
-                                <linearGradient id="timelineCoronaBranch" x1="1150" y1="250" x2="2386" y2="258" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0" stop-color="#c491ff" stop-opacity="0.98"/>
-                                    <stop offset="0.42" stop-color="#9f7aea" stop-opacity="0.86"/>
-                                    <stop offset="0.72" stop-color="#ffcc33" stop-opacity="0.78"/>
-                                    <stop offset="1" stop-color="#7dd3fc" stop-opacity="0.42"/>
-                                </linearGradient>
-                                <radialGradient id="timelineMergeGlow" cx="0.5" cy="0.5" r="0.5">
-                                    <stop offset="0" stop-color="#f4d7ff" stop-opacity="1"/>
-                                    <stop offset="0.42" stop-color="#c58cff" stop-opacity="0.74"/>
-                                    <stop offset="1" stop-color="#8a5bff" stop-opacity="0"/>
-                                </radialGradient>
-                                <filter id="timelineBranchGlow" x="-14%" y="-150%" width="128%" height="400%" color-interpolation-filters="sRGB">
-                                    <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur"/>
-                                    <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.28  0 1 0 0 0.38  0 0 1 0 0.94  0 0 0 1.2 0" result="glow"/>
-                                    <feMerge>
-                                        <feMergeNode in="glow"/>
-                                        <feMergeNode in="SourceGraphic"/>
-                                    </feMerge>
-                                </filter>
-                            </defs>
+                    <div class="history-scroll-container" id="historyScrollWrap">
+                        <div class="history-cards-track" id="historyCardsTrack">
 
-                            <g opacity="0.34" pointer-events="none">
-                                <path d="M 44 250 H 2436" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-                                <path d="M 44 150 H 2436 M 44 370 H 2436" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                                <path d="M 320 60 V 468 M 760 60 V 468 M 1150 60 V 468 M 1580 60 V 468 M 2010 60 V 468" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-                            </g>
-
-                            <g class="timeline-lane lane-cabbage" tabindex="0" role="group" aria-label="Cabbage Engine 技术分支">
-                                <path class="lane-hitbox" d="M 115 150 C 320 138 560 148 760 158 C 940 168 1050 205 1150 250"/>
-                                <path class="branch-draw branch-glow" data-start="0" data-end="0.46" d="M 115 150 C 320 138 560 148 760 158 C 940 168 1050 205 1150 250"/>
-                                <path class="branch-draw branch-core" data-start="0" data-end="0.46" d="M 115 150 C 320 138 560 148 760 158 C 940 168 1050 205 1150 250"/>
-                                <circle class="timeline-node-glow" cx="115" cy="150" r="36" fill="#3b82f6"/>
-                                <circle class="timeline-node-core" cx="115" cy="150" r="16" fill="#5ca4ff" stroke="#101d45" stroke-width="10"/>
-                                <circle class="timeline-bud" cx="760" cy="158" r="12" fill="#73b2ff" stroke="#101d45" stroke-width="10"/>
-                            </g>
-
-                            <g class="timeline-lane lane-vision" tabindex="0" role="group" aria-label="Vision 渲染技术分支">
-                                <path class="lane-hitbox" d="M 112 372 C 260 388 350 402 438 400 C 560 398 660 396 760 392 C 920 388 1060 300 1150 250"/>
-                                <path class="branch-draw branch-glow" data-start="0" data-end="0.48" d="M 112 372 C 260 388 350 402 438 400 C 560 398 660 396 760 392 C 920 388 1060 300 1150 250"/>
-                                <path class="branch-draw branch-core" data-start="0" data-end="0.48" d="M 112 372 C 260 388 350 402 438 400 C 560 398 660 396 760 392 C 920 388 1060 300 1150 250"/>
-                                <circle class="timeline-node-glow" cx="112" cy="372" r="36" fill="#ef4444"/>
-                                <circle class="timeline-node-core" cx="112" cy="372" r="16" fill="#ff514f" stroke="#361624" stroke-width="10"/>
-                                <circle class="timeline-bud" cx="438" cy="400" r="12" fill="#ff6868" stroke="#361624" stroke-width="10"/>
-                                <circle class="timeline-bud" cx="760" cy="392" r="12" fill="#ff8585" stroke="#361624" stroke-width="10"/>
-                            </g>
-
-                            <g class="timeline-lane lane-corona" tabindex="0" role="group" aria-label="Corona Engine 主干">
-                                <path class="lane-hitbox" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
-                                <path class="branch-draw branch-glow" data-start="0.42" data-end="1" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
-                                <path class="branch-draw branch-core" data-start="0.42" data-end="1" d="M 1150 250 C 1310 226 1445 232 1582 250 C 1732 270 1866 245 2006 232 C 2156 218 2280 232 2386 258"/>
-                                <circle class="timeline-bud" cx="1582" cy="250" r="12" fill="#c491ff" stroke="#24183f" stroke-width="10"/>
-                            </g>
-
-                            <g class="merge-hotspot" tabindex="0" role="button" aria-label="2025 年融合节点">
-                                <circle class="merge-pulse-ring" cx="1150" cy="250" r="66" fill="url(#timelineMergeGlow)" opacity="0.82"/>
-                                <circle class="merge-pulse-ring-2" cx="1150" cy="250" r="56" fill="url(#timelineMergeGlow)" opacity="0.50"/>
-                                <circle cx="1150" cy="250" r="58" fill="url(#timelineMergeGlow)" opacity="0.88"/>
-                                <circle cx="1150" cy="250" r="28" fill="#b984ff" opacity="0.66"/>
-                                <circle cx="1150" cy="250" r="13" fill="#f0d4ff"/>
-                            </g>
-
-                            <g pointer-events="none" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <image href="render/Group 14264.png" x="94" y="126" width="48" height="48" opacity="0.92"/>
-                                <image href="render/Group 14265.png" x="88" y="346" width="48" height="48" opacity="0.92"/>
-                                <path d="M 1564 239 h36 l10 12 l-28 17 l-28 -17 z" fill="none" stroke="#c491ff" stroke-width="3" opacity="0.74"/>
-                                <path d="M 1568 242 l14 10 l23 -10" stroke="#c491ff" stroke-width="3" opacity="0.70"/>
-                            </g>
-
-                            <foreignObject x="0" y="28" width="300" height="104" data-lane="cabbage">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
+                            <div class="history-card-col">
+                                <div class="history-card lane-cabbage">
+                                    <div class="history-card-icon"></div>
+                                    <span class="history-card-year">2017-2021</span>
                                     <h3>Cabbage Engine 前身</h3>
                                     <p>GraphZ 开发多个用于竞赛与科研的引擎雏形</p>
                                 </div>
-                            </foreignObject>
-                            <foreignObject x="50" y="190" width="168" height="44" data-lane="cabbage">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2017-2021</div>
-                            </foreignObject>
-                            <foreignObject x="650" y="50" width="300" height="106" data-lane="cabbage">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
-                                    <h3>Cabbage Engine 诞生</h3>
-                                    <p>对开发的各个雏形引擎进行整合，Cabbage Engine 正式诞生</p>
-                                </div>
-                            </foreignObject>
-                            <foreignObject x="720" y="180" width="82" height="44" data-lane="cabbage">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2022</div>
-                            </foreignObject>
-                            <foreignObject x="50" y="290" width="160" height="44" data-lane="vision">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2018-2020</div>
-                            </foreignObject>
-                            <foreignObject x="0" y="415" width="300" height="92" data-lane="vision">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
+                            </div>
+
+                            <div class="history-card-col">
+                                <div class="history-card lane-vision">
+                                    <div class="history-card-icon"></div>
+                                    <span class="history-card-year">2018-2020</span>
                                     <h3>Vision Renderer 前身</h3>
                                     <p>Zero 开发 Z-Renderer、Paladin</p>
                                 </div>
-                            </foreignObject>
-                            <foreignObject x="365" y="328" width="160" height="44" data-lane="vision">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2020-2021</div>
-                            </foreignObject>
-                            <foreignObject x="320" y="420" width="300" height="98" data-lane="vision">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
+                            </div>
+
+                            <div class="history-card-col">
+                                <div class="history-card lane-vision">
+                                    <div class="history-card-icon"></div>
+                                    <span class="history-card-year">2020-2021</span>
                                     <h3>Vision Renderer 前身</h3>
-                                    <p>转向硬件光线追踪<br/>开启新项目 LumiRender 并完成技术验证</p>
+                                    <p>转向硬件光线追踪，开启新项目 LumiRender 并完成技术验证</p>
                                 </div>
-                            </foreignObject>
-                            <foreignObject x="720" y="328" width="82" height="44" data-lane="vision">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2022</div>
-                            </foreignObject>
-                            <foreignObject x="650" y="415" width="300" height="86" data-lane="vision">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
+                            </div>
+
+                            <div class="history-card-col">
+                                <div class="history-card lane-cabbage">
+                                    <div class="history-card-icon"></div>
+                                    <span class="history-card-year">2022</span>
+                                    <h3>Cabbage Engine 诞生</h3>
+                                    <p>对开发的各个雏形引擎进行整合，Cabbage Engine 正式诞生</p>
+                                </div>
+                            </div>
+
+                            <div class="history-card-col">
+                                <div class="history-card lane-vision">
+                                    <div class="history-card-icon"></div>
+                                    <span class="history-card-year">2022</span>
                                     <h3>Vision Renderer 诞生</h3>
                                     <p>Vision 渲染器正式诞生</p>
                                 </div>
-                            </foreignObject>
-                            <foreignObject x="1110" y="178" width="82" height="44" data-lane="corona">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2025</div>
-                            </foreignObject>
-                            <foreignObject x="1050" y="306" width="300" height="126" data-lane="corona">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
+                            </div>
+
+                            <div class="history-card-col">
+                                <div class="history-card lane-merge">
+                                    <div class="history-card-icon"></div>
+                                    <span class="history-card-year">2025</span>
                                     <h3>Corona Engine 诞生</h3>
-                                    <p><span class="gold">Vision 与 Cabbage 的初步融合</span></p>
-                                    <p>解决自研 GPU 编程语言架构难题<br/>发表 SIGGRAPH ASIA 顶会</p>
+                                    <p><span class="gold">Vision 与 Cabbage 的初步融合</span><br>解决自研 GPU 编程语言架构难题，发表 SIGGRAPH ASIA 顶会</p>
                                 </div>
-                            </foreignObject>
-                            <foreignObject x="1540" y="180" width="82" height="44" data-lane="corona">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-year-pill">2026</div>
-                            </foreignObject>
-                            <foreignObject x="1460" y="300" width="320" height="140" data-lane="corona">
-                                <div xmlns="http://www.w3.org/1999/xhtml" class="timeline-copy center">
+                            </div>
+
+                            <div class="history-card-col">
+                                <div class="history-card lane-corona">
+                                    <div class="history-card-icon"></div>
+                                    <span class="history-card-year">2026</span>
                                     <h3>Corona Engine v1.0 正式版</h3>
                                     <p>深度重构，持续打磨，厚积薄发。支撑高校赛事，学术课题深化，主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
                                 </div>
-                            </foreignObject>
-                        </svg>
+                            </div>
+
                         </div>
-                    </div>
+                        <div class="history-scroll-progress" aria-hidden="true">
+                            <span id="historyProgressBar"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3144,243 +2968,126 @@ function initMemberModals() {
     });
 }
 
-function initTimelineInteractions() {
-    const cabbage = document.querySelector('.lane-cabbage');
-    const vision = document.querySelector('.lane-vision');
-    const corona = document.querySelector('.lane-corona');
-    if (!cabbage || !vision || !corona) return;
-
-    document.querySelectorAll('[data-lane]').forEach(function(el) {
-        el.addEventListener('mouseenter', function() {
-            const lane = document.querySelector('.lane-' + this.getAttribute('data-lane'));
-            if (lane) lane.classList.add('semantic-active');
-        });
-        el.addEventListener('mouseleave', function() {
-            const lane = document.querySelector('.lane-' + this.getAttribute('data-lane'));
-            if (lane) lane.classList.remove('semantic-active');
-        });
-    });
-
-    function flashMerge() {
-        cabbage.classList.add('merge-flash');
-        vision.classList.add('merge-flash');
-    }
-    function unflashMerge() {
-        cabbage.classList.remove('merge-flash');
-        vision.classList.remove('merge-flash');
-    }
-    corona.addEventListener('mouseenter', flashMerge);
-    corona.addEventListener('mouseleave', unflashMerge);
-    document.querySelectorAll('.merge-hotspot').forEach(function(el) {
-        el.addEventListener('mouseenter', flashMerge);
-        el.addEventListener('mouseleave', unflashMerge);
-    });
-}
-
-function initTimelineComet() {
-    var svg = document.querySelector('.timeline-map');
-    if (!svg) return;
-    var cabbage = document.querySelector('.lane-cabbage');
-    var vision  = document.querySelector('.lane-vision');
-    var corona  = document.querySelector('.lane-corona');
-    if (!cabbage || !vision || !corona) return;
-
-    var NS = 'http://www.w3.org/2000/svg';
-    var defs = svg.querySelector('defs');
-
-    // 彗星辉光滤镜
-    var f = document.createElementNS(NS, 'filter');
-    f.id = 'cometGlowF';
-    f.setAttribute('x', '-120%'); f.setAttribute('y', '-120%');
-    f.setAttribute('width', '340%'); f.setAttribute('height', '340%');
-    var fb = document.createElementNS(NS, 'feGaussianBlur');
-    fb.setAttribute('in', 'SourceGraphic'); fb.setAttribute('stdDeviation', '10'); fb.setAttribute('result', 'b');
-    var fm = document.createElementNS(NS, 'feMerge');
-    var fn1 = document.createElementNS(NS, 'feMergeNode'); fn1.setAttribute('in', 'b');
-    var fn2 = document.createElementNS(NS, 'feMergeNode'); fn2.setAttribute('in', 'SourceGraphic');
-    fm.appendChild(fn1); fm.appendChild(fn2);
-    f.appendChild(fb); f.appendChild(fm);
-    defs.appendChild(f);
-
-    // 彗星容器
-    var cg = document.createElementNS(NS, 'g');
-    cg.setAttribute('pointer-events', 'none');
-    svg.appendChild(cg);
-
-    function makeComet(color) {
-        var g = document.createElementNS(NS, 'g');
-        g.style.display = 'none';
-        var outer = document.createElementNS(NS, 'circle');
-        outer.setAttribute('r', '26'); outer.setAttribute('fill', color);
-        outer.setAttribute('opacity', '0.30'); outer.setAttribute('filter', 'url(#cometGlowF)');
-        var mid = document.createElementNS(NS, 'circle');
-        mid.setAttribute('r', '10'); mid.setAttribute('fill', color);
-        mid.setAttribute('opacity', '0.55'); mid.setAttribute('filter', 'url(#cometGlowF)');
-        var core = document.createElementNS(NS, 'circle');
-        core.setAttribute('r', '4.5'); core.setAttribute('fill', '#ffffff');
-        core.setAttribute('opacity', '1');
-        g.appendChild(outer); g.appendChild(mid); g.appendChild(core);
-        cg.appendChild(g);
-        return g;
-    }
-
-    var cabbageComet = makeComet('#73b2ff');
-    var visionComet  = makeComet('#ff6868');
-
-    // 取各分支主路径（第一条 branch-core）
-    var cMain = cabbage.querySelectorAll('.branch-core')[0];
-    var vMain = vision.querySelectorAll('.branch-core')[0];
-    var rMain = corona.querySelectorAll('.branch-core')[0];
-
-    function runComet(comet, paths, dur, hoverFn) {
-        if (comet._raf) cancelAnimationFrame(comet._raf);
-        if (comet._to)  clearTimeout(comet._to);
-        var lens = Array.prototype.map.call(paths, function(p) { return p.getTotalLength(); });
-        var total = lens.reduce(function(a, b) { return a + b; }, 0);
-        var t0 = performance.now();
-        comet.style.display = '';
-
-        function tick(now) {
-            var t  = Math.min((now - t0) / (dur * 1000), 1);
-            var d  = t * total;
-            var pt = null;
-            for (var i = 0; i < paths.length; i++) {
-                if (d <= lens[i]) { pt = paths[i].getPointAtLength(d); break; }
-                d -= lens[i];
-            }
-            if (!pt) pt = paths[paths.length - 1].getPointAtLength(lens[lens.length - 1]);
-            comet.setAttribute('transform', 'translate(' + pt.x + ',' + pt.y + ')');
-            if (t < 1) {
-                comet._raf = requestAnimationFrame(tick);
-            } else {
-                comet.style.display = 'none';
-                if (hoverFn()) {
-                    comet._to = setTimeout(function() {
-                        if (hoverFn()) runComet(comet, paths, dur, hoverFn);
-                    }, 160);
-                }
-            }
-        }
-        comet._raf = requestAnimationFrame(tick);
-    }
-
-    function stopComet(comet) {
-        if (comet._raf) { cancelAnimationFrame(comet._raf); comet._raf = null; }
-        if (comet._to)  { clearTimeout(comet._to); comet._to = null; }
-        comet.style.display = 'none';
-    }
-
-    var cHover = false, vHover = false, rHover = false;
-
-    cabbage.addEventListener('mouseenter', function() {
-        cHover = true;
-        runComet(cabbageComet, [cMain, rMain], 1.8, function() { return cHover; });
-    });
-    cabbage.addEventListener('mouseleave', function() { cHover = false; stopComet(cabbageComet); });
-
-    vision.addEventListener('mouseenter', function() {
-        vHover = true;
-        runComet(visionComet, [vMain, rMain], 1.8, function() { return vHover; });
-    });
-    vision.addEventListener('mouseleave', function() { vHover = false; stopComet(visionComet); });
-
-    corona.addEventListener('mouseenter', function() {
-        rHover = true;
-        runComet(cabbageComet, [cMain, rMain], 1.8, function() { return rHover; });
-        setTimeout(function() {
-            if (rHover) runComet(visionComet, [vMain, rMain], 1.8, function() { return rHover; });
-        }, 200);
-    });
-    corona.addEventListener('mouseleave', function() {
-        rHover = false;
-        stopComet(cabbageComet);
-        stopComet(visionComet);
-    });
-}
-
-function initHistoryScroll() {
-    const track = document.getElementById('historyTimelineTrack');
-    if (!track) return;
-
-    const branches = Array.prototype.slice.call(track.querySelectorAll('.branch-draw'));
-
-    // 预计算路径长度并隐藏
-    branches.forEach(function(path) {
-        const length = path.getTotalLength();
-        path.dataset.pathLength = length;
-        path.style.strokeDasharray = length;
-        path.style.strokeDashoffset = length;
-        path.style.transition = 'none';
-    });
-
-    // 只隐藏文本标签，等待淡入（不干涉 circle 自身的 CSS opacity）
-    const labels = Array.prototype.slice.call(track.querySelectorAll('foreignObject'));
-    labels.forEach(function(el) { el.classList.add('history-anim-hidden'); });
-
-    // 进度条隐藏
+function initHistoryCardsScroll() {
+    const container = document.getElementById('historyScrollWrap');
+    const track = document.getElementById('historyCardsTrack');
     const progressBar = document.getElementById('historyProgressBar');
-    if (progressBar) {
-        progressBar.style.transition = 'none';
-        progressBar.style.transform = 'scaleX(0)';
+    if (!container || !track) return;
+
+    let scrollOffset = 0;
+    let maxScroll = 0;
+    let autoSpeed = 2.5;         // 基准速度（px/帧）
+    let scrollVelocity = 0;
+    let rafId = null;
+    let friction = 0.96;
+    let wheelActive = false;
+    let wheelTimeout = null;
+    let canNavigateNext = true;
+
+    function updateMaxScroll() {
+        maxScroll = Math.max(0, track.scrollWidth - container.clientWidth);
+        scrollOffset = ((scrollOffset % maxScroll) + maxScroll) % maxScroll;
+        applyScroll();
     }
 
-    // 动画播放函数（每次进入page-2时调用）
-    window.playHistoryAnimation = function() {
-        const TOTAL = 2.6; // 总动画时长（秒）
+    function applyScroll() {
+        track.style.transform = 'translateX(' + (-scrollOffset) + 'px)';
+        updateProgress();
+    }
 
-        // 路径生长动画
-        branches.forEach(function(path) {
-            var len = parseFloat(path.dataset.pathLength) || 0;
-            var start = parseFloat(path.dataset.start || '0');
-            var end = parseFloat(path.dataset.end || '1');
-            var delay = start * TOTAL;
-            var dur = Math.max(0.3, (end - start) * TOTAL + 0.2);
+    function updateProgress() {
+        if (!progressBar) return;
+        var pct = maxScroll > 0 ? (scrollOffset / maxScroll) * 100 : 0;
+        progressBar.style.width = pct + '%';
+    }
 
-            path.style.transition = 'none';
-            path.style.strokeDashoffset = len;
+    function tick() {
+        if (maxScroll <= 0) { rafId = requestAnimationFrame(tick); return; }
 
-            (function(p, d, dl) {
-                requestAnimationFrame(function() {
-                    requestAnimationFrame(function() {
-                        p.style.transition = 'stroke-dashoffset ' + d + 's ' + dl + 's cubic-bezier(0.22,1,0.36,1)';
-                        p.style.strokeDashoffset = '0';
-                    });
-                });
-            })(path, dur, delay);
-        });
+        scrollOffset += scrollVelocity;
 
-        // 标签淡入：按 data-lane 区分延迟
-        labels.forEach(function(el) {
-            var lane = el.getAttribute('data-lane') || '';
-            var baseDelay = (lane === 'corona') ? TOTAL * 0.45 : TOTAL * 0.06;
-
-            el.classList.remove('history-anim-visible');
-            el.classList.add('history-anim-hidden');
-
-            (function(e, dl) {
-                requestAnimationFrame(function() {
-                    requestAnimationFrame(function() {
-                        e.classList.remove('history-anim-hidden');
-                        e.classList.add('history-anim-visible');
-                        e.style.transitionDelay = dl + 's';
-                    });
-                });
-            })(el, baseDelay);
-        });
-
-        // 进度条动画（视觉装饰）
-        if (progressBar) {
-            progressBar.style.transition = 'none';
-            progressBar.style.transform = 'scaleX(0)';
-            requestAnimationFrame(function() {
-                requestAnimationFrame(function() {
-                    progressBar.style.transition = 'transform ' + TOTAL + 's cubic-bezier(0.22,1,0.36,1)';
-                    progressBar.style.transform = 'scaleX(1)';
-                });
-            });
+        if (!wheelActive) {
+            if (scrollVelocity > autoSpeed + 0.02) {
+                scrollVelocity = scrollVelocity * friction + autoSpeed * (1 - friction);
+            } else if (scrollVelocity < autoSpeed - 0.02) {
+                scrollVelocity = scrollVelocity * friction + autoSpeed * (1 - friction);
+            } else {
+                scrollVelocity = autoSpeed;
+            }
         }
+
+        // 滚到底 → 切下一页
+        if (maxScroll > 0 && scrollOffset >= maxScroll + 60 && canNavigateNext && wheelActive) {
+            canNavigateNext = false;
+            if (typeof window.goToPage === 'function') {
+                window.goToPage(3);
+            }
+        }
+
+        if (scrollOffset >= maxScroll + 200) scrollOffset -= maxScroll;
+        if (scrollOffset < -200) scrollOffset += maxScroll;
+
+        applyScroll();
+        rafId = requestAnimationFrame(tick);
+    }
+
+    // ===== 滚轮 —— 捕获阶段确保优先拦截 =====
+    function onWheel(event) {
+        if (maxScroll <= 0) return;
+        event.preventDefault();
+        event.stopPropagation();
+
+        scrollVelocity += event.deltaY * 0.6;
+        scrollVelocity = Math.max(-8, Math.min(scrollVelocity, 16));
+
+        wheelActive = true;
+        if (wheelTimeout) clearTimeout(wheelTimeout);
+        wheelTimeout = setTimeout(function() {
+            wheelActive = false;
+        }, 350);
+
+        applyScroll();
+    }
+
+    container.addEventListener('wheel', onWheel, { passive: false });
+    // 也挂在父级上捕获，防止被 page-scroll 拦截
+    var pageScroll = container.closest('.page-scroll');
+    if (pageScroll) {
+        pageScroll.addEventListener('wheel', onWheel, { passive: false, capture: true });
+    }
+
+    // Init
+    scrollVelocity = autoSpeed;
+    rafId = requestAnimationFrame(tick);
+    window.setTimeout(updateMaxScroll, 150);
+    window.addEventListener('resize', updateMaxScroll);
+
+    // ===== 入场动画 =====
+    var cards = Array.prototype.slice.call(track.querySelectorAll('.history-card'));
+    cards.forEach(function(card) {
+        card.classList.add('history-card-anim-hidden');
+    });
+
+    window.playHistoryAnimation = function() {
+        scrollOffset = 0;
+        scrollVelocity = autoSpeed;
+        canNavigateNext = true;
+        applyScroll();
+        updateMaxScroll();
+
+        cards.forEach(function(card, i) {
+            card.classList.remove('history-card-anim-visible');
+            card.classList.add('history-card-anim-hidden');
+            (function(c, idx) {
+                window.setTimeout(function() {
+                    c.classList.remove('history-card-anim-hidden');
+                    c.classList.add('history-card-anim-visible');
+                }, idx * 130 + 50);
+            })(card, i);
+        });
     };
 }
+
 
 function initTeamScroll() {
     const wrap = document.getElementById('teamScrollWrap');
@@ -3459,11 +3166,9 @@ function initRoleToggle() {
 document.addEventListener('DOMContentLoaded', function() {
     initShellNavigation();
     initDownloadModal();
-    initMemberModals();
-    initHistoryScroll();
-    initTimelineInteractions();
-    initTimelineComet();
-    initTeamScroll();
+   initMemberModals();
+    initHistoryCardsScroll();
+   initTeamScroll();
     initRoleToggle();
 });
 
