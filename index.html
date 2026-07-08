@@ -3050,7 +3050,7 @@ function initHistoryCardsScroll() {
         }
 
         if (event.deltaY < 0) {
-            scrollVelocity += event.deltaY * 2.5;
+            scrollVelocity += event.deltaY * 4.5;
         } else {
             scrollVelocity += event.deltaY * 0.6;
         }
@@ -3061,6 +3061,15 @@ function initHistoryCardsScroll() {
             canNavigateNext = false;
             if (typeof window.goToPage === 'function') {
                 window.goToPage(3);
+            }
+            return;
+        }
+
+        // 回到第一张继续往上 -> 上一页
+        if (scrollOffset <= 0 && event.deltaY < 0 && canNavigateNext) {
+            canNavigateNext = false;
+            if (typeof window.goToPage === 'function') {
+                window.goToPage(1);
             }
             return;
         }
