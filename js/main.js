@@ -127,13 +127,13 @@ const bentoLayout = {
     // 右栏 · 开发者：突破边界 + 7 个小块
     devGrid: [
         { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
-        { title: "多线程", tag: "AI Agent", image: "render/1.png", icon: "fas fa-robot", tone: "sandbox", detail: "内置 AI 智能体：以自然语言驱动三维场景生成，并通过 MCP 协议直接操控与编排场景，让创作从「手动搭建」走向「对话生成」。" },
-        { title: "物理与动画", tag: "Advanced Display", icon: "fas fa-display", tone: "research", detail: "深度集成并优化立体显示技术，赋能下一代视觉体验。" },
+        { title: "多线程", tag: "Native Multithreading", icon: "fas fa-bolt", tone: "research", detail: "原生多线程架构，任务调度与并行计算深度融合，充分释放多核算力，保障大规模场景的高效运行。" },
+        { title: "物理与动画", tag: "Physics & Animation", icon: "fas fa-person-running", tone: "research", detail: "集成刚体动力学、碰撞检测与骨骼动画系统，为交互与仿真提供真实可信的物理表现。" },
         { title: "全局光照", tag: "Global Illumination", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。" },
         { title: "立体显示", tag: "Light Field · 裸眼3D", image: "render/2.png", icon: "fas fa-cube", tone: "research", detail: "面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。" },
-        { title: "C++/JS/Py三层架构", tag: "Extensible API", icon: "fas fa-code-branch", tone: "research", detail: "为 SIGGRAPH 等学术研究提供透明、可修改的底层 API。" },
-        { title: "自研EDSL语言", tag: "Heterogeneous Computing", icon: "fas fa-microchip", tone: "research", detail: "已在异构编程语言领域取得实质性突破，释放极致算力。" },
-        { title: "流式加载", tag: "Extensible API", icon: "fas fa-code-branch", tone: "research", detail: "为 SIGGRAPH 等学术研究提供透明、可修改的底层 API。" },
+        { title: "C++/JS/Py三层架构", tag: "Layered Architecture", icon: "fas fa-layer-group", tone: "research", detail: "C++ 高性能内核、JavaScript 逻辑层、Python 脚本层三层协同，兼顾运行效率与开发灵活性。" },
+        { title: "自研EDSL语言", tag: "Embedded DSL", icon: "fas fa-microchip", tone: "research", detail: "自研嵌入式领域特定语言（EDSL），统一 CPU-GPU 异构编程，以简洁语法释放极致算力。" },
+        { title: "流式加载", tag: "Streaming Loading", icon: "fas fa-download", tone: "research", detail: "大场景资源按需流式调度，实现超大世界的无缝加载与渲染，显著降低内存占用。" },
     ]
 };
 
