@@ -97,6 +97,9 @@
             position: relative;
             transform-style: preserve-3d;
         }
+        .history-card-loop-clone {
+            pointer-events: none;
+        }
         .history-card-col:nth-child(odd) {
             justify-content: flex-start;
             padding-top: 30px;
@@ -3005,14 +3008,20 @@ function initHistoryCardsScroll() {
     const percentEl = document.getElementById('historyPercent');
     if (!container || !track) return;
 
-    const cards = Array.from(track.querySelectorAll('.history-card-col'));
-    if (cards.length === 0) return;
+    track.querySelectorAll('.history-card-loop-clone').forEach(clone => clone.remove());
+    const realCards = Array.from(track.querySelectorAll('.history-card-col'));
+    if (realCards.length === 0) return;
+    const loopClone = realCards[0].cloneNode(true);
+    loopClone.classList.add('history-card-loop-clone');
+    loopClone.setAttribute('aria-hidden', 'true');
+    track.appendChild(loopClone);
+    const cards = realCards.concat(loopClone);
 
     let scrollOffset = 0;
     let targetOffset = 0;
     let isTicking = false;
     const lerpFactor = 0.34; // 更贴手的阻尼系数
-    const maxScroll = cards.length - 1;
+    const maxScroll = realCards.length - 1;
     const staggerY = [-145, 165, -175, 145, -135, 180, -150];
     const wheelThreshold = 6;
     const wheelSensitivity = 0.0066;
@@ -3044,13 +3053,18 @@ function initHistoryCardsScroll() {
         cards.forEach((card, index) => {
             const offset = index - scrollOffset;
             const absOffset = Math.abs(offset);
-            let x = offset * 280;
-            let z = -Math.max(0, offset) * 42;
-            const parallaxY = staggerY[index % staggerY.length];
+            let x = offset * 360;
+            let z = -Math.max(0, offset) * 48;
+            const staggerIndex = card.classList.contains('history-card-loop-clone') ? 1 : index;
+            const parallaxY = staggerY[staggerIndex % staggerY.length];
             let scale = clamp(1 - Math.max(0, offset) * 0.1 - Math.max(0, -offset) * 0.06, 0.66, 1);
-            let opacity = clamp(1 - Math.max(0, offset - 0.1) * 0.24, 0.24, 1);
+            let opacity = clamp(1 - Math.max(0, offset - 0.1) * 0.34, 0.12, 1);
             let rotateY = 0;
             let zIndex = 100 - Math.round(absOffset * 12);
+
+            if (card.classList.contains('history-card-loop-clone') && offset >= 0) {
+                x += 90;
+            }
 
             if (offset < 0) {
                 const exitProgress = clamp(-offset, 0, 1.35);
