@@ -34,56 +34,56 @@ const scrollingMembers = [
 
 // ================= 其它数据 =================
 const patentsData = [
-    { label: "资源调度与场景预览系统", tag: "2026 · 国家级", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
-    { label: "立体显示交互系统", tag: "2025 · 国家级", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
-    { label: "三维美术资源生成系统", tag: "2024 · 省级", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
-    { label: "分布式仿真辅助设计系统", tag: "2022 · 国家级", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
-    { label: "MLT分布式渲染系统", tag: "2020 · 国家级", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
-    { label: "物理仿真海洋探索系统", tag: "2019 · 国家级", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
-    { label: "多语言实时交互仿真系统", tag: "2019 · 省级", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
-    { label: "编程语言教学系统", tag: "2018 · 国家级", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
+    { label: "资源调度与场景预览系统", tag: "2026·国家级", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
+    { label: "立体显示交互系统", tag: "2025·国家级", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
+    { label: "三维美术资源生成系统", tag: "2024·省级", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
+    { label: "分布式仿真辅助设计系统", tag: "2022·国家级", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
+    { label: "MLT分布式渲染系统", tag: "2020·国家级", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
+    { label: "物理仿真海洋探索系统", tag: "2019·国家级", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
+    { label: "多语言实时交互仿真系统", tag: "2019·省级", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
+    { label: "编程语言教学系统", tag: "2018·国家级", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
 ];
 
 // CCF-A 顶会论文（金色 · 最内层）
 const ccfaPapers = [
-    { label: "Real-Time Light Field Tracing", tag: "录用 · CCF-A会议", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Light-Field Path Tracing", tag: "录用 · CCF-A会议", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Topology-Aware Polymorphism", tag: "公开 · CCF-A会议", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
-    { label: "游戏生成", tag: "投稿中 · CCF-A会议", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
-    { label: "光场UI算法", tag: "投稿中 · CCF-A会议", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
+    { label: "Real-Time Light Field Tracing", tag: "2026·录用·CCF-A会议", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Light-Field Path Tracing", tag: "2026·录用·CCF-A会议", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "Topology-Aware Polymorphism", tag: "2025·CCF-A会议", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
+    { label: "游戏生成", tag: "投稿中·CCF-A会议", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
+    { label: "光场UI算法", tag: "投稿中·CCF-A会议", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
 ];
 
 // 学术论文（紫色 · 第二层）
 const academicPapers = [
-    { label: "SK-GAN", tag: "中科院四区 · 投稿中", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "跨学科学业表现建模", tag: "中科院四区 · 投稿中", full: "Hybrid Three-Level Modeling of Cross-Disciplinary Academic Performance in Higher Education", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "Diagnostic-Driven MLT", tag: "中科院四区 · 投稿中", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "Visibility-Driven MLT", tag: "2025 · 中科院四区", full: "Removing Initialization Phase of Visibility-Driven Metropolis Light Transport", year: "2025", venue: "中科院四区", status: "已公开" },
-    { label: "Hot Reloading Runtime", tag: "2025 · EI会议", full: "Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis", year: "2025", venue: "EI会议", status: "已公开" },
-    { label: "Shadow Maps Enhancement", tag: "2024 · EI会议", full: "Enhancing Shadow Maps via Screen-Space Visibility", year: "2024", venue: "EI会议", status: "已公开" },
-    { label: "Parameter-Free MLT", tag: "2022 · EI会议", full: "Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility", year: "2022", venue: "EI会议", status: "已公开" },
-    { label: "多智能体场景创作机制", tag: "中文核心 · 投稿中", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
+    { label: "SK-GAN", tag: "投稿中·中科院四区", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "跨学科学业表现建模", tag: "投稿中·中科院四区", full: "Hybrid Three-Level Modeling of Cross-Disciplinary Academic Performance in Higher Education", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "Diagnostic-Driven MLT", tag: "投稿中·中科院四区", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "Visibility-Driven MLT", tag: "2025·中科院四区", full: "Removing Initialization Phase of Visibility-Driven Metropolis Light Transport", year: "2025", venue: "中科院四区", status: "已公开" },
+    { label: "Hot Reloading Runtime", tag: "2025·EI会议", full: "Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis", year: "2025", venue: "EI会议", status: "已公开" },
+    { label: "Shadow Maps Enhancement", tag: "2024·EI会议", full: "Enhancing Shadow Maps via Screen-Space Visibility", year: "2024", venue: "EI会议", status: "已公开" },
+    { label: "Parameter-Free MLT", tag: "2022·EI会议", full: "Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility", year: "2022", venue: "EI会议", status: "已公开" },
+    { label: "多智能体场景创作机制", tag: "投稿中·中文核心", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
 ];
 
 // 学生项目（绿色 · 最外层）
 const studentProjects = [
-    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", tag: "2018 · 专利", label: "三角形邻接信息移动算法" },
-    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", tag: "2019 · 专利", label: "法线修正碰撞移动方法" },
-    { title: "一种三维空间内基于降维的实时路径生成方法", tag: "2019 · 专利", label: "降维实时路径生成方法" },
-    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", tag: "2019 · 专利", label: "动态模糊降采样加速方法" },
-    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", tag: "2020 · 专利", label: "球坐标图元模型压缩方法" },
-    { title: "一种基于深度缓冲加速的光线追踪渲染方法", tag: "2021 · 专利", label: "深度缓冲加速光追渲染" },
-    { title: "一种基于光线路径复用的动态场景渲染加速方法", tag: "2021 · 专利", label: "光线路径复用渲染加速" },
-    { title: "一种基于非对称卷积核的卷积神经网络训练方法", tag: "2024 · 专利", label: "非对称卷积核训练方法" },
-    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", tag: "2024 · 专利", label: "高斯先验卷积网络优化方法" },
-    { title: "基于凸包优化的非均匀数据的聚类方法", tag: "2024 · 专利", label: "凸包优化聚类方法" },
-    { title: "基于密度聚类算法的三维物体碰撞体优化方法", tag: "2025 · 专利", label: "密度聚类碰撞体优化方法" },
-    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", tag: "2025 · 专利", label: "光追训练数据生成方法" },
-    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", tag: "2025 · 专利", label: "屏幕空间阴影优化方法" },
-    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", tag: "2026 · 专利", label: "智能体协同场景生成方法" },
-    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", tag: "2026 · 专利", label: "光场路径追踪调度方法" },
-    { title: "一种基于稀疏时空角重建的实时光场渲染方法", tag: "2026 · 专利", label: "稀疏时空角光场渲染方法" },
-    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026 · 专利", label: "子像素光线生成方法" }
+    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", tag: "2018·发明专利", label: "三角形邻接信息移动算法" },
+    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", tag: "2019·发明专利", label: "法线修正碰撞移动方法" },
+    { title: "一种三维空间内基于降维的实时路径生成方法", tag: "2019·发明专利", label: "降维实时路径生成方法" },
+    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", tag: "2019·发明专利", label: "动态模糊降采样加速方法" },
+    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", tag: "2020·发明专利", label: "球坐标图元模型压缩方法" },
+    { title: "一种基于深度缓冲加速的光线追踪渲染方法", tag: "2021·发明专利", label: "深度缓冲加速光追渲染" },
+    { title: "一种基于光线路径复用的动态场景渲染加速方法", tag: "2021·发明专利", label: "光线路径复用渲染加速" },
+    { title: "一种基于非对称卷积核的卷积神经网络训练方法", tag: "2024·发明专利", label: "非对称卷积核训练方法" },
+    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", tag: "2024·发明专利", label: "高斯先验卷积网络优化方法" },
+    { title: "基于凸包优化的非均匀数据的聚类方法", tag: "2024·发明专利", label: "凸包优化聚类方法" },
+    { title: "基于密度聚类算法的三维物体碰撞体优化方法", tag: "2025·发明专利", label: "密度聚类碰撞体优化方法" },
+    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", tag: "2025·发明专利", label: "光追训练数据生成方法" },
+    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", tag: "2025·发明专利", label: "屏幕空间阴影优化方法" },
+    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", tag: "2026·发明专利", label: "智能体协同场景生成方法" },
+    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", tag: "2026·发明专利", label: "光场路径追踪调度方法" },
+    { title: "一种基于稀疏时空角重建的实时光场渲染方法", tag: "2026·发明专利", label: "稀疏时空角光场渲染方法" },
+    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026·发明专利", label: "子像素光线生成方法" }
 ];
 
 // ================= 页面初始化与交互 =================
