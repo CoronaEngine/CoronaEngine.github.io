@@ -145,6 +145,106 @@
         .history-card.lane-merge::before { background: linear-gradient(180deg, #ffcc33, #c491ff); }
         .history-card.lane-merge:hover { border-color: rgba(255,204,51,0.40); }
 
+        /* History cards: richer frosted-glass colors based on the original four lanes */
+        .history-card {
+            background: rgba(8,16,36,0.56) !important;
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+            border: 1px solid rgba(255,255,255,0.10) !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35) !important;
+        }
+        .history-card > * { position: relative; z-index: 1; }
+        .history-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.62;
+            transition: opacity 0.35s ease;
+        }
+        .history-card:hover::after { opacity: 1; }
+
+        /* Cabbage: blue */
+        .history-card.lane-cabbage {
+            background:
+                radial-gradient(ellipse at 72% 24%, rgba(96,165,250,0.20), transparent 62%),
+                linear-gradient(135deg, rgba(37,99,235,0.16), rgba(8,16,36,0.58) 58%),
+                rgba(8,16,36,0.58) !important;
+            border-color: rgba(96,165,250,0.34) !important;
+        }
+        .history-card.lane-cabbage::before {
+            background: linear-gradient(180deg, #2563eb, #60a5fa) !important;
+            box-shadow: 0 0 20px rgba(96,165,250,0.42);
+        }
+        .history-card.lane-cabbage::after {
+            background: radial-gradient(ellipse at 70% 30%, rgba(96,165,250,0.24), transparent 65%) !important;
+        }
+        .history-card.lane-cabbage:hover {
+            border-color: rgba(96,165,250,0.58) !important;
+            box-shadow: 0 0 52px rgba(96,165,250,0.18), 0 18px 50px rgba(0,0,0,0.45) !important;
+        }
+
+        /* Vision: red */
+        .history-card.lane-vision {
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(248,113,113,0.22), transparent 62%),
+                linear-gradient(135deg, rgba(185,28,28,0.18), rgba(22,10,26,0.60) 58%),
+                rgba(22,10,26,0.60) !important;
+            border-color: rgba(248,113,113,0.34) !important;
+        }
+        .history-card.lane-vision::before {
+            background: linear-gradient(180deg, #b91c1c, #fb6f6f) !important;
+            box-shadow: 0 0 20px rgba(248,113,113,0.42);
+        }
+        .history-card.lane-vision::after {
+            background: radial-gradient(ellipse at 32% 22%, rgba(248,113,113,0.26), transparent 65%) !important;
+        }
+        .history-card.lane-vision:hover {
+            border-color: rgba(248,113,113,0.58) !important;
+            box-shadow: 0 0 52px rgba(248,113,113,0.18), 0 18px 50px rgba(0,0,0,0.45) !important;
+        }
+
+        /* Corona: purple */
+        .history-card.lane-corona {
+            background:
+                radial-gradient(ellipse at 70% 26%, rgba(196,145,255,0.24), transparent 62%),
+                linear-gradient(135deg, rgba(139,92,246,0.18), rgba(20,14,42,0.60) 58%),
+                rgba(20,14,42,0.60) !important;
+            border-color: rgba(196,145,255,0.36) !important;
+        }
+        .history-card.lane-corona::before {
+            background: linear-gradient(180deg, #c491ff, #9f7aea) !important;
+            box-shadow: 0 0 20px rgba(196,145,255,0.44);
+        }
+        .history-card.lane-corona::after {
+            background: radial-gradient(ellipse at 70% 30%, rgba(196,145,255,0.28), transparent 65%) !important;
+        }
+        .history-card.lane-corona:hover {
+            border-color: rgba(196,145,255,0.60) !important;
+            box-shadow: 0 0 55px rgba(160,100,240,0.20), 0 18px 50px rgba(0,0,0,0.45) !important;
+        }
+
+        /* Merge: gold */
+        .history-card.lane-merge {
+            background:
+                radial-gradient(ellipse at 68% 24%, rgba(255,204,51,0.24), transparent 62%),
+                linear-gradient(135deg, rgba(220,160,40,0.18), rgba(30,22,10,0.60) 58%),
+                rgba(30,22,10,0.60) !important;
+            border-color: rgba(255,204,51,0.38) !important;
+        }
+        .history-card.lane-merge::before {
+            background: linear-gradient(180deg, #ffcc33, #f59e0b) !important;
+            box-shadow: 0 0 20px rgba(255,204,51,0.46);
+        }
+        .history-card.lane-merge::after {
+            background: radial-gradient(ellipse at 70% 30%, rgba(255,204,51,0.28), transparent 65%) !important;
+        }
+        .history-card.lane-merge:hover {
+            border-color: rgba(255,204,51,0.62) !important;
+            box-shadow: 0 0 55px rgba(255,204,51,0.20), 0 18px 50px rgba(0,0,0,0.45) !important;
+        }
+
         .history-card-year {
             display: inline-block;
             font-size: 0.9rem;
@@ -155,24 +255,28 @@
             letter-spacing: 0.02em;
         }
         .lane-cabbage .history-card-year {
-            color: #a5d0ff;
-            background: rgba(37,99,235,0.28);
-            border: 1px solid rgba(115,178,255,0.30);
+            color: #bfdbfe;
+            background: rgba(37,99,235,0.24);
+            border: 1px solid rgba(96,165,250,0.42);
+            box-shadow: inset 0 0 14px rgba(96,165,250,0.14);
         }
         .lane-vision .history-card-year {
-            color: #ffb8b8;
-            background: rgba(185,28,28,0.28);
-            border: 1px solid rgba(255,104,104,0.30);
+            color: #fecaca;
+            background: rgba(185,28,28,0.24);
+            border: 1px solid rgba(248,113,113,0.42);
+            box-shadow: inset 0 0 14px rgba(248,113,113,0.14);
         }
         .lane-corona .history-card-year {
-            color: #e4c6ff;
-            background: rgba(139,92,246,0.28);
-            border: 1px solid rgba(196,145,255,0.30);
+            color: #e9d5ff;
+            background: rgba(139,92,246,0.24);
+            border: 1px solid rgba(196,145,255,0.44);
+            box-shadow: inset 0 0 14px rgba(196,145,255,0.14);
         }
         .lane-merge .history-card-year {
-            color: #ffe599;
-            background: rgba(220,160,40,0.24);
-            border: 1px solid rgba(255,204,51,0.34);
+            color: #fde68a;
+            background: rgba(220,160,40,0.22);
+            border: 1px solid rgba(255,204,51,0.48);
+            box-shadow: inset 0 0 14px rgba(255,204,51,0.14);
         }
         .history-card h3 {
             margin: 0 0 10px;
