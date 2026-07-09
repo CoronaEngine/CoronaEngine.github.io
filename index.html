@@ -84,6 +84,8 @@
            gap: 0;
            will-change: transform;
            position: relative;
+           perspective: 1100px;
+           transform-style: preserve-3d;
        }
         .history-card-col {
             flex-shrink: 0;
@@ -93,6 +95,7 @@
             justify-content: center;
             padding: 0 30px;
             position: relative;
+            transform-style: preserve-3d;
         }
         .history-card-col:nth-child(odd) {
             justify-content: flex-start;
@@ -2881,6 +2884,14 @@ function initShellNavigation() {
 
     window.addEventListener('wheel', function(event) {
         if (event.target.closest('.member-modal-overlay.active, .dl-overlay.active, .team-scroll-wrap')) return;
+        if (Date.now() < (window.historyEdgeScrollLockUntil || 0)) {
+            event.preventDefault();
+            return;
+        }
+        if (currentPage === 2) {
+            event.preventDefault();
+            return;
+        }
         const scroller = event.target.closest('.page-scroll') || activePageScroll();
         if (scroller === activePageScroll() && canScrollWithin(scroller, event.deltaY)) return;
 
@@ -3000,17 +3011,17 @@ function initHistoryCardsScroll() {
     let scrollOffset = 0;
     let targetOffset = 0;
     let isTicking = false;
-    const lerpFactor = 0.08; // 阻尼顺滑系数
+    const lerpFactor = 0.34; // 更贴手的阻尼系数
     const maxScroll = cards.length - 1;
-    const staggerY = [-80, 95, -105, 80, -70, 110, -90];
-    const wheelThreshold = 18;
-    const wheelStepDelay = 650;
-    const edgeAttemptDelay = 450;
-    const touchThreshold = 50;
-    let lastWheelStepTime = 0;
-    let edgeNavDirection = 0;
-    let edgeNavCount = 0;
-    let lastEdgeNavAttempt = 0;
+    const staggerY = [-145, 165, -175, 145, -135, 180, -150];
+    const wheelThreshold = 6;
+    const wheelSensitivity = 0.0066;
+    const snapDelay = 240;
+    const edgeExitDelay = 560;
+    const touchThreshold = 42;
+    let snapTimer = 0;
+    let edgeReadySide = 0;
+    let edgeReadyAt = 0;
     let touchStartX = 0;
     let touchStartY = 0;
 
@@ -3018,10 +3029,9 @@ function initHistoryCardsScroll() {
         return Math.max(min, Math.min(max, value));
     }
 
-    function resetEdgeNavigation() {
-        edgeNavDirection = 0;
-        edgeNavCount = 0;
-        lastEdgeNavAttempt = 0;
+    function resetEdgeGate() {
+        edgeReadySide = 0;
+        edgeReadyAt = 0;
     }
 
     function updateAnimation() {
@@ -3033,22 +3043,34 @@ function initHistoryCardsScroll() {
 
         cards.forEach((card, index) => {
             const offset = index - scrollOffset;
-            const x = offset * 300;
-            const z = 0;
+            const absOffset = Math.abs(offset);
+            let x = offset * 280;
+            let z = -Math.max(0, offset) * 42;
             const parallaxY = staggerY[index % staggerY.length];
-            let scale = clamp(1 - offset * 0.12, 0.62, 1);
-            let opacity = clamp(1 - Math.max(0, offset - 0.15) * 0.35, 0, 1);
-            let zIndex = 100 - Math.round(Math.abs(offset) * 10);
+            let scale = clamp(1 - Math.max(0, offset) * 0.1 - Math.max(0, -offset) * 0.06, 0.66, 1);
+            let opacity = clamp(1 - Math.max(0, offset - 0.1) * 0.24, 0.24, 1);
+            let rotateY = 0;
+            let zIndex = 100 - Math.round(absOffset * 12);
 
-            if (offset < -0.35) {
+            if (offset < 0) {
+                const exitProgress = clamp(-offset, 0, 1.35);
+                x = offset * 520 - exitProgress * 70;
+                z = exitProgress * 180;
+                scale = clamp(1 + Math.max(0, exitProgress - 0.18) * 0.34, 1, 1.36);
+                rotateY = clamp(exitProgress * 34, 0, 42);
+                opacity = clamp(1 - Math.max(0, exitProgress - 0.22) * 0.72, 0.18, 1);
+                zIndex = 140 - Math.round(exitProgress * 8);
+            }
+
+            if (offset < -1.18) {
                 opacity = 0;
-                scale = 1;
                 zIndex = 0;
             }
 
-            card.style.pointerEvents = Math.abs(offset) < 0.45 && opacity > 0.6 ? 'auto' : 'none';
+            card.style.pointerEvents = absOffset < 0.45 && opacity > 0.6 ? 'auto' : 'none';
             card.style.zIndex = String(zIndex);
-            card.style.transform = `translate3d(${x}px, ${parallaxY}px, ${z}px) scale(${scale})`;
+            card.style.transformOrigin = offset < 0 ? 'right center' : 'center center';
+            card.style.transform = `translate3d(${x}px, ${parallaxY}px, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
             card.style.opacity = opacity.toFixed(3);
         });
 
@@ -3056,6 +3078,15 @@ function initHistoryCardsScroll() {
             const progress = maxScroll > 0 ? clamp(scrollOffset / maxScroll, 0, 1) : 0;
             progressBar.style.width = (progress * 100).toFixed(2) + '%';
             if (percentEl) percentEl.textContent = (progress * 100).toFixed(0) + '%';
+        }
+
+        const edgeSide = targetOffset <= 0 && scrollOffset <= 0.001 ? -1 :
+            targetOffset >= maxScroll && scrollOffset >= maxScroll - 0.001 ? 1 : 0;
+        if (edgeSide === 0) {
+            resetEdgeGate();
+        } else if (edgeReadySide !== edgeSide) {
+            edgeReadySide = edgeSide;
+            edgeReadyAt = Date.now();
         }
 
         if (isTicking) requestAnimationFrame(updateAnimation);
@@ -3068,65 +3099,79 @@ function initHistoryCardsScroll() {
         }
     }
 
-    function tryEdgeNavigation(direction) {
-        const atLast = direction > 0 && targetOffset >= maxScroll && scrollOffset >= maxScroll - 0.05;
-        const atFirst = direction < 0 && targetOffset <= 0 && scrollOffset <= 0.05;
+    function snapToNearestCard() {
+        targetOffset = Math.round(clamp(targetOffset, 0, maxScroll));
+        requestRender();
+    }
+
+    function scheduleSnap() {
+        window.clearTimeout(snapTimer);
+        snapTimer = window.setTimeout(snapToNearestCard, snapDelay);
+    }
+
+    function handleEdgeExit(direction) {
+        const atLast = direction > 0 && targetOffset >= maxScroll && scrollOffset >= maxScroll - 0.08;
+        const atFirst = direction < 0 && targetOffset <= 0 && scrollOffset <= 0.08;
         if (!atLast && !atFirst) return false;
 
-        const edgeDirection = direction > 0 ? 1 : -1;
         const now = Date.now();
-        if (edgeNavDirection !== edgeDirection) {
-            edgeNavDirection = edgeDirection;
-            edgeNavCount = 0;
-            lastEdgeNavAttempt = 0;
+        if (edgeReadySide !== direction || edgeReadyAt === 0) {
+            edgeReadySide = direction;
+            edgeReadyAt = now;
+            return true;
         }
 
-        if (now - lastEdgeNavAttempt < edgeAttemptDelay) return true;
-        lastEdgeNavAttempt = now;
-        edgeNavCount += 1;
-
-        if (edgeNavCount >= 2 && typeof window.goToPage === 'function') {
-            window.goToPage(edgeDirection > 0 ? 3 : 1);
-            resetEdgeNavigation();
+        if (now - edgeReadyAt >= edgeExitDelay && typeof window.goToPage === 'function') {
+            window.historyEdgeScrollLockUntil = now + 1500;
+            window.goToPage(direction > 0 ? 3 : 1);
+            resetEdgeGate();
         }
         return true;
     }
 
-    function stepHistory(direction) {
-        const nextOffset = targetOffset + direction;
-        if (nextOffset >= 0 && nextOffset <= maxScroll) {
-            targetOffset = nextOffset;
-            resetEdgeNavigation();
-            requestRender();
-            return true;
+    function pushHistory(delta) {
+        const direction = delta > 0 ? 1 : -1;
+        targetOffset = clamp(targetOffset + delta * wheelSensitivity, 0, maxScroll);
+        requestRender();
+
+        if (targetOffset > 0 && targetOffset < maxScroll) {
+            resetEdgeGate();
         }
-        return tryEdgeNavigation(direction);
+
+        if (handleEdgeExit(direction)) return;
+        scheduleSnap();
     }
 
     function onWheel(event) {
+        const historyPage = document.getElementById('page-2');
+        if (!historyPage || !historyPage.classList.contains('active')) return;
         event.preventDefault();
         event.stopPropagation();
         const delta = event.deltaY || event.deltaX;
         if (Math.abs(delta) < wheelThreshold) return;
-
-        const now = Date.now();
-        if (now - lastWheelStepTime < wheelStepDelay) return;
-        lastWheelStepTime = now;
-
-        stepHistory(delta > 0 ? 1 : -1);
+        pushHistory(delta);
     }
 
     container.addEventListener('touchstart', e => {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
+        window.clearTimeout(snapTimer);
     }, { passive: true });
 
-    container.addEventListener('touchend', e => {
-        if (!e.changedTouches || e.changedTouches.length === 0) return;
-        const diffX = touchStartX - e.changedTouches[0].clientX;
-        const diffY = touchStartY - e.changedTouches[0].clientY;
+    container.addEventListener('touchmove', e => {
+        if (!e.touches || e.touches.length === 0) return;
+        const diffX = touchStartX - e.touches[0].clientX;
+        const diffY = touchStartY - e.touches[0].clientY;
         if (Math.abs(diffX) < touchThreshold || Math.abs(diffX) < Math.abs(diffY)) return;
-        stepHistory(diffX > 0 ? 1 : -1);
+        targetOffset = clamp(targetOffset + diffX * 0.01, 0, maxScroll);
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        resetEdgeGate();
+        requestRender();
+    }, { passive: true });
+
+    container.addEventListener('touchend', () => {
+        scheduleSnap();
     }, { passive: true });
 
     container.addEventListener('wheel', onWheel, { passive: false });
@@ -3143,7 +3188,8 @@ function initHistoryCardsScroll() {
     window.playHistoryAnimation = function() {
         scrollOffset = -1;
         targetOffset = 0;
-        resetEdgeNavigation();
+        resetEdgeGate();
+        window.clearTimeout(snapTimer);
         requestRender();
     };
 }
