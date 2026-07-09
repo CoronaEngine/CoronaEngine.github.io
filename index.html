@@ -242,6 +242,18 @@
             transition: width 0.08s linear;
         }
 
+
+        .history-scroll-percent {
+            position: absolute;
+            bottom: 20px;
+            left: 198px;
+            color: #ffcc33;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            font-variant-numeric: tabular-nums;
+            z-index: 10;
+        }
         /* 动画入场 */
         .history-card-anim-hidden {
             opacity: 0;
@@ -2594,6 +2606,7 @@ body.menu-open {
                         <div class="history-scroll-progress" aria-hidden="true">
                             <span id="historyProgressBar"></span>
                         </div>
+                        <span class="history-scroll-percent" id="historyPercent">0%</span>
                     </div>
                 </div>
             </div>
@@ -2978,6 +2991,7 @@ function initHistoryCardsScroll() {
     const container = document.getElementById('historyScrollWrap');
     const track = document.getElementById('historyCardsTrack');
     const progressBar = document.getElementById('historyProgressBar');
+    const percentEl = document.getElementById('historyPercent');
     if (!container || !track) return;
 
     const cards = Array.from(track.querySelectorAll('.history-card-col'));
@@ -3044,6 +3058,7 @@ function initHistoryCardsScroll() {
         if (progressBar) {
             let progress = Math.max(0, Math.min(1, scrollOffset / maxScroll));
             progressBar.style.width = (progress * 100).toFixed(2) + '%';
+            if (percentEl) percentEl.textContent = (progress * 100).toFixed(0) + '%';
         }
 
         if (isTicking) requestAnimationFrame(updateAnimation);
@@ -3056,7 +3071,9 @@ function initHistoryCardsScroll() {
         }
     }
 
-    let lastNavTime = 0;
+    let edgeNavDirection = 0;
+    let edgeNavCount = 0;
+    let lastEdgeNavAttempt = 0;
     function onWheel(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -3066,19 +3083,29 @@ function initHistoryCardsScroll() {
         targetOffset = Math.max(-0.5, Math.min(targetOffset, maxScroll + 0.5));
         requestRender();
 
-        if (targetOffset >= maxScroll + 0.4 && delta > 15) {
-            let now = Date.now();
-            if (now - lastNavTime > 2500) {
-                lastNavTime = now;
-                if (typeof window.goToPage === 'function') window.goToPage(3);
-            }
+        const edgeDirection = scrollOffset >= maxScroll - 0.05 && delta > 15 ? 1 :
+            (scrollOffset <= 0.05 && delta < -15 ? -1 : 0);
+
+        if (edgeDirection === 0) {
+            edgeNavDirection = 0;
+            edgeNavCount = 0;
+            return;
         }
-        if (targetOffset <= -0.4 && delta < -15) {
-            let now = Date.now();
-            if (now - lastNavTime > 2500) {
-                lastNavTime = now;
-                if (typeof window.goToPage === 'function') window.goToPage(1);
-            }
+
+        const now = Date.now();
+        if (edgeNavDirection !== edgeDirection) {
+            edgeNavDirection = edgeDirection;
+            edgeNavCount = 0;
+            lastEdgeNavAttempt = 0;
+        }
+
+        if (now - lastEdgeNavAttempt < 450) return;
+        lastEdgeNavAttempt = now;
+        edgeNavCount += 1;
+
+        if (edgeNavCount >= 2 && typeof window.goToPage === 'function') {
+            window.goToPage(edgeDirection > 0 ? 3 : 1);
+            edgeNavCount = 0;
         }
     }
 
