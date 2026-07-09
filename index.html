@@ -97,7 +97,7 @@
             position: relative;
             transform-style: preserve-3d;
         }
-        .history-card-loop-clone {
+        .history-card-future {
             pointer-events: none;
         }
         .history-card-col:nth-child(odd) {
@@ -251,10 +251,10 @@
 
         .history-scroll-percent {
             position: absolute;
-            bottom: 20px;
-            left: 198px;
+            bottom: 34px;
+            left: 20px;
             color: #ffcc33;
-            font-size: 0.7rem;
+            font-size: 0.78rem;
             font-weight: 600;
             letter-spacing: 0.04em;
             font-variant-numeric: tabular-nums;
@@ -2612,7 +2612,7 @@ body.menu-open {
                         <div class="history-scroll-progress" aria-hidden="true">
                             <span id="historyProgressBar"></span>
                         </div>
-                        <span class="history-scroll-percent" id="historyPercent">0%</span>
+                        <span class="history-scroll-percent" id="historyPercent">2017</span>
                     </div>
                 </div>
             </div>
@@ -3008,20 +3008,29 @@ function initHistoryCardsScroll() {
     const percentEl = document.getElementById('historyPercent');
     if (!container || !track) return;
 
-    track.querySelectorAll('.history-card-loop-clone').forEach(clone => clone.remove());
+    track.querySelectorAll('.history-card-loop-clone, .history-card-future').forEach(extra => extra.remove());
     const realCards = Array.from(track.querySelectorAll('.history-card-col'));
     if (realCards.length === 0) return;
-    const loopClone = realCards[0].cloneNode(true);
-    loopClone.classList.add('history-card-loop-clone');
-    loopClone.setAttribute('aria-hidden', 'true');
-    track.appendChild(loopClone);
-    const cards = realCards.concat(loopClone);
+    const futureCard = document.createElement('div');
+    futureCard.className = 'history-card-col history-card-future';
+    futureCard.setAttribute('aria-hidden', 'true');
+    futureCard.innerHTML = `
+        <div class="history-card lane-merge">
+            <div class="history-card-icon"></div>
+            <span class="history-card-year">Future</span>
+            <h3>后续敬请期待</h3>
+            <p>更多技术突破与版本规划正在持续推进</p>
+        </div>
+    `;
+    track.appendChild(futureCard);
+    const cards = realCards.concat(futureCard);
 
     let scrollOffset = 0;
     let targetOffset = 0;
     let isTicking = false;
     const lerpFactor = 0.34; // 更贴手的阻尼系数
     const maxScroll = realCards.length - 1;
+    const historyYears = [2017, 2018, 2020, 2022, 2022, 2025, 2026];
     const staggerY = [-145, 165, -175, 145, -135, 180, -150];
     const wheelThreshold = 6;
     const wheelSensitivity = 0.0066;
@@ -3055,14 +3064,14 @@ function initHistoryCardsScroll() {
             const absOffset = Math.abs(offset);
             let x = offset * 360;
             let z = -Math.max(0, offset) * 48;
-            const staggerIndex = card.classList.contains('history-card-loop-clone') ? 1 : index;
+            const staggerIndex = card.classList.contains('history-card-future') ? 1 : index;
             const parallaxY = staggerY[staggerIndex % staggerY.length];
             let scale = clamp(1 - Math.max(0, offset) * 0.1 - Math.max(0, -offset) * 0.06, 0.66, 1);
             let opacity = clamp(1 - Math.max(0, offset - 0.1) * 0.34, 0.12, 1);
             let rotateY = 0;
             let zIndex = 100 - Math.round(absOffset * 12);
 
-            if (card.classList.contains('history-card-loop-clone') && offset >= 0) {
+            if (card.classList.contains('history-card-future') && offset >= 0) {
                 x += 90;
             }
 
@@ -3091,7 +3100,14 @@ function initHistoryCardsScroll() {
         if (progressBar) {
             const progress = maxScroll > 0 ? clamp(scrollOffset / maxScroll, 0, 1) : 0;
             progressBar.style.width = (progress * 100).toFixed(2) + '%';
-            if (percentEl) percentEl.textContent = (progress * 100).toFixed(0) + '%';
+            if (percentEl) {
+                const yearIndex = clamp(scrollOffset, 0, maxScroll);
+                const lowerIndex = Math.floor(yearIndex);
+                const upperIndex = Math.min(lowerIndex + 1, historyYears.length - 1);
+                const localProgress = yearIndex - lowerIndex;
+                const year = Math.round(historyYears[lowerIndex] + (historyYears[upperIndex] - historyYears[lowerIndex]) * localProgress);
+                percentEl.textContent = String(year);
+            }
         }
 
         const edgeSide = targetOffset <= 0 && scrollOffset <= 0.001 ? -1 :
