@@ -71,7 +71,7 @@
        .history-scroll-container {
            position: relative;
            width: 100%;
-            height: 680px;
+            height: calc(100vh - 80px);
            overflow: hidden;
            margin: 0;
            padding: 0;
@@ -224,7 +224,7 @@
         .history-scroll-progress {
             position: absolute;
             bottom: 24px;
-            left: 32px;
+            left: 20px;
             width: 160px;
             height: 4px;
             background: rgba(255,255,255,0.06);
@@ -1283,7 +1283,7 @@ body.menu-open {
     }
 
    .history-scroll-container {
-        height: 480px;
+        height: calc(100vh - 100px);
    }
     .history-card-col {
         width: 380px;
@@ -2449,6 +2449,17 @@ body.menu-open {
             opacity: 0 !important;
             transform: none !important;
         }
+
+        /* 发展历程页铺满屏幕 */
+        #page-2 .page-scroll {
+            padding: 80px 0 0 0;
+            overflow: hidden;
+        }
+        #page-2 .content-stage {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
     </style>
 </head>
 <body data-page="0">
@@ -2579,9 +2590,6 @@ body.menu-open {
                                     <p>深度重构，持续打磨，厚积薄发。支撑高校赛事，学术课题深化，主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
                                 </div>
                             </div>
-
-                        
-
 </div>
                         <div class="history-scroll-progress" aria-hidden="true">
                             <span id="historyProgressBar"></span>
@@ -2987,7 +2995,7 @@ function initHistoryCardsScroll() {
     const maxScroll = cards.length - 1;
 
     // Y 轴交错散点排布 (让卡片上下错落，不至于死板地排成一横排，加大间距避免重叠)
-    const staggerY = [-160, 190, -210, 160, -140, 220, -180];
+    const staggerY = [-80, 95, -105, 80, -70, 110, -90];
 
     function updateAnimation() {
         scrollOffset += (targetOffset - scrollOffset) * lerpFactor;
@@ -2999,27 +3007,34 @@ function initHistoryCardsScroll() {
         cards.forEach((card, index) => {
             let angle = (index - scrollOffset) * cardAngleSpacing;
             
-            // X 轴和 Z 轴构成水平圆环轨道
-            let x = Math.sin(angle) * radiusX;
-            let z = Math.cos(angle) * radiusZ - radiusZ;
+            // 线性水平移动，无弧度
+            let offset = index - scrollOffset;
+            let x = offset * 460;
+            let z = 0;
+            let parallaxY = staggerY[index % staggerY.length];
 
-            // Y 轴引入上下散落和视差补偿
-            let yBase = staggerY[index % staggerY.length];
-            // 越偏向后方的卡片，上下偏移稍微收束一点
-            let parallaxY = yBase * Math.cos(angle);
+            // 翻书式动画：右侧淡入变大，左侧直接消失（无淡出）
+            let scale, opacity;
+            const fadeZone = 1.4;
+            const vanishAngle = -0.85;
 
-            // 根据 Z 深度计算缩放和透明度
-            let zProgress = (z + radiusZ * 1.6) / (radiusZ * 1.6);
-            zProgress = Math.max(0, Math.min(1, zProgress));
-
-            let scale = 0.5 + 0.5 * zProgress;
-            let opacity = zProgress * zProgress;
-
-            // 转到后方半圆时彻底隐藏
-            if (Math.cos(angle) < 0) opacity = 0;
+            if (angle > 0) {
+                // 右侧淡入并逐渐变大
+                let t = Math.max(0, 1 - angle / fadeZone);
+                opacity = t * t;
+                scale = 0.48 + 0.52 * t;
+            } else if (angle >= vanishAngle) {
+                // 正面可视区域，完全显示
+                opacity = 1;
+                scale = 1;
+            } else {
+                // 超出左侧阈值，直接消失
+                opacity = 0;
+                scale = 1;
+            }
 
             card.style.pointerEvents = opacity > 0.6 ? 'auto' : 'none';
-            card.style.zIndex = Math.round(zProgress * 100);
+            card.style.zIndex = opacity > 0.5 ? 100 : 0;
             
             // 注意这里位移映射的改变：x映射到X，parallaxY映射到Y
             card.style.transform = `translate3d(${x}px, ${parallaxY}px, ${z}px) scale(${scale})`;
@@ -3053,14 +3068,14 @@ function initHistoryCardsScroll() {
 
         if (targetOffset >= maxScroll + 0.4 && delta > 15) {
             let now = Date.now();
-            if (now - lastNavTime > 1000) {
+            if (now - lastNavTime > 2500) {
                 lastNavTime = now;
                 if (typeof window.goToPage === 'function') window.goToPage(3);
             }
         }
         if (targetOffset <= -0.4 && delta < -15) {
             let now = Date.now();
-            if (now - lastNavTime > 1000) {
+            if (now - lastNavTime > 2500) {
                 lastNavTime = now;
                 if (typeof window.goToPage === 'function') window.goToPage(1);
             }
@@ -3238,17 +3253,17 @@ document.addEventListener('DOMContentLoaded', function() {
             shapes[1][i3+1] = r1 * Math.sin(phi) * Math.sin(theta);
             shapes[1][i3+2] = r1 * Math.cos(phi);
 
-            // --- 形状 2: 时空沙漏/虫洞 ---
+            // --- 形状 2: 放射性能量场 ---
             const thetaG = Math.random() * 2 * Math.PI;
-            const throatRadius = 22; // 虫洞最细处（中心）的半径，确保不会挡住文字
-            const maxHeight = 30;    // 虫洞上下延伸的最大高度
-            const y = (Math.random() - 0.5) * 2 * maxHeight;
-            const thickness = Math.random() * 4; // 星云外壳的厚度
-            const r2 = throatRadius * Math.sqrt(1 + Math.pow(y / 12, 2)) + thickness;
+            const phiG = Math.acos(2 * Math.random() - 1); 
+            const safeZone = 28; // 中心绝对没有任何粒子的安全半径
+            const distance = safeZone + Math.pow(Math.random(), 2.5) * 40; 
+            const spikes = Math.pow(Math.sin(thetaG * 6) * Math.sin(phiG * 6), 4) * 15;
+            const r2 = distance + spikes;
 
-            shapes[2][i3] = r2 * Math.cos(thetaG);
-            shapes[2][i3+1] = y; // Y轴不再是压缩的，而是完全释放
-            shapes[2][i3+2] = r2 * Math.sin(thetaG);
+            shapes[2][i3] = r2 * Math.sin(phiG) * Math.cos(thetaG);
+            shapes[2][i3+1] = r2 * Math.cos(phiG) * 0.4; 
+            shapes[2][i3+2] = r2 * Math.sin(phiG) * Math.sin(thetaG);
 
             // --- 形状 3: 星环圆环 ---
             const R = 35;
