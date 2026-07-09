@@ -257,7 +257,7 @@ function renderTeam() {
             '</span>';
     }
 
-    var label1 = '<div class="credit-section-label"><span>创始人</span></div>';
+    var label1 = '<div class="credit-section-label"><span>联合创始人</span></div>';
     var row1 = '<div class="credit-names-row">' +
         founders.map(function(p) { return creditBtn(p, true); }).join('') +
         '</div>';
