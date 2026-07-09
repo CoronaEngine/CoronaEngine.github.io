@@ -118,21 +118,21 @@ function initSceneAccordion() {
 const bentoLayout = {
     // 左栏 · 创作者：零基础创作沙盒 + 4 个小块
     creatorGrid: [
-        { title: "零基础创作沙盒，让灵感即刻落地", tag: "Creation Sandbox", icon: "fas fa-wand-magic-sparkles", tone: "sandbox", detail: "专为学生与初学者打造，让创意不再被技术壁垒阻挡。告别传统繁杂的引擎面板，无论你是是否有美术与技术基础，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。" },
-        { title: "可视化编程", tag: "Visual Scripting", icon: "fas fa-puzzle-piece", tone: "sandbox", detail: "用直观的逻辑模块代替生涩代码，所见即所得。" },
-        { title: "协同编辑", tag: "AI Scene Assistant", icon: "fas fa-robot", tone: "sandbox", detail: "多人实时协作的场景编辑能力，像在线文档一样顺畅高效。" },
-        { title: "所见即所得", tag: "Beginner Ecosystem", icon: "fas fa-seedling", tone: "sandbox", detail: "搭建与游玩无缝切换，无需等待，随时随地测试你的每一个灵感。" },
-        { title: "AI 助手", tag: "Real-Time Collaboration", image: "render/3.png", icon: "fas fa-users-gear", tone: "sandbox", detail: "智能化辅助构建、美术资产一键生成，大幅降低场景搭建的时间成本。" }
+        { title: "零基础创作沙盒，让灵感即刻落地", tag: "Creation Sandbox", icon: "fas fa-wand-magic-sparkles", tone: "sandbox", detail: "专为学生与初学者打造，让创意不再被技术壁垒阻挡。告别繁杂的引擎面板，无论你是否具备美术与技术基础，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。" },
+        { title: "可视化编程", tag: "Visual Scripting", icon: "fas fa-puzzle-piece", tone: "sandbox", detail: "用直观的逻辑节点代替晦涩代码，拖拽连线即可编排游戏行为，让想法一步步变成可玩的机制。" },
+        { title: "协同编辑", tag: "Real-Time Collaboration", icon: "fas fa-users", tone: "sandbox", detail: "多人实时协作编辑同一场景，改动即时同步，像在线文档一样顺畅，团队创作不再互相等待。" },
+        { title: "所见即所得", tag: "WYSIWYG", icon: "fas fa-play", tone: "sandbox", detail: "编辑与运行无缝切换，无需漫长的构建等待，随时点击即玩，让每一个灵感都能立刻得到验证。" },
+        { title: "AI 助手", tag: "AI Assistant", image: "render/3.png", icon: "fas fa-robot", tone: "sandbox", detail: "AI 全程陪伴创作：智能辅助搭建场景、一键生成美术资产，把繁琐的重复劳动交给它，大幅缩短从想法到成品的时间。" }
     ],
     // 右栏 · 开发者：核心大块 + 6 个尺寸参差的小块
     devGrid: [
-        { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
-        { title: "“声光力”", tag: "Global Illumination", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。" },
-        { title: "立体显示", tag: "Async", icon: "fas fa-bolt", tone: "research", detail: "异步任务调度模型，IO 与计算解耦并行，避免阻塞主线程，保障大规模场景的流畅运行。" },
-        { title: "流式加载", tag: "Physics", icon: "fas fa-atom", tone: "research", detail: "刚体动力学与碰撞检测系统，为交互与仿真提供真实可信的物理表现。" },
-        { title: "三层架构", tag: "Light Field · 裸眼3D", image: "render/2.png", icon: "fas fa-cube", tone: "research", detail: "面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。" },
-        { title: "多线程", tag: "Embedded DSL", icon: "fas fa-code", tone: "research", detail: "自研嵌入式领域特定语言（EDSL），统一 CPU-GPU 异构编程，以简洁语法释放极致算力。" },
-        { title: "自研EDSL语言", tag: "Streaming Loading", icon: "fas fa-download", tone: "research", detail: "大场景资源按需流式调度，实现超大世界的无缝加载与渲染，显著降低内存占用。" },
+        { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为游戏开发、影视制作等数字内容创作中的特殊需求而设计，提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
+        { title: "“声光力”", tag: "Sound · Light · Force", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "以声、光、力三位一体构建沉浸世界：全局光照还原物理级光影，空间音频营造三维声场，刚体模拟驱动真实碰撞，骨骼动画赋予角色鲜活姿态。" },
+        { title: "立体显示", tag: "Light Field · Naked-Eye 3D", icon: "fas fa-cube", tone: "research", detail: "面向光场显示设备的实时渲染管线，无需佩戴任何外设即可呈现真实景深的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建，兼顾立体感与实时性能。" },
+        { title: "流式加载", tag: "Streaming Loading", icon: "fas fa-download", tone: "research", detail: "大场景资源按需流式调度，边浏览边加载，实现超大世界的无缝进出，在保证画面连续的同时显著降低内存占用。" },
+        { title: "三层架构", tag: "Layered Architecture", image: "render/2.png", icon: "fas fa-layer-group", tone: "research", detail: "清晰的三层分工：C++ 底层专注核心算法与高性能计算，Python 层承载业务后端与 AI 逻辑，HTML/JS 层负责前端交互与呈现，各层解耦、协同高效。" },
+        { title: "多线程", tag: "Multithreading", icon: "fas fa-bolt", tone: "research", detail: "异步任务调度模型，将 IO 与计算解耦并行，充分榨取多核算力，避免阻塞主线程，保障大规模场景稳定流畅运行。" },
+        { title: "自研EDSL语言", tag: "Embedded DSL", icon: "fas fa-code", tone: "research", detail: "自研嵌入式领域特定语言（EDSL），统一 CPU-GPU 异构编程模型，以简洁直观的语法释放底层极致算力，让高性能代码更易编写与维护。" },
     ]
 };
 
