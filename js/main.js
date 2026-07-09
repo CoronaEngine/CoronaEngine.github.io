@@ -34,14 +34,14 @@ const scrollingMembers = [
 
 // ================= 其它数据 =================
 const patentsData = [
-    { label: "资源调度与场景预览系统", tag: "2026·国家级", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
-    { label: "立体显示交互系统", tag: "2025·国家级", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
-    { label: "三维美术资源生成系统", tag: "2024·省级", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
-    { label: "分布式仿真辅助设计系统", tag: "2022·国家级", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
-    { label: "MLT分布式渲染系统", tag: "2020·国家级", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
-    { label: "物理仿真海洋探索系统", tag: "2019·国家级", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
-    { label: "多语言实时交互仿真系统", tag: "2019·省级", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
-    { label: "编程语言教学系统", tag: "2018·国家级", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
+    { label: "流式加载与大模型", tag: "2026·国家级", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
+    { label: "立体显示与物理仿真", tag: "2025·国家级", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
+    { label: "三维美术资源生成", tag: "2024·省级", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
+    { label: "三维重建与离线渲染", tag: "2022·国家级", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
+    { label: "分布式离线渲染", tag: "2020·国家级", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
+    { label: "实时光线追踪", tag: "2019·国家级", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
+    { label: "实时光线追踪", tag: "2019·省级", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
+    { label: "实时光线追踪", tag: "2018·国家级", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
 ];
 
 // CCF-A 顶会论文（金色 · 最内层）
