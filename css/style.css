@@ -1438,3 +1438,59 @@ nav {
         grid-template-columns: 1fr;
     }
 }
+
+/* ================= 发展历程 3D 旋转散点覆盖样式 ================= */
+.history-scroll-container {
+    perspective: 1200px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.history-cards-track {
+    transform-style: preserve-3d !important;
+    position: relative !important;
+    display: block !important; 
+    padding: 0 !important;
+}
+
+.history-card-col {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    width: 460px !important;
+    margin-left: -230px !important; /* 卡片宽度的负一半，使其居中 */
+    margin-top: -120px !important; 
+    padding: 0 !important;
+    justify-content: center !important;
+    transform-origin: center center !important;
+    will-change: transform, opacity !important;
+}
+
+/* 彻底移除旧版的所有横向/纵向连线 */
+.history-card-col::after,
+.history-card-col::before,
+.history-card::before {
+    display: none !important;
+}
+
+/* 增强卡片的深色玻璃材质，去除默认背景色 */
+.history-card-col:nth-child(odd),
+.history-card-col:nth-child(even) {
+    justify-content: center !important;
+}
+
+.history-card {
+    background: rgba(8, 12, 28, 0.7) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* 悬停发光效果 */
+.history-card:hover {
+    border-color: rgba(255, 204, 51, 0.4) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 204, 51, 0.1) !important;
+}

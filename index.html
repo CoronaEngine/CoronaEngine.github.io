@@ -71,7 +71,7 @@
        .history-scroll-container {
            position: relative;
            width: 100%;
-            height: 680px;
+            height: calc(100vh - 80px);
            overflow: hidden;
            margin: 0;
            padding: 0;
@@ -84,6 +84,8 @@
            gap: 0;
            will-change: transform;
            position: relative;
+           perspective: 1100px;
+           transform-style: preserve-3d;
        }
         .history-card-col {
             flex-shrink: 0;
@@ -93,6 +95,10 @@
             justify-content: center;
             padding: 0 30px;
             position: relative;
+            transform-style: preserve-3d;
+        }
+        .history-card-future {
+            pointer-events: none;
         }
         .history-card-col:nth-child(odd) {
             justify-content: flex-start;
@@ -224,7 +230,7 @@
         .history-scroll-progress {
             position: absolute;
             bottom: 24px;
-            left: 32px;
+            left: 20px;
             width: 160px;
             height: 4px;
             background: rgba(255,255,255,0.06);
@@ -242,6 +248,18 @@
             transition: width 0.08s linear;
         }
 
+
+        .history-scroll-percent {
+            position: absolute;
+            bottom: 34px;
+            left: 20px;
+            color: #ffcc33;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            font-variant-numeric: tabular-nums;
+            z-index: 10;
+        }
         /* 动画入场 */
         .history-card-anim-hidden {
             opacity: 0;
@@ -1283,7 +1301,7 @@ body.menu-open {
     }
 
    .history-scroll-container {
-        height: 480px;
+        height: calc(100vh - 100px);
    }
     .history-card-col {
         width: 380px;
@@ -2449,6 +2467,17 @@ body.menu-open {
             opacity: 0 !important;
             transform: none !important;
         }
+
+        /* 发展历程页铺满屏幕 */
+        #page-2 .page-scroll {
+            padding: 80px 0 0 0;
+            overflow: hidden;
+        }
+        #page-2 .content-stage {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
     </style>
 </head>
 <body data-page="0">
@@ -2579,13 +2608,11 @@ body.menu-open {
                                     <p>深度重构，持续打磨，厚积薄发。支撑高校赛事，学术课题深化，主办学科竞赛，以赛促研打磨引擎。聚焦渲染与裸眼 3D，冲刺顶会成果。</p>
                                 </div>
                             </div>
-
-                        
-
 </div>
                         <div class="history-scroll-progress" aria-hidden="true">
                             <span id="historyProgressBar"></span>
                         </div>
+                        <span class="history-scroll-percent" id="historyPercent">2017</span>
                     </div>
                 </div>
             </div>
@@ -2860,6 +2887,14 @@ function initShellNavigation() {
 
     window.addEventListener('wheel', function(event) {
         if (event.target.closest('.member-modal-overlay.active, .dl-overlay.active, .team-scroll-wrap')) return;
+        if (Date.now() < (window.historyEdgeScrollLockUntil || 0)) {
+            event.preventDefault();
+            return;
+        }
+        if (currentPage === 2) {
+            event.preventDefault();
+            return;
+        }
         const scroller = event.target.closest('.page-scroll') || activePageScroll();
         if (scroller === activePageScroll() && canScrollWithin(scroller, event.deltaY)) return;
 
@@ -2970,164 +3005,224 @@ function initHistoryCardsScroll() {
     const container = document.getElementById('historyScrollWrap');
     const track = document.getElementById('historyCardsTrack');
     const progressBar = document.getElementById('historyProgressBar');
+    const percentEl = document.getElementById('historyPercent');
     if (!container || !track) return;
 
+    track.querySelectorAll('.history-card-loop-clone, .history-card-future').forEach(extra => extra.remove());
+    const realCards = Array.from(track.querySelectorAll('.history-card-col'));
+    if (realCards.length === 0) return;
+    const futureCard = document.createElement('div');
+    futureCard.className = 'history-card-col history-card-future';
+    futureCard.setAttribute('aria-hidden', 'true');
+    futureCard.innerHTML = `
+        <div class="history-card lane-merge">
+            <div class="history-card-icon"></div>
+            <span class="history-card-year">Future</span>
+            <h3>后续敬请期待</h3>
+            <p>更多技术突破与版本规划正在持续推进</p>
+        </div>
+    `;
+    track.appendChild(futureCard);
+    const cards = realCards.concat(futureCard);
+
     let scrollOffset = 0;
-    let maxScroll = 0;
-    let autoSpeed = 2.5;
-    let scrollVelocity = 0;
-    let rafId = null;
-    let friction = 0.96;
-    let wheelActive = false;
-    let wheelTimeout = null;
-    let autoPlaying = true;
+    let targetOffset = 0;
+    let isTicking = false;
+    const lerpFactor = 0.34; // 更贴手的阻尼系数
+    const maxScroll = realCards.length - 1;
+    const historyYears = [2017, 2018, 2020, 2022, 2022, 2025, 2026];
+    const staggerY = [-145, 165, -175, 145, -135, 180, -150];
+    const wheelThreshold = 6;
+    const wheelSensitivity = 0.0066;
+    const snapDelay = 240;
+    const edgeExitDelay = 560;
+    const touchThreshold = 42;
+    let snapTimer = 0;
+    let edgeReadySide = 0;
+    let edgeReadyAt = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
 
-    function updateMaxScroll() {
-        maxScroll = Math.max(0, track.scrollWidth - container.clientWidth);
-        applyScroll();
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
     }
 
-    function applyScroll() {
-        track.style.transform = 'translateX(' + (-scrollOffset) + 'px)';
-        updateProgress();
+    function resetEdgeGate() {
+        edgeReadySide = 0;
+        edgeReadyAt = 0;
     }
 
-    function updateProgress() {
-        if (!progressBar) return;
-        var pct = maxScroll > 0 ? (scrollOffset / maxScroll) * 100 : 0;
-        progressBar.style.width = Math.min(100, pct) + '%';
-    }
-
-    function tick() {
-        if (maxScroll <= 0) { rafId = requestAnimationFrame(tick); return; }
-
-        if (autoPlaying) {
-            scrollOffset += scrollVelocity;
+    function updateAnimation() {
+        scrollOffset += (targetOffset - scrollOffset) * lerpFactor;
+        if (Math.abs(targetOffset - scrollOffset) < 0.001) {
+            scrollOffset = targetOffset;
+            isTicking = false;
         }
 
-        if (!wheelActive && autoPlaying) {
-            if (scrollVelocity > autoSpeed + 0.02) {
-                scrollVelocity = scrollVelocity * friction + autoSpeed * (1 - friction);
-            } else if (scrollVelocity < autoSpeed - 0.02) {
-                scrollVelocity = scrollVelocity * friction + autoSpeed * (1 - friction);
-            } else {
-                scrollVelocity = autoSpeed;
+        cards.forEach((card, index) => {
+            const offset = index - scrollOffset;
+            const absOffset = Math.abs(offset);
+            let x = offset * 360;
+            let z = -Math.max(0, offset) * 48;
+            const staggerIndex = card.classList.contains('history-card-future') ? 1 : index;
+            const parallaxY = staggerY[staggerIndex % staggerY.length];
+            let scale = clamp(1 - Math.max(0, offset) * 0.1 - Math.max(0, -offset) * 0.06, 0.66, 1);
+            let opacity = clamp(1 - Math.max(0, offset - 0.1) * 0.34, 0.12, 1);
+            let rotateY = 0;
+            let zIndex = 100 - Math.round(absOffset * 12);
+
+            if (card.classList.contains('history-card-future') && offset >= 0) {
+                x += 90;
+            }
+
+            if (offset < 0) {
+                const exitProgress = clamp(-offset, 0, 1.35);
+                x = offset * 520 - exitProgress * 70;
+                z = exitProgress * 180;
+                scale = clamp(1 + Math.max(0, exitProgress - 0.18) * 0.34, 1, 1.36);
+                rotateY = clamp(exitProgress * 34, 0, 42);
+                opacity = clamp(1 - Math.max(0, exitProgress - 0.22) * 0.72, 0.18, 1);
+                zIndex = 140 - Math.round(exitProgress * 8);
+            }
+
+            if (offset < -1.18) {
+                opacity = 0;
+                zIndex = 0;
+            }
+
+            card.style.pointerEvents = absOffset < 0.45 && opacity > 0.6 ? 'auto' : 'none';
+            card.style.zIndex = String(zIndex);
+            card.style.transformOrigin = offset < 0 ? 'right center' : 'center center';
+            card.style.transform = `translate3d(${x}px, ${parallaxY}px, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
+            card.style.opacity = opacity.toFixed(3);
+        });
+
+        if (progressBar) {
+            const progress = maxScroll > 0 ? clamp(scrollOffset / maxScroll, 0, 1) : 0;
+            progressBar.style.width = (progress * 100).toFixed(2) + '%';
+            if (percentEl) {
+                const yearIndex = clamp(scrollOffset, 0, maxScroll);
+                const lowerIndex = Math.floor(yearIndex);
+                const upperIndex = Math.min(lowerIndex + 1, historyYears.length - 1);
+                const localProgress = yearIndex - lowerIndex;
+                const year = Math.round(historyYears[lowerIndex] + (historyYears[upperIndex] - historyYears[lowerIndex]) * localProgress);
+                percentEl.textContent = String(year);
             }
         }
 
-        // 到底 -> 停
-        if (scrollOffset >= maxScroll) {
-            scrollOffset = maxScroll;
-            if (autoPlaying) {
-                autoPlaying = false;
-                scrollVelocity = 0;
-                applyScroll();
-                rafId = requestAnimationFrame(tick);
-                return;
-            }
+        const edgeSide = targetOffset <= 0 && scrollOffset <= 0.001 ? -1 :
+            targetOffset >= maxScroll && scrollOffset >= maxScroll - 0.001 ? 1 : 0;
+        if (edgeSide === 0) {
+            resetEdgeGate();
+        } else if (edgeReadySide !== edgeSide) {
+            edgeReadySide = edgeSide;
+            edgeReadyAt = Date.now();
         }
 
-        if (scrollOffset < 0) scrollOffset = 0;
-
-        applyScroll();
-        rafId = requestAnimationFrame(tick);
+        if (isTicking) requestAnimationFrame(updateAnimation);
     }
 
-    let lastNavTime = 0;
+    function requestRender() {
+        if (!isTicking) {
+            isTicking = true;
+            requestAnimationFrame(updateAnimation);
+        }
+    }
+
+    function snapToNearestCard() {
+        targetOffset = Math.round(clamp(targetOffset, 0, maxScroll));
+        requestRender();
+    }
+
+    function scheduleSnap() {
+        window.clearTimeout(snapTimer);
+        snapTimer = window.setTimeout(snapToNearestCard, snapDelay);
+    }
+
+    function handleEdgeExit(direction) {
+        const atLast = direction > 0 && targetOffset >= maxScroll && scrollOffset >= maxScroll - 0.08;
+        const atFirst = direction < 0 && targetOffset <= 0 && scrollOffset <= 0.08;
+        if (!atLast && !atFirst) return false;
+
+        const now = Date.now();
+        if (edgeReadySide !== direction || edgeReadyAt === 0) {
+            edgeReadySide = direction;
+            edgeReadyAt = now;
+            return true;
+        }
+
+        if (now - edgeReadyAt >= edgeExitDelay && typeof window.goToPage === 'function') {
+            window.historyEdgeScrollLockUntil = now + 1500;
+            window.goToPage(direction > 0 ? 3 : 1);
+            resetEdgeGate();
+        }
+        return true;
+    }
+
+    function pushHistory(delta) {
+        const direction = delta > 0 ? 1 : -1;
+        targetOffset = clamp(targetOffset + delta * wheelSensitivity, 0, maxScroll);
+        requestRender();
+
+        if (targetOffset > 0 && targetOffset < maxScroll) {
+            resetEdgeGate();
+        }
+
+        if (handleEdgeExit(direction)) return;
+        scheduleSnap();
+    }
 
     function onWheel(event) {
-        if (maxScroll <= 0) return;
+        const historyPage = document.getElementById('page-2');
+        if (!historyPage || !historyPage.classList.contains('active')) return;
         event.preventDefault();
         event.stopPropagation();
-
-        // 唤醒
-        if (!autoPlaying) {
-            autoPlaying = true;
-            scrollVelocity = autoSpeed;
-        }
-
-        // 方向敏感加速
-        if (event.deltaY > 0) {
-            scrollVelocity += event.deltaY * 12;
-        } else {
-            scrollVelocity += event.deltaY * 0.6;
-        }
-        scrollVelocity = Math.max(-8, Math.min(scrollVelocity, 16));
-
-        // 到底 -> 下一页（往前推）
-        if (scrollOffset >= maxScroll - 5 && event.deltaY > 0 && scrollVelocity > autoSpeed) {
-            var now = Date.now();
-            if (now - lastNavTime > 1200) {
-                lastNavTime = now;
-                scrollOffset = maxScroll;
-                autoPlaying = false;
-                scrollVelocity = 0;
-                applyScroll();
-                if (typeof window.goToPage === 'function') window.goToPage(3);
-            }
-            return;
-        }
-
-        // 到开头 -> 上一页（往回拉）
-        if (scrollOffset <= 5 && event.deltaY < 0 && scrollVelocity < 0) {
-            var now2 = Date.now();
-            if (now2 - lastNavTime > 1200) {
-                lastNavTime = now2;
-                scrollOffset = 0;
-                autoPlaying = false;
-                scrollVelocity = 0;
-                applyScroll();
-                if (typeof window.goToPage === 'function') window.goToPage(1);
-            }
-            return;
-        }
-
-        wheelActive = true;
-        if (wheelTimeout) clearTimeout(wheelTimeout);
-        wheelTimeout = setTimeout(function() {
-            wheelActive = false;
-        }, 350);
-
-        applyScroll();
+        const delta = event.deltaY || event.deltaX;
+        if (Math.abs(delta) < wheelThreshold) return;
+        pushHistory(delta);
     }
+
+    container.addEventListener('touchstart', e => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        window.clearTimeout(snapTimer);
+    }, { passive: true });
+
+    container.addEventListener('touchmove', e => {
+        if (!e.touches || e.touches.length === 0) return;
+        const diffX = touchStartX - e.touches[0].clientX;
+        const diffY = touchStartY - e.touches[0].clientY;
+        if (Math.abs(diffX) < touchThreshold || Math.abs(diffX) < Math.abs(diffY)) return;
+        targetOffset = clamp(targetOffset + diffX * 0.01, 0, maxScroll);
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        resetEdgeGate();
+        requestRender();
+    }, { passive: true });
+
+    container.addEventListener('touchend', () => {
+        scheduleSnap();
+    }, { passive: true });
 
     container.addEventListener('wheel', onWheel, { passive: false });
-
     var pageScroll = container.closest('.page-scroll');
-    if (pageScroll) {
-        pageScroll.addEventListener('wheel', onWheel, { passive: false, capture: true });
-    }
+    if (pageScroll) pageScroll.addEventListener('wheel', onWheel, { passive: false, capture: true });
 
-    scrollVelocity = autoSpeed;
-    rafId = requestAnimationFrame(tick);
-    window.setTimeout(updateMaxScroll, 150);
-    window.addEventListener('resize', updateMaxScroll);
-
-    var cards = Array.prototype.slice.call(track.querySelectorAll('.history-card'));
-    cards.forEach(function(card) {
-        card.classList.add('history-card-anim-hidden');
+    cards.forEach(card => {
+        card.classList.remove('history-card-anim-hidden', 'history-card-anim-visible');
+        card.style.transition = 'none';
     });
 
-    window.playHistoryAnimation = function() {
-        scrollOffset = 0;
-        scrollVelocity = autoSpeed;
-        autoPlaying = true;
-        applyScroll();
-        updateMaxScroll();
+    requestRender();
 
-        cards.forEach(function(card, i) {
-            card.classList.remove('history-card-anim-visible');
-            card.classList.add('history-card-anim-hidden');
-            (function(c, idx) {
-                window.setTimeout(function() {
-                    c.classList.remove('history-card-anim-hidden');
-                    c.classList.add('history-card-anim-visible');
-                }, idx * 130 + 50);
-            })(card, i);
-        });
+    window.playHistoryAnimation = function() {
+        scrollOffset = -1;
+        targetOffset = 0;
+        resetEdgeGate();
+        window.clearTimeout(snapTimer);
+        requestRender();
     };
 }
-
 
 function initTeamScroll() {
     const wrap = document.getElementById('teamScrollWrap');
@@ -3228,7 +3323,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        const particleCount = 45000; 
+        const particleCount = 62000; 
         const geometry = new THREE.BufferGeometry();
         
         const shapes = [];
@@ -3266,17 +3361,23 @@ document.addEventListener('DOMContentLoaded', function() {
             shapes[1][i3+1] = r1 * Math.sin(phi) * Math.sin(theta);
             shapes[1][i3+2] = r1 * Math.cos(phi);
 
-            // --- 形状 2: 时空沙漏/虫洞 ---
-            const thetaG = Math.random() * 2 * Math.PI;
-            const throatRadius = 22; // 虫洞最细处（中心）的半径，确保不会挡住文字
-            const maxHeight = 30;    // 虫洞上下延伸的最大高度
-            const y = (Math.random() - 0.5) * 2 * maxHeight;
-            const thickness = Math.random() * 4; // 星云外壳的厚度
-            const r2 = throatRadius * Math.sqrt(1 + Math.pow(y / 12, 2)) + thickness;
-
-            shapes[2][i3] = r2 * Math.cos(thetaG);
-            shapes[2][i3+1] = y; // Y轴不再是压缩的，而是完全释放
-            shapes[2][i3+2] = r2 * Math.sin(thetaG);
+            // --- Shape 2: hollow academic vortex ---
+            // Keep the center empty; particles sit on spiral arms and rotate with the page config.
+            const vortexArms = 5;
+            const armIndex = i % vortexArms;
+            const coreRadius = 20;
+            const outerRadius = 76;
+            const radialT = Math.pow(Math.random(), 0.58);
+            const r2 = coreRadius + radialT * (outerRadius - coreRadius);
+            const armAngle = armIndex * ((Math.PI * 2) / vortexArms);
+            const spiralTwist = radialT * Math.PI * 3.6;
+            const swirlNoise = (Math.random() - 0.5) * (0.16 + radialT * 0.72);
+            const thetaG = armAngle + spiralTwist + swirlNoise;
+            const bandNoise = (Math.random() - 0.5) * (2.4 + radialT * 8.5);
+            const verticalWave = Math.sin(thetaG * 1.7 + radialT * Math.PI * 2) * (1.5 + radialT * 3.8);
+            shapes[2][i3] = (r2 + bandNoise) * Math.cos(thetaG);
+            shapes[2][i3+1] = verticalWave + (Math.random() - 0.5) * 3.2;
+            shapes[2][i3+2] = (r2 + bandNoise) * Math.sin(thetaG);
 
             // --- 形状 3: 星环圆环 ---
             const R = 35;
@@ -3435,12 +3536,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // ==========================================
         const pageShapeMap = [0, 1, 1, 2, 5, 3];
         const pageConfigs = [
-            { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
-            { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5 },
-            { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffccaa, parallax: 0.5 },
-            { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.02, tint: 0xeebbff, parallax: 1.2 },
-            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0xaaccff, parallax: 1.5 },
-            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2 }
+            { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0, particleSize: 0.25, particleOpacity: 0.95 },
+            { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5, particleSize: 0.25, particleOpacity: 0.95 },
+            { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffccaa, parallax: 0.5, particleSize: 0.25, particleOpacity: 0.95 },
+            { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.08, tint: 0xffd6ff, parallax: 0, particleSize: 0.34, particleOpacity: 1.0 },
+            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0xaaccff, parallax: 1.5, particleSize: 0.25, particleOpacity: 0.95 },
+            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2, particleSize: 0.25, particleOpacity: 0.95 }
         ];
 
         let targetCam = new THREE.Vector3(pageConfigs[0].cam.x, pageConfigs[0].cam.y, pageConfigs[0].cam.z);
@@ -3450,10 +3551,14 @@ document.addEventListener('DOMContentLoaded', function() {
         let targetRotSpeed = pageConfigs[0].rotSpeed;
         let targetTint = new THREE.Color(pageConfigs[0].tint);
         let targetParallax = pageConfigs[0].parallax;
+        let targetParticleSize = pageConfigs[0].particleSize || 0.25;
+        let targetParticleOpacity = pageConfigs[0].particleOpacity || 0.95;
 
         let currentRotSpeed = targetRotSpeed;
         let currentRotationY = 0;
         let currentTint = new THREE.Color(pageConfigs[0].tint);
+        material.size = targetParticleSize;
+        material.opacity = targetParticleOpacity;
 
         function applySceneConfig(index) {
             const cfg = pageConfigs[index];
@@ -3463,6 +3568,8 @@ document.addEventListener('DOMContentLoaded', function() {
             targetRotSpeed = cfg.rotSpeed;
             targetTint.setHex(cfg.tint);
             targetParallax = cfg.parallax;
+            targetParticleSize = cfg.particleSize || 0.25;
+            targetParticleOpacity = cfg.particleOpacity || 0.95;
         }
 
         // ==========================================
@@ -3497,6 +3604,8 @@ document.addEventListener('DOMContentLoaded', function() {
             currentRotSpeed += (targetRotSpeed - currentRotSpeed) * 0.02;
             currentTint.lerp(targetTint, 0.03);
             material.color.copy(currentTint);
+            material.size += (targetParticleSize - material.size) * 0.05;
+            material.opacity += (targetParticleOpacity - material.opacity) * 0.05;
 
             const positions = geometry.attributes.position.array;
             const shapeIndex = typeof pageShapeMap[currentPage] === 'number' ? pageShapeMap[currentPage] : currentPage;
