@@ -3001,15 +3001,28 @@ function initHistoryCardsScroll() {
     let targetOffset = 0;
     let isTicking = false;
     const lerpFactor = 0.08; // 阻尼顺滑系数
-
-    // --- 改为水平 3D 旋转的轨道参数 ---
-    const radiusX = 420; // 决定左右散开的宽度
-    const radiusZ = 450; // 决定前后纵深
-    const cardAngleSpacing = Math.PI / 4.5; 
     const maxScroll = cards.length - 1;
-
-    // Y 轴交错散点排布 (让卡片上下错落，不至于死板地排成一横排，加大间距避免重叠)
     const staggerY = [-80, 95, -105, 80, -70, 110, -90];
+    const wheelThreshold = 18;
+    const wheelStepDelay = 650;
+    const edgeAttemptDelay = 450;
+    const touchThreshold = 50;
+    let lastWheelStepTime = 0;
+    let edgeNavDirection = 0;
+    let edgeNavCount = 0;
+    let lastEdgeNavAttempt = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    function resetEdgeNavigation() {
+        edgeNavDirection = 0;
+        edgeNavCount = 0;
+        lastEdgeNavAttempt = 0;
+    }
 
     function updateAnimation() {
         scrollOffset += (targetOffset - scrollOffset) * lerpFactor;
@@ -3019,44 +3032,28 @@ function initHistoryCardsScroll() {
         }
 
         cards.forEach((card, index) => {
-            let angle = (index - scrollOffset) * cardAngleSpacing;
-            
-            // 线性水平移动，无弧度
-            let offset = index - scrollOffset;
-            let x = offset * 460;
-            let z = 0;
-            let parallaxY = staggerY[index % staggerY.length];
+            const offset = index - scrollOffset;
+            const x = offset * 300;
+            const z = 0;
+            const parallaxY = staggerY[index % staggerY.length];
+            let scale = clamp(1 - offset * 0.12, 0.62, 1);
+            let opacity = clamp(1 - Math.max(0, offset - 0.15) * 0.35, 0, 1);
+            let zIndex = 100 - Math.round(Math.abs(offset) * 10);
 
-            // 翻书式动画：右侧淡入变大，左侧直接消失（无淡出）
-            let scale, opacity;
-            const fadeZone = 1.4;
-            const vanishAngle = -0.85;
-
-            if (angle > 0) {
-                // 右侧淡入并逐渐变大
-                let t = Math.max(0, 1 - angle / fadeZone);
-                opacity = t * t;
-                scale = 0.48 + 0.52 * t;
-            } else if (angle >= vanishAngle) {
-                // 正面可视区域，完全显示
-                opacity = 1;
-                scale = 1;
-            } else {
-                // 超出左侧阈值，直接消失
+            if (offset < -0.35) {
                 opacity = 0;
                 scale = 1;
+                zIndex = 0;
             }
 
-            card.style.pointerEvents = opacity > 0.6 ? 'auto' : 'none';
-            card.style.zIndex = opacity > 0.5 ? 100 : 0;
-            
-            // 注意这里位移映射的改变：x映射到X，parallaxY映射到Y
+            card.style.pointerEvents = Math.abs(offset) < 0.45 && opacity > 0.6 ? 'auto' : 'none';
+            card.style.zIndex = String(zIndex);
             card.style.transform = `translate3d(${x}px, ${parallaxY}px, ${z}px) scale(${scale})`;
             card.style.opacity = opacity.toFixed(3);
         });
 
         if (progressBar) {
-            let progress = Math.max(0, Math.min(1, scrollOffset / maxScroll));
+            const progress = maxScroll > 0 ? clamp(scrollOffset / maxScroll, 0, 1) : 0;
             progressBar.style.width = (progress * 100).toFixed(2) + '%';
             if (percentEl) percentEl.textContent = (progress * 100).toFixed(0) + '%';
         }
@@ -3071,27 +3068,12 @@ function initHistoryCardsScroll() {
         }
     }
 
-    let edgeNavDirection = 0;
-    let edgeNavCount = 0;
-    let lastEdgeNavAttempt = 0;
-    function onWheel(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        let delta = event.deltaY || event.deltaX;
-        
-        targetOffset += delta * 0.0025;
-        targetOffset = Math.max(-0.5, Math.min(targetOffset, maxScroll + 0.5));
-        requestRender();
+    function tryEdgeNavigation(direction) {
+        const atLast = direction > 0 && targetOffset >= maxScroll && scrollOffset >= maxScroll - 0.05;
+        const atFirst = direction < 0 && targetOffset <= 0 && scrollOffset <= 0.05;
+        if (!atLast && !atFirst) return false;
 
-        const edgeDirection = scrollOffset >= maxScroll - 0.05 && delta > 15 ? 1 :
-            (scrollOffset <= 0.05 && delta < -15 ? -1 : 0);
-
-        if (edgeDirection === 0) {
-            edgeNavDirection = 0;
-            edgeNavCount = 0;
-            return;
-        }
-
+        const edgeDirection = direction > 0 ? 1 : -1;
         const now = Date.now();
         if (edgeNavDirection !== edgeDirection) {
             edgeNavDirection = edgeDirection;
@@ -3099,29 +3081,52 @@ function initHistoryCardsScroll() {
             lastEdgeNavAttempt = 0;
         }
 
-        if (now - lastEdgeNavAttempt < 450) return;
+        if (now - lastEdgeNavAttempt < edgeAttemptDelay) return true;
         lastEdgeNavAttempt = now;
         edgeNavCount += 1;
 
         if (edgeNavCount >= 2 && typeof window.goToPage === 'function') {
             window.goToPage(edgeDirection > 0 ? 3 : 1);
-            edgeNavCount = 0;
+            resetEdgeNavigation();
         }
+        return true;
     }
 
-    // 移动端滑动支持（改为横向滑动体验更好）
-    let touchStartX = 0;
-    let baseOffset = 0;
+    function stepHistory(direction) {
+        const nextOffset = targetOffset + direction;
+        if (nextOffset >= 0 && nextOffset <= maxScroll) {
+            targetOffset = nextOffset;
+            resetEdgeNavigation();
+            requestRender();
+            return true;
+        }
+        return tryEdgeNavigation(direction);
+    }
+
+    function onWheel(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const delta = event.deltaY || event.deltaX;
+        if (Math.abs(delta) < wheelThreshold) return;
+
+        const now = Date.now();
+        if (now - lastWheelStepTime < wheelStepDelay) return;
+        lastWheelStepTime = now;
+
+        stepHistory(delta > 0 ? 1 : -1);
+    }
+
     container.addEventListener('touchstart', e => {
         touchStartX = e.touches[0].clientX;
-        baseOffset = targetOffset;
+        touchStartY = e.touches[0].clientY;
     }, { passive: true });
-    
-    container.addEventListener('touchmove', e => {
-        let diffX = touchStartX - e.touches[0].clientX;
-        targetOffset = baseOffset + diffX * 0.015;
-        targetOffset = Math.max(-0.5, Math.min(targetOffset, maxScroll + 0.5));
-        requestRender();
+
+    container.addEventListener('touchend', e => {
+        if (!e.changedTouches || e.changedTouches.length === 0) return;
+        const diffX = touchStartX - e.changedTouches[0].clientX;
+        const diffY = touchStartY - e.changedTouches[0].clientY;
+        if (Math.abs(diffX) < touchThreshold || Math.abs(diffX) < Math.abs(diffY)) return;
+        stepHistory(diffX > 0 ? 1 : -1);
     }, { passive: true });
 
     container.addEventListener('wheel', onWheel, { passive: false });
@@ -3130,18 +3135,18 @@ function initHistoryCardsScroll() {
 
     cards.forEach(card => {
         card.classList.remove('history-card-anim-hidden', 'history-card-anim-visible');
-        card.style.transition = 'none'; 
+        card.style.transition = 'none';
     });
-    
+
     requestRender();
 
     window.playHistoryAnimation = function() {
-        scrollOffset = -3; 
+        scrollOffset = -1;
         targetOffset = 0;
+        resetEdgeNavigation();
         requestRender();
     };
 }
-
 
 function initTeamScroll() {
     const wrap = document.getElementById('teamScrollWrap');
