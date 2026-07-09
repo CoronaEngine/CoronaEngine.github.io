@@ -3323,7 +3323,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        const particleCount = 45000; 
+        const particleCount = 62000; 
         const geometry = new THREE.BufferGeometry();
         
         const shapes = [];
@@ -3361,17 +3361,23 @@ document.addEventListener('DOMContentLoaded', function() {
             shapes[1][i3+1] = r1 * Math.sin(phi) * Math.sin(theta);
             shapes[1][i3+2] = r1 * Math.cos(phi);
 
-            // --- 形状 2: 放射性能量场 ---
-            const thetaG = Math.random() * 2 * Math.PI;
-            const phiG = Math.acos(2 * Math.random() - 1); 
-            const safeZone = 28; // 中心绝对没有任何粒子的安全半径
-            const distance = safeZone + Math.pow(Math.random(), 2.5) * 40; 
-            const spikes = Math.pow(Math.sin(thetaG * 6) * Math.sin(phiG * 6), 4) * 15;
-            const r2 = distance + spikes;
-
-            shapes[2][i3] = r2 * Math.sin(phiG) * Math.cos(thetaG);
-            shapes[2][i3+1] = r2 * Math.cos(phiG) * 0.4; 
-            shapes[2][i3+2] = r2 * Math.sin(phiG) * Math.sin(thetaG);
+            // --- Shape 2: hollow academic vortex ---
+            // Keep the center empty; particles sit on spiral arms and rotate with the page config.
+            const vortexArms = 5;
+            const armIndex = i % vortexArms;
+            const coreRadius = 20;
+            const outerRadius = 76;
+            const radialT = Math.pow(Math.random(), 0.58);
+            const r2 = coreRadius + radialT * (outerRadius - coreRadius);
+            const armAngle = armIndex * ((Math.PI * 2) / vortexArms);
+            const spiralTwist = radialT * Math.PI * 3.6;
+            const swirlNoise = (Math.random() - 0.5) * (0.16 + radialT * 0.72);
+            const thetaG = armAngle + spiralTwist + swirlNoise;
+            const bandNoise = (Math.random() - 0.5) * (2.4 + radialT * 8.5);
+            const verticalWave = Math.sin(thetaG * 1.7 + radialT * Math.PI * 2) * (1.5 + radialT * 3.8);
+            shapes[2][i3] = (r2 + bandNoise) * Math.cos(thetaG);
+            shapes[2][i3+1] = verticalWave + (Math.random() - 0.5) * 3.2;
+            shapes[2][i3+2] = (r2 + bandNoise) * Math.sin(thetaG);
 
             // --- 形状 3: 星环圆环 ---
             const R = 35;
@@ -3530,12 +3536,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // ==========================================
         const pageShapeMap = [0, 1, 1, 2, 5, 3];
         const pageConfigs = [
-            { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0 },
-            { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5 },
-            { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffccaa, parallax: 0.5 },
-            { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.02, tint: 0xeebbff, parallax: 1.2 },
-            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0xaaccff, parallax: 1.5 },
-            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2 }
+            { cam: {x: 0, y: 30, z: 70}, tiltX: 0.1, tiltZ: 0, rotSpeed: 0.05, tint: 0xffffff, parallax: 1.0, particleSize: 0.25, particleOpacity: 0.95 },
+            { cam: {x: 0, y: 0, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.08, tint: 0xccffaa, parallax: 1.5, particleSize: 0.25, particleOpacity: 0.95 },
+            { cam: {x: 40, y: 10, z: 50}, tiltX: 0, tiltZ: -0.1, rotSpeed: 0.03, tint: 0xffccaa, parallax: 0.5, particleSize: 0.25, particleOpacity: 0.95 },
+            { cam: {x: -30, y: 45, z: 45}, tiltX: 0.1, tiltZ: 0.1, rotSpeed: 0.08, tint: 0xffd6ff, parallax: 0, particleSize: 0.34, particleOpacity: 1.0 },
+            { cam: {x: 0, y: -20, z: 80}, tiltX: 0, tiltZ: 0, rotSpeed: 0.3, tint: 0xaaccff, parallax: 1.5, particleSize: 0.25, particleOpacity: 0.95 },
+            { cam: {x: 0, y: 40, z: 50}, tiltX: 0.2, tiltZ: 0, rotSpeed: 0.05, tint: 0xaaffff, parallax: 1.2, particleSize: 0.25, particleOpacity: 0.95 }
         ];
 
         let targetCam = new THREE.Vector3(pageConfigs[0].cam.x, pageConfigs[0].cam.y, pageConfigs[0].cam.z);
@@ -3545,10 +3551,14 @@ document.addEventListener('DOMContentLoaded', function() {
         let targetRotSpeed = pageConfigs[0].rotSpeed;
         let targetTint = new THREE.Color(pageConfigs[0].tint);
         let targetParallax = pageConfigs[0].parallax;
+        let targetParticleSize = pageConfigs[0].particleSize || 0.25;
+        let targetParticleOpacity = pageConfigs[0].particleOpacity || 0.95;
 
         let currentRotSpeed = targetRotSpeed;
         let currentRotationY = 0;
         let currentTint = new THREE.Color(pageConfigs[0].tint);
+        material.size = targetParticleSize;
+        material.opacity = targetParticleOpacity;
 
         function applySceneConfig(index) {
             const cfg = pageConfigs[index];
@@ -3558,6 +3568,8 @@ document.addEventListener('DOMContentLoaded', function() {
             targetRotSpeed = cfg.rotSpeed;
             targetTint.setHex(cfg.tint);
             targetParallax = cfg.parallax;
+            targetParticleSize = cfg.particleSize || 0.25;
+            targetParticleOpacity = cfg.particleOpacity || 0.95;
         }
 
         // ==========================================
@@ -3592,6 +3604,8 @@ document.addEventListener('DOMContentLoaded', function() {
             currentRotSpeed += (targetRotSpeed - currentRotSpeed) * 0.02;
             currentTint.lerp(targetTint, 0.03);
             material.color.copy(currentTint);
+            material.size += (targetParticleSize - material.size) * 0.05;
+            material.opacity += (targetParticleOpacity - material.opacity) * 0.05;
 
             const positions = geometry.attributes.position.array;
             const shapeIndex = typeof pageShapeMap[currentPage] === 'number' ? pageShapeMap[currentPage] : currentPage;
