@@ -3,9 +3,9 @@
 // link: 点击头像跳转的链接。如果留空，默认为 "#"
 
 const founders = [
-    {n: "范洪辉", r: "联合创始人", tags: ["教授", "博士", "硕士生导师"], b: "江苏理工学院教授、博士、硕士生导师，\"十四五\"计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", exp: "江苏理工学院教授、博士、硕士生导师，\"十四五\"计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", avatar: "images/Fan.jpg", link: "https://baike.baidu.com/item/%E8%8C%83%E6%B4%AA%E8%BE%89/63345374", detail: true},
-    {n: "Zero", r: "联合创始人", tags: ["资深图形引擎工程师"], b: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", exp: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
-    {n: "邹刘磊", r: "联合创始人", tags: ["某初创公司CTO", "校外硕士研究生导师"], b: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", exp: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou", detail: true}
+    {n: "范洪辉", r: "联合创始人", tags: ["教授", "博士", "硕士研究生导师"], b: "教授、博士、硕士研究生导师，\"十四五\"计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", exp: "江苏理工学院教授、博士、硕士生导师，\"十四五\"计算机科学与技术省重点学科带头人，软件工程国家一流专业负责人，面向对象程序设计国家一流课程负责人。主要研究方向为图形图像处理、机器学习，主持国家重点研发计划子课题、国家自然科学基金、省科技计划项目等科研项目十余项，公开发表SCI/EI论文100余篇。", avatar: "images/Fan.jpg", link: "https://baike.baidu.com/item/%E8%8C%83%E6%B4%AA%E8%BE%89/63345374", detail: true},
+    {n: "邹刘磊 GraphZ", r: "联合创始人", tags: ["某初创公司CTO", "硕士研究生导师"], b: "某初创公司CTO，硕士研究生导师，曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，公开发明论文/学术专利20余项。", exp: "某初创公司CTO，硕士研究生导师（校外），曾于D5渲染器担任图形引擎工程师，曾于网易游戏、阿里巴巴担任游戏引擎工程师。曾担任第十届、第十一届\"数媒竞赛\"（A类竞赛）国赛决赛评委。指导学生获\"大创项目\"省级/国家级3项。研究兴趣集中在计算机图形学、计算成像、计算机视觉，对全局光照、渲染后处理、光场显示等课题较为熟悉，发明论文/学术论文30余项。", avatar: "images/GraphZ.jpg", link: "https://github.com/GraphZou", detail: true},
+    {n: "朱翎 Zero", r: "联合创始人", tags: ["资深图形引擎工程师"], b: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", exp: "资深图形引擎工程师，曾任职于D5渲染器、欢聚时代、网易、多益等头部企业。网易任职期间为《阴阳师》《哈利波特：魔法觉醒》等项目提供引擎技术支持，多益任职期间于《神武》项目组担任开发工作。专注于全局光照、嵌入式 DSL 及工具链优化等方向，发明专利/顶会论文10项，对前沿技术的工程化落地有一定的实践积累。", avatar: "images/Zero.png", link: "https://github.com/FaithZL", detail: true},
 ];
 
 const coreMembers = [
@@ -34,56 +34,56 @@ const scrollingMembers = [
 
 // ================= 其它数据 =================
 const patentsData = [
-    { label: "资源调度与场景预览系统", tag: "2026 · 国家级", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
-    { label: "立体显示交互系统", tag: "2025 · 国家级", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
-    { label: "三维美术资源生成系统", tag: "2024 · 省级", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
-    { label: "分布式仿真辅助设计系统", tag: "2022 · 国家级", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
-    { label: "MLT分布式渲染系统", tag: "2020 · 国家级", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
-    { label: "物理仿真海洋探索系统", tag: "2019 · 国家级", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
-    { label: "多语言实时交互仿真系统", tag: "2019 · 省级", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
-    { label: "编程语言教学系统", tag: "2018 · 国家级", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
+    { label: "流式加载与大模型", tag: "2026·国家级", full: "基于大模型与流式加载的资源调度与场景预览系统", year: "2026", level: "国家级" },
+    { label: "立体显示与物理仿真", tag: "2025·国家级", full: "基于牛顿力学仿真与光照传输模拟的实时交互式立体显示系统", year: "2025", level: "国家级" },
+    { label: "三维美术资源生成", tag: "2024·省级", full: "基于PCG与AIGC的三维美术资源生成与预览系统", year: "2024", level: "省级" },
+    { label: "三维重建与离线渲染", tag: "2022·国家级", full: "基于Image-Based三维重建与Physically-Based渲染的分布式仿真模拟与辅助设计系统", year: "2022", level: "国家级" },
+    { label: "分布式离线渲染", tag: "2020·国家级", full: "基于Metropolis Light Transport的分布式渲染系统", year: "2020", level: "国家级" },
+    { label: "实时光线追踪", tag: "2019·国家级", full: "基于Real-Time Path Tracing与Reinforcement Learning的在物理仿真下的海洋探索系统", year: "2019", level: "国家级" },
+    { label: "实时光线追踪", tag: "2019·省级", full: "基于Photon Mapping与Deep Learning的多语言实时交互仿真系统的研究与开发", year: "2019", level: "省级" },
+    { label: "实时光线追踪", tag: "2018·国家级", full: "基于Real-Time Ray Tracing的编程语言教学系统", year: "2018", level: "国家级" }
 ];
 
 // CCF-A 顶会论文（金色 · 最内层）
 const ccfaPapers = [
-    { label: "Real-Time Light Field Tracing", tag: "录用 · CCF-A会议", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Light-Field Path Tracing", tag: "录用 · CCF-A会议", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
-    { label: "Topology-Aware Polymorphism", tag: "公开 · CCF-A会议", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
-    { label: "游戏生成", tag: "投稿中 · CCF-A会议", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
-    { label: "光场UI算法", tag: "投稿中 · CCF-A会议", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
+    { label: "光场与EDSL", tag: "2026·录用·CCF-A会议", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "光场立体显示", tag: "2026·录用·CCF-A会议", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
+    { label: "EDSL", tag: "2025·CCF-A会议", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
+    { label: "游戏生成", tag: "投稿中·CCF-A会议", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
+    { label: "光场立体显示", tag: "投稿中·CCF-A会议", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
 ];
 
 // 学术论文（紫色 · 第二层）
 const academicPapers = [
-    { label: "SK-GAN", tag: "中科院四区 · 投稿中", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "跨学科学业表现建模", tag: "中科院四区 · 投稿中", full: "Hybrid Three-Level Modeling of Cross-Disciplinary Academic Performance in Higher Education", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "Diagnostic-Driven MLT", tag: "中科院四区 · 投稿中", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "Visibility-Driven MLT", tag: "2025 · 中科院四区", full: "Removing Initialization Phase of Visibility-Driven Metropolis Light Transport", year: "2025", venue: "中科院四区", status: "已公开" },
-    { label: "Hot Reloading Runtime", tag: "2025 · EI会议", full: "Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis", year: "2025", venue: "EI会议", status: "已公开" },
-    { label: "Shadow Maps Enhancement", tag: "2024 · EI会议", full: "Enhancing Shadow Maps via Screen-Space Visibility", year: "2024", venue: "EI会议", status: "已公开" },
-    { label: "Parameter-Free MLT", tag: "2022 · EI会议", full: "Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility", year: "2022", venue: "EI会议", status: "已公开" },
-    { label: "多智能体场景创作机制", tag: "中文核心 · 投稿中", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
+    { label: "机器视觉", tag: "投稿中·中科院四区", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "数学模型", tag: "投稿中·中科院四区", full: "Hybrid Three-Level Modeling of Cross-Disciplinary Academic Performance in Higher Education", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "离线渲染", tag: "投稿中·中科院四区", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "离线渲染", tag: "2025·中科院四区", full: "Removing Initialization Phase of Visibility-Driven Metropolis Light Transport", year: "2025", venue: "中科院四区", status: "已公开" },
+    { label: "引擎架构", tag: "2025·EI会议", full: "Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis", year: "2025", venue: "EI会议", status: "已公开" },
+    { label: "实时阴影渲染", tag: "2024·EI会议", full: "Enhancing Shadow Maps via Screen-Space Visibility", year: "2024", venue: "EI会议", status: "已公开" },
+    { label: "离线渲染", tag: "2022·EI会议", full: "Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility", year: "2022", venue: "EI会议", status: "已公开" },
+    { label: "三维场景生成", tag: "投稿中·中文核心", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
 ];
 
 // 学生项目（绿色 · 最外层）
 const studentProjects = [
-    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", tag: "2018 · 专利", label: "三角形邻接信息移动算法" },
-    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", tag: "2019 · 专利", label: "法线修正碰撞移动方法" },
-    { title: "一种三维空间内基于降维的实时路径生成方法", tag: "2019 · 专利", label: "降维实时路径生成方法" },
-    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", tag: "2019 · 专利", label: "动态模糊降采样加速方法" },
-    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", tag: "2020 · 专利", label: "球坐标图元模型压缩方法" },
-    { title: "一种基于深度缓冲加速的光线追踪渲染方法", tag: "2021 · 专利", label: "深度缓冲加速光追渲染" },
-    { title: "一种基于光线路径复用的动态场景渲染加速方法", tag: "2021 · 专利", label: "光线路径复用渲染加速" },
-    { title: "一种基于非对称卷积核的卷积神经网络训练方法", tag: "2024 · 专利", label: "非对称卷积核训练方法" },
-    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", tag: "2024 · 专利", label: "高斯先验卷积网络优化方法" },
-    { title: "基于凸包优化的非均匀数据的聚类方法", tag: "2024 · 专利", label: "凸包优化聚类方法" },
-    { title: "基于密度聚类算法的三维物体碰撞体优化方法", tag: "2025 · 专利", label: "密度聚类碰撞体优化方法" },
-    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", tag: "2025 · 专利", label: "光追训练数据生成方法" },
-    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", tag: "2025 · 专利", label: "屏幕空间阴影优化方法" },
-    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", tag: "2026 · 专利", label: "智能体协同场景生成方法" },
-    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", tag: "2026 · 专利", label: "光场路径追踪调度方法" },
-    { title: "一种基于稀疏时空角重建的实时光场渲染方法", tag: "2026 · 专利", label: "稀疏时空角光场渲染方法" },
-    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026 · 专利", label: "子像素光线生成方法" }
+    { title: "一种基于三角形邻接信息的沿三维模型表面移动算法", tag: "2018·发明专利", label: "路径生成" },
+    { title: "一种基于离散碰撞检测的借助法线修正位置的移动方法", tag: "2019·发明专利", label: "碰撞检测优化" },
+    { title: "一种三维空间内基于降维的实时路径生成方法", tag: "2019·发明专利", label: "路径生成" },
+    { title: "一种带有动态模糊的降低采样数量的渲染加速方法", tag: "2019·发明专利", label: "实时渲染优化" },
+    { title: "基于球坐标图元映射的模型压缩与碰撞检测方法", tag: "2020·发明专利", label: "碰撞检测优化" },
+    { title: "一种基于深度缓冲加速的光线追踪渲染方法", tag: "2021·发明专利", label: "实时光线追踪" },
+    { title: "一种基于光线路径复用的动态场景渲染加速方法", tag: "2021·发明专利", label: "实时光线追踪" },
+    { title: "一种基于非对称卷积核的卷积神经网络训练方法", tag: "2024·发明专利", label: "卷积神经网络" },
+    { title: "一种基于高斯先验指导的卷积神经网络结构优化的方法", tag: "2024·发明专利", label: "卷积神经网络" },
+    { title: "基于凸包优化的非均匀数据的聚类方法", tag: "2024·发明专利", label: "凸包优化聚类" },
+    { title: "基于密度聚类算法的三维物体碰撞体优化方法", tag: "2025·发明专利", label: "碰撞检测" },
+    { title: "一种利用光线追踪生成用于图像优化网络的训练数据的方法", tag: "2025·发明专利", label: "数据集生成" },
+    { title: "一种基于屏幕空间阴影的阴影贴图优化方法", tag: "2025·发明专利", label: "实时阴影渲染" },
+    { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", tag: "2026·发明专利", label: "三维场景生成" },
+    { title: "一种基于显示与架构对齐的光场路径追踪调度方法", tag: "2026·发明专利", label: "光场立体显示" },
+    { title: "一种基于稀疏时空角重建的实时光场渲染方法", tag: "2026·发明专利", label: "光场立体显示" },
+    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026·发明专利", label: "光场立体显示" }
 ];
 
 // ================= 页面初始化与交互 =================
@@ -118,21 +118,21 @@ function initSceneAccordion() {
 const bentoLayout = {
     // 左栏 · 创作者：零基础创作沙盒 + 4 个小块
     creatorGrid: [
-        { title: "零基础创作沙盒，让灵感即刻落地", tag: "Creation Sandbox", icon: "fas fa-wand-magic-sparkles", tone: "sandbox", detail: "专为学生与初学者打造，让创意不再被技术壁垒阻挡。告别传统繁杂的引擎面板，无论你是是否有美术与技术基础，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。" },
-        { title: "可视化编程", tag: "Visual Scripting", icon: "fas fa-puzzle-piece", tone: "sandbox", detail: "用直观的逻辑模块代替生涩代码，所见即所得。" },
-        { title: "协同编辑", tag: "AI Scene Assistant", icon: "fas fa-robot", tone: "sandbox", detail: "多人实时协作的场景编辑能力，像在线文档一样顺畅高效。" },
-        { title: "所见即所得", tag: "Beginner Ecosystem", icon: "fas fa-seedling", tone: "sandbox", detail: "搭建与游玩无缝切换，无需等待，随时随地测试你的每一个灵感。" },
-        { title: "AI 助手", tag: "Real-Time Collaboration", image: "render/3.png", icon: "fas fa-users-gear", tone: "sandbox", detail: "智能化辅助构建、美术资产一键生成，大幅降低场景搭建的时间成本。" }
+        { title: "零基础创作沙盒，让灵感即刻落地", tag: "Creation Sandbox", icon: "fas fa-wand-magic-sparkles", tone: "sandbox", detail: "专为学生与初学者打造，让创意不再被技术壁垒阻挡。告别繁杂的引擎面板，无论你是否具备美术与技术基础，只需带上灵感，就能在这里轻松拼搭出心中的游戏世界。" },
+        { title: "可视化编程", tag: "Visual Scripting", icon: "fas fa-puzzle-piece", tone: "sandbox", detail: "用直观的逻辑节点代替晦涩代码，拖拽连线即可编排游戏行为，让想法一步步变成可玩的机制。" },
+        { title: "协同编辑", tag: "Real-Time Collaboration", icon: "fas fa-users", tone: "sandbox", detail: "多人实时协作编辑同一场景，改动即时同步，像在线文档一样顺畅，团队创作不再互相等待。" },
+        { title: "所见即所得", tag: "WYSIWYG", icon: "fas fa-play", tone: "sandbox", detail: "编辑与运行无缝切换，无需漫长的构建等待，随时点击即玩，让每一个灵感都能立刻得到验证。" },
+        { title: "AI 助手", tag: "AI Assistant", image: "render/3.png", icon: "fas fa-robot", tone: "sandbox", detail: "AI 全程陪伴创作：智能辅助搭建场景、一键生成美术资产，把繁琐的重复劳动交给它，大幅缩短从想法到成品的时间。" }
     ],
     // 右栏 · 开发者：核心大块 + 6 个尺寸参差的小块
     devGrid: [
-        { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为挑战游戏开发、影视制作等数字内容创作中的特殊需求而设计。提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
-        { title: "全局光照", tag: "Global Illumination", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "硬件光追与光栅化双管线并行：硬件光线追踪实现物理级间接光照，光栅化路径以 RSM + SSR 提供高性能近似，在画质与帧率之间灵活取舍。" },
-        { title: "异步", tag: "Async", icon: "fas fa-bolt", tone: "research", detail: "异步任务调度模型，IO 与计算解耦并行，避免阻塞主线程，保障大规模场景的流畅运行。" },
-        { title: "物理", tag: "Physics", icon: "fas fa-atom", tone: "research", detail: "刚体动力学与碰撞检测系统，为交互与仿真提供真实可信的物理表现。" },
-        { title: "立体显示", tag: "Light Field · 裸眼3D", image: "render/2.png", icon: "fas fa-cube", tone: "research", detail: "面向光场显示设备的实时渲染管线，无需佩戴任何设备即可呈现真实立体的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建优化。" },
-        { title: "自研EDSL语言", tag: "Embedded DSL", icon: "fas fa-code", tone: "research", detail: "自研嵌入式领域特定语言（EDSL），统一 CPU-GPU 异构编程，以简洁语法释放极致算力。" },
-        { title: "流式加载", tag: "Streaming Loading", icon: "fas fa-download", tone: "research", detail: "大场景资源按需流式调度，实现超大世界的无缝加载与渲染，显著降低内存占用。" },
+        { title: "突破边界，专为硬核而生", tag: "Research Native", icon: "fas fa-circle-nodes", tone: "research", detail: "为游戏开发、影视制作等数字内容创作中的特殊需求而设计，提供极具深度的底层控制力，助力前沿学术探索与工业级图形技术突破。" },
+        { title: "“声光力”", tag: "Sound · Light · Force", image: "render/1.png", icon: "fas fa-sun", tone: "research", detail: "以声、光、力三位一体构建沉浸世界：全局光照还原物理级光影，空间音频营造三维声场，刚体模拟驱动真实碰撞，骨骼动画赋予角色鲜活姿态。" },
+        { title: "立体显示", tag: "Light Field · Naked-Eye 3D", icon: "fas fa-cube", tone: "research", detail: "面向光场显示设备的实时渲染管线，无需佩戴任何外设即可呈现真实景深的裸眼 3D 画面，针对空间-角度-时间维度做稀疏重建，兼顾立体感与实时性能。" },
+        { title: "流式加载", tag: "Streaming Loading", icon: "fas fa-download", tone: "research", detail: "大场景资源按需流式调度，边浏览边加载，实现超大世界的无缝进出，在保证画面连续的同时显著降低内存占用。" },
+        { title: "三层架构", tag: "Layered Architecture", image: "render/2.png", icon: "fas fa-layer-group", tone: "research", detail: "清晰的三层分工：C++ 底层专注核心算法与高性能计算，Python 层承载业务后端与 AI 逻辑，HTML/JS 层负责前端交互与呈现，各层解耦、协同高效。" },
+        { title: "多线程", tag: "Multithreading", icon: "fas fa-bolt", tone: "research", detail: "异步任务调度模型，将 IO 与计算解耦并行，充分榨取多核算力，避免阻塞主线程，保障大规模场景稳定流畅运行。" },
+        { title: "自研EDSL语言", tag: "Embedded DSL", icon: "fas fa-code", tone: "research", detail: "自研嵌入式领域特定语言（EDSL），统一 CPU-GPU 异构编程模型，以简洁直观的语法释放底层极致算力，让高性能代码更易编写与维护。" },
     ]
 };
 
@@ -257,7 +257,7 @@ function renderTeam() {
             '</span>';
     }
 
-    var label1 = '<div class="credit-section-label"><span>创始人</span></div>';
+    var label1 = '<div class="credit-section-label"><span>联合创始人</span></div>';
     var row1 = '<div class="credit-names-row">' +
         founders.map(function(p) { return creditBtn(p, true); }).join('') +
         '</div>';
