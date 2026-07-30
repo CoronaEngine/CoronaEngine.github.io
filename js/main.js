@@ -14,7 +14,7 @@ const coreMembers = [
     {n: "吴学杰", r: "核心成员(架构)", b: "引擎架构工程师，深度参与引擎工具链与编辑器核心框架的搭建，主导引擎脚本层架构、Agent底层架构，致力于AI Native的游戏引擎工具链于编辑器研发工作。", avatar: "images/WXJ.jpg", link: "https://github.com/JOPLOPOL"},
     {n: "Royalvice", r: "核心成员(算法)", b: "北京邮电大学博士，专注于3D显示、神经渲染及3D AIGC等前沿交叉学科。致力于探索AI算法与传统图形学的结合，并推动学术成果在引擎中的工程化落地。", avatar: "images/Royalvice.png", link: "https://github.com/Royalvice"},
     {n: "FZM", r: "引擎开发（Agent）", b: "任职于科大讯飞，曾于字节跳动实习，深度参与引擎的Agent架构设计与重构工作，主导引擎中基于Agent的游戏生成工作。", avatar: "images/FZM.jpg", link: "https://github.com/fzm2017"},
-    {n: "ZJM", r: "引擎开发（Agent）", b: "任职于货拉拉，曾经在索尼、字节跳动实习，曾参与索尼智能驾驶相关项目、货拉拉运输调度相关项目，主导引擎针对各种项目时所用的2D/3D内容生成、目标检测等神经网络训练。", avatar: "images/FZM.jpg", link: "https://github.com/fzm2017"},
+    {n: "ZJM", r: "引擎开发（神经网络）", b: "任职于货拉拉，曾经在索尼、字节跳动实习，曾参与索尼智能驾驶相关项目、货拉拉运输调度相关项目，主导引擎针对各种项目时所用的2D/3D内容生成、目标检测等神经网络训练。", avatar: "images/ZJM.jpg", link: "https://github.com/fzm2017"},
 ];
 
 const scrollingMembers = [
