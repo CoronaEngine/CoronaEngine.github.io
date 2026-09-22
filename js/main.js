@@ -50,20 +50,18 @@ const ccfaPapers = [
     { label: "光场与EDSL", tag: "2026·录用·CCF-A会议", full: "Real-Time Light Field Tracing via Display-Architecture Alignment", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
     { label: "光场立体显示", tag: "2026·录用·CCF-A会议", full: "Real-Time Light-Field Path Tracing for 3D Displays via Sparse Spatial-Angular-Temporal Reconstruction", year: "2026", venue: "顶会 SIGGRAPH", status: "已公开" },
     { label: "EDSL", tag: "2025·CCF-A会议", full: "Topology-Aware Polymorphism for Embedded Shading Languages", year: "2025", venue: "顶会 SIGGRAPH ASIA", status: "已公开" },
-    { label: "游戏生成", tag: "投稿中·CCF-A会议", full: "游戏生成", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" },
-    { label: "光场立体显示", tag: "投稿中·CCF-A会议", full: "光场UI算法", year: "2026", venue: "SIGGRAPH ASIA", status: "投稿中" }
 ];
 
 // 学术论文（紫色 · 第二层）
 const academicPapers = [
-    { label: "机器视觉", tag: "投稿中·中科院四区", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "机器视觉", tag: "录用·中科院四区", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "投稿中" },
     { label: "数学模型", tag: "投稿中·中科院四区", full: "Hybrid Three-Level Modeling of Cross-Disciplinary Academic Performance in Higher Education", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "离线渲染", tag: "投稿中·中科院四区", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "投稿中" },
+    { label: "离线渲染", tag: "录用·中科院四区", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "投稿中" },
     { label: "离线渲染", tag: "2025·中科院四区", full: "Removing Initialization Phase of Visibility-Driven Metropolis Light Transport", year: "2025", venue: "中科院四区", status: "已公开" },
     { label: "引擎架构", tag: "2025·EI会议", full: "Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis", year: "2025", venue: "EI会议", status: "已公开" },
     { label: "实时阴影渲染", tag: "2024·EI会议", full: "Enhancing Shadow Maps via Screen-Space Visibility", year: "2024", venue: "EI会议", status: "已公开" },
     { label: "离线渲染", tag: "2022·EI会议", full: "Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility", year: "2022", venue: "EI会议", status: "已公开" },
-    { label: "三维场景生成", tag: "投稿中·中文核心", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
+    { label: "三维场景生成", tag: "录用·中文核心", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
 ];
 
 // 学生项目（绿色 · 最外层）
