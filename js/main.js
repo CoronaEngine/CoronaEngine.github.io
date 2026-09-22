@@ -54,14 +54,14 @@ const ccfaPapers = [
 
 // 学术论文（紫色 · 第二层）
 const academicPapers = [
-    { label: "机器视觉", tag: "录用·中科院四区", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "数学模型", tag: "投稿中·中科院四区", full: "Hybrid Three-Level Modeling of Cross-Disciplinary Academic Performance in Higher Education", year: "2026", venue: "中科院四区", status: "投稿中" },
-    { label: "离线渲染", tag: "录用·中科院四区", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "投稿中" },
     { label: "离线渲染", tag: "2025·中科院四区", full: "Removing Initialization Phase of Visibility-Driven Metropolis Light Transport", year: "2025", venue: "中科院四区", status: "已公开" },
     { label: "引擎架构", tag: "2025·EI会议", full: "Hot Reloading for Runtime Code Modifiability via File Monitoring and Dependency Analysis", year: "2025", venue: "EI会议", status: "已公开" },
     { label: "实时阴影渲染", tag: "2024·EI会议", full: "Enhancing Shadow Maps via Screen-Space Visibility", year: "2024", venue: "EI会议", status: "已公开" },
     { label: "离线渲染", tag: "2022·EI会议", full: "Parameter-Free Single-Pass Parallel Metropolis Light Transport with Sensor Path Visibility", year: "2022", venue: "EI会议", status: "已公开" },
-    { label: "三维场景生成", tag: "录用·中文核心", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "投稿中" },
+    { label: "三维场景生成", tag: "录用·中文核心", full: "基于状态节点介入与上下文意图保持的多智能体三维场景迭代创作机制", year: "2026", venue: "中文核心", status: "录用" },
+    { label: "离线渲染", tag: "录用·中科院四区", full: "Diagnostic-Driven Metropolis Light Transport with Adaptive Parameter Control", year: "2026", venue: "中科院四区", status: "录用" },
+    { label: "机器视觉", tag: "录用·中科院四区", full: "SK-GAN: Selective Kernel Channel Based Generative Adversarial Network for Image Restoration on Industrial Parts", year: "2026", venue: "中科院四区", status: "录用" },
+    { label: "数学模型", tag: "投稿中·中科院四区", full: "Hybrid Three-Level Modeling of Cross-Disciplinary Academic Performance in Higher Education", year: "2026", venue: "中科院四区", status: "投稿中" },
 ];
 
 // 学生项目（绿色 · 最外层）
@@ -82,7 +82,10 @@ const studentProjects = [
     { title: "一种基于物理仿真与智能体协同的三维场景生成与编辑方法", tag: "2026·发明专利", label: "三维场景生成" },
     { title: "一种基于显示与架构对齐的光场路径追踪调度方法", tag: "2026·发明专利", label: "光场立体显示" },
     { title: "一种基于稀疏时空角重建的实时光场渲染方法", tag: "2026·发明专利", label: "光场立体显示" },
-    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026·发明专利", label: "光场立体显示" }
+    { title: "一种基于显示原生光线映射的子像素级光线生成方法", tag: "2026·发明专利", label: "光场立体显示" },
+    { title: "一种基于统一可执行契约的跨语言实时引擎协同控制方法", tag: "2026·发明专利", label: "引擎架构" },
+    { title: "一种基于操作序列感知与困难记录匹配的游戏引擎自适应引导方法", tag: "2026·发明专利", label: "引擎新手引导" },
+    { title: "一种基于创作阶段识别与状态节点约束的三维场景介入编辑方法", tag: "2026·发明专利", label: "三维场景生成" },
 ];
 
 // ================= 页面初始化与交互 =================
